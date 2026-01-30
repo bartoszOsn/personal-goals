@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TimeController } from './TimeController';
+import { TimeAppModule } from '../../app/time/TimeAppModule';
+import { TimeDTOConverter } from './TimeDTOConverter';
 
 @Module({
-	imports: [],
+	imports: [TimeAppModule],
 	controllers: [TimeController],
-	providers: []
+	providers: [TimeDTOConverter]
 })
 export class TimePresentationModule {}

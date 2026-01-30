@@ -4,62 +4,77 @@ import type { RestPeriodListDTO } from './dto/RestPeriodListDTO';
 import type { RestPeriodRequestDTO } from './dto/RestPeriodRequestDTO';
 import type { RestPeriodDTO } from './dto/RestPeriodDTO';
 import { SprintListDTO } from './dto/SprintListDTO';
+import { TimeService } from '../../app/time/TimeService';
+import { TimeDTOConverter } from './TimeDTOConverter';
+import { RestPeriodId } from '../../domain/time/model/RestPeriod';
 
 @Controller('time')
 export class TimeController {
+	constructor(
+		private readonly timeService: TimeService,
+		private readonly timeDTOConverter: TimeDTOConverter
+	) {}
+
 	@Get('sprint')
-	public getSprints(): Promise<SprintListDTO> {
-		return Promise.resolve({
-			sprints: []
-		});
+	public async getSprints(): Promise<SprintListDTO> {
+		const sprints = await this.timeService.getSprints();
+		return this.timeDTOConverter.toListDTO(sprints);
 	}
 
 	@Get('sprint-settings')
-	public getSprintsSettings(): Promise<SprintSettingsDTO> {
-		return Promise.resolve({
-			sprintDuration: 'two-weeks',
-			quarterAssignment: 'beginning'
-		});
+	public async getSprintsSettings(): Promise<SprintSettingsDTO> {
+		const settings = await this.timeService.getSprintSettings();
+		return this.timeDTOConverter.toSettingsDTO(settings);
 	}
 
 	@Put('sprint-settings')
-	public updateSprintsSettings(settings: SprintSettingsDTO): Promise<void> {
-		return Promise.resolve();
+	public async updateSprintsSettings(
+		settings: SprintSettingsDTO
+	): Promise<void> {
+		const request = this.timeDTOConverter.fromSettingsDTO(settings);
+		await this.timeService.updateSprintSettings(request);
 	}
 
 	@Get('rest-period')
-	public getRestPeriods(): Promise<RestPeriodListDTO> {
-		return Promise.resolve({
-			restPeriods: []
-		});
+	public async getRestPeriods(): Promise<RestPeriodListDTO> {
+		const restPeriods = await this.timeService.getRestPeriods();
+
+		return this.timeDTOConverter.toRestPeriodListDTO(restPeriods);
 	}
 
 	@Post('rest-period')
-	public addRestPeriod(
+	public async addRestPeriod(
 		restPeriodCreation: RestPeriodRequestDTO
 	): Promise<RestPeriodDTO> {
-		return Promise.resolve({
-			...restPeriodCreation,
-			id: 'asd'
-		});
+		const request =
+			this.timeDTOConverter.fromRestPeriodRequestDTO(restPeriodCreation);
+
+		const newRestPeriod = await this.timeService.addRestPeriod(request);
+		return this.timeDTOConverter.toRestPeriodDTO(newRestPeriod);
 	}
 
 	@Put('rest-period/:id')
-	public updateRestPeriod(
+	public async updateRestPeriod(
 		restPeriodRequest: RestPeriodRequestDTO,
 		@Param('id') id: string
 	): Promise<RestPeriodDTO> {
-		return Promise.resolve({
-			...restPeriodRequest,
-			id: id
-		});
+		const request =
+			this.timeDTOConverter.fromRestPeriodRequestDTO(restPeriodRequest);
+		const restPeriodId = new RestPeriodId(id);
+
+		const updated = await this.timeService.updateRestPeriod(
+			restPeriodId,
+			request
+		);
+		return this.timeDTOConverter.toRestPeriodDTO(updated);
 	}
 
 	@Delete('rest-period/:id')
-	public deleteRestPeriod(
+	public async deleteRestPeriod(
 		@Param('id')
 		id: string
 	): Promise<void> {
-		return Promise.resolve();
+		const restPeriodId = new RestPeriodId(id);
+		await this.timeService.deleteRestPeriod(restPeriodId);
 	}
 }
