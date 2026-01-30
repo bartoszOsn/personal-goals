@@ -1,5 +1,6 @@
 {
 	"singleQuote": true,
 	"trailingComma": "none",
-	"useTabs": true
+	"useTabs": true,
+	"tabWidth": 4
 }
