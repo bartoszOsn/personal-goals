@@ -15,4 +15,8 @@ export class Year {
 	public toString() {
 		return this.year.toString();
 	}
+
+	public getValue(): number {
+		return this.year;
+	}
 }
