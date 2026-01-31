@@ -44,17 +44,30 @@ export class TimeDTOConverter {
 	}
 
 	toRestPeriodListDTO(restPeriods: RestPeriod[]): RestPeriodListDTO {
-		return undefined as any; // TODO
+		return {
+			restPeriods: restPeriods.map((restPeriod) =>
+				this.toRestPeriodDTO(restPeriod)
+			)
+		};
 	}
 
 	fromRestPeriodRequestDTO(
 		restPeriodCreation: RestPeriodRequestDTO
 	): RestPeriodRequest {
-		return undefined as any; // TODO
+		return new RestPeriodRequest(
+			restPeriodCreation.name ?? null,
+			new Date(restPeriodCreation.start),
+			new Date(restPeriodCreation.end)
+		);
 	}
 
 	toRestPeriodDTO(restPeriod: RestPeriod): RestPeriodDTO {
-		return undefined as any;
+		return {
+			id: restPeriod.id.getId(),
+			name: restPeriod.name ?? undefined,
+			start: restPeriod.start.toString(),
+			end: restPeriod.end.toString()
+		};
 	}
 
 	private toSprintDTO(sprint: Sprint): SprintDTO {
