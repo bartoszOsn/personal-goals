@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Sprint } from '../../domain/time/model/Sprint';
 import { SprintListDTO } from './dto/SprintListDTO';
-import { SprintSettings } from '../../domain/time/model/SprintSettings';
+import {
+	SprintSettings,
+	SprintSettingsDuration,
+	SprintSettingsQuarterAssignment
+} from '../../domain/time/model/SprintSettings';
 import { SprintSettingsDTO } from './dto/SprintSettingsDTO';
 import { RestPeriod } from '../../domain/time/model/RestPeriod';
 import { RestPeriodListDTO } from './dto/RestPeriodListDTO';
@@ -22,11 +26,21 @@ export class TimeDTOConverter {
 	}
 
 	toSettingsDTO(settings: SprintSettings): SprintSettingsDTO {
-		return undefined as any; // TODO
+		return {
+			sprintDuration: this.toSprintDurationDTO(settings.sprintDuration),
+			quarterAssignment: this.toSprintQuarterAssignmentDTO(
+				settings.quarterAssignment
+			),
+			generateUntil: settings.generateUntil.toString()
+		};
 	}
 
 	fromSettingsDTO(settings: SprintSettingsDTO): SprintSettings {
-		return undefined as any; // TODO
+		return new SprintSettings(
+			this.fromSprintDurationDTO(settings.sprintDuration),
+			this.fromSprintQuarterAssignmentDTO(settings.quarterAssignment),
+			new Date(settings.generateUntil)
+		);
 	}
 
 	toRestPeriodListDTO(restPeriods: RestPeriod[]): RestPeriodListDTO {
@@ -65,6 +79,66 @@ export class TimeDTOConverter {
 				return 'Q4';
 			default:
 				throw new UnreachableError(quarter);
+		}
+	}
+
+	private toSprintDurationDTO(
+		sprintDuration: SprintSettingsDuration
+	): SprintSettingsDTO['sprintDuration'] {
+		switch (sprintDuration) {
+			case SprintSettingsDuration.WEEK:
+				return 'week';
+			case SprintSettingsDuration.TWO_WEEKS:
+				return 'two-weeks';
+			case SprintSettingsDuration.MONTH:
+				return 'month';
+			default:
+				throw new UnreachableError(sprintDuration);
+		}
+	}
+
+	private toSprintQuarterAssignmentDTO(
+		quarterAssignment: SprintSettingsQuarterAssignment
+	): SprintSettingsDTO['quarterAssignment'] {
+		switch (quarterAssignment) {
+			case SprintSettingsQuarterAssignment.BEGINNING:
+				return 'beginning';
+			case SprintSettingsQuarterAssignment.END:
+				return 'end';
+			case SprintSettingsQuarterAssignment.BY_MAJORITY:
+				return 'by-majority';
+			default:
+				throw new UnreachableError(quarterAssignment);
+		}
+	}
+
+	private fromSprintDurationDTO(
+		sprintDuration: SprintSettingsDTO['sprintDuration']
+	): SprintSettingsDuration {
+		switch (sprintDuration) {
+			case 'week':
+				return SprintSettingsDuration.WEEK;
+			case 'two-weeks':
+				return SprintSettingsDuration.TWO_WEEKS;
+			case 'month':
+				return SprintSettingsDuration.MONTH;
+			default:
+				throw new UnreachableError(sprintDuration);
+		}
+	}
+
+	private fromSprintQuarterAssignmentDTO(
+		quarterAssignment: SprintSettingsDTO['quarterAssignment']
+	): SprintSettingsQuarterAssignment {
+		switch (quarterAssignment) {
+			case 'beginning':
+				return SprintSettingsQuarterAssignment.BEGINNING;
+			case 'end':
+				return SprintSettingsQuarterAssignment.END;
+			case 'by-majority':
+				return SprintSettingsQuarterAssignment.BY_MAJORITY;
+			default:
+				throw new UnreachableError(quarterAssignment);
 		}
 	}
 }
