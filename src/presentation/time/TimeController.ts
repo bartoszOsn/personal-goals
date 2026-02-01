@@ -1,4 +1,12 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Post,
+	Put
+} from '@nestjs/common';
 import type { SprintSettingsDTO } from './dto/SprintSettingsDTO';
 import type { RestPeriodListDTO } from './dto/RestPeriodListDTO';
 import type { RestPeriodRequestDTO } from './dto/RestPeriodRequestDTO';
@@ -29,7 +37,7 @@ export class TimeController {
 
 	@Put('sprint-settings')
 	public async updateSprintsSettings(
-		settings: SprintSettingsDTO
+		@Body() settings: SprintSettingsDTO
 	): Promise<void> {
 		const request = this.timeDTOConverter.fromSettingsDTO(settings);
 		await this.timeService.updateSprintSettings(request);
@@ -44,7 +52,7 @@ export class TimeController {
 
 	@Post('rest-period')
 	public async addRestPeriod(
-		restPeriodCreation: RestPeriodRequestDTO
+		@Body() restPeriodCreation: RestPeriodRequestDTO
 	): Promise<RestPeriodDTO> {
 		const request =
 			this.timeDTOConverter.fromRestPeriodRequestDTO(restPeriodCreation);
@@ -55,7 +63,7 @@ export class TimeController {
 
 	@Put('rest-period/:id')
 	public async updateRestPeriod(
-		restPeriodRequest: RestPeriodRequestDTO,
+		@Body() restPeriodRequest: RestPeriodRequestDTO,
 		@Param('id') id: string
 	): Promise<RestPeriodDTO> {
 		const request =
