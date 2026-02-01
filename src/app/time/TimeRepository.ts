@@ -18,7 +18,6 @@ export abstract class TimeRepository {
 	): Promise<RestPeriod>;
 
 	abstract updateRestPeriod(
-		user: User,
 		restPeriodId: RestPeriodId,
 		request: RestPeriodRequest
 	): Promise<RestPeriod>;

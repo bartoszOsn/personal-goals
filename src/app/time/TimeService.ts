@@ -54,12 +54,7 @@ export class TimeService {
 		restPeriodId: RestPeriodId,
 		request: RestPeriodRequest
 	): Promise<RestPeriod> {
-		const user = await this.userStorage.getUser();
-		return this.timeRepository.updateRestPeriod(
-			user,
-			restPeriodId,
-			request
-		);
+		return this.timeRepository.updateRestPeriod(restPeriodId, request);
 	}
 
 	public async deleteRestPeriod(restPeriodId: RestPeriodId): Promise<void> {
