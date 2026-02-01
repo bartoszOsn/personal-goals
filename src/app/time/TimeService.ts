@@ -3,37 +3,65 @@ import { Sprint } from '../../domain/time/model/Sprint';
 import { SprintSettings } from '../../domain/time/model/SprintSettings';
 import { RestPeriod, RestPeriodId } from '../../domain/time/model/RestPeriod';
 import { RestPeriodRequest } from '../../domain/time/model/RestPeriodRequest';
+import { TimeRepository } from './TimeRepository';
+import { UserStorage } from '../auth/UserStorage';
+import { TimeSprintCalculationService } from '../../domain/time/TimeSprintCalculationService';
 
 @Injectable()
 export class TimeService {
-	public getSprints(): Promise<Sprint[]> {
-		return Promise.resolve([]);
+	public constructor(
+		private readonly timeRepository: TimeRepository,
+		private readonly timeSprintCalculationService: TimeSprintCalculationService,
+		private readonly userStorage: UserStorage
+	) {}
+
+	public async getSprints(): Promise<Sprint[]> {
+		const user = await this.userStorage.getUser();
+		const settings = await this.timeRepository.getSprintSettings(user);
+		const restPeriods = await this.timeRepository.getRestPeriods(user);
+
+		return this.timeSprintCalculationService.calculateSprints(
+			settings,
+			restPeriods
+		);
 	}
 
-	public getSprintSettings(): Promise<SprintSettings> {
-		return Promise.resolve(SprintSettings);
+	public async getSprintSettings(): Promise<SprintSettings> {
+		const user = await this.userStorage.getUser();
+		return this.timeRepository.getSprintSettings(user);
 	}
 
-	public updateSprintSettings(settings: SprintSettings): Promise<void> {
-		return Promise.resolve();
+	public async updateSprintSettings(settings: SprintSettings): Promise<void> {
+		const user = await this.userStorage.getUser();
+		await this.timeRepository.updateSprintSettings(user, settings);
 	}
 
-	public getRestPeriods(): Promise<RestPeriod[]> {
-		return Promise.resolve([]);
+	public async getRestPeriods(): Promise<RestPeriod[]> {
+		const user = await this.userStorage.getUser();
+		return this.timeRepository.getRestPeriods(user);
 	}
 
-	public addRestPeriod(request: RestPeriodRequest): Promise<RestPeriod> {
-		return Promise.resolve(null as any);
+	public async addRestPeriod(
+		request: RestPeriodRequest
+	): Promise<RestPeriod> {
+		const user = await this.userStorage.getUser();
+		return this.timeRepository.addRestPeriod(user, request);
 	}
 
-	public updateRestPeriod(
+	public async updateRestPeriod(
 		restPeriodId: RestPeriodId,
 		request: RestPeriodRequest
 	): Promise<RestPeriod> {
-		return Promise.resolve(null as any);
+		const user = await this.userStorage.getUser();
+		return this.timeRepository.updateRestPeriod(
+			user,
+			restPeriodId,
+			request
+		);
 	}
 
-	public deleteRestPeriod(restPeriodId: RestPeriodId): Promise<void> {
-		return Promise.resolve();
+	public async deleteRestPeriod(restPeriodId: RestPeriodId): Promise<void> {
+		const user = await this.userStorage.getUser();
+		await this.timeRepository.deleteRestPeriod(user, restPeriodId);
 	}
 }
