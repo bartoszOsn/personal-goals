@@ -16,9 +16,8 @@ export class TimeService {
 	) {}
 
 	public async getSprints(): Promise<Sprint[]> {
-		const user = await this.userStorage.getUser();
-		const settings = await this.timeRepository.getSprintSettings(user);
-		const restPeriods = await this.timeRepository.getRestPeriods(user);
+		const settings = await this.getSprintSettings();
+		const restPeriods = await this.getRestPeriods();
 
 		return this.timeSprintCalculationService.calculateSprints(
 			settings,
@@ -28,7 +27,10 @@ export class TimeService {
 
 	public async getSprintSettings(): Promise<SprintSettings> {
 		const user = await this.userStorage.getUser();
-		return this.timeRepository.getSprintSettings(user);
+		return (
+			(await this.timeRepository.getSprintSettings(user)) ??
+			SprintSettings.default
+		);
 	}
 
 	public async updateSprintSettings(settings: SprintSettings): Promise<void> {

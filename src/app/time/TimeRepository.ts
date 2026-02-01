@@ -4,7 +4,7 @@ import { RestPeriod, RestPeriodId } from '../../domain/time/model/RestPeriod';
 import { RestPeriodRequest } from 'src/domain/time/model/RestPeriodRequest';
 
 export abstract class TimeRepository {
-	abstract getSprintSettings(user: User): Promise<SprintSettings>;
+	abstract getSprintSettings(user: User): Promise<SprintSettings | null>;
 	abstract updateSprintSettings(
 		user: User,
 		settings: SprintSettings

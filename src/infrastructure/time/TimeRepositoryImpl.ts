@@ -7,7 +7,7 @@ import { SprintSettings } from 'src/domain/time/model/SprintSettings';
 
 @Injectable()
 export class TimeRepositoryImpl extends TimeRepository {
-	getSprintSettings(user: User): Promise<SprintSettings> {
+	getSprintSettings(user: User): Promise<SprintSettings | null> {
 		throw new Error('Method not implemented.');
 	}
 	updateSprintSettings(user: User, settings: SprintSettings): Promise<void> {
