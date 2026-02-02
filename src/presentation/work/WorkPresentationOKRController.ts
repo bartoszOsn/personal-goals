@@ -12,9 +12,12 @@ import { ObjectiveDTO } from './dto/ObjectiveDTO';
 import { KeyResultDTO } from './dto/KeyResultDTO';
 import type { ObjectiveRequestDTO } from './dto/ObjectiveRequestDTO';
 import type { KeyResultRequestDTO } from './dto/KeyResultRequestDTO';
+import { WorkOKRService } from '../../app/work/WorkOKRService';
 
 @Controller('work/okr')
 export class WorkPresentationOKRController {
+	constructor(private readonly workOKRService: WorkOKRService) {}
+
 	@Get('objective')
 	async getOKRs(): Promise<ObjectiveDTO[]> {
 		throw new NotImplementedException();
