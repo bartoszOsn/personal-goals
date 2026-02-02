@@ -1,45 +1,59 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Objective, ObjectiveId } from '../../domain/work/model/Objective';
 import { ObjectiveRequest } from '../../domain/work/model/ObjectiveRequest';
 import { KeyResult, KeyResultId } from '../../domain/work/model/KeyResult';
 import { KeyResultRequest } from '../../domain/work/model/KeyResultRequest';
+import { WorkOKRRepository } from './WorkOKRRepository';
+import { UserStorage } from '../auth/UserStorage';
 
 @Injectable()
 export class WorkOKRService {
-	getObjectives(): Promise<Objective[]> {
-		throw new NotImplementedException();
+	constructor(
+		private readonly workOKRRepository: WorkOKRRepository,
+		private readonly userStorage: UserStorage
+	) {}
+
+	async getObjectives(): Promise<Objective[]> {
+		const user = await this.userStorage.getUser();
+		return this.workOKRRepository.getObjectives(user);
 	}
 
-	createObjective(request: ObjectiveRequest): Promise<Objective> {
-		throw new NotImplementedException();
+	async createObjective(request: ObjectiveRequest): Promise<Objective> {
+		const user = await this.userStorage.getUser();
+		return this.workOKRRepository.createObjective(user, request);
 	}
 
-	updateObjective(
+	async updateObjective(
 		id: ObjectiveId,
 		request: ObjectiveRequest
 	): Promise<Objective> {
-		throw new NotImplementedException();
+		const user = await this.userStorage.getUser();
+		return this.workOKRRepository.updateObjective(user, id, request);
 	}
 
-	deleteObjective(id: ObjectiveId): Promise<void> {
-		throw new NotImplementedException();
+	async deleteObjective(id: ObjectiveId): Promise<void> {
+		const user = await this.userStorage.getUser();
+		await this.workOKRRepository.deleteObjective(user, id);
 	}
 
-	createKeyResult(
+	async createKeyResult(
 		parentId: ObjectiveId,
 		request: KeyResultRequest
 	): Promise<KeyResult> {
-		throw new NotImplementedException();
+		const user = await this.userStorage.getUser();
+		return this.workOKRRepository.createKeyResult(user, parentId, request);
 	}
 
 	async updateKeyResult(
 		id: KeyResultId,
 		request: KeyResultRequest
 	): Promise<KeyResult> {
-		throw new NotImplementedException();
+		const user = await this.userStorage.getUser();
+		return this.workOKRRepository.updateKeyResult(user, id, request);
 	}
 
 	async deleteKeyResult(id: KeyResultId): Promise<void> {
-		throw new NotImplementedException();
+		const user = await this.userStorage.getUser();
+		await this.workOKRRepository.deleteKeyResult(user, id);
 	}
 }
