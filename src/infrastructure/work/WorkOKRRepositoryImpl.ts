@@ -5,40 +5,107 @@ import { KeyResult, KeyResultId } from 'src/domain/work/model/KeyResult';
 import { KeyResultRequest } from 'src/domain/work/model/KeyResultRequest';
 import { Objective, ObjectiveId } from 'src/domain/work/model/Objective';
 import { ObjectiveRequest } from 'src/domain/work/model/ObjectiveRequest';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectiveEntity } from './entity/ObjectiveEntity';
+import { Repository } from 'typeorm';
+import { KeyResultEntity } from './entity/KeyResultEntity';
+import { UserEntity } from '../auth/entity/UserEntity';
+import { WorkOKREntityConverter } from './WorkOKREntityConverter';
 
 @Injectable()
 export class WorkOKRRepositoryImpl extends WorkOKRRepository {
-	getObjectives(user: User): Promise<Objective[]> {
-		throw new Error('Method not implemented.');
+	constructor(
+		@InjectRepository(ObjectiveEntity)
+		private readonly objectiveRepository: Repository<ObjectiveEntity>,
+		@InjectRepository(KeyResultEntity)
+		private readonly keyResultRepository: Repository<KeyResultEntity>,
+		private readonly workOKREntityConverter: WorkOKREntityConverter
+	) {
+		super();
 	}
-	createObjective(user: User, request: ObjectiveRequest): Promise<Objective> {
-		throw new Error('Method not implemented.');
+
+	async getObjectives(user: User): Promise<Objective[]> {
+		const entities = await this.objectiveRepository.find({
+			where: {
+				user: { id: user.id.id } as unknown as UserEntity
+			},
+			relations: ['keyResults']
+		});
+
+		return this.workOKREntityConverter.fromObjectiveEntities(entities);
 	}
-	updateObjective(
+
+	async createObjective(
+		user: User,
+		request: ObjectiveRequest
+	): Promise<Objective> {
+		const entity = this.workOKREntityConverter.toObjectiveEntity(
+			user,
+			request
+		);
+		const createdEntity = await this.objectiveRepository.save(entity);
+		return this.workOKREntityConverter.fromObjectiveEntity(createdEntity);
+	}
+
+	async updateObjective(
 		user: User,
 		id: ObjectiveId,
 		request: ObjectiveRequest
 	): Promise<Objective> {
-		throw new Error('Method not implemented.');
+		const entity = this.workOKREntityConverter.toObjectiveEntity(
+			user,
+			request
+		);
+		entity.id = id.id;
+		const updatedEntity = await this.objectiveRepository.save(entity);
+		return this.workOKREntityConverter.fromObjectiveEntity(updatedEntity);
 	}
-	deleteObjective(user: User, id: ObjectiveId): Promise<void> {
-		throw new Error('Method not implemented.');
+
+	async deleteObjective(user: User, id: ObjectiveId): Promise<void> {
+		await this.objectiveRepository.delete({
+			user: { id: user.id.id } as unknown as UserEntity,
+			id: id.id
+		});
 	}
-	createKeyResult(
+
+	async createKeyResult(
 		user: User,
 		parentId: ObjectiveId,
 		request: KeyResultRequest
 	): Promise<KeyResult> {
-		throw new Error('Method not implemented.');
+		const entity = this.workOKREntityConverter.toKeyResultEntity(request);
+		entity.objective = {
+			id: parentId.id,
+			user: { id: user.id.id } as unknown as UserEntity
+		} as unknown as ObjectiveEntity;
+		const updatedEntity = await this.keyResultRepository.save(entity);
+		return this.workOKREntityConverter.fromKeyResultEntity(updatedEntity);
 	}
-	updateKeyResult(
+
+	async updateKeyResult(
 		user: User,
 		id: KeyResultId,
 		request: KeyResultRequest
 	): Promise<KeyResult> {
-		throw new Error('Method not implemented.');
+		const entity = this.workOKREntityConverter.toKeyResultEntity(request);
+		entity.id = id.id;
+		await this.keyResultRepository.update(
+			{
+				objective: {
+					user: { id: user.id.id } as unknown as UserEntity
+				} as unknown as ObjectiveEntity
+			},
+			entity
+		);
+		return this.workOKREntityConverter.fromKeyResultEntity(entity);
 	}
-	deleteKeyResult(user: User, id: KeyResultId): Promise<void> {
-		throw new Error('Method not implemented.');
+
+	async deleteKeyResult(user: User, id: KeyResultId): Promise<void> {
+		await this.keyResultRepository.delete({
+			objective: {
+				user: { id: user.id.id } as unknown as UserEntity
+			} as unknown as ObjectiveEntity,
+			id: id.id
+		});
 	}
 }
