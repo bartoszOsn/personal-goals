@@ -1,13 +1,15 @@
 import { RichText } from './RichText';
 import { Year } from '../../time/model/Year';
 import { Quarter } from '../../time/model/Quarter';
+import { KeyResult } from './KeyResult';
 
 export class Objective {
 	constructor(
 		public readonly id: ObjectiveId,
 		public readonly name: string,
 		public readonly description: RichText,
-		public readonly deadline: ObjectiveDeadline
+		public readonly deadline: ObjectiveDeadline,
+		public readonly keyResults: KeyResult[]
 	) {}
 }
 

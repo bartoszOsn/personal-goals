@@ -5,6 +5,7 @@ import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { AuthInfrastructureModule } from '../infrastructure/auth/AuthInfrastructureModule';
 import { UserEntity } from '../infrastructure/auth/entity/UserEntity';
 import { Repository } from 'typeorm';
+import { WorkPresentationModule } from './work/WorkPresentationModule';
 
 @Module({
 	imports: [
@@ -14,9 +15,10 @@ import { Repository } from 'typeorm';
 			autoLoadEntities: true,
 			synchronize: true // TODO: Remove in production, use migrations instead
 		}),
-		AuthAppModule,
+		AuthAppModule, // TODO: remove when it will work
 		AuthInfrastructureModule,
-		TimePresentationModule
+		TimePresentationModule,
+		WorkPresentationModule
 	],
 	controllers: []
 })
