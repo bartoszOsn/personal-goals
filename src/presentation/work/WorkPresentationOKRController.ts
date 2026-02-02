@@ -3,7 +3,6 @@ import {
 	Controller,
 	Delete,
 	Get,
-	NotImplementedException,
 	Param,
 	Post,
 	Put
@@ -13,21 +12,33 @@ import { KeyResultDTO } from './dto/KeyResultDTO';
 import type { ObjectiveRequestDTO } from './dto/ObjectiveRequestDTO';
 import type { KeyResultRequestDTO } from './dto/KeyResultRequestDTO';
 import { WorkOKRService } from '../../app/work/WorkOKRService';
+import { ObjectiveListDTO } from './dto/ObjectiveListDTO';
+import { WorkOkrDTOConverter } from './WorkOkrDTOConverter';
+import { ObjectiveId } from '../../domain/work/model/Objective';
+import { KeyResultId } from '../../domain/work/model/KeyResult';
 
 @Controller('work/okr')
 export class WorkPresentationOKRController {
-	constructor(private readonly workOKRService: WorkOKRService) {}
+	constructor(
+		private readonly workOKRService: WorkOKRService,
+		private readonly workOkrDTOConverter: WorkOkrDTOConverter
+	) {}
 
 	@Get('objective')
-	async getOKRs(): Promise<ObjectiveDTO[]> {
-		throw new NotImplementedException();
+	async getOKRs(): Promise<ObjectiveListDTO> {
+		const objectives = await this.workOKRService.getObjectives();
+		return this.workOkrDTOConverter.toObjectiveListDTO(objectives);
 	}
 
 	@Post('objective')
 	async createObjective(
 		@Body() request: ObjectiveRequestDTO
 	): Promise<ObjectiveDTO> {
-		throw new NotImplementedException();
+		const domainRequest =
+			this.workOkrDTOConverter.fromObjectiveRequestDTO(request);
+		const objective =
+			await this.workOKRService.createObjective(domainRequest);
+		return this.workOkrDTOConverter.toObjectiveDTO(objective);
 	}
 
 	@Put('objective/:objectiveId')
@@ -35,21 +46,37 @@ export class WorkPresentationOKRController {
 		@Param('objectiveId') objectiveId: string,
 		@Body() request: ObjectiveRequestDTO
 	): Promise<ObjectiveDTO> {
-		throw new NotImplementedException();
+		const domainRequest =
+			this.workOkrDTOConverter.fromObjectiveRequestDTO(request);
+		const id = new ObjectiveId(objectiveId);
+		const objective = await this.workOKRService.updateObjective(
+			id,
+			domainRequest
+		);
+		return this.workOkrDTOConverter.toObjectiveDTO(objective);
 	}
 
 	@Delete('objective/:objectiveId')
 	async deleteObjective(
 		@Param('objectiveId') objectiveId: string
 	): Promise<void> {
-		throw new NotImplementedException();
+		const id = new ObjectiveId(objectiveId);
+		await this.workOKRService.deleteObjective(id);
 	}
 
-	@Post('key-result')
+	@Post('/key-result/:objectiveId')
 	async createKeyResult(
+		@Param('objectiveId') objectiveId: string,
 		@Body() request: KeyResultRequestDTO
 	): Promise<KeyResultDTO> {
-		throw new NotImplementedException();
+		const id = new ObjectiveId(objectiveId);
+		const domainRequest =
+			this.workOkrDTOConverter.fromKeyResultRequestDTO(request);
+		const keyResult = await this.workOKRService.createKeyResult(
+			id,
+			domainRequest
+		);
+		return this.workOkrDTOConverter.toKeyResultDTO(keyResult);
 	}
 
 	@Put('key-result/:keyResultId')
@@ -57,13 +84,21 @@ export class WorkPresentationOKRController {
 		@Param('keyResultId') keyResultId: string,
 		@Body() request: KeyResultRequestDTO
 	): Promise<KeyResultDTO> {
-		throw new NotImplementedException();
+		const id = new KeyResultId(keyResultId);
+		const domainRequest =
+			this.workOkrDTOConverter.fromKeyResultRequestDTO(request);
+		const keyResult = await this.workOKRService.updateKeyResult(
+			id,
+			domainRequest
+		);
+		return this.workOkrDTOConverter.toKeyResultDTO(keyResult);
 	}
 
 	@Delete('key-result/:keyResultId')
 	async deleteKeyResult(
 		@Param('keyResultId') keyResultId: string
 	): Promise<void> {
-		throw new NotImplementedException();
+		const id = new KeyResultId(keyResultId);
+		await this.workOKRService.deleteKeyResult(id);
 	}
 }

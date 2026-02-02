@@ -1,4 +1,5 @@
 import { RichText } from './RichText';
+import { KeyResultProgress } from './KeyResultProgress';
 
 export class KeyResult {
 	constructor(
@@ -9,16 +10,6 @@ export class KeyResult {
 	) {}
 }
 
-class KeyResultId {
+export class KeyResultId {
 	constructor(public readonly id: string) {}
-}
-
-class KeyResultProgress {
-	constructor(public readonly progress: number) {
-		if (this.progress < 0 || this.progress > 1) {
-			throw new Error(
-				`Progress must be between 0 and 1. Received ${this.progress}`
-			);
-		}
-	}
 }
