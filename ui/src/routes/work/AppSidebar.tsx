@@ -74,7 +74,7 @@ export function AppSidebar() {
 function MenuLink({ href, children }: { href: LinkOptions['to'], children: ReactNode }) {
 	return (
 		<SidebarMenuButton asChild>
-			<Link to={href} activeProps={{ className: 'font-bold'}}>{children}</Link>
+			<Link to={href} activeProps={{ className: 'font-bold'}} activeOptions={{ exact: true }}>{children}</Link>
 		</SidebarMenuButton>
 	)
 }

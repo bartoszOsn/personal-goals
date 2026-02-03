@@ -6,8 +6,8 @@ export function WorkRoute() {
 	return (
 		<SidebarProvider>
 			<AppSidebar />
-			<main>
-				<SidebarTrigger />
+			<main className='relative pt-12 px-8'>
+				<SidebarTrigger className='absolute top-2 left-2' />
 				<Outlet />
 			</main>
 		</SidebarProvider>
