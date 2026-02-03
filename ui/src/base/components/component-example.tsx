@@ -3,7 +3,7 @@ import * as React from "react"
 import {
   Example,
   ExampleWrapper,
-} from "@/components/example"
+} from "@/base/components/example.tsx"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,9 +15,9 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/base/components/ui/alert-dialog.tsx"
+import { Badge } from "@/base/components/ui/badge.tsx"
+import { Button } from "@/base/components/ui/button.tsx"
 import {
   Card,
   CardAction,
@@ -26,7 +26,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/base/components/ui/card.tsx"
 import {
   Combobox,
   ComboboxContent,
@@ -34,7 +34,7 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-} from "@/components/ui/combobox"
+} from "@/base/components/ui/combobox.tsx"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -51,9 +51,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/base/components/ui/dropdown-menu.tsx"
+import { Field, FieldGroup, FieldLabel } from "@/base/components/ui/field.tsx"
+import { Input } from "@/base/components/ui/input.tsx"
 import {
   Select,
   SelectContent,
@@ -61,8 +61,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/base/components/ui/select.tsx"
+import { Textarea } from "@/base/components/ui/textarea.tsx"
 import { PlusIcon, BluetoothIcon, MoreVerticalIcon, FileIcon, FolderIcon, FolderOpenIcon, FileCodeIcon, MoreHorizontalIcon, FolderSearchIcon, SaveIcon, DownloadIcon, EyeIcon, LayoutIcon, PaletteIcon, SunIcon, MoonIcon, MonitorIcon, UserIcon, CreditCardIcon, SettingsIcon, KeyboardIcon, LanguagesIcon, BellIcon, MailIcon, ShieldIcon, HelpCircleIcon, FileTextIcon, LogOutIcon } from "lucide-react"
 
 export function ComponentExample() {

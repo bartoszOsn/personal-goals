@@ -9,7 +9,7 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem
-} from '@/components/ui/sidebar.tsx';
+} from '@/base/components/ui/sidebar.tsx';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 
