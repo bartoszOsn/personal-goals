@@ -6,4 +6,5 @@ export interface SprintDTO {
 	readonly yearlyIndex: number;
 	readonly startDate: Date;
 	readonly endDate: Date;
+	readonly status: 'completed' | 'active' | 'future';
 }

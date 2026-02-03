@@ -5,6 +5,7 @@ import { Sprint } from './model/Sprint';
 import { Year } from './model/Year';
 import { Quarter } from './model/Quarter';
 import { UnreachableError } from '../../util/UnreachableError';
+import { SprintStatus } from './model/SprintStatus';
 
 @Injectable()
 export class TimeSprintCalculationService {
@@ -71,7 +72,8 @@ export class TimeSprintCalculationService {
 						quarter,
 						yearlyIndex,
 						currentDate,
-						sprintEnd
+						sprintEnd,
+						this.getSprintStatus(currentDate, sprintEnd)
 					)
 				);
 			}
@@ -142,5 +144,17 @@ export class TimeSprintCalculationService {
 			}
 		}
 		return null;
+	}
+
+	private getSprintStatus(sprintStart: Date, sprintEnd: Date): SprintStatus {
+		const now = new Date();
+		if (sprintEnd < now) {
+			return SprintStatus.COMPLETED;
+		}
+		if (sprintStart > now) {
+			return SprintStatus.FUTURE;
+		}
+
+		return SprintStatus.ACTIVE;
 	}
 }

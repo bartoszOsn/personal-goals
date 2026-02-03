@@ -16,6 +16,7 @@ import { SprintDTO } from './dto/SprintDTO';
 import { Quarter } from '../../domain/time/model/Quarter';
 import { QuarterDTO } from './dto/QuarterDTO';
 import { UnreachableError } from '../../util/UnreachableError';
+import { SprintStatus } from '../../domain/time/model/SprintStatus';
 
 @Injectable()
 export class TimeDTOConverter {
@@ -76,7 +77,8 @@ export class TimeDTOConverter {
 			quarter: this.toQuarterDTO(sprint.quarter),
 			yearlyIndex: sprint.yearlyIndex,
 			startDate: sprint.start,
-			endDate: sprint.end
+			endDate: sprint.end,
+			status: this.toSprintStatusDTO(sprint.status)
 		};
 	}
 
@@ -152,6 +154,19 @@ export class TimeDTOConverter {
 				return SprintSettingsQuarterAssignment.BY_MAJORITY;
 			default:
 				throw new UnreachableError(quarterAssignment);
+		}
+	}
+
+	private toSprintStatusDTO(status: SprintStatus): SprintDTO['status'] {
+		switch (status) {
+			case SprintStatus.COMPLETED:
+				return 'completed';
+			case SprintStatus.ACTIVE:
+				return 'active';
+			case SprintStatus.FUTURE:
+				return 'future';
+			default:
+				throw new UnreachableError(status);
 		}
 	}
 }
