@@ -3,7 +3,7 @@ import { Sprint } from '../../domain/time/model/Sprint';
 import { SprintSettings } from '../../domain/time/model/SprintSettings';
 import { TimeRepository } from './TimeRepository';
 import { UserStorage } from '../auth/UserStorage';
-import { TimeSprintCalculator } from '../../domain/time/TimeSprintCalculator';
+import { getSprintsFromSprintRangesAndSettings } from '../../domain/time/getSprintsFromSprintRangesAndSettings';
 
 @Injectable()
 export class TimeService {
@@ -13,10 +13,16 @@ export class TimeService {
 	) {}
 
 	public async getSprints(): Promise<Sprint[]> {
-		const timeSprintCalculator = new TimeSprintCalculator();
-		const settings = await this.getSprintSettings();
-
-		return timeSprintCalculator.calculateSprints(settings);
+		const user = await this.userStorage.getUser();
+		const sprintRanges =
+			await this.timeRepository.getSprintTimeRanges(user);
+		const sprintSettings = await this.getSprintSettings();
+		const today = new Date();
+		return getSprintsFromSprintRangesAndSettings(
+			sprintRanges,
+			sprintSettings,
+			today
+		);
 	}
 
 	public async getSprintSettings(): Promise<SprintSettings> {

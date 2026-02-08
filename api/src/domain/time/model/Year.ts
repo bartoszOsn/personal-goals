@@ -19,4 +19,8 @@ export class Year {
 	public getValue(): number {
 		return this.year;
 	}
+
+	equals(year: Year) {
+		return this.year === year.year;
+	}
 }
