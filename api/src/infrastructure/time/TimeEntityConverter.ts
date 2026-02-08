@@ -6,6 +6,9 @@ import {
 	SprintSettingsQuarterAssignment
 } from '../../domain/time/model/SprintSettings';
 import { UnreachableError } from '../../util/UnreachableError';
+import { SprintTimeRangeEntity } from './entity/SprintTimeRangeEntity';
+import { SprintTimeRange } from '../../domain/time/model/SprintTimeRange';
+import { SprintId } from '../../domain/time/model/SprintId';
 
 @Injectable()
 export class TimeEntityConverter {
@@ -47,6 +50,20 @@ export class TimeEntityConverter {
 			default:
 				throw new UnreachableError(quarterAssignment);
 		}
+	}
+
+	fromSprintTimeRangeEntities(
+		entities: SprintTimeRangeEntity[]
+	): SprintTimeRange[] {
+		return entities.map((entity) => this.fromSprintTimeRangeEntity(entity));
+	}
+
+	fromSprintTimeRangeEntity(entity: SprintTimeRangeEntity): SprintTimeRange {
+		return new SprintTimeRange(
+			new SprintId(entity.id),
+			entity.startDate,
+			entity.endDate
+		);
 	}
 
 	private fromSprintSettingsEntityDuration(
