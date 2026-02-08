@@ -1,7 +1,4 @@
 export * from './dto/time/QuarterDTO';
-export * from './dto/time/RestPeriodDTO';
-export * from './dto/time/RestPeriodListDTO';
-export * from './dto/time/RestPeriodRequestDTO';
 export * from './dto/time/SprintDTO';
 export * from './dto/time/SprintListDTO';
 export * from './dto/time/SprintSettingsDTO';
