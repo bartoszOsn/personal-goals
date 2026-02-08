@@ -1,0 +1,9 @@
+{
+	"name": "@personal-okr/shared",
+	"version": "0.0.0",
+	"private": true,
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"packageManager": "yarn@4.9.2"
+}
