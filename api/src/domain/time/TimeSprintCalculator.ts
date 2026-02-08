@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { SprintSettings, SprintSettingsDuration } from './model/SprintSettings';
 import { Sprint } from './model/Sprint';
 import { Year } from './model/Year';
@@ -6,8 +5,7 @@ import { Quarter } from './model/Quarter';
 import { UnreachableError } from '../../util/UnreachableError';
 import { SprintStatus } from './model/SprintStatus';
 
-@Injectable()
-export class TimeSprintCalculationService {
+export class TimeSprintCalculator {
 	private static readonly generationStart = new Date(1970, 0, 1);
 
 	calculateSprints(settings: SprintSettings): Sprint[] {
@@ -17,7 +15,7 @@ export class TimeSprintCalculationService {
 			settings.sprintDuration
 		);
 
-		let currentDate = TimeSprintCalculationService.generationStart;
+		let currentDate = TimeSprintCalculator.generationStart;
 		const yearlySprintCounts = new Map<number, number>();
 
 		while (currentDate < generateUntil) {

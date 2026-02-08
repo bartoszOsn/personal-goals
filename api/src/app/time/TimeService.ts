@@ -3,20 +3,20 @@ import { Sprint } from '../../domain/time/model/Sprint';
 import { SprintSettings } from '../../domain/time/model/SprintSettings';
 import { TimeRepository } from './TimeRepository';
 import { UserStorage } from '../auth/UserStorage';
-import { TimeSprintCalculationService } from '../../domain/time/TimeSprintCalculationService';
+import { TimeSprintCalculator } from '../../domain/time/TimeSprintCalculator';
 
 @Injectable()
 export class TimeService {
 	public constructor(
 		private readonly timeRepository: TimeRepository,
-		private readonly timeSprintCalculationService: TimeSprintCalculationService,
 		private readonly userStorage: UserStorage
 	) {}
 
 	public async getSprints(): Promise<Sprint[]> {
+		const timeSprintCalculator = new TimeSprintCalculator();
 		const settings = await this.getSprintSettings();
 
-		return this.timeSprintCalculationService.calculateSprints(settings);
+		return timeSprintCalculator.calculateSprints(settings);
 	}
 
 	public async getSprintSettings(): Promise<SprintSettings> {
