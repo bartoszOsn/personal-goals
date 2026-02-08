@@ -1,22 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { Sprint } from '../../domain/time/model/Sprint';
-import { SprintListDTO } from './dto/SprintListDTO';
 import {
 	SprintSettings,
 	SprintSettingsDuration,
 	SprintSettingsQuarterAssignment
 } from '../../domain/time/model/SprintSettings';
-import { SprintSettingsDTO } from './dto/SprintSettingsDTO';
 import { RestPeriod } from '../../domain/time/model/RestPeriod';
-import { RestPeriodListDTO } from './dto/RestPeriodListDTO';
-import { RestPeriodRequestDTO } from './dto/RestPeriodRequestDTO';
 import { RestPeriodRequest } from '../../domain/time/model/RestPeriodRequest';
-import { RestPeriodDTO } from './dto/RestPeriodDTO';
-import { SprintDTO } from './dto/SprintDTO';
 import { Quarter } from '../../domain/time/model/Quarter';
-import { QuarterDTO } from './dto/QuarterDTO';
 import { UnreachableError } from '../../util/UnreachableError';
 import { SprintStatus } from '../../domain/time/model/SprintStatus';
+import {
+	RestPeriodListDTO,
+	RestPeriodRequestDTO,
+	SprintListDTO,
+	SprintSettingsDTO,
+	RestPeriodDTO,
+	SprintDTO,
+	QuarterDTO
+} from '@personal-okr/shared';
 
 @Injectable()
 export class TimeDTOConverter {

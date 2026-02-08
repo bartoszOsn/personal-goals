@@ -1,22 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { ObjectiveListDTO } from './dto/ObjectiveListDTO';
 import {
 	Objective,
 	ObjectiveDeadline
 } from '../../domain/work/model/Objective';
-import { ObjectiveDTO } from './dto/ObjectiveDTO';
-import { ObjectiveDeadlineDTO } from './dto/ObjectiveDeadlineDTO';
 import { Quarter } from '../../domain/time/model/Quarter';
 import { UnreachableError } from '../../util/UnreachableError';
 import { KeyResult } from '../../domain/work/model/KeyResult';
-import { KeyResultDTO } from './dto/KeyResultDTO';
-import type { ObjectiveRequestDTO } from './dto/ObjectiveRequestDTO';
 import { ObjectiveRequest } from '../../domain/work/model/ObjectiveRequest';
 import { Year } from '../../domain/time/model/Year';
 import { RichText } from '../../domain/work/model/RichText';
-import { KeyResultRequestDTO } from './dto/KeyResultRequestDTO';
 import { KeyResultRequest } from '../../domain/work/model/KeyResultRequest';
 import { KeyResultProgress } from '../../domain/work/model/KeyResultProgress';
+import {
+	KeyResultDTO,
+	KeyResultRequestDTO,
+	ObjectiveDeadlineDTO,
+	ObjectiveListDTO,
+	ObjectiveRequestDTO,
+	ObjectiveDTO
+} from '@personal-okr/shared';
 
 @Injectable()
 export class WorkOkrDTOConverter {

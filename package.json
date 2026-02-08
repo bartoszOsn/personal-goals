@@ -1,0 +1,13 @@
+{
+	"name": "@personal-okr/root",
+	"private": true,
+	"scripts": {
+		"dev": "yarn workspaces foreach -Rip --from @personal-okr/ui --from @personal-okr/api run dev"
+	},
+	"workspaces": [
+		"./ui",
+		"./api",
+		"./shared"
+	],
+	"packageManager": "yarn@4.9.2"
+}

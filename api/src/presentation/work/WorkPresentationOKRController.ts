@@ -7,15 +7,17 @@ import {
 	Post,
 	Put
 } from '@nestjs/common';
-import { ObjectiveDTO } from './dto/ObjectiveDTO';
-import { KeyResultDTO } from './dto/KeyResultDTO';
-import type { ObjectiveRequestDTO } from './dto/ObjectiveRequestDTO';
-import type { KeyResultRequestDTO } from './dto/KeyResultRequestDTO';
 import { WorkOKRService } from '../../app/work/WorkOKRService';
-import { ObjectiveListDTO } from './dto/ObjectiveListDTO';
 import { WorkOkrDTOConverter } from './WorkOkrDTOConverter';
 import { ObjectiveId } from '../../domain/work/model/Objective';
 import { KeyResultId } from '../../domain/work/model/KeyResult';
+import type {
+	KeyResultDTO,
+	KeyResultRequestDTO,
+	ObjectiveListDTO,
+	ObjectiveRequestDTO,
+	ObjectiveDTO
+} from '@personal-okr/shared';
 
 @Controller('work/okr')
 export class WorkPresentationOKRController {

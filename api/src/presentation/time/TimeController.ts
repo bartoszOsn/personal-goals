@@ -7,14 +7,16 @@ import {
 	Post,
 	Put
 } from '@nestjs/common';
-import type { SprintSettingsDTO } from './dto/SprintSettingsDTO';
-import type { RestPeriodListDTO } from './dto/RestPeriodListDTO';
-import type { RestPeriodRequestDTO } from './dto/RestPeriodRequestDTO';
-import type { RestPeriodDTO } from './dto/RestPeriodDTO';
-import { SprintListDTO } from './dto/SprintListDTO';
 import { TimeService } from '../../app/time/TimeService';
 import { TimeDTOConverter } from './TimeDTOConverter';
 import { RestPeriodId } from '../../domain/time/model/RestPeriod';
+import type {
+	RestPeriodDTO,
+	RestPeriodListDTO,
+	RestPeriodRequestDTO,
+	SprintListDTO,
+	SprintSettingsDTO
+} from '@personal-okr/shared';
 
 @Controller('time')
 export class TimeController {
