@@ -6,11 +6,6 @@ import {
 	SprintSettingsQuarterAssignment
 } from '../../domain/time/model/SprintSettings';
 import { UnreachableError } from '../../util/UnreachableError';
-import { RestPeriod, RestPeriodId } from '../../domain/time/model/RestPeriod';
-import { RestPeriodEntity } from './entity/RestPeriodEntity';
-import { User } from '../../domain/auth/model/User';
-import { RestPeriodRequest } from '../../domain/time/model/RestPeriodRequest';
-import { UserEntity } from '../auth/entity/UserEntity';
 
 @Injectable()
 export class TimeEntityConverter {
@@ -52,27 +47,6 @@ export class TimeEntityConverter {
 			default:
 				throw new UnreachableError(quarterAssignment);
 		}
-	}
-
-	fromRestPeriodEntity(entity: RestPeriodEntity): RestPeriod {
-		return new RestPeriod(
-			new RestPeriodId(entity.id),
-			entity.name ?? null,
-			entity.start,
-			entity.end
-		);
-	}
-
-	toRestPeriodEntity(
-		user: User,
-		request: RestPeriodRequest
-	): RestPeriodEntity {
-		const entity = new RestPeriodEntity();
-		entity.name = request.name ?? undefined;
-		entity.start = request.start;
-		entity.end = request.end;
-		entity.user = { id: user.id.id } as unknown as UserEntity;
-		return entity;
 	}
 
 	private fromSprintSettingsEntityDuration(

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { SprintSettings, SprintSettingsDuration } from './model/SprintSettings';
-import { RestPeriod } from './model/RestPeriod';
 import { Sprint } from './model/Sprint';
 import { Year } from './model/Year';
 import { Quarter } from './model/Quarter';
@@ -11,10 +10,7 @@ import { SprintStatus } from './model/SprintStatus';
 export class TimeSprintCalculationService {
 	private static readonly generationStart = new Date(1970, 0, 1);
 
-	calculateSprints(
-		settings: SprintSettings,
-		restPeriods: RestPeriod[]
-	): Sprint[] {
+	calculateSprints(settings: SprintSettings): Sprint[] {
 		const sprints: Sprint[] = [];
 		const generateUntil = settings.generateUntil;
 		const sprintDurationMs = this.getSprintDurationInMs(
@@ -28,32 +24,12 @@ export class TimeSprintCalculationService {
 			const currentYear = currentDate.getFullYear();
 			const yearEnd = new Date(currentYear, 11, 31, 23, 59, 59, 999);
 
-			// Skip if current date is in a rest period
-			if (this.isInRestPeriod(currentDate, restPeriods)) {
-				currentDate = this.getNextDateAfterRestPeriod(
-					currentDate,
-					restPeriods
-				);
-				continue;
-			}
-
 			// Calculate sprint end date
 			let sprintEnd = new Date(currentDate.getTime() + sprintDurationMs);
 
 			// Ensure sprint doesn't cross year boundary
 			if (sprintEnd > yearEnd) {
 				sprintEnd = yearEnd;
-			}
-
-			// Check if sprint overlaps with rest period
-			const restPeriodStart = this.getRestPeriodStartInRange(
-				currentDate,
-				sprintEnd,
-				restPeriods
-			);
-			if (restPeriodStart) {
-				// Shorten sprint to end before rest period
-				sprintEnd = new Date(restPeriodStart.getTime() - 1);
 			}
 
 			// Only add sprint if it has positive duration
@@ -109,41 +85,6 @@ export class TimeSprintCalculationService {
 			default:
 				throw new UnreachableError(duration);
 		}
-	}
-
-	private isInRestPeriod(date: Date, restPeriods: RestPeriod[]): boolean {
-		return restPeriods.some(
-			(period) => date >= period.start && date <= period.end
-		);
-	}
-
-	private getNextDateAfterRestPeriod(
-		date: Date,
-		restPeriods: RestPeriod[]
-	): Date {
-		const overlappingPeriod = restPeriods.find(
-			(period) => date >= period.start && date <= period.end
-		);
-
-		if (overlappingPeriod) {
-			return new Date(overlappingPeriod.end.getTime() + 1);
-		}
-
-		return date;
-	}
-
-	private getRestPeriodStartInRange(
-		start: Date,
-		end: Date,
-		restPeriods: RestPeriod[]
-	): Date | null {
-		for (const period of restPeriods) {
-			const periodStart = period.start;
-			if (periodStart > start && periodStart <= end) {
-				return periodStart;
-			}
-		}
-		return null;
 	}
 
 	private getSprintStatus(sprintStart: Date, sprintEnd: Date): SprintStatus {

@@ -5,19 +5,14 @@ import {
 	SprintSettingsDuration,
 	SprintSettingsQuarterAssignment
 } from '../../domain/time/model/SprintSettings';
-import { RestPeriod } from '../../domain/time/model/RestPeriod';
-import { RestPeriodRequest } from '../../domain/time/model/RestPeriodRequest';
 import { Quarter } from '../../domain/time/model/Quarter';
 import { UnreachableError } from '../../util/UnreachableError';
 import { SprintStatus } from '../../domain/time/model/SprintStatus';
 import {
-	RestPeriodListDTO,
-	RestPeriodRequestDTO,
-	SprintListDTO,
-	SprintSettingsDTO,
-	RestPeriodDTO,
+	QuarterDTO,
 	SprintDTO,
-	QuarterDTO
+	SprintListDTO,
+	SprintSettingsDTO
 } from '@personal-okr/shared';
 
 @Injectable()
@@ -44,33 +39,6 @@ export class TimeDTOConverter {
 			this.fromSprintQuarterAssignmentDTO(settings.quarterAssignment),
 			new Date(settings.generateUntil)
 		);
-	}
-
-	toRestPeriodListDTO(restPeriods: RestPeriod[]): RestPeriodListDTO {
-		return {
-			restPeriods: restPeriods.map((restPeriod) =>
-				this.toRestPeriodDTO(restPeriod)
-			)
-		};
-	}
-
-	fromRestPeriodRequestDTO(
-		restPeriodCreation: RestPeriodRequestDTO
-	): RestPeriodRequest {
-		return new RestPeriodRequest(
-			restPeriodCreation.name ?? null,
-			new Date(restPeriodCreation.start),
-			new Date(restPeriodCreation.end)
-		);
-	}
-
-	toRestPeriodDTO(restPeriod: RestPeriod): RestPeriodDTO {
-		return {
-			id: restPeriod.id.getId(),
-			name: restPeriod.name ?? undefined,
-			start: restPeriod.start.toString(),
-			end: restPeriod.end.toString()
-		};
 	}
 
 	private toSprintDTO(sprint: Sprint): SprintDTO {

@@ -1,22 +1,7 @@
-import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Param,
-	Post,
-	Put
-} from '@nestjs/common';
+import { Body, Controller, Get, Put } from '@nestjs/common';
 import { TimeService } from '../../app/time/TimeService';
 import { TimeDTOConverter } from './TimeDTOConverter';
-import { RestPeriodId } from '../../domain/time/model/RestPeriod';
-import type {
-	RestPeriodDTO,
-	RestPeriodListDTO,
-	RestPeriodRequestDTO,
-	SprintListDTO,
-	SprintSettingsDTO
-} from '@personal-okr/shared';
+import type { SprintListDTO, SprintSettingsDTO } from '@personal-okr/shared';
 
 @Controller('time')
 export class TimeController {
@@ -43,48 +28,5 @@ export class TimeController {
 	): Promise<void> {
 		const request = this.timeDTOConverter.fromSettingsDTO(settings);
 		await this.timeService.updateSprintSettings(request);
-	}
-
-	@Get('rest-period')
-	public async getRestPeriods(): Promise<RestPeriodListDTO> {
-		const restPeriods = await this.timeService.getRestPeriods();
-
-		return this.timeDTOConverter.toRestPeriodListDTO(restPeriods);
-	}
-
-	@Post('rest-period')
-	public async addRestPeriod(
-		@Body() restPeriodCreation: RestPeriodRequestDTO
-	): Promise<RestPeriodDTO> {
-		const request =
-			this.timeDTOConverter.fromRestPeriodRequestDTO(restPeriodCreation);
-
-		const newRestPeriod = await this.timeService.addRestPeriod(request);
-		return this.timeDTOConverter.toRestPeriodDTO(newRestPeriod);
-	}
-
-	@Put('rest-period/:id')
-	public async updateRestPeriod(
-		@Body() restPeriodRequest: RestPeriodRequestDTO,
-		@Param('id') id: string
-	): Promise<RestPeriodDTO> {
-		const request =
-			this.timeDTOConverter.fromRestPeriodRequestDTO(restPeriodRequest);
-		const restPeriodId = new RestPeriodId(id);
-
-		const updated = await this.timeService.updateRestPeriod(
-			restPeriodId,
-			request
-		);
-		return this.timeDTOConverter.toRestPeriodDTO(updated);
-	}
-
-	@Delete('rest-period/:id')
-	public async deleteRestPeriod(
-		@Param('id')
-		id: string
-	): Promise<void> {
-		const restPeriodId = new RestPeriodId(id);
-		await this.timeService.deleteRestPeriod(restPeriodId);
 	}
 }
