@@ -1,15 +1,17 @@
-import { SidebarProvider, SidebarTrigger } from '@/base/components/ui/sidebar.tsx';
 import { Outlet } from '@tanstack/react-router';
 import { AppSidebar } from '@/routes/work/AppSidebar.tsx';
+import { AppShell } from '@mantine/core';
 
 export function WorkRoute() {
 	return (
-		<SidebarProvider>
+		<AppShell navbar={{
+			width: 250,
+			breakpoint: 'sm'
+		}}>
 			<AppSidebar />
-			<main className='relative pt-12 px-8'>
-				<SidebarTrigger className='absolute top-2 left-2' />
+			<AppShell.Main>
 				<Outlet />
-			</main>
-		</SidebarProvider>
-	)
+			</AppShell.Main>
+		</AppShell>
+	);
 }
