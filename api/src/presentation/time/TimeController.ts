@@ -1,7 +1,20 @@
-import { Body, Controller, Get, Put } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	NotImplementedException,
+	Post,
+	Put
+} from '@nestjs/common';
 import { TimeService } from '../../app/time/TimeService';
 import { TimeDTOConverter } from './TimeDTOConverter';
-import type { SprintListDTO, SprintSettingsDTO } from '@personal-okr/shared';
+import type {
+	SprintListDTO,
+	SprintSettingsDTO,
+	SprintListChangeDTO,
+	SprintDeleteResultDTO
+} from '@personal-okr/shared';
 
 @Controller('time')
 export class TimeController {
@@ -14,6 +27,21 @@ export class TimeController {
 	public async getSprints(): Promise<SprintListDTO> {
 		const sprints = await this.timeService.getSprints();
 		return this.timeDTOConverter.toListDTO(sprints);
+	}
+
+	@Post('sprint')
+	public createSprints(): Promise<SprintListChangeDTO> {
+		throw new NotImplementedException();
+	}
+
+	@Put('sprint/:id')
+	public updateSprint(): Promise<SprintListChangeDTO> {
+		throw new NotImplementedException();
+	}
+
+	@Delete('sprint/:id')
+	public deleteSprint(): Promise<SprintDeleteResultDTO> {
+		throw new NotImplementedException();
 	}
 
 	@Get('sprint-settings')
