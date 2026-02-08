@@ -2,6 +2,8 @@ export * from './dto/time/QuarterDTO';
 export * from './dto/time/SprintDTO';
 export * from './dto/time/SprintListDTO';
 export * from './dto/time/SprintSettingsDTO';
+export * from './dto/time/SprintListChangeDTO';
+export * from './dto/time/SprintDeleteResultDTO';
 
 export * from './dto/work/KeyResultDTO';
 export * from './dto/work/KeyResultRequestDTO';
