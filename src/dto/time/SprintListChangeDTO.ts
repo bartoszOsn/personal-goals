@@ -11,5 +11,7 @@ export interface SprintChangeSuccessDTO {
 export interface SprintChangeOverlapFailureDTO {
 	status: 'failure';
 	reason: 'overlap';
-	conflictingSprings: SprintListDTO;
+	conflictingSprings: {
+		[sprintId: string]: SprintListDTO;
+	};
 }
