@@ -66,8 +66,8 @@ export class TimeDTOConverter {
 			year: sprint.year.getValue(),
 			quarter: this.toQuarterDTO(sprint.quarter),
 			yearlyIndex: sprint.yearlyIndex,
-			startDate: sprint.start,
-			endDate: sprint.end,
+			startDate: sprint.startDate,
+			endDate: sprint.endDate,
 			status: this.toSprintStatusDTO(sprint.status)
 		};
 	}

@@ -5,10 +5,10 @@ import { SprintId } from '../../domain/time/model/SprintId';
 
 export abstract class TimeRepository {
 	abstract getSprintTimeRanges(user: User): Promise<SprintTimeRange[]>;
-	abstract updateSprintTimeRange(
+	abstract updateSprintTimeRanges(
 		user: User,
-		timeRange: SprintTimeRange
-	): Promise<SprintTimeRange>;
+		ranges: SprintTimeRange[]
+	): Promise<void>;
 	abstract createSprintTimeRange(
 		user: User,
 		startDate: Date,
@@ -17,6 +17,7 @@ export abstract class TimeRepository {
 	abstract deleteSprintTimeRange(user: User, id: SprintId): Promise<void>;
 
 	abstract getSprintSettings(user: User): Promise<SprintSettings | null>;
+
 	abstract updateSprintSettings(
 		user: User,
 		settings: SprintSettings

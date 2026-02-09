@@ -31,28 +31,27 @@ export class TimeRepositoryImpl extends TimeRepository {
 		return this.timeEntityConverter.fromSprintTimeRangeEntities(entities);
 	}
 
-	async updateSprintTimeRange(
+	async updateSprintTimeRanges(
 		user: User,
-		timeRange: SprintTimeRange
-	): Promise<SprintTimeRange> {
-		await this.sprintTimeRangeRepository.update(
-			{
-				user: { id: user.id.id },
-				id: timeRange.id.value
-			},
-			{ startDate: timeRange.startDate, endDate: timeRange.endDate }
+		timeRanges: SprintTimeRange[]
+	): Promise<void> {
+		await this.sprintTimeRangeRepository.manager.transaction(
+			async (manager) => {
+				for (const timeRange of timeRanges) {
+					await manager.update(
+						SprintTimeRangeEntity,
+						{
+							user: { id: user.id.id },
+							id: timeRange.id.value
+						},
+						{
+							startDate: timeRange.startDate,
+							endDate: timeRange.endDate
+						}
+					);
+				}
+			}
 		);
-
-		const entity = await this.sprintTimeRangeRepository.findOneBy({
-			user: { id: user.id.id },
-			id: timeRange.id.value
-		});
-
-		if (!entity) {
-			throw new Error('Sprint time range not found');
-		}
-
-		return this.timeEntityConverter.fromSprintTimeRangeEntity(entity);
 	}
 
 	async createSprintTimeRange(

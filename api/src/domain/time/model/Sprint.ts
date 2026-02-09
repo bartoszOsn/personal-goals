@@ -2,15 +2,18 @@ import { Year } from './Year';
 import { Quarter } from './Quarter';
 import { SprintStatus } from './SprintStatus';
 import { SprintId } from './SprintId';
+import { SprintTimeRange } from './SprintTimeRange';
 
-export class Sprint {
+export class Sprint extends SprintTimeRange {
 	constructor(
-		public readonly id: SprintId,
+		id: SprintId,
 		public readonly year: Year,
 		public readonly quarter: Quarter,
 		public readonly yearlyIndex: number,
-		public readonly start: Date,
-		public readonly end: Date,
+		startDate: Date,
+		endDate: Date,
 		public readonly status: SprintStatus
-	) {}
+	) {
+		super(id, startDate, endDate);
+	}
 }
