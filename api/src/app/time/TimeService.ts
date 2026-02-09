@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { Sprint } from '../../domain/time/model/Sprint';
 import { SprintSettings } from '../../domain/time/model/SprintSettings';
 import { TimeRepository } from './TimeRepository';
 import { UserStorage } from '../auth/UserStorage';
 import { getSprintsFromSprintRangesAndSettings } from '../../domain/time/getSprintsFromSprintRangesAndSettings';
+import { SprintChangeAttemptResult } from './SprintChangeAttemptResult';
+import { SprintTimeRange } from '../../domain/time/model/SprintTimeRange';
 
 @Injectable()
 export class TimeService {
@@ -23,6 +25,12 @@ export class TimeService {
 			sprintSettings,
 			today
 		);
+	}
+
+	public updateSprintRanges(
+		ranges: SprintTimeRange[]
+	): Promise<SprintChangeAttemptResult> {
+		throw new NotImplementedException();
 	}
 
 	public async getSprintSettings(): Promise<SprintSettings> {

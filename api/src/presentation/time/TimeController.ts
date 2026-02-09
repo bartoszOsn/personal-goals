@@ -1,5 +1,6 @@
 import {
 	Body,
+	ConflictException,
 	Controller,
 	Delete,
 	Get,
@@ -13,7 +14,8 @@ import type {
 	SprintListDTO,
 	SprintSettingsDTO,
 	SprintListChangeDTO,
-	SprintDeleteResultDTO
+	SprintDeleteResultDTO,
+	SprintChangeRequestDTO
 } from '@personal-okr/shared';
 
 @Controller('time')
@@ -34,9 +36,20 @@ export class TimeController {
 		throw new NotImplementedException();
 	}
 
-	@Put('sprint/:id')
-	public updateSprint(): Promise<SprintListChangeDTO> {
-		throw new NotImplementedException();
+	@Put('sprint')
+	public async updateSprints(
+		@Body() request: SprintChangeRequestDTO
+	): Promise<SprintListChangeDTO> {
+		const newRanges =
+			this.timeDTOConverter.fromSprintChangeRequestDTO(request);
+		const result = await this.timeService.updateSprintRanges(newRanges);
+		if (result.isSuccess) {
+			return this.timeDTOConverter.toListChangeDTO(result);
+		} else {
+			throw new ConflictException(
+				this.timeDTOConverter.toListChangeDTO(result)
+			);
+		}
 	}
 
 	@Delete('sprint/:id')
