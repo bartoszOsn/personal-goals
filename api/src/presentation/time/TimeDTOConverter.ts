@@ -43,6 +43,7 @@ export class TimeDTOConverter {
 
 	private toSprintDTO(sprint: Sprint): SprintDTO {
 		return {
+			id: sprint.id.value,
 			year: sprint.year.getValue(),
 			quarter: this.toQuarterDTO(sprint.quarter),
 			yearlyIndex: sprint.yearlyIndex,
