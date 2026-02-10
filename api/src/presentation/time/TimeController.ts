@@ -15,7 +15,9 @@ import type {
 	SprintSettingsDTO,
 	SprintListChangeDTO,
 	SprintDeleteResultDTO,
-	SprintChangeRequestDTO
+	SprintChangeRequestDTO,
+	SprintBulkCreateRequestDTO,
+	SprintListCreateDTO
 } from '@personal-okr/shared';
 
 @Controller('time')
@@ -32,8 +34,25 @@ export class TimeController {
 	}
 
 	@Post('sprint')
-	public createSprints(): Promise<SprintListChangeDTO> {
-		throw new NotImplementedException();
+	public async createSprints(
+		@Body() request: SprintBulkCreateRequestDTO
+	): Promise<SprintListCreateDTO> {
+		const sprintDuration = this.timeDTOConverter.fromSprintDurationDTO(
+			request.sprintDuration
+		);
+		const result = await this.timeService.createBulkSprints(
+			new Date(request.startDate),
+			request.numberOfSprints,
+			sprintDuration
+		);
+
+		if (result.isSuccess) {
+			return this.timeDTOConverter.toListCreateDTO(result);
+		} else {
+			throw new ConflictException(
+				this.timeDTOConverter.toListCreateDTO(result)
+			);
+		}
 	}
 
 	@Put('sprint')

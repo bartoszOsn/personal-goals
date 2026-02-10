@@ -3,10 +3,7 @@ import { Sprint } from '../../domain/time/model/Sprint';
 export class SprintChangeAttemptSuccessResult {
 	readonly isSuccess = true as const;
 
-	constructor(
-		public readonly addedSprints: Sprint[],
-		public readonly modifiedSprints: Sprint[]
-	) {}
+	constructor(public readonly modifiedSprints: Sprint[]) {}
 }
 
 export class SprintChangeAttemptOverlapFailureResult {

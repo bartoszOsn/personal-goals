@@ -10,6 +10,7 @@ import { TimeEntityConverter } from './TimeEntityConverter';
 import { SprintId } from 'src/domain/time/model/SprintId';
 import { SprintTimeRange } from 'src/domain/time/model/SprintTimeRange';
 import { SprintTimeRangeEntity } from './entity/SprintTimeRangeEntity';
+import { TimeRange } from '../../domain/time/model/TimeRange';
 
 @Injectable()
 export class TimeRepositoryImpl extends TimeRepository {
@@ -54,20 +55,23 @@ export class TimeRepositoryImpl extends TimeRepository {
 		);
 	}
 
-	async createSprintTimeRange(
+	async createSprintTimeRanges(
 		user: User,
-		startDate: Date,
-		endDate: Date
-	): Promise<SprintTimeRange> {
-		const entity = new SprintTimeRangeEntity();
-		entity.user = { id: user.id.id } as unknown as UserEntity;
-		entity.startDate = startDate;
-		entity.endDate = endDate;
+		ranges: TimeRange[]
+	): Promise<SprintTimeRange[]> {
+		const entities = ranges.map((range) => {
+			const entity = new SprintTimeRangeEntity();
+			entity.user = { id: user.id.id } as unknown as UserEntity;
+			entity.startDate = range.startDate;
+			entity.endDate = range.endDate;
+			return entity;
+		});
 
-		const createdEntity = await this.sprintTimeRangeRepository.save(entity);
+		const createdEntities =
+			await this.sprintTimeRangeRepository.save(entities);
 
-		return this.timeEntityConverter.fromSprintTimeRangeEntity(
-			createdEntity
+		return this.timeEntityConverter.fromSprintTimeRangeEntities(
+			createdEntities
 		);
 	}
 

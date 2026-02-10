@@ -14,12 +14,14 @@ import {
 	SprintChangeRequestDTO,
 	SprintDTO,
 	SprintListChangeDTO,
+	SprintListCreateDTO,
 	SprintListDTO,
 	SprintSettingsDTO
 } from '@personal-okr/shared';
 import { SprintTimeRange } from '../../domain/time/model/SprintTimeRange';
 import { SprintId } from '../../domain/time/model/SprintId';
 import { SprintChangeAttemptResult } from '../../app/time/SprintChangeAttemptResult';
+import { SprintCreateAttemptResult } from '../../app/time/SprintCreateAttemptResult';
 
 @Injectable()
 export class TimeDTOConverter {
@@ -117,7 +119,7 @@ export class TimeDTOConverter {
 		}
 	}
 
-	private fromSprintDurationDTO(
+	fromSprintDurationDTO(
 		sprintDuration: SprintSettingsDTO['sprintDuration']
 	): SprintSettingsDuration {
 		switch (sprintDuration) {
@@ -164,7 +166,6 @@ export class TimeDTOConverter {
 		if (result.isSuccess) {
 			return {
 				status: 'success',
-				addedSprints: this.toListDTO(result.addedSprints),
 				modifiedSprints: this.toListDTO(result.modifiedSprints)
 			};
 		}
@@ -177,6 +178,21 @@ export class TimeDTOConverter {
 					([key, value]) => [key, this.toListDTO(value)] as const
 				)
 			) as SprintChangeOverlapFailureDTO['conflictingSprings']
+		};
+	}
+
+	toListCreateDTO(result: SprintCreateAttemptResult): SprintListCreateDTO {
+		if (result.isSuccess) {
+			return {
+				status: 'success',
+				addedSprints: this.toListDTO(result.addedSprints)
+			};
+		}
+
+		return {
+			status: 'failure',
+			reason: 'overlap',
+			conflictingSprings: this.toListDTO(result.conflictingSprings)
 		};
 	}
 }

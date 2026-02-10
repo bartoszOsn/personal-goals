@@ -1,6 +1,9 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Sprint } from '../../domain/time/model/Sprint';
-import { SprintSettings } from '../../domain/time/model/SprintSettings';
+import {
+	SprintSettings,
+	SprintSettingsDuration
+} from '../../domain/time/model/SprintSettings';
 import { TimeRepository } from './TimeRepository';
 import { UserStorage } from '../auth/UserStorage';
 import { getSprintsFromSprintRangesAndSettings } from '../../domain/time/getSprintsFromSprintRangesAndSettings';
@@ -11,6 +14,13 @@ import {
 } from './SprintChangeAttemptResult';
 import { SprintTimeRange } from '../../domain/time/model/SprintTimeRange';
 import { getConflictsOnSprintUpdate } from '../../domain/time/getConflictsOnSprintUpdate';
+import { getNewSprintTimeRanges } from '../../domain/time/getNewSprintTimeRanges';
+import {
+	SprintCreateAttemptOverlapFailureResult,
+	SprintCreateAttemptResult,
+	SprintCreateAttemptSuccessResult
+} from './SprintCreateAttemptResult';
+import { getConflictsOnSprintCreate } from '../../domain/time/GetConflictsOnSprintCreate';
 
 @Injectable()
 export class TimeService {
@@ -65,8 +75,48 @@ export class TimeService {
 
 		await this.timeRepository.updateSprintTimeRanges(user, ranges);
 		return new SprintChangeAttemptSuccessResult(
-			[],
 			getSprintsFromSprintRangesAndSettings(ranges, sprintSettings, today)
+		);
+	}
+
+	public async createBulkSprints(
+		startDate: Date,
+		numberOfSprints: number,
+		sprintDuration: SprintSettingsDuration
+	): Promise<SprintCreateAttemptResult> {
+		const user = await this.userStorage.getUser();
+		const currentRanges =
+			await this.timeRepository.getSprintTimeRanges(user);
+		const timeRanges = getNewSprintTimeRanges(
+			startDate,
+			numberOfSprints,
+			sprintDuration
+		);
+		const sprintSettings = await this.getSprintSettings();
+		const today = new Date();
+
+		const conflicts = getConflictsOnSprintCreate(timeRanges, currentRanges);
+		if (conflicts.length > 0) {
+			return new SprintCreateAttemptOverlapFailureResult(
+				getSprintsFromSprintRangesAndSettings(
+					conflicts,
+					sprintSettings,
+					today
+				)
+			);
+		}
+
+		const adddedRanges = await this.timeRepository.createSprintTimeRanges(
+			user,
+			timeRanges
+		);
+
+		return new SprintCreateAttemptSuccessResult(
+			getSprintsFromSprintRangesAndSettings(
+				adddedRanges,
+				sprintSettings,
+				today
+			)
 		);
 	}
 

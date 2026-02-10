@@ -2,6 +2,7 @@ import { User } from '../../domain/auth/model/User';
 import { SprintSettings } from '../../domain/time/model/SprintSettings';
 import { SprintTimeRange } from '../../domain/time/model/SprintTimeRange';
 import { SprintId } from '../../domain/time/model/SprintId';
+import { TimeRange } from '../../domain/time/model/TimeRange';
 
 export abstract class TimeRepository {
 	abstract getSprintTimeRanges(user: User): Promise<SprintTimeRange[]>;
@@ -9,11 +10,10 @@ export abstract class TimeRepository {
 		user: User,
 		ranges: SprintTimeRange[]
 	): Promise<void>;
-	abstract createSprintTimeRange(
+	abstract createSprintTimeRanges(
 		user: User,
-		startDate: Date,
-		endDate: Date
-	): Promise<SprintTimeRange>;
+		ranges: TimeRange[]
+	): Promise<SprintTimeRange[]>;
 	abstract deleteSprintTimeRange(user: User, id: SprintId): Promise<void>;
 
 	abstract getSprintSettings(user: User): Promise<SprintSettings | null>;
