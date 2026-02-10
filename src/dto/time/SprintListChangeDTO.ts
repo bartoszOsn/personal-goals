@@ -4,7 +4,6 @@ export type SprintListChangeDTO = SprintChangeSuccessDTO | SprintChangeOverlapFa
 
 export interface SprintChangeSuccessDTO {
 	status: 'success';
-	addedSprints: SprintListDTO;
 	modifiedSprints: SprintListDTO;
 }
 
