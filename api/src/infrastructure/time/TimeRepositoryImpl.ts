@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TimeRepository } from '../../app/time/TimeRepository';
 import { User } from 'src/domain/auth/model/User';
 import { SprintSettings } from 'src/domain/time/model/SprintSettings';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { SprintSettingsEntity } from './entity/SprintSettingsEntity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../auth/entity/UserEntity';
@@ -75,10 +75,10 @@ export class TimeRepositoryImpl extends TimeRepository {
 		);
 	}
 
-	async deleteSprintTimeRange(user: User, id: SprintId): Promise<void> {
+	async deleteSprintTimeRanges(user: User, ids: SprintId[]): Promise<void> {
 		await this.sprintTimeRangeRepository.delete({
 			user: { id: user.id.id },
-			id: id.value
+			id: In(ids.map((id) => id.value))
 		});
 	}
 

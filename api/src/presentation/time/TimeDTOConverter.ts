@@ -12,6 +12,7 @@ import {
 	QuarterDTO,
 	SprintChangeOverlapFailureDTO,
 	SprintChangeRequestDTO,
+	SprintDeleteResultDTO,
 	SprintDTO,
 	SprintListChangeDTO,
 	SprintListCreateDTO,
@@ -22,6 +23,7 @@ import { SprintTimeRange } from '../../domain/time/model/SprintTimeRange';
 import { SprintId } from '../../domain/time/model/SprintId';
 import { SprintChangeAttemptResult } from '../../app/time/SprintChangeAttemptResult';
 import { SprintCreateAttemptResult } from '../../app/time/SprintCreateAttemptResult';
+import { SprintDeleteAttempt } from '../../app/time/SprintDeleteAttempt';
 
 @Injectable()
 export class TimeDTOConverter {
@@ -178,6 +180,20 @@ export class TimeDTOConverter {
 					([key, value]) => [key, this.toListDTO(value)] as const
 				)
 			) as SprintChangeOverlapFailureDTO['conflictingSprings']
+		};
+	}
+
+	toSprintDeleteResultDTO(
+		result: SprintDeleteAttempt
+	): SprintDeleteResultDTO {
+		if (result.isSuccess) {
+			return { status: 'success' };
+		}
+
+		return {
+			status: 'failure',
+			reason: 'task-assigned',
+			assignedTasks: [] // TODO: Map to taskDTO when tasks will be implemented
 		};
 	}
 

@@ -5,6 +5,8 @@ import {
 	Delete,
 	Get,
 	NotImplementedException,
+	Param,
+	ParseArrayPipe,
 	Post,
 	Put
 } from '@nestjs/common';
@@ -19,6 +21,7 @@ import type {
 	SprintBulkCreateRequestDTO,
 	SprintListCreateDTO
 } from '@personal-okr/shared';
+import { SprintId } from '../../domain/time/model/SprintId';
 
 @Controller('time')
 export class TimeController {
@@ -71,9 +74,20 @@ export class TimeController {
 		}
 	}
 
-	@Delete('sprint/:id')
-	public deleteSprint(): Promise<SprintDeleteResultDTO> {
-		throw new NotImplementedException();
+	@Delete('sprint/:ids')
+	public async deleteSprint(
+		@Param('ids', new ParseArrayPipe({ items: String, separator: ',' }))
+		ids: string[]
+	): Promise<SprintDeleteResultDTO> {
+		const sprintIds = ids.map((id) => new SprintId(id));
+		const result = await this.timeService.deleteSprintsByIds(sprintIds);
+		if (result.isSuccess) {
+			return this.timeDTOConverter.toSprintDeleteResultDTO(result);
+		} else {
+			throw new ConflictException(
+				this.timeDTOConverter.toSprintDeleteResultDTO(result)
+			);
+		}
 	}
 
 	@Get('sprint-settings')

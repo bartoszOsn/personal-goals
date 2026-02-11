@@ -14,7 +14,6 @@ export abstract class TimeRepository {
 		user: User,
 		ranges: TimeRange[]
 	): Promise<SprintTimeRange[]>;
-	abstract deleteSprintTimeRange(user: User, id: SprintId): Promise<void>;
 
 	abstract getSprintSettings(user: User): Promise<SprintSettings | null>;
 
@@ -22,4 +21,6 @@ export abstract class TimeRepository {
 		user: User,
 		settings: SprintSettings
 	): Promise<void>;
+
+	abstract deleteSprintTimeRanges(user: User, ids: SprintId[]): Promise<void>;
 }

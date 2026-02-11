@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { Sprint } from '../../domain/time/model/Sprint';
 import {
 	SprintSettings,
@@ -21,6 +21,11 @@ import {
 	SprintCreateAttemptSuccessResult
 } from './SprintCreateAttemptResult';
 import { getConflictsOnSprintCreate } from '../../domain/time/GetConflictsOnSprintCreate';
+import { SprintId } from '../../domain/time/model/SprintId';
+import {
+	SprintDeleteAttempt,
+	SprintDeleteSuccessAttempt
+} from './SprintDeleteAttempt';
 
 @Injectable()
 export class TimeService {
@@ -118,6 +123,16 @@ export class TimeService {
 				today
 			)
 		);
+	}
+
+	public async deleteSprintsByIds(
+		ids: SprintId[]
+	): Promise<SprintDeleteAttempt> {
+		// TODO: check if all sprints have no tasks assigned when tasks will be implemented
+
+		const user = await this.userStorage.getUser();
+		await this.timeRepository.deleteSprintTimeRanges(user, ids);
+		return new SprintDeleteSuccessAttempt();
 	}
 
 	public async getSprintSettings(): Promise<SprintSettings> {
