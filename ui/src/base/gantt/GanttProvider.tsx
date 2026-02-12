@@ -1,8 +1,10 @@
 import type { GanttProps } from '@/base/gantt/GanttProps.ts';
-import { createContext, type ReactNode, useContext } from 'react';
+import { createContext, type ReactNode, useContext, useState } from 'react';
 
 export interface GanttContext<TData> {
 	props: GanttProps<TData>;
+	rows: { id: string, top: number, height: number }[];
+	setRows(rows: { id: string, top: number, height: number }[]): void;
 }
 
 const GanttContext = createContext<GanttContext<unknown> | null>(null);
@@ -13,8 +15,10 @@ export interface GanttProviderProps<TData> {
 }
 
 export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
+	const [rows, setRows] = useState<{ id: string, top: number, height: number }[]>([]);
+
 	return (
-		<GanttContext.Provider value={{ props: props.props }}>
+		<GanttContext.Provider value={{ props: props.props, rows, setRows }}>
 			{props.children}
 		</GanttContext.Provider>
 	);
