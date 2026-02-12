@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useDateRanges } from '@/base/gantt/hooks/useDateRanges';
 import { GanttChartRowLines } from '@/base/gantt/chart/GanttChartRowLines';
 import { GanttCharttItemBars } from '@/base/gantt/chart/GanttCharttItemBars';
+import { GanttChartTodayLine } from '@/base/gantt/chart/GanttChartTodayLine';
 
 export function GanttChart<TData>() {
 	const context = useGanttContext<TData>();
@@ -23,6 +24,7 @@ export function GanttChart<TData>() {
 			<svg height={context.scrollAreaHeight} width={dateToPixelPos(endDate)}>
 				<GanttChartRowLines />
 				<GanttCharttItemBars />
+				<GanttChartTodayLine />
 			</svg>
 		</ScrollArea>
 	);

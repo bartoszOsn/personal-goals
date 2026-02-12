@@ -6,8 +6,8 @@ export function SprintSettingsRoute() {
 		{
 			id: '1',
 			name: 'Sprint 1',
-			start: new Date('2023-01-01'),
-			end: new Date('2023-01-31'),
+			start: new Date('2026-01-01'),
+			end: new Date('2026-01-31'),
 			color: 'green',
 			data: undefined,
 			linksInto: []
@@ -15,8 +15,8 @@ export function SprintSettingsRoute() {
 		{
 			id: '2',
 			name: 'Sprint 2',
-			start: new Date('2023-02-01'),
-			end: new Date('2023-02-28'),
+			start: new Date('2026-02-01'),
+			end: new Date('2026-02-28'),
 			color: 'blue',
 			data: undefined,
 			linksInto: []
@@ -24,8 +24,8 @@ export function SprintSettingsRoute() {
 		{
 			id: '3',
 			name: 'Sprint 3',
-			start: new Date('2023-03-01'),
-			end: new Date('2023-03-31'),
+			start: new Date('2026-03-01'),
+			end: new Date('2026-03-31'),
 			color: 'red',
 			data: undefined,
 			linksInto: []
@@ -33,8 +33,8 @@ export function SprintSettingsRoute() {
 		{
 			id: '4',
 			name: 'Sprint 4',
-			start: new Date('2023-04-01'),
-			end: new Date('2023-04-30'),
+			start: new Date('2026-04-01'),
+			end: new Date('2026-04-30'),
 			color: 'yellow',
 			data: undefined,
 			linksInto: []
@@ -42,8 +42,8 @@ export function SprintSettingsRoute() {
 		{
 			id: '5',
 			name: 'Sprint 5',
-			start: new Date('2023-05-01'),
-			end: new Date('2023-05-31'),
+			start: new Date('2026-05-01'),
+			end: new Date('2026-05-31'),
 			color: 'green',
 			data: undefined,
 			linksInto: []
@@ -51,8 +51,8 @@ export function SprintSettingsRoute() {
 		{
 			id: '6',
 			name: 'Sprint 6',
-			start: new Date('2023-06-01'),
-			end: new Date('2023-06-30'),
+			start: new Date('2026-06-01'),
+			end: new Date('2026-06-30'),
 			color: 'blue',
 			data: undefined,
 			linksInto: []
@@ -60,8 +60,8 @@ export function SprintSettingsRoute() {
 		{
 			id: '7',
 			name: 'Sprint 7',
-			start: new Date('2023-07-01'),
-			end: new Date('2023-07-31'),
+			start: new Date('2026-07-01'),
+			end: new Date('2026-07-31'),
 			color: 'red',
 			data: undefined,
 			linksInto: []
@@ -69,8 +69,8 @@ export function SprintSettingsRoute() {
 		{
 			id: '8',
 			name: 'Sprint 8',
-			start: new Date('2023-08-01'),
-			end: new Date('2023-08-31'),
+			start: new Date('2026-08-01'),
+			end: new Date('2026-08-31'),
 			color: 'yellow',
 			data: undefined,
 			linksInto: []
@@ -78,8 +78,8 @@ export function SprintSettingsRoute() {
 		{
 			id: '9',
 			name: 'Sprint 9',
-			start: new Date('2023-08-01'),
-			end: new Date('2023-08-31'),
+			start: new Date('2026-08-01'),
+			end: new Date('2026-08-31'),
 			color: 'yellow',
 			data: undefined,
 			linksInto: []
