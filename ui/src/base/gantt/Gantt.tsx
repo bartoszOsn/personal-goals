@@ -7,7 +7,7 @@ import { GanttChart } from '@/base/gantt/GanttChart.tsx';
 export function Gantt<TData>(props: GanttProps<TData>) {
 	return (
 		<GanttProvider props={props}>
-			<Group {...props.containerProps} flex='1 1 auto' mih='0'>
+			<Group {...props.containerProps} wrap='nowrap' flex='1 1 auto' mih='0'>
 				<GanttTable />
 				<GanttChart />
 			</Group>
