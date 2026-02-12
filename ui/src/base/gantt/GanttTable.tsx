@@ -57,7 +57,7 @@ export function GanttTable<TData>() {
 									   viewportRef: viewportRef,
 									   onScrollPositionChange: ({ y }) => context.setScrollY(y),
 									   viewportProps: {
-										   style: { paddingBottom: 0 }
+										   style: { paddingBottom: 0 },
 									   }
 									}}>
 				<Table ref={ref} stickyHeader>

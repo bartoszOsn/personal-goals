@@ -1,7 +1,7 @@
 import { useGanttContext } from '@/base/gantt/GanttProvider.tsx';
 import { useCallback, useMemo } from 'react';
 
-const pixelPerDay = 50;
+const pixelPerDay = 5;
 const pixelPerMillis = pixelPerDay / (1000 * 60 * 60 * 24);
 
 export function useDateRanges() {
