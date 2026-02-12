@@ -1,9 +1,6 @@
 import { useGanttContext } from '@/base/gantt/GanttProvider.tsx';
 import { useCallback, useMemo } from 'react';
 
-const pixelPerDay = 5;
-const pixelPerMillis = pixelPerDay / (1000 * 60 * 60 * 24);
-
 export function useDateRanges() {
 	const context = useGanttContext();
 	const sortedItems = useMemo(
@@ -19,9 +16,11 @@ export function useDateRanges() {
 		[sortedItems]
 	);
 
+	const pixelPerMillis = context.zoomLevel.pixelsPerDay / (1000 * 60 * 60 * 24);
+
 	const dateToPixelPos = useCallback((date: Date) => {
 		return (date.getTime() - startDate.getTime()) * pixelPerMillis;
-	}, [startDate]);
+	}, [pixelPerMillis, startDate]);
 
 	return {
 		startDate,

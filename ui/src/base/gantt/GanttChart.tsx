@@ -5,6 +5,8 @@ import { useDateRanges } from '@/base/gantt/hooks/useDateRanges';
 import { GanttChartRowLines } from '@/base/gantt/chart/GanttChartRowLines';
 import { GanttCharttItemBars } from '@/base/gantt/chart/GanttCharttItemBars';
 import { GanttChartTodayLine } from '@/base/gantt/chart/GanttChartTodayLine';
+import { GanttChartHeader } from '@/base/gantt/chart/GanttChartHeader';
+import { GanttZoomButtons } from '@/base/gantt/chart/GanttZoomButtons';
 
 export function GanttChart<TData>() {
 	const context = useGanttContext<TData>();
@@ -20,12 +22,14 @@ export function GanttChart<TData>() {
 	}, [context.scrollY]);
 
 	return (
-		<ScrollArea style={{ flexGrow: 1 }} h="100%" viewportRef={viewportRef} onScrollPositionChange={({ y }) => context.setScrollY(y)}>
+		<ScrollArea key={context.zoomLevel.pixelsPerDay} style={{ flexGrow: 1 }} h="100%" viewportRef={viewportRef} onScrollPositionChange={({ y }) => context.setScrollY(y)}>
 			<svg height={context.scrollAreaHeight} width={dateToPixelPos(endDate)}>
 				<GanttChartRowLines />
-				<GanttCharttItemBars />
 				<GanttChartTodayLine />
+				<GanttCharttItemBars />
+				<GanttChartHeader />
 			</svg>
+				<GanttZoomButtons />
 		</ScrollArea>
 	);
 }

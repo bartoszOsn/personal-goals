@@ -87,7 +87,7 @@ export function SprintSettingsRoute() {
 	];
 
 	return (
-		<Stack w='100%' h='100vh' style={{ overflow: 'hidden' }}>
+		<Stack w='100%' h='100vh' p='lg' style={{ overflow: 'hidden' }}>
 			<Title>Sprint Settings</Title>
 			<Gantt items={ganntItems} containerProps={{ w: '100%', style: { flexGrow: 1, flexShrink: 0 } }} />
 		</Stack>

@@ -1,6 +1,8 @@
 import type { GanttProps } from '@/base/gantt/GanttProps.ts';
 import { createContext, type ReactNode, useContext, useMemo, useState } from 'react';
 import type { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
+import { zoomLevels } from '@/base/gantt/zoomLevels';
+import type { ZoomLevel } from '@/base/gantt/model/ZoomLevel';
 
 export interface GanttContext<TData> {
 	props: GanttProps<TData>;
@@ -10,6 +12,8 @@ export interface GanttContext<TData> {
 	setScrollAreaHeight(scrollAreaHeight: number): void;
 	scrollY: number;
 	setScrollY(scrollY: number): void;
+	zoomLevel: ZoomLevel;
+	setZoomLevel(zoomLevel: ZoomLevel): void;
 }
 
 const GanttContext = createContext<GanttContext<unknown> | null>(null);
@@ -23,13 +27,15 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 	const [rows, setRows] = useState<RowPositionInfo[]>([]);
 	const [scrollAreaHeight, setScrollAreaHeight] = useState(0);
 	const [scrollY, setScrollY] = useState(0);
+	const [zoomLevel, setZoomLevel] = useState<ZoomLevel>(zoomLevels[0]);
 
 	const context = useMemo(() => ({
 		props: props.props,
 		rows, setRows,
 		scrollAreaHeight, setScrollAreaHeight,
-		scrollY, setScrollY
-	}), [props.props, rows, setRows, scrollAreaHeight, setScrollAreaHeight, scrollY, setScrollY])
+		scrollY, setScrollY,
+		zoomLevel, setZoomLevel
+	}), [props.props, rows, scrollAreaHeight, scrollY, zoomLevel])
 
 	return (
 		<GanttContext.Provider value={context}>
