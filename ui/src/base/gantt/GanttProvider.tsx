@@ -1,10 +1,15 @@
 import type { GanttProps } from '@/base/gantt/GanttProps.ts';
-import { createContext, type ReactNode, useContext, useState } from 'react';
+import { createContext, type ReactNode, useContext, useMemo, useState } from 'react';
+import type { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 
 export interface GanttContext<TData> {
 	props: GanttProps<TData>;
-	rows: { id: string, top: number, height: number }[];
-	setRows(rows: { id: string, top: number, height: number }[]): void;
+	rows: RowPositionInfo[];
+	setRows(rows: RowPositionInfo[]): void;
+	scrollAreaHeight: number;
+	setScrollAreaHeight(scrollAreaHeight: number): void;
+	scrollY: number;
+	setScrollY(scrollY: number): void;
 }
 
 const GanttContext = createContext<GanttContext<unknown> | null>(null);
@@ -15,10 +20,19 @@ export interface GanttProviderProps<TData> {
 }
 
 export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
-	const [rows, setRows] = useState<{ id: string, top: number, height: number }[]>([]);
+	const [rows, setRows] = useState<RowPositionInfo[]>([]);
+	const [scrollAreaHeight, setScrollAreaHeight] = useState(0);
+	const [scrollY, setScrollY] = useState(0);
+
+	const context = useMemo(() => ({
+		props: props.props,
+		rows, setRows,
+		scrollAreaHeight, setScrollAreaHeight,
+		scrollY, setScrollY
+	}), [props.props, rows, setRows, scrollAreaHeight, setScrollAreaHeight, scrollY, setScrollY])
 
 	return (
-		<GanttContext.Provider value={{ props: props.props, rows, setRows }}>
+		<GanttContext.Provider value={context}>
 			{props.children}
 		</GanttContext.Provider>
 	);
