@@ -2,6 +2,7 @@ import { useGanttContext } from '@/base/gantt/GanttProvider';
 import { ScrollArea } from '@mantine/core';
 import { useEffect, useRef } from 'react';
 import { useDateRanges } from '@/base/gantt/hooks/useDateRanges';
+import { GanttChartRowLines } from '@/base/gantt/chart/GanttChartRowLines';
 
 export function GanttChart<TData>() {
 	const context = useGanttContext<TData>();
@@ -19,6 +20,7 @@ export function GanttChart<TData>() {
 	return (
 		<ScrollArea style={{ flexGrow: 1 }} h="100%" viewportRef={viewportRef} onScrollPositionChange={({ y }) => context.setScrollY(y)}>
 			<svg height={context.scrollAreaHeight} width={dateToPixelPos(endDate)}>
+				<GanttChartRowLines />
 			</svg>
 		</ScrollArea>
 	);
