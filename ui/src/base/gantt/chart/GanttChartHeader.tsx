@@ -39,7 +39,7 @@ function HeaderRow(props: { cells: HeaderCell[], offsetY: number }) {
 					  y={y}
 					  width={width}
 					  height={height}
-					  fill="var(--mantine-color-gray-0)"
+					  fill="var(--mantine-color-gray-light)"
 					  rx='4' />
 				<HtmlInSvg x={x}
 						   y={y}
