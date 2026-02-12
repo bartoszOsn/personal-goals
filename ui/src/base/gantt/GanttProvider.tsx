@@ -14,6 +14,8 @@ export interface GanttContext<TData> {
 	setScrollY(scrollY: number): void;
 	zoomLevel: ZoomLevel;
 	setZoomLevel(zoomLevel: ZoomLevel): void;
+	chartViewportWidth: number;
+	setChartViewportWidth(viewportWidth: number): void;
 }
 
 const GanttContext = createContext<GanttContext<unknown> | null>(null);
@@ -28,14 +30,16 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 	const [scrollAreaHeight, setScrollAreaHeight] = useState(0);
 	const [scrollY, setScrollY] = useState(0);
 	const [zoomLevel, setZoomLevel] = useState<ZoomLevel>(zoomLevels[0]);
+	const [chartViewportWidth, setChartViewportWidth] = useState(0);
 
 	const context = useMemo(() => ({
 		props: props.props,
 		rows, setRows,
 		scrollAreaHeight, setScrollAreaHeight,
 		scrollY, setScrollY,
-		zoomLevel, setZoomLevel
-	}), [props.props, rows, scrollAreaHeight, scrollY, zoomLevel])
+		zoomLevel, setZoomLevel,
+		chartViewportWidth, setChartViewportWidth
+	}), [props.props, rows, scrollAreaHeight, scrollY, zoomLevel, chartViewportWidth, setChartViewportWidth])
 
 	return (
 		<GanttContext.Provider value={context}>
