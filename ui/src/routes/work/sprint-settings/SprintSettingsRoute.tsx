@@ -1,16 +1,20 @@
 import { Group, Stack } from '@mantine/core';
 import { Gantt, type GanttItem } from '@/base/gantt';
-import { useSprintQuery } from '@/api/sprint-hooks';
-import type { SprintDTO } from '@personal-okr/shared';
+import { useSprintQuery, useUpdateSprintsMutation } from '@/api/sprint-hooks';
+import type { SprintChangeOverlapFailureDTO, SprintChangeRequestDTO, SprintDTO } from '@personal-okr/shared';
 import { CreateSprintsButtton } from '@/routes/work/sprint-settings/CreateSprintsButtton';
 import { quarterToColor } from '@/core/quarterToColor';
 import { getSprintName } from '@/core/getSprintName';
 import { useState } from 'react';
 import { DeleteSprintsButton } from '@/routes/work/sprint-settings/DeleteSprintsButton';
 import { Temporal } from 'temporal-polyfill';
+import type { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
+import { HttpError } from '@/base/http';
+import { notifications } from '@mantine/notifications';
 
 export function SprintSettingsRoute() {
 	const sprints = useSprintQuery();
+	const updateSprints = useUpdateSprintsMutation();
 
 	const ganttItems: GanttItem<SprintDTO>[] = !sprints.data ? [] : sprints.data.sprints.map(sprint => ({
 		id: sprint.id,
@@ -23,6 +27,24 @@ export function SprintSettingsRoute() {
 	}));
 
 	const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
+
+	const changeDates = async (items: Map<string, GanttNewItemDates>) => {
+		const request: SprintChangeRequestDTO = Object.fromEntries(
+			[...items.entries()].map(([id, dates]) => [id, { newStartDate: dates.startDate.toString(), newEndDate: dates.endDate.toString() }])
+		);
+
+		await updateSprints.mutateAsync(request)
+			.catch(err => {
+				if (HttpError.is<SprintChangeOverlapFailureDTO>(err, 409)) {
+					notifications.show({
+						message: 'Sprint overlap detected. Please resolve conflicts before saving.',
+						color: 'red'
+					})
+				} else {
+					throw err;
+				}
+			})
+	}
 
 	return (
 		<Stack w="100%" h="100vh" p="lg" style={{ overflow: 'hidden' }}>
@@ -38,7 +60,7 @@ export function SprintSettingsRoute() {
 												containerProps={{ w: '100%', style: { flexGrow: 1, flexShrink: 0 } }}
 												selectedItemIds={selectedItemIds}
 												setSelectedItemIds={setSelectedItemIds}
-												changeDates={() => new Promise(res => setTimeout(res, 1000))}
+												changeDates={changeDates}
 				/>
 			}
 		</Stack>

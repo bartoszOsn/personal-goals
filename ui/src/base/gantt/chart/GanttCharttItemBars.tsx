@@ -42,7 +42,6 @@ function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) 
 		if (context.props.selectedItemIds?.includes(item.id)) {
 			return context.props.selectedItemIds.map(id => context.props.items.find(item => item.id === id)!);
 		} else {
-			context.props.setSelectedItemIds?.([item.id]);
 			return [context.props.items.find(i => i.id === item.id)!];
 		}
 	}
@@ -83,7 +82,7 @@ function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) 
 			{
 				context.props.changeDates && (
 					<>
-						<rect x={dateToPixelPos(actualStart)}
+						<rect x={dateToPixelPos(actualStart) - dragHandleWidth}
 							  y={row.top + yMargin}
 							  width={dragHandleWidth}
 							  height={row.height - yMargin * 2}
@@ -92,7 +91,7 @@ function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) 
 								  fill: 'transparent',
 								  cursor: 'w-resize'
 							  }} />
-						<rect x={dateToPixelPos(actualEnd) - dragHandleWidth}
+						<rect x={dateToPixelPos(actualEnd)}
 							  y={row.top + yMargin}
 							  width={dragHandleWidth}
 							  height={row.height - yMargin * 2}
