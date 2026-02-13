@@ -16,7 +16,7 @@ export function GanttChartTodayLine() {
 	}
 
 	return (
-		<Tooltip label={`Today (${today.toLocaleString()})`}>
+		<Tooltip.Floating label={`Today (${today.toLocaleString()})`}>
 			<g x={dateToPixelPos(today) - tooltipMargin} width={tooltipMargin * 2} y={0} height={context.scrollAreaHeight}>
 				<line x1={dateToPixelPos(today)}
 					  y1={0}
@@ -30,6 +30,6 @@ export function GanttChartTodayLine() {
 					  height={context.scrollAreaHeight}
 					  fill='transparent' />
 			</g>
-		</Tooltip>
+		</Tooltip.Floating>
 	)
 }
