@@ -24,6 +24,7 @@ import { SprintId } from '../../domain/time/model/SprintId';
 import { SprintChangeAttemptResult } from '../../app/time/SprintChangeAttemptResult';
 import { SprintCreateAttemptResult } from '../../app/time/SprintCreateAttemptResult';
 import { SprintDeleteAttempt } from '../../app/time/SprintDeleteAttempt';
+import { Temporal } from 'temporal-polyfill';
 
 @Injectable()
 export class TimeDTOConverter {
@@ -47,7 +48,7 @@ export class TimeDTOConverter {
 		return new SprintSettings(
 			this.fromSprintDurationDTO(settings.sprintDuration),
 			this.fromSprintQuarterAssignmentDTO(settings.quarterAssignment),
-			new Date(settings.generateUntil)
+			Temporal.PlainDate.from(settings.generateUntil)
 		);
 	}
 
@@ -58,8 +59,8 @@ export class TimeDTOConverter {
 			([sprintId, change]) =>
 				new SprintTimeRange(
 					new SprintId(sprintId),
-					new Date(change.newStartDate),
-					new Date(change.newEndDate)
+					Temporal.PlainDate.from(change.newStartDate),
+					Temporal.PlainDate.from(change.newEndDate)
 				)
 		);
 	}
@@ -70,8 +71,8 @@ export class TimeDTOConverter {
 			year: sprint.year.getValue(),
 			quarter: this.toQuarterDTO(sprint.quarter),
 			yearlyIndex: sprint.yearlyIndex,
-			startDate: sprint.startDate,
-			endDate: sprint.endDate,
+			startDate: sprint.startDate.toString(),
+			endDate: sprint.endDate.toString(),
 			status: this.toSprintStatusDTO(sprint.status)
 		};
 	}

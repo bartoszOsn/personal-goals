@@ -1,4 +1,4 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Sprint } from '../../domain/time/model/Sprint';
 import {
 	SprintSettings,
@@ -26,6 +26,7 @@ import {
 	SprintDeleteAttempt,
 	SprintDeleteSuccessAttempt
 } from './SprintDeleteAttempt';
+import { Temporal } from 'temporal-polyfill';
 
 @Injectable()
 export class TimeService {
@@ -39,7 +40,7 @@ export class TimeService {
 		const sprintRanges =
 			await this.timeRepository.getSprintTimeRanges(user);
 		const sprintSettings = await this.getSprintSettings();
-		const today = new Date();
+		const today = Temporal.Now.plainDateISO();
 		return getSprintsFromSprintRangesAndSettings(
 			sprintRanges,
 			sprintSettings,
@@ -52,7 +53,7 @@ export class TimeService {
 	): Promise<SprintChangeAttemptResult> {
 		const user = await this.userStorage.getUser();
 		const sprintSettings = await this.getSprintSettings();
-		const today = new Date();
+		const today = Temporal.Now.plainDateISO();
 		const currentRanges =
 			await this.timeRepository.getSprintTimeRanges(user);
 		const conflicts = getConflictsOnSprintUpdate(ranges, currentRanges);
@@ -85,7 +86,7 @@ export class TimeService {
 	}
 
 	public async createBulkSprints(
-		startDate: Date,
+		startDate: Temporal.PlainDate,
 		numberOfSprints: number,
 		sprintDuration: SprintSettingsDuration
 	): Promise<SprintCreateAttemptResult> {
@@ -98,7 +99,7 @@ export class TimeService {
 			sprintDuration
 		);
 		const sprintSettings = await this.getSprintSettings();
-		const today = new Date();
+		const today = Temporal.Now.plainDateISO();
 
 		const conflicts = getConflictsOnSprintCreate(timeRanges, currentRanges);
 		if (conflicts.length > 0) {

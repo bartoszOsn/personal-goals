@@ -46,8 +46,8 @@ export class TimeRepositoryImpl extends TimeRepository {
 							id: timeRange.id.value
 						},
 						{
-							startDate: timeRange.startDate,
-							endDate: timeRange.endDate
+							startDate: timeRange.startDate.toString(),
+							endDate: timeRange.endDate.toString()
 						}
 					);
 				}
@@ -62,8 +62,8 @@ export class TimeRepositoryImpl extends TimeRepository {
 		const entities = ranges.map((range) => {
 			const entity = new SprintTimeRangeEntity();
 			entity.user = { id: user.id.id } as unknown as UserEntity;
-			entity.startDate = range.startDate;
-			entity.endDate = range.endDate;
+			entity.startDate = range.startDate.toString();
+			entity.endDate = range.endDate.toString();
 			return entity;
 		});
 
@@ -113,7 +113,7 @@ export class TimeRepositoryImpl extends TimeRepository {
 					this.timeEntityConverter.toSprintSettingsEntityQuarterAssignment(
 						settings.quarterAssignment
 					),
-				generateUntil: settings.generateUntil
+				generateUntil: settings.generateUntil.toString()
 			}
 		);
 	}

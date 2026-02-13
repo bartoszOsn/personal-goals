@@ -10,7 +10,7 @@ export function getConflictsOnSprintUpdate(
 	);
 
 	const conflicts = new Map<SprintTimeRange, SprintTimeRange[]>();
-	for (let sprintTimeRange of sprintsToUpdate) {
+	for (const sprintTimeRange of sprintsToUpdate) {
 		const conflictsForSprint = allSprintsAfterChange.filter(
 			(s) =>
 				!s.id.equals(sprintTimeRange.id) && s.overlaps(sprintTimeRange)

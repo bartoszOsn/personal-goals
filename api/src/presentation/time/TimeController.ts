@@ -4,7 +4,6 @@ import {
 	Controller,
 	Delete,
 	Get,
-	NotImplementedException,
 	Param,
 	ParseArrayPipe,
 	Post,
@@ -13,15 +12,16 @@ import {
 import { TimeService } from '../../app/time/TimeService';
 import { TimeDTOConverter } from './TimeDTOConverter';
 import type {
-	SprintListDTO,
-	SprintSettingsDTO,
-	SprintListChangeDTO,
-	SprintDeleteResultDTO,
-	SprintChangeRequestDTO,
 	SprintBulkCreateRequestDTO,
-	SprintListCreateDTO
+	SprintChangeRequestDTO,
+	SprintDeleteResultDTO,
+	SprintListChangeDTO,
+	SprintListCreateDTO,
+	SprintListDTO,
+	SprintSettingsDTO
 } from '@personal-okr/shared';
 import { SprintId } from '../../domain/time/model/SprintId';
+import { Temporal } from 'temporal-polyfill';
 
 @Controller('time')
 export class TimeController {
@@ -44,7 +44,7 @@ export class TimeController {
 			request.sprintDuration
 		);
 		const result = await this.timeService.createBulkSprints(
-			new Date(request.startDate),
+			Temporal.PlainDate.from(request.startDate),
 			request.numberOfSprints,
 			sprintDuration
 		);

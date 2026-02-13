@@ -9,6 +9,7 @@ import { UnreachableError } from '../../util/UnreachableError';
 import { SprintTimeRangeEntity } from './entity/SprintTimeRangeEntity';
 import { SprintTimeRange } from '../../domain/time/model/SprintTimeRange';
 import { SprintId } from '../../domain/time/model/SprintId';
+import { Temporal } from 'temporal-polyfill';
 
 @Injectable()
 export class TimeEntityConverter {
@@ -18,7 +19,7 @@ export class TimeEntityConverter {
 			this.fromSprintSettingsEntityQuarterAssignment(
 				entity.quarterAssignment
 			),
-			entity.generateUntil
+			Temporal.PlainDate.from(entity.generateUntil)
 		);
 	}
 
@@ -61,8 +62,8 @@ export class TimeEntityConverter {
 	fromSprintTimeRangeEntity(entity: SprintTimeRangeEntity): SprintTimeRange {
 		return new SprintTimeRange(
 			new SprintId(entity.id),
-			entity.startDate,
-			entity.endDate
+			Temporal.PlainDate.from(entity.startDate),
+			Temporal.PlainDate.from(entity.endDate)
 		);
 	}
 

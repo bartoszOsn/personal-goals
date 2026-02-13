@@ -7,10 +7,10 @@ export class SprintTimeRangeEntity {
 	id: string;
 
 	@Column()
-	startDate: Date;
+	startDate: string;
 
 	@Column()
-	endDate: Date;
+	endDate: string;
 
 	@ManyToOne(() => UserEntity, (user) => user.sprints)
 	user: UserEntity;

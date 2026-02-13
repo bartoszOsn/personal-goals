@@ -1,3 +1,5 @@
+import { Temporal } from 'temporal-polyfill';
+
 export enum SprintSettingsDuration {
 	WEEK = 'week',
 	TWO_WEEKS = 'twoWeeks',
@@ -20,18 +22,10 @@ export class SprintSettings {
 	constructor(
 		public readonly sprintDuration: SprintSettingsDuration,
 		public readonly quarterAssignment: SprintSettingsQuarterAssignment,
-		public readonly generateUntil: Date
+		public readonly generateUntil: Temporal.PlainDate
 	) {}
 
-	private static getDateTenYearsInFuture() {
-		const now = new Date();
-		return new Date(
-			now.getFullYear() + 10,
-			now.getMonth(),
-			now.getDate(),
-			now.getHours(),
-			now.getMinutes(),
-			now.getSeconds()
-		);
+	private static getDateTenYearsInFuture(): Temporal.PlainDate {
+		return Temporal.Now.plainDateISO().add({ years: 10 });
 	}
 }

@@ -8,11 +8,12 @@ import { Year } from './model/Year';
 import { Quarter } from './model/Quarter';
 import { SprintStatus } from './model/SprintStatus';
 import { UnreachableError } from '../../util/UnreachableError';
+import { Temporal } from 'temporal-polyfill';
 
 export function getSprintsFromSprintRangesAndSettings(
 	ranges: SprintTimeRange[],
 	settings: SprintSettings,
-	today: Date
+	today: Temporal.PlainDate
 ): Sprint[] {
 	return ranges.map((range) => {
 		const id = range.id;
@@ -37,7 +38,7 @@ function getSprintYearFromRange(
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	_settings: SprintSettings
 ): Year {
-	return Year.of(range.endDate.getFullYear());
+	return Year.fromPlainDate(range.endDate);
 }
 
 function getSprintQuarterFromRange(
@@ -50,10 +51,11 @@ function getSprintQuarterFromRange(
 		case SprintSettingsQuarterAssignment.END:
 			return getQuartedByDate(range.endDate);
 		case SprintSettingsQuarterAssignment.BY_MAJORITY: {
-			const middleOfSprint = new Date(
-				range.startDate.getTime() +
-					(range.endDate.getTime() - range.startDate.getTime()) / 2
-			);
+			const middleOfSprint = range.startDate.add({
+				days: Math.round(
+					range.endDate.since(range.startDate).abs().total('days') / 2
+				)
+			});
 			return getQuartedByDate(middleOfSprint);
 		}
 		default:
@@ -70,26 +72,26 @@ function getSprintYearlyIndexFromRange(
 	const year = getSprintYearFromRange(range, settings);
 	return ranges
 		.filter((r) => getSprintYearFromRange(r, settings).equals(year))
-		.toSorted((a, b) => a.startDate.getTime() - b.startDate.getTime())
+		.toSorted((a, b) => a.startDate.since(b.startDate).sign)
 		.indexOf(range);
 }
 
 function getSprintStatusFromRange(
 	range: SprintTimeRange,
-	today: Date
+	today: Temporal.PlainDate
 ): SprintStatus {
-	if (range.endDate < today) {
+	if (Temporal.PlainDate.compare(range.endDate, today) === -1) {
 		return SprintStatus.COMPLETED;
 	}
-	if (range.startDate > today) {
+	if (Temporal.PlainDate.compare(range.startDate, today) === 1) {
 		return SprintStatus.COMPLETED;
 	}
 
 	return SprintStatus.ACTIVE;
 }
 
-function getQuartedByDate(date: Date): Quarter {
-	const month = date.getMonth() + 1;
+function getQuartedByDate(date: Temporal.PlainDate): Quarter {
+	const month = date.month;
 	if (month <= 3) {
 		return Quarter.Q1;
 	}

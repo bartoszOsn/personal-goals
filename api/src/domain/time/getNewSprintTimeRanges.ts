@@ -1,8 +1,9 @@
 import { SprintSettingsDuration } from './model/SprintSettings';
 import { TimeRange } from './model/TimeRange';
+import { Temporal } from 'temporal-polyfill';
 
 export function getNewSprintTimeRanges(
-	startDate: Date,
+	startDate: Temporal.PlainDate,
 	numberOfSprints: number,
 	sprintDuration: SprintSettingsDuration
 ): TimeRange[] {
@@ -18,27 +19,20 @@ export function getNewSprintTimeRanges(
 
 export function getNewSprintTimeRangesWeekly(
 	weeksInRange: number,
-	startDate: Date,
+	startDate: Temporal.PlainDate,
 	numberOfSprints: number
 ): TimeRange[] {
-	const firstMondayAfterStartDate = new Date(startDate);
-	firstMondayAfterStartDate.setDate(
-		firstMondayAfterStartDate.getDate() +
-			7 -
-			firstMondayAfterStartDate.getDay()
-	);
+	const firstMondayAfterStartDate = getNextOrSameMonday(startDate);
 
 	const result: TimeRange[] = [];
 	let currentStart = firstMondayAfterStartDate;
 	while (result.length < numberOfSprints) {
 		const start = currentStart;
-		const end = new Date(start);
-		end.setDate(end.getDate() + 7 * weeksInRange);
+		const end = start.add({ weeks: weeksInRange, days: -1 });
 
 		const range = new TimeRange(start, end);
 		result.push(range);
-		currentStart = new Date(end);
-		currentStart.setDate(currentStart.getDate() + 1);
+		currentStart = end.add({ days: 1 });
 	}
 
 	return result;
@@ -46,27 +40,43 @@ export function getNewSprintTimeRangesWeekly(
 
 function getNewSprintTimeRangesMonthly(
 	monthsInRange: number,
-	startDate: Date,
+	startDate: Temporal.PlainDate,
 	numberOfSprints: number
 ): TimeRange[] {
-	const firstMonthStartAfterStart = new Date(startDate);
-	firstMonthStartAfterStart.setMonth(
-		firstMonthStartAfterStart.getMonth() + 1
-	);
-	firstMonthStartAfterStart.setDate(1);
+	const firstMonthStartAfterStart = getNextOrSameFirstDayOfMonth(startDate);
 
 	const result: TimeRange[] = [];
 	let currentStart = firstMonthStartAfterStart;
 	while (result.length < numberOfSprints) {
 		const start = currentStart;
-		const end = new Date(start);
-		end.setMonth(end.getMonth() + monthsInRange);
+		const end = start.add({ months: monthsInRange, days: -1 });
 
 		const range = new TimeRange(start, end);
 		result.push(range);
-		currentStart = new Date(end);
-		currentStart.setDate(currentStart.getDate() + 1);
+		currentStart = end.add({ days: 1 });
 	}
 
 	return result;
+}
+
+function getNextOrSameMonday(
+	startDate: Temporal.PlainDate
+): Temporal.PlainDate {
+	const dayOfWeek = startDate.dayOfWeek; // 1 = Monday, 7 = Sunday
+	if (dayOfWeek === 1) {
+		return startDate;
+	}
+	const daysUntilMonday = (8 - dayOfWeek) % 7;
+	return startDate.add({ days: daysUntilMonday });
+}
+
+function getNextOrSameFirstDayOfMonth(
+	startDate: Temporal.PlainDate
+): Temporal.PlainDate {
+	const date = startDate.day;
+	if (date === 1) {
+		return startDate;
+	}
+	const daysUntilFirst = startDate.daysInMonth - date;
+	return startDate.add({ days: daysUntilFirst });
 }

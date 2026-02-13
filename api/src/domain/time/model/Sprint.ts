@@ -3,6 +3,7 @@ import { Quarter } from './Quarter';
 import { SprintStatus } from './SprintStatus';
 import { SprintId } from './SprintId';
 import { SprintTimeRange } from './SprintTimeRange';
+import { Temporal } from 'temporal-polyfill';
 
 export class Sprint extends SprintTimeRange {
 	constructor(
@@ -10,8 +11,8 @@ export class Sprint extends SprintTimeRange {
 		public readonly year: Year,
 		public readonly quarter: Quarter,
 		public readonly yearlyIndex: number,
-		startDate: Date,
-		endDate: Date,
+		startDate: Temporal.PlainDate,
+		endDate: Temporal.PlainDate,
 		public readonly status: SprintStatus
 	) {
 		super(id, startDate, endDate);

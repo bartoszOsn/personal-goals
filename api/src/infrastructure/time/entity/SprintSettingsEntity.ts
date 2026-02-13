@@ -19,7 +19,7 @@ export class SprintSettingsEntity {
 	quarterAssignment: 'beginning' | 'end' | 'by-majority';
 
 	@Column()
-	generateUntil: Date;
+	generateUntil: string;
 
 	@OneToOne(() => UserEntity, (user: UserEntity) => user.id)
 	@JoinColumn()
