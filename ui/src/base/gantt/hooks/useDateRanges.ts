@@ -25,13 +25,17 @@ export function useDateRanges() {
 	);
 
 	const dateToPixelPos = useCallback((date: Temporal.PlainDate) => {
-
 		return date.since(startDate).total('milliseconds') * pixelPerMillis;
 	}, [pixelPerMillis, startDate]);
+
+	const pixelPosToDate = useCallback((pixelPos: number) => {
+		return startDate.add({ milliseconds: pixelPos / pixelPerMillis });
+	}, [startDate, pixelPerMillis]);
 
 	return {
 		startDate,
 		endDate,
-		dateToPixelPos
+		dateToPixelPos,
+		pixelPosToDate
 	};
 }

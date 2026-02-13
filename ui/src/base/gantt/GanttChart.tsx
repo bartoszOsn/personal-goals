@@ -28,7 +28,7 @@ export function GanttChart<TData>() {
 
 	return (
 		<ScrollArea key={context.zoomLevel.pixelsPerDay} style={{ flexGrow: 1 }} h="100%" viewportRef={viewportRef} onScrollPositionChange={({ y }) => context.setScrollY(y)}>
-			<svg height={context.scrollAreaHeight} width={dateToPixelPos(endDate)}>
+			<svg ref={context.svg} height={context.scrollAreaHeight} width={dateToPixelPos(endDate)}>
 				<GanttChartRowLines />
 				<GanttChartTodayLine />
 				<GanttCharttItemBars />

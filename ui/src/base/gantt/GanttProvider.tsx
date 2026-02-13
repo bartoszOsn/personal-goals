@@ -1,8 +1,9 @@
 import type { GanttProps } from '@/base/gantt/GanttProps.ts';
-import { createContext, type ReactNode, useContext, useMemo, useState } from 'react';
+import { createContext, type ReactNode, RefObject, useContext, useMemo, useRef, useState } from 'react';
 import type { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 import { zoomLevels } from '@/base/gantt/zoomLevels';
 import type { ZoomLevel } from '@/base/gantt/model/ZoomLevel';
+import type { DragData } from '@/base/gantt/model/DragData';
 
 export interface GanttContext<TData> {
 	props: GanttProps<TData>;
@@ -16,6 +17,9 @@ export interface GanttContext<TData> {
 	setZoomLevel(zoomLevel: ZoomLevel): void;
 	chartViewportWidth: number;
 	setChartViewportWidth(viewportWidth: number): void;
+	dragData: DragData;
+	setDragData(data: DragData): void;
+	svg: RefObject<SVGSVGElement | null>;
 }
 
 const GanttContext = createContext<GanttContext<unknown> | null>(null);
@@ -31,15 +35,19 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 	const [scrollY, setScrollY] = useState(0);
 	const [zoomLevel, setZoomLevel] = useState<ZoomLevel>(zoomLevels[0]);
 	const [chartViewportWidth, setChartViewportWidth] = useState(0);
+	const [dragData, setDragData] = useState<DragData>({ status: 'idle' });
+	const svg = useRef<SVGSVGElement>(null);
 
-	const context = useMemo(() => ({
-		props: props.props,
+	const context: GanttContext<unknown> = useMemo(() => ({
+		props: props.props as GanttProps<unknown>,
 		rows, setRows,
 		scrollAreaHeight, setScrollAreaHeight,
 		scrollY, setScrollY,
 		zoomLevel, setZoomLevel,
-		chartViewportWidth, setChartViewportWidth
-	}), [props.props, rows, scrollAreaHeight, scrollY, zoomLevel, chartViewportWidth, setChartViewportWidth])
+		chartViewportWidth, setChartViewportWidth,
+		dragData, setDragData,
+		svg
+	}), [props.props, rows, scrollAreaHeight, scrollY, zoomLevel, chartViewportWidth, setChartViewportWidth, dragData, setDragData, svg])
 
 	return (
 		<GanttContext.Provider value={context}>

@@ -69,7 +69,10 @@ export function GanttTable<TData>() {
 			const endIndex = context.props.items.indexOf(row);
 			const newSelectedIds = [...selectedIds];
 			for (let i = Math.min(startIndex, endIndex); i <= Math.max(startIndex, endIndex); i++) {
-				newSelectedIds[i] = context.props.items[i].id;
+				if (newSelectedIds.includes(context.props.items[i].id)) {
+					continue;
+				}
+				newSelectedIds.push(context.props.items[i].id);
 			}
 			context.props.setSelectedItemIds?.(newSelectedIds);
 		}
