@@ -14,3 +14,5 @@ export * from './dto/work/ObjectiveDeadlineDTO';
 export * from './dto/work/ObjectiveDTO';
 export * from './dto/work/ObjectiveListDTO';
 export * from './dto/work/ObjectiveRequestDTO';
+
+export * from './temporal/isPlainDate';
