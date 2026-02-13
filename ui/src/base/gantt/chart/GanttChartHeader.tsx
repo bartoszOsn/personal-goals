@@ -3,6 +3,7 @@ import type { HeaderType } from '@/base/gantt/model/ZoomLevel.ts';
 import { useDateRanges } from '@/base/gantt/hooks/useDateRanges.ts';
 import { HtmlInSvg } from '@/base/gantt/chart/HtmlInSvg';
 import { Text } from '@mantine/core';
+import { Temporal } from 'temporal-polyfill';
 
 export const headerCellHeight = 15;
 export const headerCellXMargin = 1;
@@ -59,11 +60,11 @@ function HeaderRow(props: { cells: HeaderCell[], offsetY: number }) {
 
 interface HeaderCell {
 	label: string;
-	start: Date;
-	end: Date;
+	start: Temporal.PlainDate;
+	end: Temporal.PlainDate;
 }
 
-function getHeaderCells(zoomLevel: HeaderType, startDate: Date, endDate: Date): HeaderCell[] {
+function getHeaderCells(zoomLevel: HeaderType, startDate: Temporal.PlainDate, endDate: Temporal.PlainDate): HeaderCell[] {
 	switch (zoomLevel) {
 		case 'year':
 			return getYearHeaderCells(startDate, endDate);
@@ -74,57 +75,62 @@ function getHeaderCells(zoomLevel: HeaderType, startDate: Date, endDate: Date): 
 	}
 }
 
-function getYearHeaderCells(startDate: Date, endDate: Date): HeaderCell[] {
+function getYearHeaderCells(startDate: Temporal.PlainDate, endDate: Temporal.PlainDate): HeaderCell[] {
 	const result: HeaderCell[] = [];
+	debugger;
 
-	while (result.length === 0 || result[result.length - 1].end !== endDate) {
+	while (result.length === 0 || Temporal.PlainDate.compare(result[result.length - 1].end, endDate) != 0) {
 		const start = result.length === 0 ? startDate : result[result.length - 1].end;
-		const end = startOfYear(start.getFullYear() + 1);
-		const label = start.getFullYear().toString();
+		const end = startOfYear(start.year + 1);
+		const label = start.year.toString();
 		result.push({
 			label,
 			start,
-			end: end > endDate ? endDate : end
+			end: Temporal.PlainDate.compare(end, endDate) === 1 ? endDate : end
 		});
 	}
 
 	return result;
 }
 
-function getMonthHeaderCells(startDate: Date, endDate: Date): HeaderCell[] {
+function getMonthHeaderCells(startDate: Temporal.PlainDate, endDate: Temporal.PlainDate): HeaderCell[] {
 	const result: HeaderCell[] = [];
-	while (result.length === 0 || result[result.length - 1].end !== endDate) {
+	while (result.length === 0 || Temporal.PlainDate.compare(result[result.length - 1].end, endDate) != 0) {
 		const start = result.length === 0 ? startDate : result[result.length - 1].end;
-		const end = startOfMonth(start.getFullYear(), start.getMonth() + 1);
+		const end = startOfMonth(start.year, start.month + 1);
 		const label = start.toLocaleString('default', { month: 'short' });
 		result.push({
 			label,
 			start,
-			end: end > endDate ? endDate : end
+			end: Temporal.PlainDate.compare(end, endDate) === 1 ? endDate : end
 		});
 	}
 	return result;
 }
 
-function getDayHeaderCells(startDate: Date, endDate: Date): HeaderCell[] {
+function getDayHeaderCells(startDate: Temporal.PlainDate, endDate: Temporal.PlainDate): HeaderCell[] {
 	const result: HeaderCell[] = [];
-	while (result.length === 0 || result[result.length - 1].end !== endDate) {
+	while (result.length === 0 || Temporal.PlainDate.compare(result[result.length - 1].end, endDate) != 0) {
 		const start = result.length === 0 ? startDate : result[result.length - 1].end;
-		const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1);
+		const end = start.add({ days: 1 });
 		const label = start.toLocaleString('default', { day: '2-digit' });
 		result.push({
 			label,
 			start,
-			end: end > endDate ? endDate : end
+			end: Temporal.PlainDate.compare(end, endDate) === 1 ? endDate : end
 		});
 	}
 	return result;
 }
 
-function startOfYear(year: number): Date {
-	return new Date(year, 0, 1);
+function startOfYear(year: number): Temporal.PlainDate {
+	return Temporal.PlainDate.from({ year, month: 1, day: 1 });
 }
 
 function startOfMonth(year: number, month: number) {
-	return new Date(year, month, 1);
+	while (month > 12) {
+		year++;
+		month -= 12;
+	}
+	return Temporal.PlainDate.from({ year, month, day: 1 });
 }

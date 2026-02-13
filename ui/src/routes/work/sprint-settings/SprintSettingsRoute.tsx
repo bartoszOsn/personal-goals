@@ -7,6 +7,7 @@ import { quarterToColor } from '@/core/quarterToColor';
 import { getSprintName } from '@/core/getSprintName';
 import { useState } from 'react';
 import { DeleteSprintsButton } from '@/routes/work/sprint-settings/DeleteSprintsButton';
+import { Temporal } from 'temporal-polyfill';
 
 export function SprintSettingsRoute() {
 	const sprints = useSprintQuery();
@@ -15,8 +16,8 @@ export function SprintSettingsRoute() {
 		id: sprint.id,
 		name: getSprintName(sprint),
 		color: quarterToColor[sprint.quarter],
-		start: new Date(sprint.startDate),
-		end: new Date(sprint.endDate),
+		start: Temporal.PlainDate.from(sprint.startDate),
+		end: Temporal.PlainDate.from(sprint.endDate),
 		data: sprint,
 		linksInto: []
 	}));

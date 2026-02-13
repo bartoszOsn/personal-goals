@@ -7,16 +7,17 @@ import { DateInput } from '@mantine/dates';
 import { HttpError } from '@/base/http';
 import { notifications } from '@mantine/notifications';
 import { getSprintName } from '@/core/getSprintName';
+import { Temporal } from 'temporal-polyfill';
 
 export function CreateSprintsButtton() {
 	const [opened, { open, close }] = useDisclosure(false);
 	const mutation = useCreateSprintsMutation();
-	const [startDate, setStartDate] = useState(new Date());
+	const [startDate, setStartDate] = useState(Temporal.Now.plainDateISO());
 	const [numberOfSprints, setNumberOfSprints] = useState(1);
 	const [sprintDuration, setSprintDuration] = useState<SprintBulkCreateRequestDTO['sprintDuration']>('two-weeks');
 
 	const request: SprintBulkCreateRequestDTO = {
-		startDate: startDate.toISOString(),
+		startDate: startDate.toString(),
 		numberOfSprints,
 		sprintDuration,
 	};
@@ -51,8 +52,8 @@ export function CreateSprintsButtton() {
 				<Stack>
 					<DateInput
 						label="Start date"
-						value={startDate}
-						onChange={(e) => e && setStartDate(new Date(e))}
+						value={startDate.toString()}
+						onChange={(e) => e && setStartDate(Temporal.PlainDate.from(e))}
 					/>
 					<NumberInput
 						label="Number of sprints"

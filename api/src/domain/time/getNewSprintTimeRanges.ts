@@ -28,7 +28,7 @@ export function getNewSprintTimeRangesWeekly(
 	let currentStart = firstMondayAfterStartDate;
 	while (result.length < numberOfSprints) {
 		const start = currentStart;
-		const end = start.add({ weeks: weeksInRange, days: -1 });
+		const end = start.add({ weeks: weeksInRange }).subtract({ days: 1 });
 
 		const range = new TimeRange(start, end);
 		result.push(range);
@@ -49,7 +49,7 @@ function getNewSprintTimeRangesMonthly(
 	let currentStart = firstMonthStartAfterStart;
 	while (result.length < numberOfSprints) {
 		const start = currentStart;
-		const end = start.add({ months: monthsInRange, days: -1 });
+		const end = start.add({ months: monthsInRange }).subtract({ days: 1 });
 
 		const range = new TimeRange(start, end);
 		result.push(range);

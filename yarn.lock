@@ -1961,6 +1961,7 @@ __metadata:
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
     recharts: "npm:^3.7.0"
+    temporal-polyfill: "npm:^0.3.0"
     tw-animate-css: "npm:^1.4.0"
     typescript: "npm:~5.9.3"
     typescript-eslint: "npm:^8.46.4"

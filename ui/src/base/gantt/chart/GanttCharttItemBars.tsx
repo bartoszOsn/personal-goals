@@ -14,11 +14,13 @@ export function GanttCharttItemBars() {
 			return null;
 		}
 
+		const actualEnd = item.end.add({ days: 1 });
+
 		return (
 			<>
 				<rect x={dateToPixelPos(item.start)}
 					  y={row.top + yMargin}
-					  width={dateToPixelPos(item.end) - dateToPixelPos(item.start)}
+					  width={dateToPixelPos(actualEnd) - dateToPixelPos(item.start)}
 					  height={row.height - yMargin * 2}
 					  style={{
 						  fill: `var(--mantine-color-${item.color}-5)`,
@@ -36,7 +38,7 @@ export function GanttCharttItemBars() {
 									  fill: 'transparent',
 									  cursor: 'w-resize'
 								  }} />
-							<rect x={dateToPixelPos(item.end) - dragHandleWidth}
+							<rect x={dateToPixelPos(actualEnd) - dragHandleWidth}
 								  y={row.top + yMargin}
 								  width={dragHandleWidth}
 								  height={row.height - yMargin * 2}

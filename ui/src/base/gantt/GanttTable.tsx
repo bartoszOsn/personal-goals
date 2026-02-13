@@ -102,8 +102,8 @@ export function GanttTable<TData>() {
 										  bg={context.props.selectedItemIds?.includes(item.id) ? 'var(--mantine-color-blue-light)' : undefined}
 										  onClick={(e) => onRowClick(e, item)}>
 									<Table.Td>{item.name}</Table.Td>
-									<Table.Td>{item.start.toLocaleDateString()}</Table.Td>
-									<Table.Td>{item.end.toLocaleDateString()}</Table.Td>
+									<Table.Td>{item.start.toLocaleString()}</Table.Td>
+									<Table.Td>{item.end.toLocaleString()}</Table.Td>
 								</Table.Tr>
 							))
 						}

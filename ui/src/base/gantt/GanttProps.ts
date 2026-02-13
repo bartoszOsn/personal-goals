@@ -1,5 +1,6 @@
 import type { GanttItem } from '@/base/gantt/GanttItem.ts';
 import type { GroupProps } from '@mantine/core';
+import { Temporal } from 'temporal-polyfill';
 
 export interface GanttProps<TData> {
 	items: GanttItem<TData>[];
@@ -10,6 +11,6 @@ export interface GanttProps<TData> {
 }
 
 export interface GanttNewItemDates {
-	startDate: Date;
-	endDate: Date;
+	startDate: Temporal.PlainDate;
+	endDate: Temporal.PlainDate;
 }
