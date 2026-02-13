@@ -4,6 +4,7 @@ import { useDateRanges } from '@/base/gantt/hooks/useDateRanges.ts';
 import { HtmlInSvg } from '@/base/gantt/chart/HtmlInSvg';
 import { Text } from '@mantine/core';
 import { Temporal } from 'temporal-polyfill';
+import { isPlainDate } from '@personal-okr/shared';
 
 export const headerCellHeight = 15;
 export const headerCellXMargin = 1;
@@ -77,16 +78,15 @@ function getHeaderCells(zoomLevel: HeaderType, startDate: Temporal.PlainDate, en
 
 function getYearHeaderCells(startDate: Temporal.PlainDate, endDate: Temporal.PlainDate): HeaderCell[] {
 	const result: HeaderCell[] = [];
-	debugger;
 
-	while (result.length === 0 || Temporal.PlainDate.compare(result[result.length - 1].end, endDate) != 0) {
+	while (result.length === 0 || isPlainDate(result[result.length - 1].end).notEquals(endDate)) {
 		const start = result.length === 0 ? startDate : result[result.length - 1].end;
 		const end = startOfYear(start.year + 1);
 		const label = start.year.toString();
 		result.push({
 			label,
 			start,
-			end: Temporal.PlainDate.compare(end, endDate) === 1 ? endDate : end
+			end: isPlainDate(end).after(endDate) ? endDate : end
 		});
 	}
 
@@ -95,14 +95,14 @@ function getYearHeaderCells(startDate: Temporal.PlainDate, endDate: Temporal.Pla
 
 function getMonthHeaderCells(startDate: Temporal.PlainDate, endDate: Temporal.PlainDate): HeaderCell[] {
 	const result: HeaderCell[] = [];
-	while (result.length === 0 || Temporal.PlainDate.compare(result[result.length - 1].end, endDate) != 0) {
+	while (result.length === 0 || isPlainDate(result[result.length - 1].end).notEquals(endDate)) {
 		const start = result.length === 0 ? startDate : result[result.length - 1].end;
 		const end = startOfMonth(start.year, start.month + 1);
 		const label = start.toLocaleString('default', { month: 'short' });
 		result.push({
 			label,
 			start,
-			end: Temporal.PlainDate.compare(end, endDate) === 1 ? endDate : end
+			end: isPlainDate(end).after(endDate) ? endDate : end
 		});
 	}
 	return result;
@@ -110,14 +110,14 @@ function getMonthHeaderCells(startDate: Temporal.PlainDate, endDate: Temporal.Pl
 
 function getDayHeaderCells(startDate: Temporal.PlainDate, endDate: Temporal.PlainDate): HeaderCell[] {
 	const result: HeaderCell[] = [];
-	while (result.length === 0 || Temporal.PlainDate.compare(result[result.length - 1].end, endDate) != 0) {
+	while (result.length === 0 || isPlainDate(result[result.length - 1].end).notEquals(endDate)) {
 		const start = result.length === 0 ? startDate : result[result.length - 1].end;
 		const end = start.add({ days: 1 });
 		const label = start.toLocaleString('default', { day: '2-digit' });
 		result.push({
 			label,
 			start,
-			end: Temporal.PlainDate.compare(end, endDate) === 1 ? endDate : end
+			end: isPlainDate(end).after(endDate) ? endDate : end
 		});
 	}
 	return result;

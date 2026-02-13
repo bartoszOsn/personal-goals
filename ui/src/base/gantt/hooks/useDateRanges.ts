@@ -1,6 +1,7 @@
 import { useGanttContext } from '@/base/gantt/GanttProvider.tsx';
 import { useCallback, useMemo } from 'react';
 import { Temporal } from 'temporal-polyfill';
+import { isPlainDate } from '@personal-okr/shared';
 
 export function useDateRanges() {
 	const context = useGanttContext();
@@ -18,7 +19,7 @@ export function useDateRanges() {
 		() => {
 			const lastItemEndDate = sortedItems[sortedItems.length - 1].end;
 			const screensEndDate = startDate.add({ milliseconds: context.chartViewportWidth / pixelPerMillis });
-			return Temporal.PlainDate.compare(lastItemEndDate, screensEndDate) === 1 ? lastItemEndDate.add({ days: 10 }) : screensEndDate;
+			return isPlainDate(lastItemEndDate).after(screensEndDate) ? lastItemEndDate.add({ days: 10 }) : screensEndDate;
 		},
 		[context.chartViewportWidth, pixelPerMillis, sortedItems, startDate]
 	);

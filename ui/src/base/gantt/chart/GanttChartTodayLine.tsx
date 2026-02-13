@@ -2,6 +2,7 @@ import { useDateRanges } from '@/base/gantt/hooks/useDateRanges.ts';
 import { useGanttContext } from '@/base/gantt/GanttProvider';
 import { Tooltip } from '@mantine/core';
 import { Temporal } from 'temporal-polyfill';
+import { isPlainDate } from '@personal-okr/shared';
 
 const tooltipMargin = 10;
 
@@ -10,7 +11,7 @@ export function GanttChartTodayLine() {
 	const { startDate, endDate, dateToPixelPos} = useDateRanges();
 	const today = Temporal.Now.plainDateISO();
 
-	if (Temporal.PlainDate.compare(today, startDate) === -1 || Temporal.PlainDate.compare(today, endDate) === 1) {
+	if (isPlainDate(today).before(startDate) || isPlainDate(today).after(endDate)) {
 		return null;
 	}
 
