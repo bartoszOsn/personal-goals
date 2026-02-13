@@ -5,7 +5,7 @@ export interface SprintDTO {
 	readonly year: number;
 	readonly quarter: QuarterDTO;
 	readonly yearlyIndex: number;
-	readonly startDate: Date;
-	readonly endDate: Date;
+	readonly startDate: string;
+	readonly endDate: string;
 	readonly status: 'completed' | 'active' | 'future';
 }
