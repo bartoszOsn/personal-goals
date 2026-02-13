@@ -29,7 +29,7 @@ export function useDateRanges() {
 	}, [pixelPerMillis, startDate]);
 
 	const pixelPosToDate = useCallback((pixelPos: number) => {
-		return startDate.add({ milliseconds: pixelPos / pixelPerMillis });
+		return startDate.add({ milliseconds: Math.round(pixelPos / pixelPerMillis) });
 	}, [startDate, pixelPerMillis]);
 
 	return {

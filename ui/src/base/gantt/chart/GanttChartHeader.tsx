@@ -5,8 +5,9 @@ import { HtmlInSvg } from '@/base/gantt/chart/HtmlInSvg';
 import { Text } from '@mantine/core';
 import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
+import { useEffect } from 'react';
 
-export const headerCellHeight = 15;
+export const headerCellHeight = 30;
 export const headerCellXMargin = 1;
 export const headerRowYMargin = 4;
 
@@ -15,10 +16,15 @@ export function GanttChartHeader() {
 	const { startDate, endDate, dateToPixelPos } = useDateRanges();
 	const headerCells = getHeaderCells(context.zoomLevel.header, startDate, endDate);
 	const subheaderCells = getHeaderCells(context.zoomLevel.subheader, startDate, endDate);
+	const headerHeight = headerCellHeight * 2 + headerRowYMargin * 2;
+
+	useEffect(() => {
+		context.setChartHeaderSize(headerHeight);
+	}, [context, headerHeight]);
 
 	return (
 		<g>
-			<rect x={0} y={context.scrollY} width={dateToPixelPos(endDate)} height={headerCellHeight * 2 + headerRowYMargin * 2} fill="var(--mantine-color-body)" />
+			<rect x={0} y={context.scrollY} width={dateToPixelPos(endDate)} height={headerHeight} fill="var(--mantine-color-body)" />
 			<HeaderRow cells={headerCells} offsetY={0} />
 			<HeaderRow cells={subheaderCells} offsetY={headerCellHeight + headerRowYMargin} />
 		</g>
@@ -52,7 +58,7 @@ function HeaderRow(props: { cells: HeaderCell[], offsetY: number }) {
 						  size="xs"
 						  c="dimmed"
 						  ta="center"
-						  style={{ alignContent: 'center', transform: 'scale(0.5)' }}>{cell.label}</Text>
+						  style={{ alignContent: 'center' }}>{cell.label}</Text>
 				</HtmlInSvg>
 			</g>
 		);

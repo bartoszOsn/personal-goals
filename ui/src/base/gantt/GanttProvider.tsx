@@ -20,6 +20,8 @@ export interface GanttContext<TData> {
 	dragData: DragData;
 	setDragData(data: DragData): void;
 	svg: RefObject<SVGSVGElement | null>;
+	chartHeaderSize: number;
+	setChartHeaderSize(headerSize: number): void;
 }
 
 const GanttContext = createContext<GanttContext<unknown> | null>(null);
@@ -37,6 +39,7 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 	const [chartViewportWidth, setChartViewportWidth] = useState(0);
 	const [dragData, setDragData] = useState<DragData>({ status: 'idle' });
 	const svg = useRef<SVGSVGElement>(null);
+	const [chartHeaderSize, setChartHeaderSize] = useState(0);
 
 	const context: GanttContext<unknown> = useMemo(() => ({
 		props: props.props as GanttProps<unknown>,
@@ -46,8 +49,9 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 		zoomLevel, setZoomLevel,
 		chartViewportWidth, setChartViewportWidth,
 		dragData, setDragData,
-		svg
-	}), [props.props, rows, scrollAreaHeight, scrollY, zoomLevel, chartViewportWidth, setChartViewportWidth, dragData, setDragData, svg])
+		svg,
+		chartHeaderSize, setChartHeaderSize,
+	}), [props.props, rows, scrollAreaHeight, scrollY, zoomLevel, chartViewportWidth, dragData, chartHeaderSize])
 
 	return (
 		<GanttContext.Provider value={context}>

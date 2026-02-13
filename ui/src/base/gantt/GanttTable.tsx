@@ -1,4 +1,4 @@
-import { Box, rem, Table } from '@mantine/core';
+import { Box, px, rem, Table } from '@mantine/core';
 import { useGanttContext } from '@/base/gantt/GanttProvider';
 import { useElementSize } from '@mantine/hooks';
 import { useEffect, useRef } from 'react';
@@ -90,7 +90,7 @@ export function GanttTable<TData>() {
 									   }
 								   }}>
 				<Table ref={ref} stickyHeader>
-					<Table.Thead>
+					<Table.Thead h={px(context.chartHeaderSize)}>
 						<Table.Tr>
 							<Table.Th>Name</Table.Th>
 							<Table.Th>Start</Table.Th>
