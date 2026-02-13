@@ -37,6 +37,7 @@ export function SprintSettingsRoute() {
 												containerProps={{ w: '100%', style: { flexGrow: 1, flexShrink: 0 } }}
 												selectedItemIds={selectedItemIds}
 												setSelectedItemIds={setSelectedItemIds}
+												changeDates={() => {}}
 				/>
 			}
 		</Stack>

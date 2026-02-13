@@ -6,7 +6,7 @@ import { Text } from '@mantine/core';
 
 export const headerCellHeight = 15;
 export const headerCellXMargin = 1;
-export const headerRowYMargin = 1;
+export const headerRowYMargin = 4;
 
 export function GanttChartHeader() {
 	const context = useGanttContext();
@@ -39,7 +39,8 @@ function HeaderRow(props: { cells: HeaderCell[], offsetY: number }) {
 					  y={y}
 					  width={width}
 					  height={height}
-					  fill="var(--mantine-color-gray-light)"
+					  fill='transparent'
+					  stroke="var(--mantine-color-gray-light)"
 					  rx='4' />
 				<HtmlInSvg x={x}
 						   y={y}
