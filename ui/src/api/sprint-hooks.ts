@@ -20,3 +20,15 @@ export function useCreateSprintsMutation() {
 		}
 	})
 }
+
+export function useDeleteSprintsMutation() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (ids: string[]) => {
+			await http.delete(`/api/time/sprint/${ids.join(',')}`);
+		},
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: ['sprint']});
+		}
+	})
+}

@@ -72,7 +72,7 @@ export function CreateSprintsButtton() {
 					<Button onClick={submit} loading={mutation.isPending}>Create sprints</Button>
 				</Stack>
 			</Modal>
-			<Button onClick={open}>CreateSprints</Button>
+			<Button onClick={open}>Create sprints</Button>
 		</>
 	)
 }
