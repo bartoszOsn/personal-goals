@@ -1,9 +1,9 @@
 import type { ObjectiveDTO } from '@personal-okr/shared';
-import { Box, Button, Center, Collapse, Group, Modal, RingProgress, Stack, Text, TextInput } from '@mantine/core';
-import { useKeyResultCreateMutation } from '@/api/okr-hooks';
+import { ActionIcon, Box, Button, Center, Collapse, Group, Modal, RingProgress, Stack, Text, TextInput } from '@mantine/core';
+import { useKeyResultCreateMutation, useOkrDeleteMutation } from '@/api/okr-hooks';
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
-import { IconChevronDown, IconChevronUp, IconClock, IconPercentage } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronUp, IconClock, IconPercentage, IconTrash } from '@tabler/icons-react';
 
 export interface OKRTableProps {
 	objective: ObjectiveDTO;
@@ -11,6 +11,7 @@ export interface OKRTableProps {
 
 export function OkRTable({ objective }: OKRTableProps) {
 	const createKRMutation = useKeyResultCreateMutation();
+	const deleteOkrMutation = useOkrDeleteMutation();
 	const [opened, { open, close }] = useDisclosure(false);
 	const [name, setName] = useState<string>();
 	const [collapsed, { toggle: toggleCollapse }] = useDisclosure(false);
@@ -32,9 +33,12 @@ export function OkRTable({ objective }: OKRTableProps) {
 					<Button onClick={submit} loading={createKRMutation.isPending}>Create</Button>
 				</Stack>
 			</Modal>
-			<Box bg="blue.1" style={{ borderLeft: 'solid 2px var(--mantine-color-blue-5)' }} pr="lg" pl='sm' py="xs">
+			<Box bg="blue.1"
+				 style={{ borderLeft: 'solid 2px var(--mantine-color-blue-5)' }}
+				 px="sm"
+				 py="xs">
 				<Group wrap="nowrap">
-					<Button size='compact-md' variant='subtle' px={2} onClick={toggleCollapse}>
+					<Button size="compact-md" variant="subtle" px={2} onClick={toggleCollapse}>
 						{
 							collapsed ? <IconChevronDown /> : <IconChevronUp />
 						}
@@ -53,6 +57,13 @@ export function OkRTable({ objective }: OKRTableProps) {
 							<IconPercentage size={12} />
 						</Center>
 					)} />
+					<ActionIcon color="red"
+								variant="subtle"
+								size="sm"
+								onClick={() => deleteOkrMutation.mutateAsync(objective.id)}
+								loading={deleteOkrMutation.isPending}>
+						<IconTrash size={12} />
+					</ActionIcon>
 				</Group>
 			</Box>
 			<Collapse in={!collapsed}>

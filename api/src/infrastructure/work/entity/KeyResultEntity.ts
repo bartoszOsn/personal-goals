@@ -21,7 +21,9 @@ export class KeyResultEntity {
 	@Column()
 	progress: number;
 
-	@ManyToOne(() => ObjectiveEntity, (objective) => objective.keyResults)
+	@ManyToOne(() => ObjectiveEntity, (objective) => objective.keyResults, {
+		onDelete: 'CASCADE'
+	})
 	@JoinColumn()
 	objective: ObjectiveEntity;
 }

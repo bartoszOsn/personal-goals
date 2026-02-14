@@ -17,6 +17,14 @@ export function useOkrCreateMutation() {
 	});
 }
 
+export function useOkrDeleteMutation() {
+	const client = useQueryClient();
+	return useMutation({
+		mutationFn: (objectiveId: string) => http.delete(`/api/work/okr/objective/${objectiveId}`),
+		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
+	})
+}
+
 export function useKeyResultCreateMutation() {
 	const client = useQueryClient();
 	return useMutation({

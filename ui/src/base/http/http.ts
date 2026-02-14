@@ -32,7 +32,11 @@ export class http {
 	private static async request<TResponse>(input: URL, init: RequestInit): Promise<TResponse> {
 		const response = await fetch(input, init);
 		if (response.ok) {
-			return await response.json();
+			try {
+				return await response.json();
+			} catch {
+				return null as TResponse;
+			}
 		}
 
 		throw new HttpError<unknown>(response.status, await response.json());
