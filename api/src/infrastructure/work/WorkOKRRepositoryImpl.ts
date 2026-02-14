@@ -43,6 +43,8 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 			user,
 			request
 		);
+		entity.description = '';
+		entity.keyResults = [];
 		const createdEntity = await this.objectiveRepository.save(entity);
 		return this.workOKREntityConverter.fromObjectiveEntity(createdEntity);
 	}
@@ -78,6 +80,8 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 			id: parentId.id,
 			user: { id: user.id.id } as unknown as UserEntity
 		} as unknown as ObjectiveEntity;
+		entity.description ??= '';
+		entity.progress ??= 0;
 		const updatedEntity = await this.keyResultRepository.save(entity);
 		return this.workOKREntityConverter.fromKeyResultEntity(updatedEntity);
 	}

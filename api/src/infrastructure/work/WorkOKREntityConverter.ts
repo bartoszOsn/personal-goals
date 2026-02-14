@@ -101,6 +101,7 @@ export class WorkOKREntityConverter {
 	): Quarter | null {
 		switch (deadlineQuarter) {
 			case undefined:
+			case null:
 				return null;
 			case 'Q1':
 				return Quarter.Q1;
