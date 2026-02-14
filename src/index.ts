@@ -14,6 +14,10 @@ export * from './dto/work/ObjectiveDeadlineDTO';
 export * from './dto/work/ObjectiveDTO';
 export * from './dto/work/ObjectiveListDTO';
 export * from './dto/work/ObjectiveRequestDTO';
+export * from './dto/work/TaskDTO';
+export * from './dto/work/TaskCreateRequestDTO';
+export * from './dto/work/TaskUpdateRequestDTO';
+export * from './dto/work/TaskListDTO';
 
 export * from './dto/auth';
 
