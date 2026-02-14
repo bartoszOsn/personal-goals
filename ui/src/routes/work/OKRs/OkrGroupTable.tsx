@@ -1,5 +1,5 @@
 import type { ObjectiveDeadlineDTO, ObjectiveDTO } from '@personal-okr/shared';
-import { ActionIcon, Group, Text } from '@mantine/core';
+import { ActionIcon, Group, Stack, Text } from '@mantine/core';
 import { CreateObjectiveModal } from '@/routes/work/OKRs/CreateObjectiveModal';
 import { quarterToColor } from '@/core/quarterToColor';
 import { OkRTable } from '@/routes/work/OKRs/OKRTable';
@@ -17,7 +17,7 @@ export function OkrGroupTable(props: OkrGroupTableProps) {
 	}
 
 	return (
-		<>
+		<Stack gap='lg'>
 			<Group gap='xs' c={deadline.quarter ? quarterToColor[deadline.quarter] : undefined}>
 				<Text fw='500'>{deadline.quarter ?? 'Global'}</Text>
 				<CreateObjectiveModal initialDeadline={deadline}>
@@ -29,6 +29,6 @@ export function OkrGroupTable(props: OkrGroupTableProps) {
 			{objectives.map((objective) => (
 				<OkRTable key={objective.id} objective={objective} />
 			))}
-		</>
+		</Stack>
 	);
 }

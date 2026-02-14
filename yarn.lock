@@ -1943,6 +1943,8 @@ __metadata:
     "@mantine/hooks": "npm:^8.3.14"
     "@mantine/notifications": "npm:^8.3.14"
     "@personal-okr/shared": "workspace:^"
+    "@tabler/icons": "npm:^3.36.1"
+    "@tabler/icons-react": "npm:^3.36.1"
     "@tanstack/react-query": "npm:^5.90.20"
     "@tanstack/react-router": "npm:^1.157.18"
     "@tanstack/router-devtools": "npm:^1.157.18"
@@ -2232,6 +2234,24 @@ __metadata:
   version: 0.3.0
   resolution: "@standard-schema/utils@npm:0.3.0"
   checksum: 10c0/6eb74cd13e52d5fc74054df51e37d947ef53f3ab9e02c085665dcca3c38c60ece8d735cebbdf18fbb13c775fbcb9becb3f53109b0e092a63f0f7389ce0993fd0
+  languageName: node
+  linkType: hard
+
+"@tabler/icons-react@npm:^3.36.1":
+  version: 3.36.1
+  resolution: "@tabler/icons-react@npm:3.36.1"
+  dependencies:
+    "@tabler/icons": "npm:"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 10c0/325dd0c7a780ec4713a93790b15517dc176af5778c36c49e1fe586113040d2e71330aa85aa9f5900cbae0fe0b78f69016ba73b4b490783c9b7292215f29c686a
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:, @tabler/icons@npm:^3.36.1":
+  version: 3.36.1
+  resolution: "@tabler/icons@npm:3.36.1"
+  checksum: 10c0/3201b3ccace5756ba9e840ece3922718165b820f760b7bc01bcab21bf7d6fed5da6e876ea9e1155ed498d8eb008e3ac3308b270c402d744014dafad20d99534c
   languageName: node
   linkType: hard
 
