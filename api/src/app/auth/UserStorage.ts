@@ -1,11 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope, Inject } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
+import type { Request } from 'express';
 import { User, UserId } from '../../domain/auth/model/User';
+import { AuthRepository } from './AuthRepository';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class UserStorage {
-	private readonly user = new User(new UserId('mock-user'));
+	constructor(
+		@Inject(REQUEST) private readonly request: Request,
+		private readonly authRepository: AuthRepository
+	) {}
 
-	getUser(): Promise<User> {
-		return Promise.resolve(this.user);
+	async getUser(): Promise<User> {
+		const userId = (this.request as any).user?.userId;
+		if (!userId) {
+			throw new Error('User not authenticated');
+		}
+
+		const user = await this.authRepository.findUserById(new UserId(userId));
+		if (!user) {
+			throw new Error('User not found');
+		}
+
+		return user;
 	}
 }

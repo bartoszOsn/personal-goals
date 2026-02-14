@@ -1,4 +1,10 @@
-import { Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	Entity,
+	OneToMany,
+	OneToOne,
+	PrimaryGeneratedColumn
+} from 'typeorm';
 import { SprintSettingsEntity } from '../../time/entity/SprintSettingsEntity';
 import { ObjectiveEntity } from '../../work/entity/ObjectiveEntity';
 import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
@@ -7,6 +13,12 @@ import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
 export class UserEntity {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
+
+	@Column({ unique: true })
+	email: string;
+
+	@Column()
+	passwordHash: string;
 
 	@OneToMany(() => SprintTimeRangeEntity, (sprint) => sprint.user)
 	sprints: SprintTimeRangeEntity[];
