@@ -38,8 +38,8 @@ export class TaskEntityConverter {
 			name: task.name,
 			description: task.description.markdown,
 			status: this.toTaskStatusString(task.status),
-			startDate: task.dates?.start.toString() ?? null,
-			endDate: task.dates?.end.toString() ?? null
+			startDate: task.dates?.start.toString() ?? undefined,
+			endDate: task.dates?.end.toString() ?? undefined
 		};
 	}
 

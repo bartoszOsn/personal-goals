@@ -24,10 +24,10 @@ export class TaskEntity {
 	status: string;
 
 	@Column({ nullable: true })
-	startDate: string | null;
+	startDate?: string;
 
 	@Column({ nullable: true })
-	endDate: string | null;
+	endDate?: string;
 
 	@ManyToMany(() => SprintTimeRangeEntity)
 	@JoinTable()
