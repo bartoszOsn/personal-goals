@@ -8,6 +8,9 @@ import { TasksRoute } from '@/routes/work/tasks/TasksRoute.tsx';
 import { TaskBacklogRoute } from '@/routes/work/tasks-backlog/TaskBacklogRoute.tsx';
 import { TaskCalendarRoute } from '@/routes/work/tasks-calendar/TaskCalendarRoute.tsx';
 import { SprintSettingsRoute } from '@/routes/work/sprint-settings/SprintSettingsRoute.tsx';
+import { AuthRoute } from '@/routes/auth/AuthRoute';
+import { LoginRoute } from '@/routes/auth/login/LoginRoute';
+import { RegisterRoute } from '@/routes/auth/RegisterRoute';
 
 const rootRoute = createRootRoute({
 	component: () => (
@@ -64,7 +67,25 @@ const sprintSettings = createRoute({
 	getParentRoute: () => workRoute,
 	path: "/sprint-settings",
 	component: SprintSettingsRoute
-})
+});
+
+const authRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/auth",
+	component: AuthRoute
+});
+
+const loginRoute = createRoute({
+	getParentRoute: () => authRoute,
+	path: "/login",
+	component: LoginRoute
+});
+
+const registerRoute = createRoute({
+	getParentRoute: () => authRoute,
+	path: "/register",
+	component: RegisterRoute
+});
 
 const routeTree = rootRoute.addChildren([
 	indexRoute,
@@ -75,6 +96,10 @@ const routeTree = rootRoute.addChildren([
 		tasksBacklogRoute,
 		tasksCalendarRoute,
 		sprintSettings
+	]),
+	authRoute.addChildren([
+		loginRoute,
+		registerRoute
 	])
 ]);
 

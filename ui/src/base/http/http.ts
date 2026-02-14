@@ -1,6 +1,8 @@
 import { HttpError } from '@/base/http/HttpError.ts';
 
 export class http {
+	private static token: string | null = null;
+
 	static get<TResponse>(url: string, queryParams: Record<string, string> = {}): Promise<TResponse> {
 		return this.request(this.getUrl(url, queryParams), { method: 'get' });
 	}
@@ -29,8 +31,27 @@ export class http {
 		return this.request(this.getUrl(url, queryParams), { method: 'delete' });
 	}
 
+	static setAuthToken(token: string | null) {
+		this.token = token;
+	}
+
 	private static async request<TResponse>(input: URL, init: RequestInit): Promise<TResponse> {
-		const response = await fetch(input, init);
+		let headers = init.headers ?? {};
+		if (Array.isArray(headers)) {
+			headers = Object.fromEntries(headers);
+		}
+		if (this.token) {
+			// @ts-expect-error
+			headers['Authorization'] = `Bearer ${this.token}`;
+		}
+
+		const response = await fetch(input, {
+			...init,
+			headers: {
+				...init.headers,
+				Authorization: this.token ? `Bearer ${this.token}` : undefined
+			}
+		});
 		if (response.ok) {
 			try {
 				return await response.json();
