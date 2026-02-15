@@ -1,0 +1,19 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { http } from '@/base/http';
+import type { TaskCreateRequestDTO, TaskListDTO } from '@personal-okr/shared';
+
+export function useTasksQuery() {
+	return useQuery({
+		queryKey: ['tasks'],
+		queryFn: () => http.get<TaskListDTO>('/api/work/task')
+	})
+}
+
+export function useCreateTaskMutation() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationKey: ['tasks', 'create'],
+		mutationFn: (request: TaskCreateRequestDTO) => http.post('/api/work/task', request),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks']})
+	})
+}

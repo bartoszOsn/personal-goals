@@ -13,7 +13,7 @@ export function AppSidebar() {
 					<CustomNavLink href='/work/okrs/progress-matrix' label='Progress matrix' />
 				</CustomNavLinkGroup>
 				<CustomNavLinkGroup label='Tasks'>
-					<CustomNavLink href='/work/tasks' label='Tasks Overview' />
+					<CustomNavLink href='/work/tasks' label='Task list' />
 					<CustomNavLink href='/work/tasks/backlog' label='Backlog' />
 					<CustomNavLink href='/work/tasks/calendar' label='Calendar' />
 				</CustomNavLinkGroup>
