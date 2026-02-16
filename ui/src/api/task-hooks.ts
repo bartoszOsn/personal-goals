@@ -17,3 +17,12 @@ export function useCreateTaskMutation() {
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks']})
 	})
 }
+
+export function useUpdateTaskMutation() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationKey: ['tasks', 'update'],
+		mutationFn: ({id, request}: { id: string, request: TaskRequestDTO }) => http.put(`/api/work/task/${id}`, request),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks']})
+	})
+}

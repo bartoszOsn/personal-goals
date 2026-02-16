@@ -1,11 +1,13 @@
 import { Button, Group, rem, Stack, Table, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
-import { useCreateTaskMutation, useTasksQuery } from '@/api/task-hooks';
+import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks';
 import { DataView, stringDataType } from '@/base/data-type';
+import type { TaskDTO } from '@personal-okr/shared';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
 	const createTaskMutation = useCreateTaskMutation();
+	const updateTaskMutation = useUpdateTaskMutation();
 
 	const onCreate = () => {
 		createTaskMutation.mutate({
@@ -15,16 +17,29 @@ export function TasksRoute() {
 			startDate: undefined,
 			endDate: undefined,
 			sprintIds: []
-		})
-	}
+		});
+	};
+
+	const onUpdateName = (task: TaskDTO, newName: string) => {
+		updateTaskMutation.mutate({
+			id: task.id, request: {
+				name: newName,
+				description: task.description,
+				status: task.status,
+				startDate: task.startDate,
+				endDate: task.endDate,
+				sprintIds: task.sprintIds
+			}
+		});
+	};
 
 	return (
-		<Stack w='100%' h='100vh' p="lg">
+		<Stack w="100%" h="100vh" p="lg">
 			<Title>Task list</Title>
 			<Group>
 				<Button leftSection={<IconPlus />} onClick={onCreate}>Create</Button>
 			</Group>
-			<Table.ScrollContainer flex='1' minWidth={rem(300)}>
+			<Table.ScrollContainer flex="1" minWidth={rem(300)}>
 				<Table stickyHeader>
 					<Table.Thead>
 						<Table.Tr>
@@ -39,7 +54,9 @@ export function TasksRoute() {
 							tasksQuery.data?.tasks.map((task) => (
 								<Table.Tr>
 									<Table.Td>
-										<DataView value={task.name} onChange={() => {}} dataType={stringDataType} />
+										<DataView value={task.name}
+												  onChange={(newName) => onUpdateName(task, newName)}
+												  dataType={stringDataType} />
 									</Table.Td>
 									<Table.Td>{task.status}</Table.Td>
 									<Table.Td>{task.startDate}</Table.Td>
@@ -51,5 +68,5 @@ export function TasksRoute() {
 				</Table>
 			</Table.ScrollContainer>
 		</Stack>
-	)
+	);
 }

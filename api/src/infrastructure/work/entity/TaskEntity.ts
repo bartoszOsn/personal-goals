@@ -4,14 +4,15 @@ import {
 	ManyToOne,
 	ManyToMany,
 	JoinTable,
-	PrimaryColumn
+	PrimaryColumn,
+	PrimaryGeneratedColumn
 } from 'typeorm';
 import { UserEntity } from '../../auth/entity/UserEntity';
 import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
 
 @Entity()
 export class TaskEntity {
-	@PrimaryColumn('uuid')
+	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
 	@Column()

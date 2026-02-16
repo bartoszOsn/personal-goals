@@ -72,12 +72,14 @@ export class TaskRepositoryImpl extends TaskRepository {
 			throw new NotFoundException('Task not found');
 		}
 
-		Object.assign(entity, this.taskEntityConverter.toTaskEntity(request));
-		entity.sprints = this.taskEntityConverter.sprintIdsToEntities(
+		const updatedEntity = this.taskEntityConverter.toTaskEntity(request);
+		updatedEntity.id = entity.id;
+		updatedEntity.user = entity.user;
+		updatedEntity.sprints = this.taskEntityConverter.sprintIdsToEntities(
 			request.sprintIds
 		);
 
-		await this.taskEntityRepository.save(entity);
+		await this.taskEntityRepository.save(updatedEntity);
 	}
 
 	async deleteTask(user: User, id: TaskId): Promise<void> {
