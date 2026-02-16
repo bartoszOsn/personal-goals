@@ -1,6 +1,7 @@
 import { Button, Group, rem, Stack, Table, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useCreateTaskMutation, useTasksQuery } from '@/api/task-hooks';
+import { DataView, stringDataType } from '@/base/data-type';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -36,7 +37,9 @@ export function TasksRoute() {
 						{
 							tasksQuery.data?.tasks.map((task) => (
 								<Table.Tr>
-									<Table.Td>{task.name}</Table.Td>
+									<Table.Td>
+										<DataView value={task.name} onChange={() => {}} dataType={stringDataType} />
+									</Table.Td>
 									<Table.Td>{task.status}</Table.Td>
 									<Table.Td>{task.dates?.start}</Table.Td>
 									<Table.Td>{task.dates?.end}</Table.Td>
