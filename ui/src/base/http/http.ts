@@ -47,10 +47,7 @@ export class http {
 
 		const response = await fetch(input, {
 			...init,
-			headers: {
-				...init.headers,
-				Authorization: this.token ? `Bearer ${this.token}` : undefined
-			}
+			headers: headers
 		});
 		if (response.ok) {
 			try {

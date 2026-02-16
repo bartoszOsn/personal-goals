@@ -1,8 +1,8 @@
 import { TaskId } from './TaskId';
 import { RichText } from './RichText';
-import { TaskDates } from './TaskDates';
 import { TaskStatus } from './TaskStatus';
 import { SprintId } from '../../time/model/SprintId';
+import { Temporal } from 'temporal-polyfill';
 
 export class Task {
 	constructor(
@@ -10,7 +10,8 @@ export class Task {
 		public readonly name: string,
 		public readonly description: RichText,
 		public readonly status: TaskStatus,
-		public readonly dates: TaskDates | null,
+		public readonly startDate: Temporal.PlainDate | null,
+		public readonly endDate: Temporal.PlainDate | null,
 		public readonly sprints: SprintId[]
 	) {}
 }

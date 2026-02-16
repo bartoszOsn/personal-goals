@@ -1,5 +1,5 @@
 import type { GanttProps } from '@/base/gantt/GanttProps.ts';
-import { createContext, type ReactNode, RefObject, useContext, useMemo, useRef, useState } from 'react';
+import { createContext, type ReactNode, type RefObject, useContext, useMemo, useRef, useState } from 'react';
 import type { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 import { zoomLevels } from '@/base/gantt/zoomLevels';
 import type { ZoomLevel } from '@/base/gantt/model/ZoomLevel';

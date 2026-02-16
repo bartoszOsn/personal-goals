@@ -4,11 +4,11 @@ import { TaskEntity } from './entity/TaskEntity';
 import { TaskId } from '../../domain/work/model/TaskId';
 import { RichText } from '../../domain/work/model/RichText';
 import { TaskStatus } from '../../domain/work/model/TaskStatus';
-import { TaskDates } from '../../domain/work/model/TaskDates';
 import { SprintId } from '../../domain/time/model/SprintId';
 import { Temporal } from 'temporal-polyfill';
 import { UnreachableError } from '../../util/UnreachableError';
 import { SprintTimeRangeEntity } from '../time/entity/SprintTimeRangeEntity';
+import { TaskRequest } from '../../domain/work/model/TaskRequest';
 
 @Injectable()
 export class TaskEntityConverter {
@@ -18,12 +18,8 @@ export class TaskEntityConverter {
 			entity.name,
 			new RichText(entity.description),
 			this.fromTaskStatusString(entity.status),
-			entity.startDate && entity.endDate
-				? new TaskDates(
-						Temporal.PlainDate.from(entity.startDate),
-						Temporal.PlainDate.from(entity.endDate)
-					)
-				: null,
+			entity.startDate ? Temporal.PlainDate.from(entity.startDate) : null,
+			entity.endDate ? Temporal.PlainDate.from(entity.endDate) : null,
 			entity.sprints?.map((sprint) => new SprintId(sprint.id)) ?? []
 		);
 	}
@@ -32,15 +28,15 @@ export class TaskEntityConverter {
 		return entities.map((entity) => this.fromTaskEntity(entity));
 	}
 
-	toTaskEntityData(task: Task): Partial<TaskEntity> {
-		return {
-			id: task.id.id,
-			name: task.name,
-			description: task.description.markdown,
-			status: this.toTaskStatusString(task.status),
-			startDate: task.dates?.start.toString() ?? undefined,
-			endDate: task.dates?.end.toString() ?? undefined
-		};
+	toTaskEntity(task: TaskRequest): TaskEntity {
+		const entity = new TaskEntity();
+		entity.name = task.name;
+		entity.description = task.description.markdown;
+		entity.status = this.toTaskStatusString(task.status);
+		entity.startDate = task.startDate?.toString() ?? undefined;
+		entity.endDate = task.endDate?.toString() ?? undefined;
+		entity.sprints = this.sprintIdsToEntities(task.sprintIds);
+		return entity;
 	}
 
 	sprintIdsToEntities(sprintIds: SprintId[]): SprintTimeRangeEntity[] {

@@ -12,7 +12,8 @@ export function TasksRoute() {
 			name: 'New task',
 			status: 'TODO',
 			description: '',
-			dates: null,
+			startDate: undefined,
+			endDate: undefined,
 			sprintIds: []
 		})
 	}
@@ -41,8 +42,8 @@ export function TasksRoute() {
 										<DataView value={task.name} onChange={() => {}} dataType={stringDataType} />
 									</Table.Td>
 									<Table.Td>{task.status}</Table.Td>
-									<Table.Td>{task.dates?.start}</Table.Td>
-									<Table.Td>{task.dates?.end}</Table.Td>
+									<Table.Td>{task.startDate}</Table.Td>
+									<Table.Td>{task.endDate}</Table.Td>
 								</Table.Tr>
 							))
 						}

@@ -13,8 +13,7 @@ import { TaskDTOConverter } from './TaskDTOConverter';
 import type {
 	TaskDTO,
 	TaskListDTO,
-	TaskCreateRequestDTO,
-	TaskUpdateRequestDTO
+	TaskRequestDTO
 } from '@personal-okr/shared';
 import { TaskId } from '../../domain/work/model/TaskId';
 
@@ -41,36 +40,19 @@ export class TaskController {
 	}
 
 	@Post()
-	public async createTask(
-		@Body() request: TaskCreateRequestDTO
-	): Promise<TaskDTO> {
-		const { name, description, status, dates, sprintIds } =
-			this.taskDTOConverter.fromTaskCreateRequestDTO(request);
-		const task = await this.taskService.createTask(
-			name,
-			description,
-			status,
-			dates,
-			sprintIds
-		);
+	public async createTask(@Body() request: TaskRequestDTO): Promise<TaskDTO> {
+		const domainRequest = this.taskDTOConverter.fromTaskRequestDTO(request);
+		const task = await this.taskService.createTask(domainRequest);
 		return this.taskDTOConverter.toTaskDTO(task);
 	}
 
 	@Put(':id')
 	public async updateTask(
 		@Param('id') id: string,
-		@Body() request: TaskUpdateRequestDTO
+		@Body() request: TaskRequestDTO
 	): Promise<void> {
-		const { name, description, status, dates, sprintIds } =
-			this.taskDTOConverter.fromTaskUpdateRequestDTO(request);
-		await this.taskService.updateTask(
-			new TaskId(id),
-			name,
-			description,
-			status,
-			dates,
-			sprintIds
-		);
+		const domainRequest = this.taskDTOConverter.fromTaskRequestDTO(request);
+		await this.taskService.updateTask(new TaskId(id), domainRequest);
 	}
 
 	@Delete(':id')

@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Task } from '../../domain/work/model/Task';
 import { TaskStatus } from '../../domain/work/model/TaskStatus';
-import {
-	TaskDTO,
-	TaskListDTO,
-	TaskCreateRequestDTO,
-	TaskUpdateRequestDTO
-} from '@personal-okr/shared';
+import { TaskDTO, TaskListDTO, TaskRequestDTO } from '@personal-okr/shared';
 import { UnreachableError } from '../../util/UnreachableError';
 import { SprintId } from '../../domain/time/model/SprintId';
 import { Temporal } from 'temporal-polyfill';
+import { TaskRequest } from '../../domain/work/model/TaskRequest';
+import { RichText } from '../../domain/work/model/RichText';
 
 @Injectable()
 export class TaskDTOConverter {
@@ -19,12 +16,8 @@ export class TaskDTOConverter {
 			name: task.name,
 			description: task.description.markdown,
 			status: this.toTaskStatusDTO(task.status),
-			dates: task.dates
-				? {
-						start: task.dates.start.toString(),
-						end: task.dates.end.toString()
-					}
-				: null,
+			startDate: task.startDate?.toString() ?? undefined,
+			endDate: task.endDate?.toString() ?? undefined,
 			sprintIds: task.sprints.map((sprint) => sprint.value)
 		};
 	}
@@ -35,51 +28,15 @@ export class TaskDTOConverter {
 		};
 	}
 
-	fromTaskCreateRequestDTO(dto: TaskCreateRequestDTO): {
-		name: string;
-		description: string;
-		status: TaskStatus;
-		dates: { start: Temporal.PlainDate; end: Temporal.PlainDate } | null;
-		sprintIds: SprintId[];
-	} {
-		return {
-			name: dto.name,
-			description: dto.description,
-			status: this.fromTaskStatusDTO(dto.status),
-			dates: dto.dates
-				? {
-						start: Temporal.PlainDate.from(dto.dates.start),
-						end: Temporal.PlainDate.from(dto.dates.end)
-					}
-				: null,
-			sprintIds: dto.sprintIds.map((id) => new SprintId(id))
-		};
-	}
-
-	fromTaskUpdateRequestDTO(dto: TaskUpdateRequestDTO): {
-		name?: string;
-		description?: string;
-		status?: TaskStatus;
-		dates?: { start: Temporal.PlainDate; end: Temporal.PlainDate } | null;
-		sprintIds?: SprintId[];
-	} {
-		return {
-			name: dto.name,
-			description: dto.description,
-			status: dto.status
-				? this.fromTaskStatusDTO(dto.status)
-				: undefined,
-			dates:
-				dto.dates !== undefined
-					? dto.dates
-						? {
-								start: Temporal.PlainDate.from(dto.dates.start),
-								end: Temporal.PlainDate.from(dto.dates.end)
-							}
-						: null
-					: undefined,
-			sprintIds: dto.sprintIds?.map((id) => new SprintId(id))
-		};
+	fromTaskRequestDTO(dto: TaskRequestDTO): TaskRequest {
+		return new TaskRequest(
+			dto.name,
+			new RichText(dto.description),
+			this.fromTaskStatusDTO(dto.status),
+			dto.startDate ? Temporal.PlainDate.from(dto.startDate) : null,
+			dto.endDate ? Temporal.PlainDate.from(dto.endDate) : null,
+			dto.sprintIds.map((id) => new SprintId(id))
+		);
 	}
 
 	private toTaskStatusDTO(status: TaskStatus): TaskDTO['status'] {
