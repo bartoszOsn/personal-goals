@@ -1,4 +1,4 @@
-import { QuarterDTO } from './QuarterDTO';
+import type { QuarterDTO } from './QuarterDTO';
 
 export interface SprintDTO {
 	readonly id: string;

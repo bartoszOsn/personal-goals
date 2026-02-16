@@ -1,4 +1,4 @@
-import { ObjectiveDeadlineDTO } from './ObjectiveDeadlineDTO';
+import type { ObjectiveDeadlineDTO } from './ObjectiveDeadlineDTO';
 
 export interface ObjectiveRequestDTO {
 	name?: string;

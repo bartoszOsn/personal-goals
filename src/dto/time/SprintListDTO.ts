@@ -1,4 +1,4 @@
-import { SprintDTO } from './SprintDTO';
+import type { SprintDTO } from './SprintDTO';
 
 export interface SprintListDTO {
 	sprints: SprintDTO[];

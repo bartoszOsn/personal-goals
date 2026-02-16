@@ -14,7 +14,9 @@ export interface TemporalComparator {
 }
 
 class TemporalComparatorImpl implements TemporalComparator {
-	constructor(public readonly a: Temporal.PlainDate) {
+	public readonly a: Temporal.PlainDate;
+	constructor(a: Temporal.PlainDate) {
+		this.a = a;
 	}
 
 	before(b: Temporal.PlainDate) {

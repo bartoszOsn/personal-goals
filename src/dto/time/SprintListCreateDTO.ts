@@ -1,4 +1,4 @@
-import { SprintListDTO } from './SprintListDTO';
+import type { SprintListDTO } from './SprintListDTO';
 
 export type SprintListCreateDTO = SprintCreateSuccessDTO | SprintCreateOverlapFailureDTO;
 
