@@ -2,7 +2,8 @@ import { Button, Group, rem, Stack, Table, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks';
 import { DataView, stringDataType } from '@/base/data-type';
-import type { TaskDTO } from '@personal-okr/shared';
+import type { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
+import { taskStatusDataType } from '@/core/taskStatusDataType';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -22,6 +23,16 @@ export function TasksRoute() {
 			id: task.id, request: { name: newName }
 		});
 	};
+
+	const onUpdateStatus = async (task: TaskDTO, newStatus: TaskStatusDTO) => {
+		if (task.status === newStatus) {
+			return;
+		}
+
+		await updateTaskMutation.mutateAsync({
+			id: task.id, request: { status: newStatus }
+		});
+	}
 
 	return (
 		<Stack w="100%" h="100vh" p="lg">
@@ -48,7 +59,11 @@ export function TasksRoute() {
 												  onChange={(newName) => onUpdateName(task, newName)}
 												  dataType={stringDataType} />
 									</Table.Td>
-									<Table.Td>{task.status}</Table.Td>
+									<Table.Td>
+										<DataView value={task.status}
+												  onChange={(newStatus) => onUpdateStatus(task, newStatus)}
+												  dataType={taskStatusDataType} />
+									</Table.Td>
 									<Table.Td>{task.startDate}</Table.Td>
 									<Table.Td>{task.endDate}</Table.Td>
 								</Table.Tr>

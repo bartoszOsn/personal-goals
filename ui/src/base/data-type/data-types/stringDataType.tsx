@@ -9,11 +9,11 @@ export const stringDataType: DataType<string> = {
 		<FocusTrap>
 			<TextInput value={value}
 					   size="xs"
-					   onBlur={onSubmit}
+					   onBlur={() => onSubmit(value)}
 					   onInput={(e) => onChange(e.currentTarget.value)}
 					   onKeyDown={(e) => {
 						   if (e.key === 'Enter') {
-							   onSubmit();
+							   onSubmit(value);
 						   }
 						   if (e.key === 'Escape') {
 							   onCancel();

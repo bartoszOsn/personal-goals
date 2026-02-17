@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 export interface DataTypeEditorProps<TData> {
 	value: TData;
 	onCancel: () => void;
-	onSubmit: () => void;
+	onSubmit: (value: TData) => void;
 	onChange: (value: TData) => void;
 }
 
