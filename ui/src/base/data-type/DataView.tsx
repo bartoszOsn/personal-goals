@@ -28,7 +28,7 @@ export function DataView<TData>(props: DataViewProps<TData>) {
 		const result = props.onChange(value);
 		setState('pending');
 		Promise.resolve(result)
-			.then(() => {
+			.finally(() => {
 				setState('presenting');
 				setEditedValue(value);
 			});

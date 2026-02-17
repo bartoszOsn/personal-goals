@@ -50,12 +50,12 @@ export class TaskEntityConverter {
 		if (task.startDate !== undefined) {
 			partial.startDate = task.startDate
 				? task.startDate.toString()
-				: undefined;
+				: (null as unknown as TaskEntity['startDate']);
 		}
 		if (task.endDate !== undefined) {
 			partial.endDate = task.endDate
 				? task.endDate.toString()
-				: undefined;
+				: (null as unknown as TaskEntity['endDate']);
 		}
 
 		return this.taskEntityRepository.create(partial);

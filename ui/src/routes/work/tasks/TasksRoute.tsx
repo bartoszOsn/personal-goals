@@ -4,6 +4,8 @@ import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/a
 import { DataView, stringDataType } from '@/base/data-type';
 import type { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
 import { taskStatusDataType } from '@/core/taskStatusDataType';
+import { Temporal } from 'temporal-polyfill';
+import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -31,6 +33,30 @@ export function TasksRoute() {
 
 		await updateTaskMutation.mutateAsync({
 			id: task.id, request: { status: newStatus }
+		});
+	}
+
+	const onUpdateStartDate = async (task: TaskDTO, newDate: Temporal.PlainDate | null) => {
+		if ((task.startDate ?? null) === newDate?.toString()) {
+			return;
+		}
+
+		await updateTaskMutation.mutateAsync({
+			id: task.id, request: {
+				startDate: newDate === null ? { empty: true} : { value: newDate.toString() }
+			}
+		});
+	}
+
+	const onUpdateEndDate = async (task: TaskDTO, newDate: Temporal.PlainDate | null) => {
+		if ((task.endDate ?? null) === newDate?.toString()) {
+			return;
+		}
+
+		await updateTaskMutation.mutateAsync({
+			id: task.id, request: {
+				endDate: newDate === null ? { empty: true} : { value: newDate.toString() }
+			}
 		});
 	}
 
@@ -64,8 +90,16 @@ export function TasksRoute() {
 												  onChange={(newStatus) => onUpdateStatus(task, newStatus)}
 												  dataType={taskStatusDataType} />
 									</Table.Td>
-									<Table.Td>{task.startDate}</Table.Td>
-									<Table.Td>{task.endDate}</Table.Td>
+									<Table.Td>
+										<DataView value={task.startDate ? Temporal.PlainDate.from(task.startDate) : null}
+												  onChange={(newDate) => onUpdateStartDate(task, newDate)}
+												  dataType={plainDateDataType} />
+									</Table.Td>
+									<Table.Td>
+										<DataView value={task.endDate ? Temporal.PlainDate.from(task.endDate) : null}
+												  onChange={(newDate) => onUpdateEndDate(task, newDate)}
+												  dataType={plainDateDataType} />
+									</Table.Td>
 								</Table.Tr>
 							))
 						}
