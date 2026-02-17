@@ -1,14 +1,15 @@
 import type { DataType } from '@/base/data-type/DataType.ts';
 import { useEffect, useState } from 'react';
+import { Skeleton } from '@mantine/core';
 
 export interface DataViewProps<TData> {
 	value: TData;
-	onChange: (value: TData) => void;
+	onChange: (value: TData) => void | Promise<void>;
 	dataType: DataType<TData>
 }
 
 export function DataView<TData>(props: DataViewProps<TData>) {
-	const [editing, setEditing] = useState(false);
+	const [state, setState] = useState<'pending' | 'editing' | 'presenting'>('presenting');
 	const [editedValue, setEditedValue] = useState<TData>(props.value);
 
 	useEffect(() => {
@@ -17,33 +18,43 @@ export function DataView<TData>(props: DataViewProps<TData>) {
 
 	const value = props.value;
 	const onCancelEditing = () => {
-		setEditing(false);
+		setState('presenting');
 		setEditedValue(props.value);
 	}
 	const onChange = (value: TData) => {
 		setEditedValue(value);
 	}
 	const onSubmit = () => {
-		props.onChange(editedValue);
-		setEditing(false);
-		setEditedValue(value);
+		const result = props.onChange(editedValue);
+		setState('pending');
+		Promise.resolve(result)
+			.then(() => {
+				setState('presenting');
+				setEditedValue(value);
+			});
 	}
 
 	return (
 		<>
 			{
-				editing ? (
+				state === 'editing' && (
 					<props.dataType.Editor value={editedValue}
 										   onCancel={onCancelEditing}
 										   onChange={onChange}
 										   onSubmit={onSubmit}/>
-				) : (
+				)
+			}
+			{
+				state === 'presenting' && (
 					<props.dataType.Presenter value={value}
-											  onEdit={() => setEditing(true)} />
+											  onEdit={() => setState('editing')} />
+				)
+			}
+			{
+				state === 'pending' && (
+					<Skeleton w='100%' h='100%' mih='30px' />
 				)
 			}
 		</>
 	);
 }
-
-export default DataView;

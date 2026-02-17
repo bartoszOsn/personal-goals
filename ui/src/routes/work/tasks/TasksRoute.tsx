@@ -13,8 +13,12 @@ export function TasksRoute() {
 		createTaskMutation.mutate({});
 	};
 
-	const onUpdateName = (task: TaskDTO, newName: string) => {
-		updateTaskMutation.mutate({
+	const onUpdateName = async (task: TaskDTO, newName: string) => {
+		if (task.name === newName) {
+			return;
+		}
+
+		await updateTaskMutation.mutateAsync({
 			id: task.id, request: { name: newName }
 		});
 	};
