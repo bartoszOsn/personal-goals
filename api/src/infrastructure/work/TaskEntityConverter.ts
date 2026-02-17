@@ -9,9 +9,17 @@ import { Temporal } from 'temporal-polyfill';
 import { UnreachableError } from '../../util/UnreachableError';
 import { SprintTimeRangeEntity } from '../time/entity/SprintTimeRangeEntity';
 import { TaskRequest } from '../../domain/work/model/TaskRequest';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { DeepPartial } from 'typeorm/common/DeepPartial';
 
 @Injectable()
 export class TaskEntityConverter {
+	constructor(
+		@InjectRepository(TaskEntity)
+		private readonly taskEntityRepository: Repository<TaskEntity>
+	) {}
+
 	fromTaskEntity(entity: TaskEntity): Task {
 		return new Task(
 			new TaskId(entity.id),
@@ -28,15 +36,29 @@ export class TaskEntityConverter {
 		return entities.map((entity) => this.fromTaskEntity(entity));
 	}
 
-	toTaskEntity(task: TaskRequest): TaskEntity {
-		const entity = new TaskEntity();
-		entity.name = task.name;
-		entity.description = task.description.markdown;
-		entity.status = this.toTaskStatusString(task.status);
-		entity.startDate = task.startDate?.toString() ?? undefined;
-		entity.endDate = task.endDate?.toString() ?? undefined;
-		entity.sprints = this.sprintIdsToEntities(task.sprintIds);
-		return entity;
+	toTaskEntityPartial(task: TaskRequest): TaskEntity {
+		const partial: DeepPartial<TaskEntity> = {};
+		if (task.name !== undefined) {
+			partial.name = task.name;
+		}
+		if (task.description !== undefined) {
+			partial.description = task.description.markdown;
+		}
+		if (task.status !== undefined) {
+			partial.status = this.toTaskStatusString(task.status);
+		}
+		if (task.startDate !== undefined) {
+			partial.startDate = task.startDate
+				? task.startDate.toString()
+				: undefined;
+		}
+		if (task.endDate !== undefined) {
+			partial.endDate = task.endDate
+				? task.endDate.toString()
+				: undefined;
+		}
+
+		return this.taskEntityRepository.create(partial);
 	}
 
 	sprintIdsToEntities(sprintIds: SprintId[]): SprintTimeRangeEntity[] {

@@ -10,26 +10,12 @@ export function TasksRoute() {
 	const updateTaskMutation = useUpdateTaskMutation();
 
 	const onCreate = () => {
-		createTaskMutation.mutate({
-			name: 'New task',
-			status: 'TODO',
-			description: '',
-			startDate: undefined,
-			endDate: undefined,
-			sprintIds: []
-		});
+		createTaskMutation.mutate({});
 	};
 
 	const onUpdateName = (task: TaskDTO, newName: string) => {
 		updateTaskMutation.mutate({
-			id: task.id, request: {
-				name: newName,
-				description: task.description,
-				status: task.status,
-				startDate: task.startDate,
-				endDate: task.endDate,
-				sprintIds: task.sprintIds
-			}
+			id: task.id, request: { name: newName }
 		});
 	};
 

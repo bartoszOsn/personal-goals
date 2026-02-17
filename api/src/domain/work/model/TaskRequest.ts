@@ -5,11 +5,11 @@ import { SprintId } from '../../time/model/SprintId';
 
 export class TaskRequest {
 	constructor(
-		readonly name: string,
-		readonly description: RichText,
-		readonly status: TaskStatus,
-		readonly startDate: Temporal.PlainDate | null,
-		readonly endDate: Temporal.PlainDate | null,
-		readonly sprintIds: SprintId[]
+		readonly name?: string,
+		readonly description?: RichText,
+		readonly status?: TaskStatus,
+		readonly startDate?: Temporal.PlainDate | null,
+		readonly endDate?: Temporal.PlainDate | null,
+		readonly sprintIds?: SprintId[]
 	) {}
 }

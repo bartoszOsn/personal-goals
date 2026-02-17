@@ -9,6 +9,7 @@ import { TaskEntity } from './entity/TaskEntity';
 import { TaskEntityConverter } from './TaskEntityConverter';
 import { UserEntity } from '../auth/entity/UserEntity';
 import { TaskRequest } from '../../domain/work/model/TaskRequest';
+import { CompleteTaskRequest } from '../../domain/work/model/CompleteTaskRequest';
 
 @Injectable()
 export class TaskRepositoryImpl extends TaskRepository {
@@ -44,12 +45,9 @@ export class TaskRepositoryImpl extends TaskRepository {
 		return this.taskEntityConverter.fromTaskEntity(entity);
 	}
 
-	async createTask(user: User, task: TaskRequest): Promise<Task> {
-		const entity = this.taskEntityConverter.toTaskEntity(task);
+	async createTask(user: User, task: CompleteTaskRequest): Promise<Task> {
+		const entity = this.taskEntityConverter.toTaskEntityPartial(task);
 		entity.user = { id: user.id.id } as unknown as UserEntity;
-		entity.sprints = this.taskEntityConverter.sprintIdsToEntities(
-			task.sprintIds
-		);
 
 		const createdEntity = await this.taskEntityRepository.save(entity);
 		return this.taskEntityConverter.fromTaskEntity(createdEntity);
@@ -60,32 +58,29 @@ export class TaskRepositoryImpl extends TaskRepository {
 		id: TaskId,
 		request: TaskRequest
 	): Promise<void> {
-		const entity = await this.taskEntityRepository.findOne({
-			where: {
-				user: { id: user.id.id },
-				id: id.id
+		const entity = this.taskEntityConverter.toTaskEntityPartial(request);
+
+		const result = await this.taskEntityRepository.update(
+			{
+				id: id.id,
+				user: { id: user.id.id }
 			},
-			relations: ['sprints']
-		});
-
-		if (!entity) {
-			throw new NotFoundException('Task not found');
-		}
-
-		const updatedEntity = this.taskEntityConverter.toTaskEntity(request);
-		updatedEntity.id = entity.id;
-		updatedEntity.user = entity.user;
-		updatedEntity.sprints = this.taskEntityConverter.sprintIdsToEntities(
-			request.sprintIds
+			entity
 		);
 
-		await this.taskEntityRepository.save(updatedEntity);
+		if (!result.affected || result.affected === 0) {
+			throw new NotFoundException(); // TODO: Change to application exception
+		}
 	}
 
 	async deleteTask(user: User, id: TaskId): Promise<void> {
-		await this.taskEntityRepository.delete({
+		const result = await this.taskEntityRepository.delete({
 			user: { id: user.id.id },
 			id: id.id
 		});
+
+		if (!result.affected || result.affected === 0) {
+			throw new NotFoundException(); // TODO: Change to application exception
+		}
 	}
 }

@@ -29,13 +29,23 @@ export class TaskDTOConverter {
 	}
 
 	fromTaskRequestDTO(dto: TaskRequestDTO): TaskRequest {
+		const dateToDomain = (date: TaskRequestDTO['startDate']) => {
+			if (date === undefined) {
+				return undefined;
+			}
+			if ('empty' in date) {
+				return null;
+			}
+			return Temporal.PlainDate.from(date.value);
+		};
+
 		return new TaskRequest(
 			dto.name,
-			new RichText(dto.description),
-			this.fromTaskStatusDTO(dto.status),
-			dto.startDate ? Temporal.PlainDate.from(dto.startDate) : null,
-			dto.endDate ? Temporal.PlainDate.from(dto.endDate) : null,
-			dto.sprintIds.map((id) => new SprintId(id))
+			dto.description ? new RichText(dto.description) : undefined,
+			dto.status ? this.fromTaskStatusDTO(dto.status) : undefined,
+			dateToDomain(dto.startDate),
+			dateToDomain(dto.endDate),
+			dto.sprintIds?.map((id) => new SprintId(id))
 		);
 	}
 

@@ -4,6 +4,7 @@ import { TaskId } from '../../domain/work/model/TaskId';
 import { TaskRepository } from './TaskRepository';
 import { UserStorage } from '../auth/UserStorage';
 import { TaskRequest } from '../../domain/work/model/TaskRequest';
+import { CompleteTaskRequest } from '../../domain/work/model/CompleteTaskRequest';
 
 @Injectable()
 export class TaskService {
@@ -24,7 +25,9 @@ export class TaskService {
 
 	async createTask(request: TaskRequest): Promise<Task> {
 		const user = await this.userStorage.getUser();
-		return this.taskRepository.createTask(user, request);
+		const requestWithDefaults =
+			CompleteTaskRequest.fromTaskRequestWithDefaults(request);
+		return this.taskRepository.createTask(user, requestWithDefaults);
 	}
 
 	async updateTask(id: TaskId, request: TaskRequest): Promise<void> {
