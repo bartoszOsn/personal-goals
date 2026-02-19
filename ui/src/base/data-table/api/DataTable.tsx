@@ -14,6 +14,7 @@ export interface DataTable<TData, TId> {
 	storage?: PropertyStorage;
 	tableProps?: TableProps;
 	scrollContainerProps?: TableScrollContainerProps;
+	onSelectionChange?: (rows: TData[]) => void;
 }
 
 export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
@@ -25,6 +26,7 @@ export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
 		storage = localStoragePropertyStorage,
 		tableProps = {},
 		scrollContainerProps = {},
+		onSelectionChange,
 	} = props;
 
 	const currentColumns = useMemo(() => {
@@ -35,7 +37,11 @@ export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
 		<Table.ScrollContainer minWidth={300} {...scrollContainerProps}>
 			<Table {...tableProps}>
 				<DataTableHeader columns={currentColumns} />
-				<DataTableBody columns={currentColumns} rows={rows} />
+				<DataTableBody columns={currentColumns}
+							   rows={rows}
+							   idSelector={idSelector}
+							   onSelectionChange={(rows) => onSelectionChange?.(rows)}
+				/>
 			</Table>
 		</Table.ScrollContainer>
 	)

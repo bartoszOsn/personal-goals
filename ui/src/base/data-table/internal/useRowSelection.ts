@@ -1,15 +1,15 @@
 import { useCallback, useMemo, useReducer } from 'react';
 
-export interface RowSelectionState {
-	lastSingleSelect: string | null;
-	selectedRows: string[];
+export interface RowSelectionState<TId> {
+	lastSingleSelect: TId | null;
+	selectedRows: TId[];
 }
 
-export type RowSelectionAction =
-	| { type: 'clickedOn', rowId: string, withShift: boolean }
+export type RowSelectionAction<TId> =
+	| { type: 'clickedOn', rowId: TId, withShift: boolean }
 	| { type: 'clickOutside' };
 
-export function useRowSelection(allRowIds: string[]) {
+export function useRowSelection<TId>(allRowIds: TId[]) {
 	const rowSelectionReducer = useMemo(
 		() => createRowSelectionReducer(allRowIds),
 		[allRowIds]
@@ -23,7 +23,7 @@ export function useRowSelection(allRowIds: string[]) {
 	return {
 		selectedRows: state.selectedRows,
 		clickedOn: useCallback(
-			(rowId: string, withShift: boolean) => {
+			(rowId: TId, withShift: boolean) => {
 				dispatch({ type: 'clickedOn', rowId, withShift });
 			},
 			[dispatch]
@@ -37,12 +37,12 @@ export function useRowSelection(allRowIds: string[]) {
 	};
 }
 
-export const rowSelectionReducerInitialState: RowSelectionState = {
+export const rowSelectionReducerInitialState: RowSelectionState<never> = {
 	lastSingleSelect: null,
 	selectedRows: []
 };
 
-export const createRowSelectionReducer = (allRowIds: string[]) => (prevState: RowSelectionState, action: RowSelectionAction): RowSelectionState => {
+export const createRowSelectionReducer = <TId>(allRowIds: TId[]) => (prevState: RowSelectionState<TId>, action: RowSelectionAction<TId>): RowSelectionState<TId> => {
 	const lastSingleSelect = prevState.lastSingleSelect !== null && allRowIds.includes(prevState.lastSingleSelect)
 		? prevState.lastSingleSelect
 		: null
