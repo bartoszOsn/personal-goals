@@ -1,11 +1,13 @@
-import { Button, Group, rem, Stack, Table, Title } from '@mantine/core';
+import { Button, Group, Stack, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks';
-import { DataView, stringDataType } from '@/base/data-type';
+import { stringDataType } from '@/base/data-type';
 import type { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
 import { taskStatusDataType } from '@/core/taskStatusDataType';
 import { Temporal } from 'temporal-polyfill';
 import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
+import { DataTable } from '@/base/data-table/api/DataTable';
+import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -60,52 +62,52 @@ export function TasksRoute() {
 		});
 	}
 
+	const columns: ColumnDescriptor<TaskDTO, any>[] = [
+		{
+			columnId: 'name',
+			columnName: 'Task',
+			columnType: stringDataType,
+			select: (task: TaskDTO) => task.name,
+			onChange: onUpdateName
+		},
+		{
+			columnId: 'status',
+			columnName: 'Status',
+			columnType: taskStatusDataType,
+			select: (task: TaskDTO) => task.status,
+			onChange: onUpdateStatus
+		},
+		{
+			columnId: 'startDate',
+			columnName: 'Start date',
+			columnType: plainDateDataType,
+			select: (task: TaskDTO) => !task.startDate ? null : Temporal.PlainDate.from(task.startDate),
+			onChange: onUpdateStartDate
+		},
+		{
+			columnId: 'endDate',
+			columnName: 'End date',
+			columnType: plainDateDataType,
+			select: (task: TaskDTO) => !task.endDate ? null : Temporal.PlainDate.from(task.endDate),
+			onChange: onUpdateEndDate
+		}
+	];
+
+	const initialColumnIds: string[] = ['name', 'status', 'startDate', 'endDate'];
+
 	return (
 		<Stack w="100%" h="100vh" p="lg">
 			<Title>Task list</Title>
 			<Group>
 				<Button leftSection={<IconPlus />} onClick={onCreate}>Create</Button>
 			</Group>
-			<Table.ScrollContainer flex="1" minWidth={rem(300)}>
-				<Table stickyHeader>
-					<Table.Thead>
-						<Table.Tr>
-							<Table.Th>Task</Table.Th>
-							<Table.Th>Status</Table.Th>
-							<Table.Th>Start</Table.Th>
-							<Table.Th>End</Table.Th>
-						</Table.Tr>
-					</Table.Thead>
-					<Table.Tbody>
-						{
-							tasksQuery.data?.tasks.map((task) => (
-								<Table.Tr>
-									<Table.Td>
-										<DataView value={task.name}
-												  onChange={(newName) => onUpdateName(task, newName)}
-												  dataType={stringDataType} />
-									</Table.Td>
-									<Table.Td>
-										<DataView value={task.status}
-												  onChange={(newStatus) => onUpdateStatus(task, newStatus)}
-												  dataType={taskStatusDataType} />
-									</Table.Td>
-									<Table.Td>
-										<DataView value={task.startDate ? Temporal.PlainDate.from(task.startDate) : null}
-												  onChange={(newDate) => onUpdateStartDate(task, newDate)}
-												  dataType={plainDateDataType} />
-									</Table.Td>
-									<Table.Td>
-										<DataView value={task.endDate ? Temporal.PlainDate.from(task.endDate) : null}
-												  onChange={(newDate) => onUpdateEndDate(task, newDate)}
-												  dataType={plainDateDataType} />
-									</Table.Td>
-								</Table.Tr>
-							))
-						}
-					</Table.Tbody>
-				</Table>
-			</Table.ScrollContainer>
+			<DataTable rows={tasksQuery.data?.tasks ?? []}
+					   idSelector={(task) => task.id}
+					   possibleColumns={columns}
+					   initialColumnIds={initialColumnIds}
+					   tableProps={{ stickyHeader: true }}
+					   scrollContainerProps={{ flex: '1', minWidth: 300 }}
+					   />
 		</Stack>
 	);
 }
