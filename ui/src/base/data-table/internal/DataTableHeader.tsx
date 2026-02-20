@@ -2,6 +2,7 @@ import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.ts
 import { ActionIcon, Box, CloseButton, Group, Popover, Table, Text } from '@mantine/core';
 import { IconDots } from '@tabler/icons-react';
 import { DataTableCustomizationPopover } from '@/base/data-table/internal/DataTableCustomizationPopover';
+import { useState } from 'react';
 
 interface DataTableHeaderProps<TData> {
 	columns: ColumnDescriptor<TData, unknown>[];
@@ -10,6 +11,7 @@ interface DataTableHeaderProps<TData> {
 }
 
 export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
+	const [popoverOpened, setPopoverOpened] = useState(false);
 	const isMoreThanOneColumn = props.columns.length > 1;
 
 	return (
@@ -34,9 +36,9 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 								}
 								{
 									isLastColumn && (
-										<Popover shadow='md' withArrow>
+										<Popover shadow='md' withArrow opened={popoverOpened} onChange={setPopoverOpened}>
 											<Popover.Target>
-												<ActionIcon size="xs" variant='subtle' color='gray'>
+												<ActionIcon size="xs" variant='subtle' color='gray' onClick={() => setPopoverOpened(o => !o)}>
 													<IconDots size={12} />
 												</ActionIcon>
 											</Popover.Target>
