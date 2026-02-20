@@ -31,7 +31,7 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 								</Group>
 								{
 									!isLastColumn && (
-										<Box w={2} h={18} bg='gray.1' />
+										<Box w={2} h={18} bg='gray.1' style={{ cursor: 'ew-resize' }} />
 									)
 								}
 								{

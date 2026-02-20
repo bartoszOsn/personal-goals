@@ -34,7 +34,7 @@ export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
 		onSelectionChange,
 	} = props;
 
-	const { ref: tableRef, width: tableWidth } = useElementSize();
+	const { ref: scrollAreaRef, width: scrollAreaWidth } = useElementSize();
 
 	const { columns, loading: columnsLoading, setColumns } = useCurrentColumns({
 		storage,
@@ -48,9 +48,9 @@ export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
 	}
 
 	return (
-		<ScrollArea.Autosize ref={tableRef} scrollbars={'xy'} {...scrollAreaProps}>
+		<ScrollArea.Autosize ref={scrollAreaRef} scrollbars={'xy'} {...scrollAreaProps}>
 			<Table style={{tableLayout: 'fixed' }} {...tableProps}>
-				<DataTableColgroup tableWidth={tableWidth} columns={columns} widths={new Map()} />
+				<DataTableColgroup tableWidth={scrollAreaWidth} columns={columns} widths={new Map()} />
 				<DataTableHeader columns={columns} allPossibleColumns={possibleColumns} setColumns={setColumns} />
 				<DataTableBody columns={columns}
 							   rows={rows}
