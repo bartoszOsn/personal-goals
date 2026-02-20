@@ -46,7 +46,7 @@ export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
 	return (
 		<Table.ScrollContainer {...scrollContainerProps}>
 			<Table {...tableProps}>
-				<DataTableHeader columns={columns} />
+				<DataTableHeader columns={columns} allPossibleColumns={possibleColumns} setColumns={setColumns} />
 				<DataTableBody columns={columns}
 							   rows={rows}
 							   idSelector={idSelector}
