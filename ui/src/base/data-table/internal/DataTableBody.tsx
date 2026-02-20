@@ -38,10 +38,12 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 		<Table.Tbody ref={tBodyRef} style={{ userSelect: 'none' }}>
 			{
 				rows.map((row: TData) => (
-					<Table.Tr bg={selectedRows.includes(idSelector(row)) ? 'blue.0' : 'white'} onClick={(e) => clickedOn(idSelector(row), e.shiftKey)}>
+					<Table.Tr key={`${idSelector(row)}`}
+							  bg={selectedRows.includes(idSelector(row)) ? 'blue.0' : 'white'}
+							  onClick={(e) => clickedOn(idSelector(row), e.shiftKey)}>
 						{
 							columns.map((column) => (
-								<Table.Td>
+								<Table.Td key={column.columnId}>
 									<DataView value={column.select(row)}
 											  onChange={(newValue) => column.onChange(row, newValue)}
 											  dataType={column.columnType} />
@@ -52,5 +54,5 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 				))
 			}
 		</Table.Tbody>
-	)
+	);
 }

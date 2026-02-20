@@ -105,6 +105,7 @@ export function TasksRoute() {
 					   idSelector={(task) => task.id}
 					   possibleColumns={columns}
 					   initialColumnIds={initialColumnIds}
+					   tableKey='tasks'
 					   tableProps={{ stickyHeader: true }}
 					   scrollContainerProps={{ flex: '1', minWidth: 300 }}
 					   />
