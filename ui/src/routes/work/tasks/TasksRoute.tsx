@@ -107,7 +107,7 @@ export function TasksRoute() {
 					   initialColumnIds={initialColumnIds}
 					   tableKey='tasks'
 					   tableProps={{ stickyHeader: true }}
-					   scrollContainerProps={{ flex: '1', minWidth: 300 }}
+					   scrollAreaProps={{ flex: '1' }}
 					   />
 		</Stack>
 	);

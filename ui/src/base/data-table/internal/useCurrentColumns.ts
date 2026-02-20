@@ -9,12 +9,6 @@ export interface UseCurrentColumnsProps<TData> {
 	initialColumnIds: string[];
 }
 
-export interface UseCurrentColumnsResult<TData> {
-	columns: ColumnDescriptor<TData, unknown>[];
-	loading: boolean;
-	setColumns: (columns: ColumnDescriptor<TData, unknown>[]) => void;
-}
-
 export function useCurrentColumns<TData>(props: UseCurrentColumnsProps<TData>) {
 	const { storage, tableKey, possibleColumns, initialColumnIds } = props;
 

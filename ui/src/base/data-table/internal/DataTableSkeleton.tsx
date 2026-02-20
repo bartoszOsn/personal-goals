@@ -1,8 +1,8 @@
-import { Skeleton, Table, type TableProps, type TableScrollContainerProps } from '@mantine/core';
+import { ScrollArea, type ScrollAreaAutosizeProps, Skeleton, Table, type TableProps } from '@mantine/core';
 
 export interface DataTableSkeletonProps {
 	tableProps: TableProps;
-	scrollContainerProps: TableScrollContainerProps;
+	scrollAreaProps: ScrollAreaAutosizeProps;
 }
 
 export function DataTableSkeleton(props: DataTableSkeletonProps) {
@@ -10,7 +10,7 @@ export function DataTableSkeleton(props: DataTableSkeletonProps) {
 	const rows = Array.from({ length: 10 }, (_, i) => i);
 
 	return (
-		<Table.ScrollContainer {...props.scrollContainerProps}>
+		<ScrollArea.Autosize {...props.scrollAreaProps}>
 			<Table {...props.tableProps}>
 				<Table.Thead>
 					<Table.Tr>
@@ -39,6 +39,6 @@ export function DataTableSkeleton(props: DataTableSkeletonProps) {
 					}
 				</Table.Tbody>
 			</Table>
-		</Table.ScrollContainer>
+		</ScrollArea.Autosize>
 	)
 }
