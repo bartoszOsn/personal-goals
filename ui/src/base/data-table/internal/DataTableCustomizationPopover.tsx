@@ -27,7 +27,7 @@ export function DataTableCustomizationPopover<TData>(props: DataTableCustomizati
 				<Stack gap={2} mb="md">
 					{
 						visible.map(c => (
-							<Group justify="space-between">
+							<Group key={c.columnId} justify="space-between">
 								<Text size='sm'>{c.columnName}</Text>
 								<Tooltip label="Click to hide">
 									<ActionIcon size="sm" color="gray" variant="subtle" onClick={() => hideColumn(c)}>
@@ -42,7 +42,7 @@ export function DataTableCustomizationPopover<TData>(props: DataTableCustomizati
 				<Stack>
 					{
 						hidden.map(c => (
-							<Group justify="space-between">
+							<Group key={c.columnId} justify="space-between">
 								<Text size='sm'>{c.columnName}</Text>
 								<Tooltip label="Click to show">
 									<ActionIcon size="sm" color="gray" variant="subtle" onClick={() => showColumn(c)}>
