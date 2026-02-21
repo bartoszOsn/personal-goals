@@ -1,6 +1,6 @@
 import type { ObjectiveDTO } from '@personal-okr/shared';
 import { ActionIcon, Box, Button, Center, Collapse, Group, Modal, RingProgress, Stack, Text, TextInput } from '@mantine/core';
-import { useKeyResultCreateMutation, useOkrDeleteMutation } from '@/api/okr-hooks';
+import { useKeyResultCreateMutation, useKeyResultDeleteMutation, useOkrDeleteMutation } from '@/api/okr-hooks';
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { IconChevronDown, IconChevronUp, IconClock, IconPercentage, IconTrash } from '@tabler/icons-react';
@@ -12,6 +12,7 @@ export interface OKRTableProps {
 export function OkRTable({ objective }: OKRTableProps) {
 	const createKRMutation = useKeyResultCreateMutation();
 	const deleteOkrMutation = useOkrDeleteMutation();
+	const deleteKeyResultMutation = useKeyResultDeleteMutation();
 	const [opened, { open, close }] = useDisclosure(false);
 	const [name, setName] = useState<string>();
 	const [collapsed, { toggle: toggleCollapse }] = useDisclosure(false);
@@ -70,7 +71,7 @@ export function OkRTable({ objective }: OKRTableProps) {
 				<Stack gap="xs" ml="xl">
 					{
 						objective.keyResults.map((keyResult, index) => (
-							<Box bg="orange.1" px="lg" py="xs" style={{ borderLeft: 'solid 2px var(--mantine-color-orange-5)' }}>
+							<Box bg="orange.1" pl="lg" pr='sm' py="xs" style={{ borderLeft: 'solid 2px var(--mantine-color-orange-5)' }}>
 								<Group wrap="nowrap">
 									<Text style={{ textWrap: 'nowrap' }} c="orange" fw="bold" size="lg">KR-{index + 1}:</Text>
 									<Box flex={1}>
@@ -81,6 +82,13 @@ export function OkRTable({ objective }: OKRTableProps) {
 											<IconPercentage size={12} />
 										</Center>
 									)} />
+									<ActionIcon color="red"
+												variant="subtle"
+												size="sm"
+												onClick={() => deleteKeyResultMutation.mutateAsync(keyResult.id)}
+												loading={deleteKeyResultMutation.isPending}>
+										<IconTrash size={12} />
+									</ActionIcon>
 								</Group>
 							</Box>
 						))

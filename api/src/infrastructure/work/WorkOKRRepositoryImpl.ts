@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { WorkOKRRepository } from '../../app/work/WorkOKRRepository';
 import { User } from 'src/domain/auth/model/User';
 import { KeyResult, KeyResultId } from 'src/domain/work/model/KeyResult';
@@ -86,7 +86,20 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 		} as unknown as ObjectiveEntity;
 		entity.description ??= '';
 		entity.progress ??= 0;
-		const updatedEntity = await this.keyResultRepository.save(entity);
+		const updated = await this.keyResultRepository.save(entity);
+		const updatedEntity = await this.keyResultRepository.findOne({
+			where: {
+				id: updated.id
+			},
+			relations: {
+				associatedTasks: true,
+				objective: true
+			}
+		});
+
+		if (!updatedEntity) {
+			throw new NotFoundException('Key not found');
+		}
 		return this.workOKREntityConverter.fromKeyResultEntity(updatedEntity);
 	}
 
@@ -109,11 +122,19 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 	}
 
 	async deleteKeyResult(user: User, id: KeyResultId): Promise<void> {
-		await this.keyResultRepository.delete({
-			objective: {
-				user: { id: user.id.id } as unknown as UserEntity
-			} as unknown as ObjectiveEntity,
-			id: id.id
+		const entity = await this.keyResultRepository.findOne({
+			where: {
+				objective: {
+					user: { id: user.id.id }
+				},
+				id: id.id
+			}
 		});
+
+		if (!entity) {
+			throw new NotFoundException(); // Throw application event.
+		}
+
+		await this.keyResultRepository.delete(entity.id);
 	}
 }

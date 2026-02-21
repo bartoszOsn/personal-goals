@@ -32,3 +32,11 @@ export function useKeyResultCreateMutation() {
 		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
 	});
 }
+
+export function useKeyResultDeleteMutation() {
+	const client = useQueryClient();
+	return useMutation({
+		mutationFn: (keyResultId: string) => http.delete(`/api/work/okr/key-result/${keyResultId}`),
+		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
+	});
+}
