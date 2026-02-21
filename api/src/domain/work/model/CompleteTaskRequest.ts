@@ -3,6 +3,7 @@ import { RichText } from './RichText';
 import { TaskStatus } from './TaskStatus';
 import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '../../time/model/SprintId';
+import { KeyResultId } from './KeyResult';
 
 export class CompleteTaskRequest extends TaskRequest {
 	private static taskRequestDefaults = new CompleteTaskRequest(
@@ -11,7 +12,8 @@ export class CompleteTaskRequest extends TaskRequest {
 		TaskStatus.TODO,
 		null,
 		null,
-		[]
+		[],
+		null
 	);
 
 	constructor(
@@ -20,9 +22,18 @@ export class CompleteTaskRequest extends TaskRequest {
 		readonly status: TaskStatus,
 		readonly startDate: Temporal.PlainDate | null,
 		readonly endDate: Temporal.PlainDate | null,
-		readonly sprintIds: SprintId[]
+		readonly sprintIds: SprintId[],
+		readonly keyResult: KeyResultId | null
 	) {
-		super(name, description, status, startDate, endDate);
+		super(
+			name,
+			description,
+			status,
+			startDate,
+			endDate,
+			sprintIds,
+			keyResult
+		);
 	}
 
 	static fromTaskRequestWithDefaults(
@@ -46,7 +57,10 @@ export class CompleteTaskRequest extends TaskRequest {
 				: taskRequest.endDate,
 			taskRequest.sprintIds === undefined
 				? this.taskRequestDefaults.sprintIds
-				: taskRequest.sprintIds
+				: taskRequest.sprintIds,
+			taskRequest.keyResult === undefined
+				? this.taskRequestDefaults.keyResult
+				: taskRequest.keyResult
 		);
 	}
 }

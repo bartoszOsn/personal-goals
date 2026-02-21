@@ -9,7 +9,10 @@ import { KeyResult } from '../../domain/work/model/KeyResult';
 import { ObjectiveRequest } from '../../domain/work/model/ObjectiveRequest';
 import { Year } from '../../domain/time/model/Year';
 import { RichText } from '../../domain/work/model/RichText';
-import { KeyResultRequest } from '../../domain/work/model/KeyResultRequest';
+import {
+	KeyResultAssociatedTasksRequest,
+	KeyResultRequest
+} from '../../domain/work/model/KeyResultRequest';
 import { KeyResultProgress } from '../../domain/work/model/KeyResultProgress';
 import {
 	KeyResultDTO,
@@ -19,6 +22,7 @@ import {
 	ObjectiveRequestDTO,
 	ObjectiveDTO
 } from '@personal-okr/shared';
+import { TaskId } from '../../domain/work/model/TaskId';
 
 @Injectable()
 export class WorkOkrDTOConverter {
@@ -47,7 +51,10 @@ export class WorkOkrDTOConverter {
 			id: keyResult.id.id,
 			name: keyResult.name,
 			description: keyResult.description.markdown,
-			progress: keyResult.progress.progress
+			progress: keyResult.progress.progress,
+			associatedTaskIds: keyResult.associatedTasks.map(
+				(taskId) => taskId.id
+			)
 		};
 	}
 
@@ -67,7 +74,8 @@ export class WorkOkrDTOConverter {
 			request.description ? new RichText(request.description) : null,
 			request.progress !== undefined
 				? new KeyResultProgress(request.progress)
-				: null
+				: null,
+			this.fromKeyResultAssociatedTasksRequestDTO(request.associatedTasks)
 		);
 	}
 
@@ -129,5 +137,23 @@ export class WorkOkrDTOConverter {
 			default:
 				throw new UnreachableError(quarter);
 		}
+	}
+
+	private fromKeyResultAssociatedTasksRequestDTO(
+		associatedTasks: KeyResultRequestDTO['associatedTasks']
+	): KeyResultAssociatedTasksRequest[] {
+		if (!associatedTasks) {
+			return [];
+		}
+
+		return associatedTasks.map(
+			(dto): KeyResultAssociatedTasksRequest =>
+				new KeyResultAssociatedTasksRequest(
+					dto.type,
+					dto.type === 'add' || dto.type === 'delete'
+						? dto.ids.map((id) => new TaskId(id))
+						: undefined
+				)
+		);
 	}
 }

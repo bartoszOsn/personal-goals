@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../../auth/entity/UserEntity';
 import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
+import { KeyResultEntity } from './KeyResultEntity';
 
 @Entity()
 export class TaskEntity {
@@ -36,4 +37,11 @@ export class TaskEntity {
 
 	@ManyToOne(() => UserEntity, (user) => user.tasks)
 	user: UserEntity;
+
+	@ManyToOne(
+		() => KeyResultEntity,
+		(keyResult) => keyResult.associatedTasks,
+		{ nullable: true, onDelete: 'SET NULL' }
+	)
+	keyResult?: KeyResultEntity;
 }

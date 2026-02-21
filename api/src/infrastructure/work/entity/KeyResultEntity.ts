@@ -3,9 +3,11 @@ import {
 	Entity,
 	JoinColumn,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn
 } from 'typeorm';
 import { ObjectiveEntity } from './ObjectiveEntity';
+import { TaskEntity } from './TaskEntity';
 
 @Entity()
 export class KeyResultEntity {
@@ -26,4 +28,7 @@ export class KeyResultEntity {
 	})
 	@JoinColumn()
 	objective: ObjectiveEntity;
+
+	@OneToMany(() => TaskEntity, (task) => task.keyResult)
+	associatedTasks: TaskEntity[];
 }

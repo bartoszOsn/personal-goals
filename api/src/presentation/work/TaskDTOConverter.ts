@@ -7,6 +7,7 @@ import { SprintId } from '../../domain/time/model/SprintId';
 import { Temporal } from 'temporal-polyfill';
 import { TaskRequest } from '../../domain/work/model/TaskRequest';
 import { RichText } from '../../domain/work/model/RichText';
+import { KeyResultId } from '../../domain/work/model/KeyResult';
 
 @Injectable()
 export class TaskDTOConverter {
@@ -18,7 +19,8 @@ export class TaskDTOConverter {
 			status: this.toTaskStatusDTO(task.status),
 			startDate: task.startDate?.toString() ?? undefined,
 			endDate: task.endDate?.toString() ?? undefined,
-			sprintIds: task.sprints.map((sprint) => sprint.value)
+			sprintIds: task.sprints.map((sprint) => sprint.value),
+			keyResultId: task.keyResultId?.id ?? undefined
 		};
 	}
 
@@ -39,13 +41,26 @@ export class TaskDTOConverter {
 			return Temporal.PlainDate.from(date.value);
 		};
 
+		const keyResultToDomain = (keyResult: TaskRequestDTO['keyResult']) => {
+			if (keyResult === undefined) {
+				return undefined;
+			}
+
+			if ('empty' in keyResult) {
+				return null;
+			}
+
+			return new KeyResultId(keyResult.value);
+		};
+
 		return new TaskRequest(
 			dto.name,
 			dto.description ? new RichText(dto.description) : undefined,
 			dto.status ? this.fromTaskStatusDTO(dto.status) : undefined,
 			dateToDomain(dto.startDate),
 			dateToDomain(dto.endDate),
-			dto.sprintIds?.map((id) => new SprintId(id))
+			dto.sprintIds?.map((id) => new SprintId(id)),
+			keyResultToDomain(dto.keyResult)
 		);
 	}
 

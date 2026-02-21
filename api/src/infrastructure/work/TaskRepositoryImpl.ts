@@ -24,7 +24,10 @@ export class TaskRepositoryImpl extends TaskRepository {
 	async getTasks(user: User): Promise<Task[]> {
 		const entities = await this.taskEntityRepository.find({
 			where: { user: { id: user.id.id } },
-			relations: ['sprints']
+			relations: {
+				sprints: true,
+				keyResult: true
+			}
 		});
 		return this.taskEntityConverter.fromTaskEntities(entities);
 	}

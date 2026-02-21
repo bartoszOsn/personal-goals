@@ -16,6 +16,7 @@ import { ObjectiveRequest } from '../../domain/work/model/ObjectiveRequest';
 import { User } from '../../domain/auth/model/User';
 import { UserEntity } from '../auth/entity/UserEntity';
 import { KeyResultRequest } from '../../domain/work/model/KeyResultRequest';
+import { TaskId } from '../../domain/work/model/TaskId';
 
 @Injectable()
 export class WorkOKREntityConverter {
@@ -79,7 +80,8 @@ export class WorkOKREntityConverter {
 			new KeyResultId(kr.id),
 			kr.name,
 			new RichText(kr.description),
-			new KeyResultProgress(kr.progress)
+			new KeyResultProgress(kr.progress),
+			kr.associatedTasks.map((task) => new TaskId(task.id))
 		);
 	}
 

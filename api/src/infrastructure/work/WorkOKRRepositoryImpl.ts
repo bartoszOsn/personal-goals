@@ -29,7 +29,11 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 			where: {
 				user: { id: user.id.id } as unknown as UserEntity
 			},
-			relations: ['keyResults']
+			relations: {
+				keyResults: {
+					associatedTasks: true
+				}
+			}
 		});
 
 		return this.workOKREntityConverter.fromObjectiveEntities(entities);

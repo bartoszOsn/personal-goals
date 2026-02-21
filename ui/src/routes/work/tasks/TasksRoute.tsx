@@ -8,6 +8,8 @@ import { Temporal } from 'temporal-polyfill';
 import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 import { DataTable } from '@/base/data-table/api/DataTable';
 import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
+import { keyResultIdDataType } from '@/core/keyResultIdDataType';
+import { useKeyResultCreateMutation } from '@/api/okr-hooks';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -62,6 +64,18 @@ export function TasksRoute() {
 		});
 	}
 
+	const onUpdateKeyResult = async (task: TaskDTO, newKeyResultId: string | undefined) => {
+		if (task.keyResultId === newKeyResultId) {
+			return;
+		}
+
+		await updateTaskMutation.mutateAsync({
+			id: task.id, request: {
+				keyResult: newKeyResultId === undefined ? { empty: true } : { value: newKeyResultId }
+			}
+		});
+	}
+
 	const columns: ColumnDescriptor<TaskDTO, any>[] = [
 		{
 			columnId: 'name',
@@ -90,6 +104,13 @@ export function TasksRoute() {
 			columnType: plainDateDataType,
 			select: (task: TaskDTO) => !task.endDate ? null : Temporal.PlainDate.from(task.endDate),
 			onChange: onUpdateEndDate
+		},
+		{
+			columnId: 'keyResultId',
+			columnName: 'Key result',
+			columnType: keyResultIdDataType,
+			select: (task: TaskDTO) => task.keyResultId,
+			onChange: onUpdateKeyResult
 		}
 	];
 

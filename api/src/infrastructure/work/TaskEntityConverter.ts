@@ -12,6 +12,7 @@ import { TaskRequest } from '../../domain/work/model/TaskRequest';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DeepPartial } from 'typeorm/common/DeepPartial';
+import { KeyResultId } from '../../domain/work/model/KeyResult';
 
 @Injectable()
 export class TaskEntityConverter {
@@ -28,7 +29,8 @@ export class TaskEntityConverter {
 			this.fromTaskStatusString(entity.status),
 			entity.startDate ? Temporal.PlainDate.from(entity.startDate) : null,
 			entity.endDate ? Temporal.PlainDate.from(entity.endDate) : null,
-			entity.sprints?.map((sprint) => new SprintId(sprint.id)) ?? []
+			entity.sprints?.map((sprint) => new SprintId(sprint.id)) ?? [],
+			entity.keyResult ? new KeyResultId(entity.keyResult.id) : null
 		);
 	}
 
@@ -56,6 +58,14 @@ export class TaskEntityConverter {
 			partial.endDate = task.endDate
 				? task.endDate.toString()
 				: (null as unknown as TaskEntity['endDate']);
+		}
+		if (task.sprintIds !== undefined) {
+			partial.sprints = this.sprintIdsToEntities(task.sprintIds);
+		}
+		if (task.keyResult !== undefined) {
+			partial.keyResult = task.keyResult
+				? { id: task.keyResult.id }
+				: (null as unknown as TaskEntity['keyResult']);
 		}
 
 		return this.taskEntityRepository.create(partial);
