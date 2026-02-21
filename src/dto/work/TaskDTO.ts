@@ -6,6 +6,7 @@ export interface TaskDTO {
 	readonly startDate?: string;
 	readonly endDate?: string;
 	readonly sprintIds: string[];
+	readonly keyResultId?: string;
 }
 
 export type TaskStatusDTO = 'TODO' | 'IN_PROGRESS' | 'DONE' | 'FAILED';

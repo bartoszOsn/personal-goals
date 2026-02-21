@@ -5,4 +5,5 @@ export interface TaskRequestDTO {
 	readonly startDate?: { empty: true } | { value: string };
 	readonly endDate?: { empty: true } | { value: string };
 	readonly sprintIds?: string[];
+	readonly keyResult?: { empty: true } | { value: string };
 }

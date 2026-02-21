@@ -3,4 +3,5 @@ export interface KeyResultDTO {
 	name: string;
 	description: string;
 	progress: number;
+	associatedTaskIds: string[];
 }
