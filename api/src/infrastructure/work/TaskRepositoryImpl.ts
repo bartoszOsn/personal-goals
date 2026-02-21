@@ -49,7 +49,9 @@ export class TaskRepositoryImpl extends TaskRepository {
 	}
 
 	async createTask(user: User, task: CompleteTaskRequest): Promise<Task> {
-		const entity = this.taskEntityConverter.toTaskEntityPartial(task);
+		const entityPartial =
+			this.taskEntityConverter.toTaskEntityPartial(task);
+		const entity = this.taskEntityRepository.create(entityPartial);
 		entity.user = { id: user.id.id } as unknown as UserEntity;
 
 		const createdEntity = await this.taskEntityRepository.save(entity);
@@ -61,19 +63,26 @@ export class TaskRepositoryImpl extends TaskRepository {
 		id: TaskId,
 		request: TaskRequest
 	): Promise<void> {
-		const entity = this.taskEntityConverter.toTaskEntityPartial(request);
+		const entityPartial =
+			this.taskEntityConverter.toTaskEntityPartial(request);
 
-		const result = await this.taskEntityRepository.update(
-			{
+		const mainEntity = await this.taskEntityRepository.findOne({
+			where: {
 				id: id.id,
 				user: { id: user.id.id }
 			},
-			entity
-		);
+			relations: ['sprints', 'keyResult']
+		});
 
-		if (!result.affected || result.affected === 0) {
+		if (!mainEntity) {
 			throw new NotFoundException(); // TODO: Change to application exception
 		}
+
+		for (const [key, value] of Object.entries(entityPartial)) {
+			(mainEntity as unknown as Record<string, unknown>)[key] = value;
+		}
+
+		await this.taskEntityRepository.save(mainEntity);
 	}
 
 	async deleteTask(user: User, id: TaskId): Promise<void> {

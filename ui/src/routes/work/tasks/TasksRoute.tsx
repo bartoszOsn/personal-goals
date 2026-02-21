@@ -9,7 +9,7 @@ import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType
 import { DataTable } from '@/base/data-table/api/DataTable';
 import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
-import { useKeyResultCreateMutation } from '@/api/okr-hooks';
+import { sprintDataType } from '@/core/sprintDataType';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -76,6 +76,14 @@ export function TasksRoute() {
 		});
 	}
 
+	const onUpdateSprints = async (task: TaskDTO, sprints: string[]) => {
+		await updateTaskMutation.mutateAsync({
+			id: task.id, request: {
+				sprintIds: sprints
+			}
+		});
+	}
+
 	const columns: ColumnDescriptor<TaskDTO, any>[] = [
 		{
 			columnId: 'name',
@@ -111,6 +119,13 @@ export function TasksRoute() {
 			columnType: keyResultIdDataType,
 			select: (task: TaskDTO) => task.keyResultId,
 			onChange: onUpdateKeyResult
+		},
+		{
+			columnId: 'sprints',
+			columnName: 'Sprints',
+			columnType: sprintDataType,
+			select: (task: TaskDTO) => task.sprintIds,
+			onChange: onUpdateSprints
 		}
 	];
 

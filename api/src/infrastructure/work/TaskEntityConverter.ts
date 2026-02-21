@@ -38,7 +38,7 @@ export class TaskEntityConverter {
 		return entities.map((entity) => this.fromTaskEntity(entity));
 	}
 
-	toTaskEntityPartial(task: TaskRequest): TaskEntity {
+	toTaskEntityPartial(task: TaskRequest): DeepPartial<TaskEntity> {
 		const partial: DeepPartial<TaskEntity> = {};
 		if (task.name !== undefined) {
 			partial.name = task.name;
@@ -68,7 +68,7 @@ export class TaskEntityConverter {
 				: (null as unknown as TaskEntity['keyResult']);
 		}
 
-		return this.taskEntityRepository.create(partial);
+		return partial;
 	}
 
 	sprintIdsToEntities(sprintIds: SprintId[]): SprintTimeRangeEntity[] {

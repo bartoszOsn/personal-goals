@@ -25,8 +25,13 @@ export class TimeRepositoryImpl extends TimeRepository {
 	}
 
 	async getSprintTimeRanges(user: User): Promise<SprintTimeRange[]> {
-		const entities = await this.sprintTimeRangeRepository.findBy({
-			user: { id: user.id.id }
+		const entities = await this.sprintTimeRangeRepository.find({
+			where: {
+				user: { id: user.id.id }
+			},
+			order: {
+				startDate: 'ASC'
+			}
 		});
 
 		return this.timeEntityConverter.fromSprintTimeRangeEntities(entities);
