@@ -3,11 +3,13 @@ import { ActionIcon, Box, CloseButton, Group, Popover, Table, Text } from '@mant
 import { IconDots } from '@tabler/icons-react';
 import { DataTableCustomizationPopover } from '@/base/data-table/internal/DataTableCustomizationPopover';
 import { useState } from 'react';
+import * as React from 'react';
 
 interface DataTableHeaderProps<TData> {
 	columns: ColumnDescriptor<TData, unknown>[];
 	allPossibleColumns: ColumnDescriptor<TData, unknown>[];
 	setColumns: (columns: ColumnDescriptor<TData, unknown>[]) => void;
+	onStartDrag: (column: ColumnDescriptor<TData, unknown>, e: React.MouseEvent) => void;
 }
 
 export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
@@ -21,7 +23,7 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 					const isLastColumn = index === props.columns.length - 1;
 
 					return (
-						<Table.Th key={column.columnId}>
+						<Table.Th key={column.columnId} data-column-id={column.columnId}>
 							<Group gap={2} justify='space-between'>
 								<Group gap={2}>
 									<Text inline inherit>
@@ -31,7 +33,7 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 								</Group>
 								{
 									!isLastColumn && (
-										<Box w={2} h={18} bg='gray.1' style={{ cursor: 'ew-resize' }} />
+										<Box w={2} h={18} bg='gray.1' style={{ cursor: 'ew-resize' }} onMouseDown={(e) => props.onStartDrag(column, e)} />
 									)
 								}
 								{

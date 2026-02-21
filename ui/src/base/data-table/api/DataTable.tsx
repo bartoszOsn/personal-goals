@@ -8,13 +8,15 @@ import { useCurrentColumns } from '@/base/data-table/internal/useCurrentColumns'
 import { DataTableSkeleton } from '@/base/data-table/internal/DataTableSkeleton';
 import { DataTableColgroup } from '@/base/data-table/internal/DataTableColgroup';
 import { useElementSize } from '@mantine/hooks';
+import { useRef } from 'react';
+import { useTableResizing } from '@/base/data-table/internal/useTableResizing';
 
 export interface DataTable<TData, TId> {
 	rows: TData[];
 	idSelector: (row: TData) => TId;
 	possibleColumns: ColumnDescriptor<TData, unknown>[];
 	initialColumnIds: string[];
-	tableKey: string
+	tableKey: string;
 	storage?: PropertyStorage;
 	tableProps?: TableProps;
 	scrollAreaProps?: ScrollAreaAutosizeProps;
@@ -31,10 +33,11 @@ export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
 		storage = localStoragePropertyStorage,
 		tableProps = {},
 		scrollAreaProps = {},
-		onSelectionChange,
+		onSelectionChange
 	} = props;
 
 	const { ref: scrollAreaRef, width: scrollAreaWidth } = useElementSize();
+	const tableRef = useRef<HTMLTableElement>(null);
 
 	const { columns, loading: columnsLoading, setColumns } = useCurrentColumns({
 		storage,
@@ -43,15 +46,24 @@ export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
 		tableKey
 	});
 
-	if (columnsLoading) {
-		return <DataTableSkeleton tableProps={tableProps} scrollAreaProps={scrollAreaProps} />
+	const { columnWidths, loading: widthsLoading, startDrag } = useTableResizing<TData>({
+		tableRef,
+		storage,
+		tableKey
+	});
+
+	if (columnsLoading || widthsLoading) {
+		return <DataTableSkeleton tableProps={tableProps} scrollAreaProps={scrollAreaProps} />;
 	}
 
 	return (
 		<ScrollArea.Autosize ref={scrollAreaRef} scrollbars={'xy'} {...scrollAreaProps}>
-			<Table style={{tableLayout: 'fixed' }} {...tableProps}>
-				<DataTableColgroup tableWidth={scrollAreaWidth} columns={columns} widths={new Map()} />
-				<DataTableHeader columns={columns} allPossibleColumns={possibleColumns} setColumns={setColumns} />
+			<Table ref={tableRef} style={{ tableLayout: 'fixed' }} {...tableProps}>
+				<DataTableColgroup tableWidth={scrollAreaWidth} columns={columns} widths={columnWidths} />
+				<DataTableHeader columns={columns}
+								 allPossibleColumns={possibleColumns}
+								 setColumns={setColumns}
+								 onStartDrag={startDrag} />
 				<DataTableBody columns={columns}
 							   rows={rows}
 							   idSelector={idSelector}
@@ -59,5 +71,5 @@ export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
 				/>
 			</Table>
 		</ScrollArea.Autosize>
-	)
+	);
 }
