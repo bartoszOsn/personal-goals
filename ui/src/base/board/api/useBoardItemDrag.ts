@@ -33,6 +33,7 @@ export function useBoardItemDrag<TData, TColumnId>(onColumnChange: (item: TData,
 
 	const onMouseUpOnWindow = useCallback(() => {
 		window.removeEventListener('mousemove', onMouseMove);
+		setDragData(null);
 	}, [onMouseMove]);
 	
 	const overlayDraggedItem = useMemo(() => {
