@@ -11,7 +11,7 @@ import { SprintSettingsRoute } from '@/routes/work/sprint-settings/SprintSetting
 import { AuthRoute } from '@/routes/auth/AuthRoute';
 import { LoginRoute } from '@/routes/auth/login/LoginRoute';
 import { RegisterRoute } from '@/routes/auth/RegisterRoute';
-import { SprintOverview } from '@/routes/work/sprint-overview/SprintOverview';
+import { SprintOverviewRoute } from '@/routes/work/sprint-overview/SprintOverviewRoute';
 
 const rootRoute = createRootRoute({
 	component: () => (
@@ -36,8 +36,8 @@ const workRoute = createRoute({
 
 const sprintOverviewRoute = createRoute({
 	getParentRoute: () => workRoute,
-	path: "/sprint-overview",
-	component: SprintOverview
+	path: `/sprint-overview/{-$sprintId}`,
+	component: SprintOverviewRoute
 });
 
 const okrsRoute = createRoute({
