@@ -2,6 +2,7 @@ import { Stack } from '@mantine/core';
 import { SprintOverviewSprintSwitcher } from '@/routes/work/sprint-overview/SprintOverviewSprintSwitcher';
 import { useNavigate } from '@tanstack/react-router';
 import { SprintOverviewSprintInfo } from '@/routes/work/sprint-overview/SprintOverviewSprintInfo';
+import { SprintOverviewTaskBoard } from '@/routes/work/sprint-overview/SprintOverviewTaskBoard';
 
 export function SprintOverview({ sprintId }: { sprintId: string }) {
 	const navigate = useNavigate();
@@ -15,6 +16,7 @@ export function SprintOverview({ sprintId }: { sprintId: string }) {
 		<Stack p="lg">
 			<SprintOverviewSprintSwitcher sprintId={sprintId} onChange={onSprintIdChange} />
 			<SprintOverviewSprintInfo sprintId={sprintId} />
+			<SprintOverviewTaskBoard sprintId={sprintId} />
 		</Stack>
 	)
 }
