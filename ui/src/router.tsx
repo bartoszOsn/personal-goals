@@ -11,6 +11,7 @@ import { SprintSettingsRoute } from '@/routes/work/sprint-settings/SprintSetting
 import { AuthRoute } from '@/routes/auth/AuthRoute';
 import { LoginRoute } from '@/routes/auth/login/LoginRoute';
 import { RegisterRoute } from '@/routes/auth/RegisterRoute';
+import { SprintOverview } from '@/routes/work/sprint-overview/SprintOverview';
 
 const rootRoute = createRootRoute({
 	component: () => (
@@ -31,6 +32,12 @@ const workRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: "/work",
 	component: WorkRoute
+});
+
+const sprintOverviewRoute = createRoute({
+	getParentRoute: () => workRoute,
+	path: "/sprint-overview",
+	component: SprintOverview
 });
 
 const okrsRoute = createRoute({
@@ -90,6 +97,7 @@ const registerRoute = createRoute({
 const routeTree = rootRoute.addChildren([
 	indexRoute,
 	workRoute.addChildren([
+		sprintOverviewRoute,
 		okrsRoute,
 		okrsProgressMatrixRoute,
 		tasksRoute,
