@@ -6,7 +6,6 @@ import { OKRsRoute } from '@/routes/work/OKRs/OKRsRoute.tsx';
 import { OKRProgressMatrixRoute } from '@/routes/work/okr-progress-matrix/OKRProgressMatrixRoute.tsx';
 import { TasksRoute } from '@/routes/work/tasks/TasksRoute.tsx';
 import { TaskBacklogRoute } from '@/routes/work/tasks-backlog/TaskBacklogRoute.tsx';
-import { TaskCalendarRoute } from '@/routes/work/tasks-calendar/TaskCalendarRoute.tsx';
 import { SprintSettingsRoute } from '@/routes/work/sprint-settings/SprintSettingsRoute.tsx';
 import { AuthRoute } from '@/routes/auth/AuthRoute';
 import { LoginRoute } from '@/routes/auth/login/LoginRoute';
@@ -64,12 +63,6 @@ const tasksBacklogRoute = createRoute({
 	component: TaskBacklogRoute
 });
 
-const tasksCalendarRoute = createRoute({
-	getParentRoute: () => workRoute,
-	path: "/tasks/calendar",
-	component: TaskCalendarRoute
-});
-
 const sprintSettings = createRoute({
 	getParentRoute: () => workRoute,
 	path: "/sprint-settings",
@@ -102,7 +95,6 @@ const routeTree = rootRoute.addChildren([
 		okrsProgressMatrixRoute,
 		tasksRoute,
 		tasksBacklogRoute,
-		tasksCalendarRoute,
 		sprintSettings
 	]),
 	authRoute.addChildren([

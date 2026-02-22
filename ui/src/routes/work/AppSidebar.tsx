@@ -8,7 +8,7 @@ export function AppSidebar() {
 				<Title order={3} pb='lg'>
 					Personal OKR
 				</Title>
-				<CustomNavLink href='/work/sprint-overview' label='Sprint overview' />
+				<CustomNavLink href='/work/sprint-overview/{-$sprintId}' label='Sprint overview' />
 				<CustomNavLinkGroup label='OKRs'>
 					<CustomNavLink href='/work/okrs' label='All OKRs' />
 					<CustomNavLink href='/work/okrs/progress-matrix' label='Progress matrix' />
@@ -16,7 +16,6 @@ export function AppSidebar() {
 				<CustomNavLinkGroup label='Tasks'>
 					<CustomNavLink href='/work/tasks' label='Task list' />
 					<CustomNavLink href='/work/tasks/backlog' label='Backlog' />
-					<CustomNavLink href='/work/tasks/calendar' label='Calendar' />
 				</CustomNavLinkGroup>
 				<CustomNavLink href='/work/sprint-settings' label='Sprint settings' />
 			</Box>
