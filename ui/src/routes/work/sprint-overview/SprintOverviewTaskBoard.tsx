@@ -1,7 +1,7 @@
 import { Board } from '@/base/board/api/Board.tsx';
 import type { BoardColumn } from '@/base/board/api/BoardColumn.ts';
 import { type TaskDTO, type TaskStatusDTO } from '@personal-okr/shared';
-import { useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks.ts';
+import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { DataView, stringDataType } from '@/base/data-type';
 import { Temporal } from 'temporal-polyfill';
@@ -12,6 +12,7 @@ import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 	const tasksQuery = useTasksQuery();
 	const taskUpdateMutation = useUpdateTaskMutation();
+	const taskCreateMutation = useCreateTaskMutation();
 	const columns: BoardColumn<TaskStatusDTO>[] = [
 		{
 			columnId: 'TODO',
@@ -40,7 +41,7 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 			<Skeleton h={300} />
 			<Skeleton h={300} />
 			<Skeleton h={300} />
-		</Group>
+		</Group>;
 	}
 
 	const tasksBySprint = tasksQuery.data.tasks.filter(task => task.sprintIds.includes(sprintId));
@@ -50,12 +51,12 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 			<DataView value={task.name}
 					  onChange={(newName) => taskUpdateMutation.mutateAsync({ id: task.id, request: { name: newName } }).then()}
 					  dataType={stringDataType} />
-			<Space h='sm' />
-			<Group wrap='nowrap' justify='space-between'>
-				<Text size='xs' c='dimmed'>Start date</Text>
-				<Text size='xs' c='dimmed'>End date</Text>
+			<Space h="sm" />
+			<Group wrap="nowrap" justify="space-between">
+				<Text size="xs" c="dimmed">Start date</Text>
+				<Text size="xs" c="dimmed">End date</Text>
 			</Group>
-			<Group wrap='nowrap' justify='space-between'>
+			<Group wrap="nowrap" justify="space-between">
 				<DataView value={task.startDate ? Temporal.PlainDate.from(task.startDate) : null}
 						  onChange={(newDate) => taskUpdateMutation.mutateAsync({
 							  id: task.id,
@@ -69,42 +70,51 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 						  }).then()}
 						  dataType={plainDateDataType} />
 			</Group>
-			<Space h='sm' />
-			<Text size='xs' c='dimmed'>Sprints</Text>
+			<Space h="sm" />
+			<Text size="xs" c="dimmed">Sprints</Text>
 			<DataView value={task.sprintIds}
 					  onChange={(newSprintIds) => taskUpdateMutation.mutateAsync({
 						  id: task.id,
 						  request: { sprintIds: newSprintIds }
 					  }).then()}
 					  dataType={sprintDataType} />
-			<Space h='sm' />
-			<Text size='xs' c='dimmed'>Key result</Text>
+			<Space h="sm" />
+			<Text size="xs" c="dimmed">Key result</Text>
 			<DataView value={task.keyResultId}
 					  onChange={(newKeyResultId) => taskUpdateMutation.mutateAsync({
 						  id: task.id,
-						  request: { keyResult: newKeyResultId ? { value: newKeyResultId } : { empty: true} },
+						  request: { keyResult: newKeyResultId ? { value: newKeyResultId } : { empty: true } }
 					  }).then()}
 					  dataType={keyResultIdDataType} />
-		</Stack>
-	}
+		</Stack>;
+	};
 
 	const onColumnChange = async (item: TaskDTO, newStatus: TaskStatusDTO) => {
 		await taskUpdateMutation.mutateAsync({
 			id: item.id,
 			request: { status: newStatus }
 		});
-	}
+	};
+
+	const onCreateTask = async (status: TaskStatusDTO) => {
+		await taskCreateMutation.mutateAsync({
+			status: status,
+			sprintIds: [sprintId]
+		});
+	};
 
 	return (
 		<>
-		<Text fw={500}>Tasks</Text>
-		<Board columnWidth={300}
-			   columns={columns}
-			   items={tasksBySprint}
-			   itemColumnSelector={(task => task.status)}
-			   renderCard={renderCard}
-			   noItemsInColumnText={'No tasks with this status'}
-			   onColumnChange={onColumnChange} />
+			<Text fw={500}>Tasks</Text>
+			<Board columnWidth={300}
+				   columns={columns}
+				   items={tasksBySprint}
+				   itemColumnSelector={(task => task.status)}
+				   renderCard={renderCard}
+				   noItemsInColumnText={'No tasks with this status'}
+				   onColumnChange={onColumnChange}
+				   onCreateItem={onCreateTask}
+				   createButtonText={'Create task'} />
 		</>
-	)
+	);
 }

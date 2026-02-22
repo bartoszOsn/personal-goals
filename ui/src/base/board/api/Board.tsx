@@ -1,7 +1,7 @@
 import type { BoardColumn } from '@/base/board/api/BoardColumn.ts';
-import type { ReactNode } from 'react';
-import { Box, Card, Center, Group, LoadingOverlay, ScrollArea, Stack, Text } from '@mantine/core';
-import { IconGripHorizontal } from '@tabler/icons-react';
+import { type ReactNode, useState } from 'react';
+import { Box, Button, Card, Center, Group, LoadingOverlay, ScrollArea, Stack, Text } from '@mantine/core';
+import { IconGripHorizontal, IconPlus } from '@tabler/icons-react';
 import { useBoardItemDrag } from '@/base/board/api/useBoardItemDrag';
 
 export interface BoardProps<TData, TColumnId> {
@@ -12,6 +12,8 @@ export interface BoardProps<TData, TColumnId> {
 	renderCard: (data: TData) => ReactNode;
 	onColumnChange: (item: TData, newColumnId: TColumnId) => void | Promise<void>;
 	noItemsInColumnText: string;
+	onCreateItem: (columnId: TColumnId) => void | Promise<void>;
+	createButtonText: string;
 }
 
 function ItemCard<TColumnId, TData>(column: BoardColumn<TColumnId>, onMouseDownOnHandle: (item: TData, initialColumn: TColumnId, e: React.MouseEvent) => void, item: TData, props: BoardProps<TData, TColumnId>) {
@@ -40,6 +42,13 @@ export function Board<TData, TColumnId>(props: BoardProps<TData, TColumnId>) {
 		onMouseUpOnTarget
 	} = useBoardItemDrag(props.onColumnChange);
 
+	const [creationPending, setCreationPending] = useState(false);
+	const createItem = async (columnId: TColumnId) => {
+		setCreationPending(true);
+		await props.onCreateItem(columnId);
+		setCreationPending(false);
+	}
+
 	return (
 		<ScrollArea.Autosize scrollbars="x" offsetScrollbars>
 			<Group wrap="nowrap" align="stretch" pos="relative">
@@ -64,6 +73,9 @@ export function Board<TData, TColumnId>(props: BoardProps<TData, TColumnId>) {
 											<Text c={'dimmed'}>{props.noItemsInColumnText}</Text>
 										)
 									}
+									<Button variant='light' color={column.color ?? 'gray'} leftSection={<IconPlus />} loading={creationPending} onClick={() => createItem(column.columnId)}>
+										{props.createButtonText}
+									</Button>
 								</Stack>
 								{
 									isDragging && (
