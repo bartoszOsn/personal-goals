@@ -37,7 +37,7 @@ export function SprintOverviewCurrentSprintLoader() {
 
 	return (
 		<Stack w="100%" h="100vh" p="lg">
-			<Skeleton w="100%" h={30} />
+			<Skeleton w="100%" h={36} />
 			<Skeleton w="100%" h={70} />
 			<Group flex={1}>
 				<Skeleton w="100%" h='100%' flex={1} />

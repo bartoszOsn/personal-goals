@@ -7,7 +7,7 @@ export function SprintOverviewSprintSwitcher
 	const sprintQuery = useSprintQuery();
 
 	if (sprintQuery.isPending || !sprintQuery.data) {
-		return <Skeleton w="100%" h={30} />
+		return <Skeleton w="100%" h={36} />
 	}
 
 	const value = sprintQuery.data.sprints.findIndex(s => s.id === sprintId) + 1;
