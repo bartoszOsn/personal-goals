@@ -88,6 +88,13 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 		</Stack>
 	}
 
+	const onColumnChange = async (item: TaskDTO, newStatus: TaskStatusDTO) => {
+		await taskUpdateMutation.mutateAsync({
+			id: item.id,
+			request: { status: newStatus }
+		});
+	}
+
 	return (
 		<>
 		<Text fw={500}>Tasks</Text>
@@ -97,7 +104,7 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 			   itemColumnSelector={(task => task.status)}
 			   renderCard={renderCard}
 			   noItemsInColumnText={'No tasks with this status'}
-			   onColumnChange={() => {}} />
+			   onColumnChange={onColumnChange} />
 		</>
 	)
 }
