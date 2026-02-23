@@ -1,7 +1,5 @@
-import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
-import type { PropertyStorage } from '@/base/property-storage/propertyStorage.ts';
 import { localStoragePropertyStorage } from '@/base/property-storage/localStoragePropertyStorage.ts';
-import { ScrollArea, type ScrollAreaAutosizeProps, Table, type TableProps } from '@mantine/core';
+import { ScrollArea, Table } from '@mantine/core';
 import { DataTableBody } from '@/base/data-table/internal/DataTableBody.tsx';
 import { DataTableHeader } from '@/base/data-table/internal/DataTableHeader.tsx';
 import { useCurrentColumns } from '@/base/data-table/internal/useCurrentColumns';
@@ -10,20 +8,9 @@ import { DataTableColgroup } from '@/base/data-table/internal/DataTableColgroup'
 import { useElementSize } from '@mantine/hooks';
 import { useRef } from 'react';
 import { useTableResizing } from '@/base/data-table/internal/useTableResizing';
+import type { DataTableProps } from '@/base/data-table/api/DataTableProps';
 
-export interface DataTable<TData, TId> {
-	rows: TData[];
-	idSelector: (row: TData) => TId;
-	possibleColumns: ColumnDescriptor<TData, unknown>[];
-	initialColumnIds: string[];
-	tableKey: string;
-	storage?: PropertyStorage;
-	tableProps?: TableProps;
-	scrollAreaProps?: ScrollAreaAutosizeProps;
-	onSelectionChange?: (rows: TData[]) => void;
-}
-
-export function DataTable<TData, TId>(props: DataTable<TData, TId>) {
+export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 	const {
 		rows,
 		idSelector,
