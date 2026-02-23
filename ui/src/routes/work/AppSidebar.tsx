@@ -8,7 +8,7 @@ export function AppSidebar() {
 				<Title order={3} pb='lg'>
 					Personal OKR
 				</Title>
-				<CustomNavLink href='/work/sprint-overview/{-$sprintId}' label='Sprint overview' />
+				<CustomNavLink href='/work/sprint-overview/{-$sprintId}' label='Sprint overview' exact={ false } />
 				<CustomNavLink href='/work/roadmap' label='Roadmap' />
 				<CustomNavLinkGroup label='OKRs'>
 					<CustomNavLink href='/work/okrs' label='All OKRs' />
@@ -28,13 +28,13 @@ function CustomNavLinkGroup({ label, ...nativeProps }: { label: string } & Omit<
 	return <NavLink {...nativeProps} label={<Text c='gray'>{label}</Text>} href='#' defaultOpened />;
 }
 
-function CustomNavLink({ href, ...nativeProps }: { href: LinkOptions['to'] } & Omit<NavLinkProps, 'Component'>) {
+function CustomNavLink({ href, exact = true, ...nativeProps }: { href: LinkOptions['to'], exact?: boolean } & Omit<NavLinkProps, 'Component'>) {
 	return (
 		<NavLink
 			{...nativeProps}
 			to={href}
 			component={Link}
-			activeOptions={{ exact: true }}
+			activeOptions={{ exact }}
 		/>
 	);
 }
