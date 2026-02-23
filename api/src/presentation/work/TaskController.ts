@@ -5,6 +5,7 @@ import {
 	Get,
 	NotFoundException,
 	Param,
+	ParseArrayPipe,
 	Post,
 	Put
 } from '@nestjs/common';
@@ -56,7 +57,10 @@ export class TaskController {
 	}
 
 	@Delete(':id')
-	public async deleteTask(@Param('id') id: string): Promise<void> {
-		await this.taskService.deleteTask(new TaskId(id));
+	public async deleteTasks(
+		@Param('id', new ParseArrayPipe({ separator: ',' })) id: string[]
+	): Promise<void> {
+		const taskIds = id.map((id) => new TaskId(id));
+		await this.taskService.deleteTasks(taskIds);
 	}
 }

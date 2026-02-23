@@ -36,8 +36,10 @@ export class TaskService {
 		await this.taskRepository.updateTask(user, id, request);
 	}
 
-	async deleteTask(id: TaskId): Promise<void> {
+	async deleteTasks(ids: TaskId[]): Promise<void> {
 		const user = await this.userStorage.getUser();
-		await this.taskRepository.deleteTask(user, id);
+		for (const id of ids) {
+			await this.taskRepository.deleteTask(user, id);
+		}
 	}
 }

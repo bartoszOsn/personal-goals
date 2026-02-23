@@ -26,3 +26,12 @@ export function useUpdateTaskMutation() {
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks']})
 	})
 }
+
+export function useDeleteTasksMutation() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationKey: ['tasks', 'delete'],
+		mutationFn: (ids: string[]) => http.delete(`/api/work/task/${ids.join(',')}`),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks']})
+	})
+}
