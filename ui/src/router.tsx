@@ -11,6 +11,7 @@ import { AuthRoute } from '@/routes/auth/AuthRoute';
 import { LoginRoute } from '@/routes/auth/login/LoginRoute';
 import { RegisterRoute } from '@/routes/auth/RegisterRoute';
 import { SprintOverviewRoute } from '@/routes/work/sprint-overview/SprintOverviewRoute';
+import { RoadmapRoute } from '@/routes/work/roadmap/RoadmapRoute';
 
 const rootRoute = createRootRoute({
 	component: () => (
@@ -37,6 +38,12 @@ const sprintOverviewRoute = createRoute({
 	getParentRoute: () => workRoute,
 	path: `/sprint-overview/{-$sprintId}`,
 	component: SprintOverviewRoute
+});
+
+const roadmapRoute = createRoute({
+	getParentRoute: () => workRoute,
+	path: "/roadmap",
+	component: RoadmapRoute
 });
 
 const okrsRoute = createRoute({
@@ -91,6 +98,7 @@ const routeTree = rootRoute.addChildren([
 	indexRoute,
 	workRoute.addChildren([
 		sprintOverviewRoute,
+		roadmapRoute,
 		okrsRoute,
 		okrsProgressMatrixRoute,
 		tasksRoute,

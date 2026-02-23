@@ -9,6 +9,7 @@ export function AppSidebar() {
 					Personal OKR
 				</Title>
 				<CustomNavLink href='/work/sprint-overview/{-$sprintId}' label='Sprint overview' />
+				<CustomNavLink href='/work/roadmap' label='Roadmap' />
 				<CustomNavLinkGroup label='OKRs'>
 					<CustomNavLink href='/work/okrs' label='All OKRs' />
 					<CustomNavLink href='/work/okrs/progress-matrix' label='Progress matrix' />
