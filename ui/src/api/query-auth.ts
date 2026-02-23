@@ -27,7 +27,7 @@ export function setToken (token: string | null, queryClient: QueryClient) {
 		localStorage.setItem('token', token);
 		queryClient.setQueryData(tokenKey, token);
 		http.setAuthToken(token);
-		if (router.matchRoute({ to: '/auth'})) {
+		if (router.state.matches.some(math => math.routeId === '/auth')) {
 			router.navigate({ to: '/work'}).then();
 		}
 	}
