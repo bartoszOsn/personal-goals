@@ -1,0 +1,1 @@
+export const PER_LEVEL_OFFSET = 18;

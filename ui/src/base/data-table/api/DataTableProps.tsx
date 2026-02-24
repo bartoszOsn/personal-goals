@@ -12,4 +12,5 @@ export interface DataTableProps<TData, TId> {
 	tableProps?: TableProps;
 	scrollAreaProps?: ScrollAreaAutosizeProps;
 	onSelectionChange?: (rows: TData[]) => void;
+	getChildrenRows?: (row: TData) => TData[];
 }

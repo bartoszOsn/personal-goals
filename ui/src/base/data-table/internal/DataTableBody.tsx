@@ -1,26 +1,31 @@
 import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
-import { Table } from '@mantine/core';
+import { ActionIcon, Group, Space, Table } from '@mantine/core';
 import { DataView } from '@/base/data-type';
 import { useRowSelection } from '@/base/data-table/internal/useRowSelection';
 import { useEffect, useMemo } from 'react';
 import { useClickOutside } from '@mantine/hooks';
+import type { FlattenRowsInfo } from '@/base/data-table/internal/useFlattenRows';
+import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
+import { PER_LEVEL_OFFSET } from '@/base/data-table/internal/PER_LEVEL_OFFSET';
 
 export interface DataTableBodyProps<TData, TId> {
 	columns: ColumnDescriptor<TData, unknown>[];
-	rows: TData[];
+	rowInfo: FlattenRowsInfo<TData, TId>;
 	idSelector: (row: TData) => TId;
 	onSelectionChange: (rows: TData[]) => void;
+	toggleRow: (row: TId) => void;
 }
 
 export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>) {
 	const {
 		columns,
-		rows,
 		idSelector,
-		onSelectionChange
+		onSelectionChange,
+		rowInfo,
+		toggleRow
 	} = props;
 
-	const allRowIds = useMemo(() => rows.map(idSelector), [rows, idSelector]);
+	const allRowIds = useMemo(() => rowInfo.rows.map(row => row.id), [rowInfo]);
 
 	const {
 		selectedRows,
@@ -29,29 +34,58 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 	} = useRowSelection(allRowIds);
 
 	useEffect(() => {
-		onSelectionChange(rows.filter((row) => selectedRows.includes(idSelector(row))));
-	}, [idSelector, onSelectionChange, rows, selectedRows]);
+		onSelectionChange(
+			rowInfo.rows
+				.filter((row) => selectedRows.includes(row.id))
+				.map(row => row.data)
+		);
+	}, [idSelector, onSelectionChange, rowInfo.rows, selectedRows]);
 
 	const tBodyRef = useClickOutside(clickOutside);
 
 	return (
 		<Table.Tbody ref={tBodyRef} style={{ userSelect: 'none' }}>
 			{
-				rows.map((row: TData) => (
-					<Table.Tr key={`${idSelector(row)}`}
-							  bg={selectedRows.includes(idSelector(row)) ? 'blue.0' : 'white'}
-							  onClick={(e) => clickedOn(idSelector(row), e.shiftKey)}>
-						{
-							columns.map((column) => (
-								<Table.Td key={column.columnId}>
-									<DataView value={column.select(row)}
-											  onChange={(newValue) => column.onChange(row, newValue)}
-											  dataType={column.columnType} />
-								</Table.Td>
-							))
-						}
-					</Table.Tr>
-				))
+				rowInfo.rows.map((row) => {
+					if (!row.visible) {
+						return null;
+					}
+
+					return (
+						<Table.Tr key={`${row.id}`}
+								  bg={selectedRows.includes(row.id) ? 'blue.0' : 'white'}
+								  onClick={(e) => clickedOn(row.id, e.shiftKey)}>
+							{
+								columns.map((column) => (
+									<Table.Td key={column.columnId}>
+										<Group wrap="nowrap"
+											   gap="sm"
+											   pl={column.hierarchyColumn && rowInfo.maxLevels > 0 ? (row.level * PER_LEVEL_OFFSET + (row.hasChildren ? 0 : PER_LEVEL_OFFSET)) : 0}>
+											{
+												column.hierarchyColumn && (
+													<>
+														{
+															row.hasChildren ? (
+																<ActionIcon variant="transparent" color="gray" size="xs" onClick={() => toggleRow(row.id)}>
+																	{
+																		row.expanded ? <IconChevronDown /> : <IconChevronRight />
+																	}
+																</ActionIcon>
+															) : <Space />
+														}
+													</>
+												)
+											}
+											<DataView value={column.select(row.data)}
+													  onChange={(newValue) => column.onChange(row.data, newValue)}
+													  dataType={column.columnType} />
+										</Group>
+									</Table.Td>
+								))
+							}
+						</Table.Tr>
+					);
+				})
 			}
 		</Table.Tbody>
 	);

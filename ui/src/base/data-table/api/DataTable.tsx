@@ -9,6 +9,7 @@ import { useElementSize } from '@mantine/hooks';
 import { useRef } from 'react';
 import { useTableResizing } from '@/base/data-table/internal/useTableResizing';
 import type { DataTableProps } from '@/base/data-table/api/DataTableProps';
+import { useFlattenRows } from '@/base/data-table/internal/useFlattenRows';
 
 export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 	const {
@@ -20,6 +21,7 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 		storage = localStoragePropertyStorage,
 		tableProps = {},
 		scrollAreaProps = {},
+		getChildrenRows = () => [],
 		onSelectionChange
 	} = props;
 
@@ -39,6 +41,11 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 		tableKey
 	});
 
+	const {
+		rowInfo,
+		toggle: toggleRow
+	} = useFlattenRows(rows, idSelector, getChildrenRows);
+
 	if (columnsLoading || widthsLoading) {
 		return <DataTableSkeleton tableProps={tableProps} scrollAreaProps={scrollAreaProps} />;
 	}
@@ -46,15 +53,18 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 	return (
 		<ScrollArea.Autosize ref={scrollAreaRef} scrollbars={'xy'} {...scrollAreaProps}>
 			<Table ref={tableRef} style={{ tableLayout: 'fixed' }} {...tableProps}>
-				<DataTableColgroup tableWidth={scrollAreaWidth} columns={columns} widths={columnWidths} />
+				<DataTableColgroup tableWidth={scrollAreaWidth}
+								   columns={columns}
+								   widths={columnWidths} />
 				<DataTableHeader columns={columns}
 								 allPossibleColumns={possibleColumns}
 								 setColumns={setColumns}
 								 onStartDrag={startDrag} />
 				<DataTableBody columns={columns}
-							   rows={rows}
 							   idSelector={idSelector}
 							   onSelectionChange={(rows) => onSelectionChange?.(rows)}
+							   rowInfo={rowInfo}
+							   toggleRow={toggleRow}
 				/>
 			</Table>
 		</ScrollArea.Autosize>

@@ -6,4 +6,5 @@ export interface ColumnDescriptor<TData, TValue> {
 	columnType: DataType<TValue>;
 	select: (data: TData) => TValue;
 	onChange: (fullData: TData, newValue: TValue) => void | Promise<void>;
+	hierarchyColumn?: boolean;
 }
