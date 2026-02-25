@@ -22,6 +22,7 @@ export interface GanttContext<TData> {
 	svg: RefObject<SVGSVGElement | null>;
 	chartHeaderSize: number;
 	setChartHeaderSize(headerSize: number): void;
+	selectedItemIdsRef: RefObject<string[]>;
 }
 
 const GanttContext = createContext<GanttContext<unknown> | null>(null);
@@ -51,6 +52,8 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 		scrollYSubscribers.current?.forEach(callback => callback(y));
 	}, []);
 
+	const selectedItemIdsRef = useRef<string[]>([]);
+
 	const context: GanttContext<unknown> = useMemo(() => ({
 		props: props.props as GanttProps<unknown>,
 		rows, setRows,
@@ -61,6 +64,7 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 		dragData, setDragData,
 		svg,
 		chartHeaderSize, setChartHeaderSize,
+		selectedItemIdsRef
 	}), [props.props, rows, scrollAreaHeight, setScrollY, subscribeToScrollY, zoomLevel, chartViewportWidth, dragData, chartHeaderSize])
 
 	return (

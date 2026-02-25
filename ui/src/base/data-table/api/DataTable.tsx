@@ -24,7 +24,8 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 	} = props;
 
 	const { ref: scrollAreaRef, width: scrollAreaWidth } = useElementSize();
-	const tableRef = useRef<HTMLTableElement>(null);
+	const fallbackTableRef = useRef<HTMLTableElement>(null);
+	const tableRef = props.tableRef ?? fallbackTableRef;
 
 	const { columns, loading: columnsLoading, setColumns } = useCurrentColumns({
 		storage,
@@ -57,7 +58,8 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 				<DataTableHeader columns={columns}
 								 allPossibleColumns={possibleColumns}
 								 setColumns={setColumns}
-								 onStartDrag={startDrag} />
+								 onStartDrag={startDrag}
+								 tableHeaderProps={props.tableHeaderProps} />
 				<DataTableBody columns={columns}
 							   onSelectionChange={(rows) => onSelectionChange?.(rows)}
 							   rowInfo={rowInfo}

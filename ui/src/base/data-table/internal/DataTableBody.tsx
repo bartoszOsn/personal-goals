@@ -3,10 +3,11 @@ import { ActionIcon, Group, Space, Table } from '@mantine/core';
 import { DataView } from '@/base/data-type';
 import { useRowSelection } from '@/base/data-table/internal/useRowSelection';
 import { useEffect, useMemo } from 'react';
-import { useClickOutside } from '@mantine/hooks';
+import { useClickOutside, usePrevious } from '@mantine/hooks';
 import type { FlattenRowsInfo } from '@/base/data-table/internal/useFlattenRows';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { PER_LEVEL_OFFSET } from '@/base/data-table/internal/PER_LEVEL_OFFSET';
+import { deepEqual } from '@tanstack/react-router';
 
 export interface DataTableBodyProps<TData, TId> {
 	columns: ColumnDescriptor<TData, unknown>[];
@@ -31,13 +32,19 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 		clickOutside
 	} = useRowSelection(allRowIds);
 
+	const prevSelected = usePrevious(selectedRows);
+
 	useEffect(() => {
+		if (deepEqual(selectedRows, prevSelected)) {
+			return;
+		}
+
 		onSelectionChange(
 			rowInfo.rows
 				.filter((row) => selectedRows.includes(row.id))
 				.map(row => row.data)
 		);
-	}, [onSelectionChange, rowInfo.rows, selectedRows]);
+	}, [onSelectionChange, prevSelected, rowInfo.rows, selectedRows]);
 
 	const tBodyRef = useClickOutside(clickOutside);
 

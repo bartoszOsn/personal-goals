@@ -39,8 +39,8 @@ function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) 
 	}
 
 	const getDragItems = () => {
-		if (context.props.selectedItemIds?.includes(item.id)) {
-			return context.props.selectedItemIds.map(id => context.props.items.find(item => item.id === id)!);
+		if (context.selectedItemIdsRef.current.includes(item.id)) {
+			return context.selectedItemIdsRef.current.map(id => context.props.items.find(item => item.id === id)!);
 		} else {
 			return [context.props.items.find(i => i.id === item.id)!];
 		}

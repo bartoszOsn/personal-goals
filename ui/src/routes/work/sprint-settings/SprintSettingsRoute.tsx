@@ -11,6 +11,9 @@ import { Temporal } from 'temporal-polyfill';
 import type { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { HttpError } from '@/base/http';
 import { notifications } from '@mantine/notifications';
+import { type ColumnDescriptor } from '@/base/data-table';
+import { stringDataType } from '@/base/data-type';
+import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 
 export function SprintSettingsRoute() {
 	const sprints = useSprintQuery();
@@ -46,6 +49,48 @@ export function SprintSettingsRoute() {
 			})
 	}
 
+	const possibleColumns: ColumnDescriptor<GanttItem<SprintDTO>, any>[] = [
+		{
+			columnId: 'name',
+			columnName: 'Name',
+			select: (sprint: GanttItem<SprintDTO>) => getSprintName(sprint.data),
+			columnType: stringDataType,
+			onChange: () => {}
+		},
+		{
+			columnId: 'startDate',
+			columnName: 'Start date',
+			select: (sprint: GanttItem<SprintDTO>) => Temporal.PlainDate.from(sprint.data.startDate),
+			columnType: plainDateDataType,
+			onChange: async (sprintItem, newDate) => {
+				const request: SprintChangeRequestDTO = {
+					[sprintItem.id]: {
+						newStartDate: newDate.toString(),
+						newEndDate: sprintItem.end.toString()
+					}
+				}
+
+				await updateSprints.mutateAsync(request)
+			}
+		},
+		{
+			columnId: 'endDate',
+			columnName: 'End date',
+			select: (sprint: GanttItem<SprintDTO>) => Temporal.PlainDate.from(sprint.data.endDate),
+			columnType: plainDateDataType,
+			onChange: async (sprintItem, newDate) => {
+				const request: SprintChangeRequestDTO = {
+					[sprintItem.id]: {
+						newStartDate: sprintItem.start.toString(),
+						newEndDate: newDate.toString()
+					}
+				}
+
+				await updateSprints.mutateAsync(request)
+			}
+		}
+	]
+
 	return (
 		<Stack w="100%" h="100vh" p="lg" style={{ overflow: 'hidden' }}>
 			<Group>
@@ -58,9 +103,11 @@ export function SprintSettingsRoute() {
 			{
 				ganttItems.length > 0 && <Gantt items={ganttItems}
 												containerProps={{ w: '100%', style: { flexGrow: 1, flexShrink: 0 } }}
-												selectedItemIds={selectedItemIds}
 												setSelectedItemIds={setSelectedItemIds}
 												changeDates={changeDates}
+												ganttKey={'sprint-settings'}
+												possibleColumns={possibleColumns}
+												initialColumnIds={['name', 'startDate', 'endDate']}
 				/>
 			}
 		</Stack>

@@ -1,11 +1,12 @@
 import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
-import { ActionIcon, Box, CloseButton, Group, Popover, Table, Text } from '@mantine/core';
+import { ActionIcon, Box, CloseButton, Group, Popover, Table, type TableTheadProps, Text } from '@mantine/core';
 import { IconDots } from '@tabler/icons-react';
 import { DataTableCustomizationPopover } from '@/base/data-table/internal/DataTableCustomizationPopover';
-import { useState } from 'react';
 import * as React from 'react';
+import { useState } from 'react';
 
 interface DataTableHeaderProps<TData> {
+	tableHeaderProps?: TableTheadProps;
 	columns: ColumnDescriptor<TData, unknown>[];
 	allPossibleColumns: ColumnDescriptor<TData, unknown>[];
 	setColumns: (columns: ColumnDescriptor<TData, unknown>[]) => void;
@@ -17,7 +18,7 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 	const isMoreThanOneColumn = props.columns.length > 1;
 
 	return (
-		<Table.Thead>
+		<Table.Thead {...props.tableHeaderProps}>
 			<Table.Tr>
 				{props.columns.map((column, index) => {
 					const isLastColumn = index === props.columns.length - 1;
