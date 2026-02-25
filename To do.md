@@ -12,3 +12,4 @@
 6. Custom rich text documents.
 7. Objectives with calculated progress based on KRs.
     - KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
+8. Update page title and favicon
