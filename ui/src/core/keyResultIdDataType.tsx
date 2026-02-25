@@ -14,11 +14,11 @@ export const keyResultIdDataType: DataType<string | undefined> = {
 			.find(kr => kr.id === value);
 
 		if (value === undefined || kr === undefined) {
-			return <Text onClick={onEdit} inherit c="dimmed" style={{ cursor: 'pointer' }}>No Key Result</Text>;
+			return <Text onClick={onEdit} inherit c="dimmed" style={{ cursor: onEdit ? 'pointer' : 'default' }}>No Key Result</Text>;
 		}
 
 		return (
-			<Text onClick={onEdit} inherit style={{ cursor: 'pointer' }}>{kr.name}</Text>
+			<Text onClick={onEdit} inherit style={{ cursor: onEdit ? 'pointer' : 'default' }}>{kr.name}</Text>
 		);
 	},
 	Editor: ({ value, onCancel, onSubmit }) => {

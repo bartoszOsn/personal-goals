@@ -3,7 +3,7 @@ import { FocusTrap, Text, TextInput } from '@mantine/core';
 
 export const stringDataType: DataType<string> = {
 	Presenter: ({ value, onEdit }) => (
-		<Text onClick={onEdit} inherit style={{ cursor: 'pointer' }}>{value}</Text>
+		<Text onClick={onEdit} inherit style={{ cursor: onEdit ? 'pointer' : 'default' }}>{value}</Text>
 	),
 	Editor: ({ value, onCancel, onChange, onSubmit }) => (
 		<FocusTrap>

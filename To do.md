@@ -1,6 +1,6 @@
 # What still needs to be done
 
-1. Non-editable columns on gantt and data table.
+1. ✅ Non-editable columns on gantt and data table.
 2. Roadmap view with objectives, KRs and tasks on one gantt chart.
     - Gantt must support items without or with only one date.
     - Gantt must support timeboxes

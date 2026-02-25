@@ -54,8 +54,7 @@ export function SprintSettingsRoute() {
 			columnId: 'name',
 			columnName: 'Name',
 			select: (sprint: GanttItem<SprintDTO>) => getSprintName(sprint.data),
-			columnType: stringDataType,
-			onChange: () => {}
+			columnType: stringDataType
 		},
 		{
 			columnId: 'startDate',

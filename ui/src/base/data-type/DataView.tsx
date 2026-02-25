@@ -4,8 +4,9 @@ import { Skeleton } from '@mantine/core';
 
 export interface DataViewProps<TData> {
 	value: TData;
-	onChange: (value: TData) => void | Promise<void>;
-	dataType: DataType<TData>
+	onChange?: (value: TData) => void | Promise<void>;
+	dataType: DataType<TData>;
+	readonly?: boolean;
 }
 
 export function DataView<TData>(props: DataViewProps<TData>) {
@@ -25,7 +26,7 @@ export function DataView<TData>(props: DataViewProps<TData>) {
 		setEditedValue(value);
 	}
 	const onSubmit = (value: TData) => {
-		const result = props.onChange(value);
+		const result = props.onChange?.(value);
 		setState('pending');
 		Promise.resolve(result)
 			.finally(() => {
@@ -47,7 +48,7 @@ export function DataView<TData>(props: DataViewProps<TData>) {
 			{
 				state === 'presenting' && (
 					<props.dataType.Presenter value={value}
-											  onEdit={() => setState('editing')} />
+											  onEdit={props.readonly ? undefined : () => setState('editing')} />
 				)
 			}
 			{

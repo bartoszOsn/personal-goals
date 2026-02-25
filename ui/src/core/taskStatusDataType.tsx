@@ -20,7 +20,7 @@ const toCSSVar = (color: MantineColor) => `var(--mantine-color-${color}-5)`;
 
 export const taskStatusDataType: DataType<TaskStatusDTO> = {
 	Presenter: ({ value, onEdit }) => (
-		<Badge color={statusToColor[value]} onClick={onEdit} style={{ cursor: 'pointer' }}>{statusToName[value]}</Badge>
+		<Badge color={statusToColor[value]} onClick={onEdit} style={{ cursor: onEdit ? 'pointer' : 'default' }}>{statusToName[value]}</Badge>
 	),
 	Editor: ({ value, onCancel, onSubmit }) => {
 		const combobox = useCombobox({

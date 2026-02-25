@@ -6,8 +6,8 @@ import { DateInput } from '@mantine/dates';
 export const plainDateDataType: DataType<Temporal.PlainDate | null> = {
 	Presenter: ({ value, onEdit }) => (
 		value === null
-			? <Text onClick={onEdit} c='gray' inherit style={{ cursor: 'pointer' }}>No date</Text>
-			: <Text onClick={onEdit} inherit style={{ cursor: 'pointer' }}>{value?.toLocaleString() ?? ''}</Text>
+			? <Text onClick={onEdit} c='gray' inherit style={{ cursor: onEdit ? 'pointer' : 'default' }}>No date</Text>
+			: <Text onClick={onEdit} inherit style={{ cursor: onEdit ? 'pointer' : 'default' }}>{value?.toLocaleString() ?? ''}</Text>
 	),
 	Editor: ({ value, onCancel, onChange, onSubmit }) => (
 		<FocusTrap>

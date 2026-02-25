@@ -15,13 +15,13 @@ export const sprintDataType: DataType<string[]> = {
 			.filter(sprint => value.includes(sprint.id));
 
 		if (sprints.length === 0) {
-			return <Text onClick={onEdit} inherit c="dimmed" style={{ cursor: 'pointer' }}>No Sprints</Text>;
+			return <Text onClick={onEdit} inherit c="dimmed" style={{ cursor: onEdit ? 'pointer' : 'default' }}>No Sprints</Text>;
 		} else if (sprints.length === 1) {
-			return <Text onClick={onEdit} inherit style={{ cursor: 'pointer' }}>{getSprintName(sprints[0])}</Text>
+			return <Text onClick={onEdit} inherit style={{ cursor: onEdit ? 'pointer' : 'default' }}>{getSprintName(sprints[0])}</Text>
 		}
 
 		return (
-			<Text onClick={onEdit} inherit style={{ cursor: 'pointer' }}>{getSprintName(sprints[sprints.length - 1])} and { sprints.length - 1 } more</Text>
+			<Text onClick={onEdit} inherit style={{ cursor: onEdit ? 'pointer' : 'default' }}>{getSprintName(sprints[sprints.length - 1])} and { sprints.length - 1 } more</Text>
 		);
 	},
 	Editor: ({ value, onCancel, onSubmit }) => {
