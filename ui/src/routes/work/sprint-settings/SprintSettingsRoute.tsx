@@ -21,7 +21,6 @@ export function SprintSettingsRoute() {
 
 	const ganttItems: GanttItem<SprintDTO>[] = !sprints.data ? [] : sprints.data.sprints.map(sprint => ({
 		id: sprint.id,
-		name: getSprintName(sprint),
 		color: quarterToColor[sprint.quarter],
 		start: Temporal.PlainDate.from(sprint.startDate),
 		end: Temporal.PlainDate.from(sprint.endDate),
