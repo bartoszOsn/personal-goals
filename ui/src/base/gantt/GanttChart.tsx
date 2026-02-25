@@ -16,12 +16,14 @@ export function GanttChart<TData>() {
 	const { dateToPixelPos, endDate } = useDateRanges();
 
 	useEffect(() => {
-		if (!viewportRef.current) {
-			return;
-		}
+		return context.subscribeToScrollY(y => {
+			if (!viewportRef.current) {
+				return;
+			}
 
-		viewportRef.current.scrollTo({ left: viewportRef.current.scrollLeft, top: context.scrollY, behavior: 'instant'});
-	}, [context.scrollY, viewportRef]);
+			viewportRef.current.scrollTo({ left: viewportRef.current.scrollLeft, top: y, behavior: 'instant' });
+		})
+	}, [context, viewportRef]);
 
 	useEffect(() => {
 		context.setChartViewportWidth(width);

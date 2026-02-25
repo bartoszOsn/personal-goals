@@ -16,12 +16,14 @@ export function GanttTable<TData>() {
 	}, [context, height]);
 
 	useEffect(() => {
-		if (!viewportRef.current) {
-			return;
-		}
+		return context.subscribeToScrollY(y => {
+			if (!viewportRef.current) {
+				return;
+			}
 
-		viewportRef.current.scrollTo({ left: viewportRef.current.scrollLeft, top: context.scrollY, behavior: 'instant' });
-	}, [context.scrollY]);
+			viewportRef.current.scrollTo({ left: viewportRef.current.scrollLeft, top: y, behavior: 'instant' });
+		})
+	}, [context]);
 
 	useEffect(() => {
 		const table = ref.current;

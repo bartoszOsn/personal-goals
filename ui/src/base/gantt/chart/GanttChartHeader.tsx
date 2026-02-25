@@ -5,7 +5,7 @@ import { HtmlInSvg } from '@/base/gantt/chart/HtmlInSvg';
 import { Text } from '@mantine/core';
 import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const headerCellHeight = 30;
 export const headerCellXMargin = 1;
@@ -18,26 +18,33 @@ export function GanttChartHeader() {
 	const subheaderCells = getHeaderCells(context.zoomLevel.subheader, startDate, endDate);
 	const headerHeight = headerCellHeight * 2 + headerRowYMargin * 2;
 
+	const groupRef = useRef<SVGGElement>(null);
+
+	useEffect(() => {
+		return context.subscribeToScrollY(y => {
+			groupRef.current?.setAttribute('transform', `translate(0 ${y})`);
+		});
+	}, [context]);
+
 	useEffect(() => {
 		context.setChartHeaderSize(headerHeight);
 	}, [context, headerHeight]);
 
 	return (
-		<g>
-			<rect x={0} y={context.scrollY} width={dateToPixelPos(endDate)} height={headerHeight} fill="var(--mantine-color-body)" />
-			<HeaderRow cells={headerCells} offsetY={0} />
-			<HeaderRow cells={subheaderCells} offsetY={headerCellHeight + headerRowYMargin} />
+		<g ref={groupRef}>
+			<rect x={0} y={0} width={dateToPixelPos(endDate)} height={headerHeight} fill="var(--mantine-color-body)" />
+			<HeaderRow cells={headerCells} offsetY={0} scrollY={0} />
+			<HeaderRow cells={subheaderCells} offsetY={headerCellHeight + headerRowYMargin} scrollY={0} />
 		</g>
 	);
 }
 
-function HeaderRow(props: { cells: HeaderCell[], offsetY: number }) {
-	const context = useGanttContext();
+function HeaderRow(props: { cells: HeaderCell[], offsetY: number, scrollY: number }) {
 	const { dateToPixelPos } = useDateRanges();
 
 	return props.cells.map(cell => {
 		const x = dateToPixelPos(cell.start) + headerCellXMargin;
-		const y = context.scrollY + props.offsetY;
+		const y = props.scrollY + props.offsetY;
 		const width = dateToPixelPos(cell.end) - dateToPixelPos(cell.start) - 2 * headerCellXMargin;
 		const height = headerCellHeight;
 
