@@ -15,3 +15,4 @@
 7. Objectives with calculated progress based on KRs.
     - KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
 8. Update page title and favicon
+9. Handle somehow the fact that after years there will be too much data to display on gantt chart. Filtering on roadmap as well?
