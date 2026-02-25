@@ -1,16 +1,18 @@
 import { Box, px, rem } from '@mantine/core';
 import { useGanttContext } from '@/base/gantt/GanttProvider';
 import { useElementSize } from '@mantine/hooks';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { RowPositionInfo } from './model/RowPositionInfo';
 import { type ColumnDescriptor, DataTable, useDataTableRows } from '@/base/data-table';
 import { type DataTableRow } from '@/base/data-table/api/DataTableRow';
 import { type GanttItem } from '@/base/gantt/GanttItem';
+import { flatItems } from '@/base/gantt/FlatItems';
 
 export function GanttTable<TData>() {
 	const context = useGanttContext<TData>();
 	const { ref, height } = useElementSize<HTMLTableElement>();
 	const viewportRef = useRef<HTMLDivElement>(null);
+	const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
 	useEffect(() => {
 		context.setScrollAreaHeight(height);
@@ -33,38 +35,40 @@ export function GanttTable<TData>() {
 
 		const tableBounds = table.getBoundingClientRect();
 
-		const rows: RowPositionInfo[] = context.props.items.map(item => {
-			const tableRow = table.querySelector(`[data-row-id="${item.id}"]`);
+		const rows: RowPositionInfo[] = flatItems(context.props.items)
+			.map(item => {
 
-			if (!tableRow) return null;
+				const tableRow = table.querySelector(`[data-row-id="${item.id}"]`);
 
-			const tableRowBounds = tableRow.getBoundingClientRect();
+				if (!tableRow) return null;
 
-			return {
-				id: item.id,
-				top: tableRowBounds.top - tableBounds.top,
-				height: tableRowBounds.height
-			};
-		})
+				const tableRowBounds = tableRow.getBoundingClientRect();
+
+				return {
+					id: item.id,
+					top: tableRowBounds.top - tableBounds.top,
+					height: tableRowBounds.height
+				};
+			})
 			.filter((item): item is RowPositionInfo => item !== null);
 
 
 		if (JSON.stringify(rows) !== JSON.stringify(context.rows)) {
 			context.setRows(rows);
 		}
-	}, [context, context.props.items, ref]);
+	}, [context, context.props.items, ref, expandedItems]);
 
 	const dataTableRows: DataTableRow<GanttItem<TData>, string>[] = useDataTableRows({
 		rawData: context.props.items,
 		getId: (item) => item.id,
-		getChildren: () => [],
+		getChildren: (item) => item.children
 	});
 
 	const onSelectionChange = (rows: GanttItem<TData>[]) => {
 		const itemIds = rows.map(row => row.id);
 		context.props.setSelectedItemIds?.(itemIds);
 		context.selectedItemIdsRef.current = itemIds;
-	}
+	};
 
 	return (
 		<Box w={rem(300)} h="100%">
@@ -85,7 +89,9 @@ export function GanttTable<TData>() {
 						   h: px(context.chartHeaderSize)
 					   }}
 					   onSelectionChange={onSelectionChange}
+					   onExpansionChange={setExpandedItems}
 					   tableRef={ref} />
 		</Box>
 	);
 }
+

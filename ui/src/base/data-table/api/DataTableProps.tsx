@@ -14,5 +14,6 @@ export interface DataTableProps<TData, TId> {
 	scrollAreaProps?: ScrollAreaAutosizeProps;
 	tableHeaderProps?: TableTheadProps;
 	onSelectionChange?: (rows: TData[]) => void;
+	onExpansionChange?: (rows: TId[]) => void;
 	tableRef?: RefObject<HTMLTableElement | null>;
 }

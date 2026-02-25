@@ -3,15 +3,18 @@ import { useDateRanges } from '@/base/gantt/hooks/useDateRanges.ts';
 import type { GanttItem } from '@/base/gantt';
 import type { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 import { useDrag } from '@/base/gantt/hooks/useDrag';
+import { flatItems } from '@/base/gantt/FlatItems';
+import { useMemo } from 'react';
 
 const yMargin = 4;
 const dragHandleWidth = 10;
 
 export function GanttCharttItemBars() {
 	const context = useGanttContext();
+	const flattenedItems = useMemo(() => flatItems(context.props.items), [context.props.items]);
 
 	return context.rows.map(row => {
-		const item = context.props.items.find(item => item.id === row.id);
+		const item = flattenedItems.find(item => item.id === row.id);
 
 		if (!item) {
 			return null;

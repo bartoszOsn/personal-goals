@@ -1,28 +1,50 @@
-import { type ColumnDescriptor, DataTable, useDataTableRows } from '@/base/data-table';
+import { type ColumnDescriptor } from '@/base/data-table';
 import { stringDataType } from '@/base/data-type';
+import { Gantt, type GanttItem } from '@/base/gantt';
+import { Temporal } from 'temporal-polyfill';
 
 export function RoadmapRoute() {
-	const rows: TestNode[] = [
+	const rows: GanttItem<string>[] = [
 		{
 			id: '1',
-			name: 'Standalone 1',
+			data: 'Standalone 1',
+			color: 'gray',
+			start: Temporal.PlainDate.from('2025-01-01'),
+			end: Temporal.PlainDate.from('2025-01-02'),
+			linksInto: [],
 			children: []
 		},
 		{
 			id: '3',
-			name: 'Root Parent',
+			data: 'Root Parent',
+			color: 'gray',
+			start: Temporal.PlainDate.from('2025-01-05'),
+			end: Temporal.PlainDate.from('2025-01-10'),
+			linksInto: [],
 			children: [
 				{
 					id: '3.1',
-					name: 'Child 1',
+					data: 'Child 1',
+					color: 'gray',
+					start: Temporal.PlainDate.from('2025-01-06'),
+					end: Temporal.PlainDate.from('2025-01-07'),
+					linksInto: [],
 					children: []
 				},
 				{
 					id: '3.2',
-					name: 'Child-parent',
+					data: 'Child-parent',
+					color: 'gray',
+					start: Temporal.PlainDate.from('2025-01-08'),
+					end: Temporal.PlainDate.from('2025-01-09'),
+					linksInto: [],
 					children: [{
 						id: '3.2.1',
-						name: 'Grandchild 1',
+						data: 'Grandchild 1',
+						color: 'gray',
+						start: Temporal.PlainDate.from('2025-01-09'),
+						end: Temporal.PlainDate.from('2025-01-10'),
+						linksInto: [],
 						children: []
 					}]
 				}
@@ -30,38 +52,29 @@ export function RoadmapRoute() {
 		},
 		{
 			id: '2',
-			name: 'Standalone 2',
+			data: 'Standalone 2',
+			color: 'gray',
+			start: Temporal.PlainDate.from('2025-01-01'),
+			end: Temporal.PlainDate.from('2025-01-02'),
+			linksInto: [],
 			children: []
 		}
 	];
 
-	const dataTableRows = useDataTableRows({
-		rawData: rows,
-		getId: row => row.id,
-		getChildren: (row) => row.children
-	})
-
-	const columns: ColumnDescriptor<TestNode, unknown>[] = [
+	const columns: ColumnDescriptor<GanttItem<string>, string>[] = [
 		{
 			columnId: 'name',
 			columnName: 'Name',
-			select: (row) => row.name,
+			select: (row) => row.data,
 			columnType: stringDataType,
-			onChange: () => {},
-			hierarchyColumn: true
+			hierarchyColumn: true,
 		}
-	] as ColumnDescriptor<TestNode, unknown>[];
+	];
 
 	return (
-		<DataTable rows={dataTableRows}
-				   possibleColumns={columns}
-				   initialColumnIds={['name']}
-				   tableKey={'test-table'} />
-	)
-}
-
-interface TestNode {
-	id: string;
-	name: string;
-	children: TestNode[];
+		<Gantt items={rows}
+			   possibleColumns={columns}
+			   initialColumnIds={['name']}
+			   ganttKey={'roadmap-gantt'} />
+	);
 }

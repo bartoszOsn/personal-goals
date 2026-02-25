@@ -15,7 +15,7 @@ export interface FlattenRow<TData, TId> {
 	visible: boolean;
 }
 
-export function useFlattenRows<TData, TId>(rows: DataTableRow<TData, TId>[]) {
+export function useFlattenRows<TData, TId>(rows: DataTableRow<TData, TId>[], onExpansionChange?: (rows: TId[]) => void) {
 	const [expanded, setExpanded] = useState<TId[]>([]);
 
 	const flattenedRows: FlattenRowsInfo<TData, TId> = useMemo(() => {
@@ -31,11 +31,19 @@ export function useFlattenRows<TData, TId>(rows: DataTableRow<TData, TId>[]) {
 	return {
 		rowInfo: flattenedRows,
 		toggle: (id: TId) => {
+			let stateAfterChange: TId[] = [];
 			if (expanded.includes(id)) {
-				setExpanded(prev => prev.filter(i => i !== id));
+				setExpanded(prev => {
+					stateAfterChange = prev.filter(i => i !== id);
+					return stateAfterChange;
+				});
 			} else {
-				setExpanded((prev) => [...prev, id]);
+				setExpanded((prev) => {
+					stateAfterChange = [...prev, id];
+					return stateAfterChange;
+				});
 			}
+			onExpansionChange?.(stateAfterChange);
 		}
 	};
 }

@@ -25,7 +25,8 @@ export function SprintSettingsRoute() {
 		start: Temporal.PlainDate.from(sprint.startDate),
 		end: Temporal.PlainDate.from(sprint.endDate),
 		data: sprint,
-		linksInto: []
+		linksInto: [],
+		children: []
 	}));
 
 	const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);

@@ -20,7 +20,8 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 		storage = localStoragePropertyStorage,
 		tableProps = {},
 		scrollAreaProps = {},
-		onSelectionChange
+		onSelectionChange,
+		onExpansionChange
 	} = props;
 
 	const { ref: scrollAreaRef, width: scrollAreaWidth } = useElementSize();
@@ -43,7 +44,7 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 	const {
 		rowInfo,
 		toggle: toggleRow
-	} = useFlattenRows(rows);
+	} = useFlattenRows(rows, onExpansionChange);
 
 	if (columnsLoading || widthsLoading) {
 		return <DataTableSkeleton tableProps={tableProps} scrollAreaProps={scrollAreaProps} />;

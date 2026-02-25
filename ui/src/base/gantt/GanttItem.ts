@@ -8,4 +8,5 @@ export interface GanttItem<TData> {
 	end: Temporal.PlainDate;
 	data: TData;
 	linksInto: string[];
+	children: GanttItem<TData>[];
 }
