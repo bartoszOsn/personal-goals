@@ -86,7 +86,8 @@ export function GanttTable<TData>() {
 						   }
 					   }}
 					   tableHeaderProps={{
-						   h: px(context.chartHeaderSize)
+						   h: px(context.chartHeaderSize),
+						   style: { verticalAlign: 'bottom' }
 					   }}
 					   onSelectionChange={onSelectionChange}
 					   onExpansionChange={setExpandedItems}
