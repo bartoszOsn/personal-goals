@@ -11,7 +11,6 @@ import { PER_LEVEL_OFFSET } from '@/base/data-table/internal/PER_LEVEL_OFFSET';
 export interface DataTableBodyProps<TData, TId> {
 	columns: ColumnDescriptor<TData, unknown>[];
 	rowInfo: FlattenRowsInfo<TData, TId>;
-	idSelector: (row: TData) => TId;
 	onSelectionChange: (rows: TData[]) => void;
 	toggleRow: (row: TId) => void;
 }
@@ -19,7 +18,6 @@ export interface DataTableBodyProps<TData, TId> {
 export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>) {
 	const {
 		columns,
-		idSelector,
 		onSelectionChange,
 		rowInfo,
 		toggleRow
@@ -39,7 +37,7 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 				.filter((row) => selectedRows.includes(row.id))
 				.map(row => row.data)
 		);
-	}, [idSelector, onSelectionChange, rowInfo.rows, selectedRows]);
+	}, [onSelectionChange, rowInfo.rows, selectedRows]);
 
 	const tBodyRef = useClickOutside(clickOutside);
 

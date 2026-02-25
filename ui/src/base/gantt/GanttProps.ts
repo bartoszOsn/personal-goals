@@ -9,4 +9,3 @@ export interface GanttProps<TData> {
 	setSelectedItemIds?: (itemIds: string[]) => void;
 	changeDates?: (items: Map<string, GanttNewItemDates>) => Promise<void>;
 }
-

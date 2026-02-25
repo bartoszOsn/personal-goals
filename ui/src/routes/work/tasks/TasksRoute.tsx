@@ -11,6 +11,7 @@ import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 import { sprintDataType } from '@/core/sprintDataType';
 import { useState } from 'react';
+import { useDataTableRows } from '@/base/data-table';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -146,6 +147,12 @@ export function TasksRoute() {
 
 	const initialColumnIds: string[] = ['name', 'status', 'startDate', 'endDate'];
 
+	const dataTableRows = useDataTableRows({
+		rawData: tasksQuery.data?.tasks ?? [],
+		getId: task => task.id,
+		getChildren: () => []
+	});
+
 	return (
 		<Stack w="100%" h="100vh" p="lg">
 			<Title>Task list</Title>
@@ -159,8 +166,7 @@ export function TasksRoute() {
 						disabled={selected.length === 0}
 						loading={deleteTaskMutation.isPending}>Delete</Button>
 			</Group>
-			<DataTable rows={tasksQuery.data?.tasks ?? []}
-					   idSelector={(task) => task.id}
+			<DataTable rows={dataTableRows}
 					   possibleColumns={columns}
 					   initialColumnIds={initialColumnIds}
 					   tableKey="tasks"

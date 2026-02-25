@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { DataTableRow } from '@/base/data-table/api/DataTableRow';
 
 export interface FlattenRowsInfo<TData, TId> {
 	maxLevels: number;
@@ -14,22 +15,18 @@ export interface FlattenRow<TData, TId> {
 	visible: boolean;
 }
 
-export function useFlattenRows<TData, TId>(
-	data: TData[],
-	getId: (data: TData) => TId,
-	getChildren: (data: TData) => TData[]
-) {
+export function useFlattenRows<TData, TId>(rows: DataTableRow<TData, TId>[]) {
 	const [expanded, setExpanded] = useState<TId[]>([]);
 
 	const flattenedRows: FlattenRowsInfo<TData, TId> = useMemo(() => {
-		const rows: FlattenRow<TData, TId>[] = flattenRows(data, expanded, getId, getChildren);
-		const maxLevel = Math.max(...rows.map(r => r.level));
+		const flatRows: FlattenRow<TData, TId>[] = flattenRows(rows, expanded);
+		const maxLevel = Math.max(...flatRows.map(r => r.level));
 
 		return {
 			maxLevels: maxLevel,
-			rows
+			rows: flatRows
 		};
-	}, [data, expanded, getChildren, getId]);
+	}, [rows, expanded]);
 
 	return {
 		rowInfo: flattenedRows,
@@ -44,28 +41,26 @@ export function useFlattenRows<TData, TId>(
 }
 
 function flattenRows<TData, TId>(
-	data: TData[],
+	data: DataTableRow<TData, TId>[],
 	expanded: TId[],
-	getId: (data: TData) => TId,
-	getChildren: (data: TData) => TData[],
 	currentLevel: number = 0,
 	visible: boolean = true
 ): FlattenRow<TData, TId>[] {
 	const result: FlattenRow<TData, TId>[] = [];
 	for (const datum of data) {
-		const children = getChildren(datum);
+		const children = datum.children;
 
 		const row: FlattenRow<TData, TId> = {
-			data: datum,
-			id: getId(datum),
+			data: datum.data,
+			id: datum.id,
 			level: currentLevel,
 			hasChildren: children.length > 0,
-			expanded: expanded.includes(getId(datum)),
+			expanded: expanded.includes(datum.id),
 			visible: visible
 		};
 
 		result.push(row);
-		result.push(...flattenRows(children, expanded, getId, getChildren, currentLevel + 1, row.expanded && row.visible));
+		result.push(...flattenRows(children, expanded, currentLevel + 1, row.expanded && row.visible));
 	}
 
 	return result;

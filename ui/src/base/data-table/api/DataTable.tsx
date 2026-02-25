@@ -14,14 +14,12 @@ import { useFlattenRows } from '@/base/data-table/internal/useFlattenRows';
 export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 	const {
 		rows,
-		idSelector,
 		possibleColumns,
 		initialColumnIds,
 		tableKey,
 		storage = localStoragePropertyStorage,
 		tableProps = {},
 		scrollAreaProps = {},
-		getChildrenRows = () => [],
 		onSelectionChange
 	} = props;
 
@@ -44,7 +42,7 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 	const {
 		rowInfo,
 		toggle: toggleRow
-	} = useFlattenRows(rows, idSelector, getChildrenRows);
+	} = useFlattenRows(rows);
 
 	if (columnsLoading || widthsLoading) {
 		return <DataTableSkeleton tableProps={tableProps} scrollAreaProps={scrollAreaProps} />;
@@ -61,7 +59,6 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 								 setColumns={setColumns}
 								 onStartDrag={startDrag} />
 				<DataTableBody columns={columns}
-							   idSelector={idSelector}
 							   onSelectionChange={(rows) => onSelectionChange?.(rows)}
 							   rowInfo={rowInfo}
 							   toggleRow={toggleRow}

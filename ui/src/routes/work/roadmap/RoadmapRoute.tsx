@@ -1,4 +1,4 @@
-import { type ColumnDescriptor, DataTable } from '@/base/data-table';
+import { type ColumnDescriptor, DataTable, useDataTableRows } from '@/base/data-table';
 import { stringDataType } from '@/base/data-type';
 
 export function RoadmapRoute() {
@@ -35,6 +35,12 @@ export function RoadmapRoute() {
 		}
 	];
 
+	const dataTableRows = useDataTableRows({
+		rawData: rows,
+		getId: row => row.id,
+		getChildren: (row) => row.children
+	})
+
 	const columns: ColumnDescriptor<TestNode, unknown>[] = [
 		{
 			columnId: 'name',
@@ -47,9 +53,7 @@ export function RoadmapRoute() {
 	] as ColumnDescriptor<TestNode, unknown>[];
 
 	return (
-		<DataTable rows={rows}
-				   idSelector={(row) => row.id}
-				   getChildrenRows={(row) => row.children}
+		<DataTable rows={dataTableRows}
 				   possibleColumns={columns}
 				   initialColumnIds={['name']}
 				   tableKey={'test-table'} />
