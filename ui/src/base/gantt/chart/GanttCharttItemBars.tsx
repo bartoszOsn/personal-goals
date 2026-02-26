@@ -8,20 +8,27 @@ import { useMemo } from 'react';
 
 const yMargin = 4;
 const dragHandleWidth = 10;
+const ONE_DATE_BAR_WIDTH = 100;
 
 export function GanttCharttItemBars() {
 	const context = useGanttContext();
 	const flattenedItems = useMemo(() => flatItems(context.props.items), [context.props.items]);
 
-	return context.rows.map(row => {
-		const item = flattenedItems.find(item => item.id === row.id);
+	return (
+		<>
+			{
+				context.rows.map(row => {
+					const item = flattenedItems.find(item => item.id === row.id);
 
-		if (!item) {
-			return null;
-		}
+					if (!item) {
+						return null;
+					}
 
-		return <Bar item={item} row={row} />;
-	});
+					return <Bar item={item} row={row} />;
+				})
+			}
+		</>
+	)
 }
 
 function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) {
@@ -30,14 +37,14 @@ function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) 
 	const startDrag = useDrag();
 
 	let actualStart = item.start;
-	let actualEnd = item.end.add({ days: 1 });
+	let actualEnd = item.end?.add({ days: 1 });
 
 	if ('draggedItems' in context.dragData && context.dragData.draggedItems.includes(item)) {
 		if (context.dragData.status === 'dragging' || context.dragData.status === 'dragging-left') {
-			actualStart = actualStart.add(context.dragData.current.since(context.dragData.start));
+			actualStart = actualStart?.add(context.dragData.current.since(context.dragData.start));
 		}
 		if (context.dragData.status === 'dragging' || context.dragData.status === 'dragging-right') {
-			actualEnd = actualEnd.add(context.dragData.current.since(context.dragData.start));
+			actualEnd = actualEnd?.add(context.dragData.current.since(context.dragData.start));
 		}
 	}
 
@@ -70,22 +77,47 @@ function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) 
 		startDrag(xDate, getDragItems(), 'dragging-right');
 	}
 
+
+	if (!actualStart && !actualEnd) {
+		return null;
+	}
+
+	const x = actualStart
+	? dateToPixelPos(actualStart)
+		: dateToPixelPos(actualEnd!) - ONE_DATE_BAR_WIDTH;
+
+	const width = actualEnd
+		? dateToPixelPos(actualEnd) - x
+		: ONE_DATE_BAR_WIDTH;
+
+	const transparent = `color(from var(--mantine-color-${item.color}-3) srgb r g b / 0)`;
+	const startColor = actualStart ? `var(--mantine-color-${item.color}-3)` : transparent;
+	const endColor = actualEnd ? `var(--mantine-color-${item.color}-3)` : transparent;
+
+	const id = `${context.props.ganttKey}-bar-item-fill-gradient-${item.id}`;
+
 	return (
 		<>
-			<rect x={dateToPixelPos(actualStart)}
+			<defs>
+				<linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id={id}>
+					<stop offset="0%" style={{ stopColor: startColor}} />
+					<stop offset="100%" style={{ stopColor: endColor}} />
+				</linearGradient>
+			</defs>
+			<rect x={x}
 				  y={row.top + yMargin}
-				  width={dateToPixelPos(actualEnd) - dateToPixelPos(actualStart)}
+				  width={width}
 				  height={row.height - yMargin * 2}
 				  onMouseDown={onMouseDownMain}
 				  style={{
-					  fill: `var(--mantine-color-${item.color}-3)`,
+					  fill: `url(#${id})`,
 					  rx: 4,
-					  cursor: context.props.changeDates ? 'grab' : 'pointer'
-				  }} />
+					  cursor: context.props.changeDates ? 'grab' : 'pointer',
+				  } as any} />
 			{
-				context.props.changeDates && (
+				context.props.changeDates && actualStart && actualEnd && (
 					<>
-						<rect x={dateToPixelPos(actualStart) - dragHandleWidth}
+						<rect x={x - dragHandleWidth}
 							  y={row.top + yMargin}
 							  width={dragHandleWidth}
 							  height={row.height - yMargin * 2}
@@ -94,7 +126,7 @@ function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) 
 								  fill: 'transparent',
 								  cursor: 'w-resize'
 							  }} />
-						<rect x={dateToPixelPos(actualEnd)}
+						<rect x={x + width}
 							  y={row.top + yMargin}
 							  width={dragHandleWidth}
 							  height={row.height - yMargin * 2}

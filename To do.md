@@ -3,7 +3,7 @@
 1. ✅ Non-editable columns on gantt and data table.
 2. Roadmap view with objectives, KRs and tasks on one gantt chart.
     - ✅ Gantt must support child items.
-    - Gantt must support items without or with only one date.
+    - ✅ Gantt must support items without or with only one date.
     - Gantt must support timeboxes
     - Gantt must support links between items
     - Option to add warning on gantt - When task dates are outside of assigned sprint (small ! icon at to right top of a bar with a tooltip)

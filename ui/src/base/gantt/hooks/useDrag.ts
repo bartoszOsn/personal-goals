@@ -42,7 +42,9 @@ export function useDrag() {
 			}
 			const diff = pos.since(newDragData.start);
 			const optimisticDates: Map<string, GanttNewItemDates> = new Map(
-				newDragData.draggedItems.map(item => [item.id, {
+				newDragData.draggedItems
+					.filter((item): item is GanttItem<unknown> & Required<Pick<GanttItem<unknown>, 'start' | 'end'>> => !!item.start && !!item.end)
+					.map(item => [item.id, {
 					startDate: type === 'dragging' || type === 'dragging-left' ? item.start.add(diff) : item.start,
 					endDate: type === 'dragging' || type === 'dragging-right' ? item.end.add(diff) : item.end,
 				}] as const)

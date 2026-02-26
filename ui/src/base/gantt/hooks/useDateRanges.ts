@@ -6,19 +6,34 @@ import { isPlainDate } from '@personal-okr/shared';
 export function useDateRanges() {
 	const context = useGanttContext();
 	const sortedItems = useMemo(
-		() => [...context.props.items].sort((a, b) => Temporal.PlainDate.compare(a.start, b.start)),
+		() => [...context.props.items].sort((a, b) => {
+			if (!a.start) {
+				return -1;
+			}
+
+			if (!b.start) {
+				return 1;
+			}
+
+			return Temporal.PlainDate.compare(a.start, b.start);
+		}),
 		[context.props.items]
 	);
 	const pixelPerMillis = context.zoomLevel.pixelsPerDay / (1000 * 60 * 60 * 24);
 
 	const startDate = useMemo(
-		() => sortedItems[0].start.subtract({ days: 10 }),
+		() => (sortedItems.map(i => i.start).filter(Boolean)[0] ?? Temporal.Now.plainDateISO()).subtract({ days: 10 }),
 		[sortedItems]
 	);
 	const endDate = useMemo(
 		() => {
-			const lastItemEndDate = sortedItems[sortedItems.length - 1].end;
+			const lastItemEndDate = sortedItems.map(i => i.start).filter(Boolean)[sortedItems.length - 1];
 			const screensEndDate = startDate.add({ milliseconds: context.chartViewportWidth / pixelPerMillis });
+
+			if (!lastItemEndDate) {
+				return screensEndDate;
+			}
+
 			return isPlainDate(lastItemEndDate).after(screensEndDate) ? lastItemEndDate.add({ days: 10 }) : screensEndDate;
 		},
 		[context.chartViewportWidth, pixelPerMillis, sortedItems, startDate]

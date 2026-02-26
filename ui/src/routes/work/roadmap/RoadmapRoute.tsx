@@ -32,6 +32,29 @@ export function RoadmapRoute() {
 					children: []
 				},
 				{
+					id: '3.3',
+					data: 'Child without start',
+					color: 'gray',
+					end: Temporal.PlainDate.from('2025-01-07'),
+					linksInto: [],
+					children: []
+				},
+				{
+					id: '3.4',
+					data: 'Child without end',
+					color: 'gray',
+					start: Temporal.PlainDate.from('2025-01-07'),
+					linksInto: [],
+					children: []
+				},
+				{
+					id: '3.5',
+					data: 'Child without dates',
+					color: 'gray',
+					linksInto: [],
+					children: []
+				},
+				{
 					id: '3.2',
 					data: 'Child-parent',
 					color: 'gray',
