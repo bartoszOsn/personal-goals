@@ -1,0 +1,15 @@
+.rich-text-editor {
+    border-color: transparent;
+}
+
+.rich-text-editor:focus-within {
+    border-color: var(--mantine-color-gray-4);
+}
+
+.mantine-RichTextEditor-toolbar {
+    display: none;
+}
+
+.rich-text-editor:focus-within .mantine-RichTextEditor-toolbar {
+    display: flex;
+}

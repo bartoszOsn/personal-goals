@@ -6,6 +6,7 @@ export function useTaskModal() {
 	return (taskId: string) => modals.openModal({
 		withCloseButton: false,
 		size: '100%',
+		mih: '100%',
 		children: <TaskModal taskId={taskId} />
 	});
 }

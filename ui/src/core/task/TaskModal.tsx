@@ -8,6 +8,7 @@ import { taskStatusDataType } from '@/core/taskStatusDataType';
 import { type TaskStatusDTO } from '@personal-okr/shared';
 import { sprintDataType } from '@/core/sprintDataType';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
+import { RichTextEditor } from '@/base/rich-text/RichTextEditor';
 
 export function TaskModal({ taskId }: { taskId: string }) {
 	const taskQuery = useTaskQuery(taskId);
@@ -67,6 +68,15 @@ export function TaskModal({ taskId }: { taskId: string }) {
 		});
 	};
 
+	const onChangeTaskDescription = async (newDescription: string) => {
+		await updateTaskMutation.mutateAsync({
+			id: taskId,
+			request: {
+				description: newDescription
+			}
+		})
+	}
+
 	if (taskQuery.isPending || !taskQuery.data) {
 		return <TaskModalSkeleton />;
 	}
@@ -115,7 +125,9 @@ export function TaskModal({ taskId }: { taskId: string }) {
 									  onChange={onKeyResultChange} />
 						</Stack>
 					</Group>
-					<textarea style={{ width: '100%' }} />
+					<RichTextEditor content={taskQuery.data.description}
+									placeholder='Description'
+									onChangeThrottle={onChangeTaskDescription} />
 				</Stack>
 			</Modal.Body>
 		</>

@@ -16,3 +16,7 @@
     - KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
 8. Update page title and favicon
 9. Handle somehow the fact that after years there will be too much data to display on gantt chart. Filtering on roadmap as well?
+10. Change this "data view" bullshit into simple react composition:
+    - ColumnDescription takes render function
+    - change dataTypes into components
+    - Add maybe some utils for inplacing, but it's handled at the dataType component level.
