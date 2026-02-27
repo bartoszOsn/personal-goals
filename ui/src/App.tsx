@@ -7,14 +7,17 @@ import { router } from '@/router.tsx';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { queryClient } from '@/api/queryClient';
+import { ModalsProvider } from '@mantine/modals';
 
 
 export function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<MantineProvider>
-				<Notifications />
-				<RouterProvider router={router} />
+				<ModalsProvider>
+					<Notifications />
+					<RouterProvider router={router} />
+				</ModalsProvider>
 			</MantineProvider>
 		</QueryClientProvider>
 	);

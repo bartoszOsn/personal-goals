@@ -1,5 +1,5 @@
-import { Button, Group, Stack, Title } from '@mantine/core';
-import { IconPlus, IconTrash } from '@tabler/icons-react';
+import { ActionIcon, Button, Group, Stack, Title, Tooltip } from '@mantine/core';
+import { IconFileInvoice, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks';
 import { stringDataType } from '@/base/data-type';
 import type { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
@@ -12,12 +12,14 @@ import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 import { sprintDataType } from '@/core/sprintDataType';
 import { useState } from 'react';
 import { useDataTableRows } from '@/base/data-table';
+import { useTaskModal } from '@/core/task/useTaskModal';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
 	const createTaskMutation = useCreateTaskMutation();
 	const updateTaskMutation = useUpdateTaskMutation();
 	const deleteTaskMutation = useDeleteTasksMutation();
+	const openTaskDialog = useTaskModal();
 	const [selected, setSelected] = useState<TaskDTO[]>([]);
 
 	const onCreate = () => {
@@ -101,6 +103,21 @@ export function TasksRoute() {
 	};
 
 	const columns: ColumnDescriptor<TaskDTO, any>[] = [
+		{
+			columnId: 'openTaskModal',
+			columnName: 'Open',
+			columnType: {
+				Presenter: ({ value: task }) => (
+					<Tooltip label='Open task'>
+						<ActionIcon size='xs' color='gray' onClick={() => openTaskDialog(task.id)}>
+							<IconFileInvoice />
+						</ActionIcon>
+					</Tooltip>
+				),
+				Editor: () => { throw new Error('Not implemented') }
+			},
+			select: (task: TaskDTO) => task,
+		},
 		{
 			columnId: 'name',
 			columnName: 'Task',

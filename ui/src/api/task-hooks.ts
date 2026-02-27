@@ -9,6 +9,14 @@ export function useTasksQuery() {
 	})
 }
 
+export function useTaskQuery(taskId: string) {
+	return useQuery({
+		queryKey: ['tasks', taskId],
+		queryFn: () => http.get<TaskListDTO>('/api/work/task')
+			.then(list => list.tasks.find(task => task.id === taskId)!)
+	}); // TODO: add endpoint for fetching single task.
+}
+
 export function useCreateTaskMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({

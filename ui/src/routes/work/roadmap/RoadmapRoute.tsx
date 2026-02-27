@@ -1,103 +1,41 @@
 import { type ColumnDescriptor } from '@/base/data-table';
 import { stringDataType } from '@/base/data-type';
 import { Gantt, type GanttItem } from '@/base/gantt';
-import { Temporal } from 'temporal-polyfill';
+import { Group, Stack } from '@mantine/core';
+import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
+import type { KeyResultDTO, ObjectiveDTO, TaskDTO } from '@personal-okr/shared';
 
 export function RoadmapRoute() {
-	const rows: GanttItem<string>[] = [
-		{
-			id: '1',
-			data: 'Standalone 1',
-			color: 'gray',
-			start: Temporal.PlainDate.from('2025-01-01'),
-			end: Temporal.PlainDate.from('2025-01-02'),
-			linksInto: [],
-			children: []
-		},
-		{
-			id: '3',
-			data: 'Root Parent',
-			color: 'gray',
-			start: Temporal.PlainDate.from('2025-01-05'),
-			end: Temporal.PlainDate.from('2025-01-10'),
-			linksInto: [],
-			children: [
-				{
-					id: '3.1',
-					data: 'Child 1',
-					color: 'gray',
-					start: Temporal.PlainDate.from('2025-01-06'),
-					end: Temporal.PlainDate.from('2025-01-07'),
-					linksInto: [],
-					children: []
-				},
-				{
-					id: '3.3',
-					data: 'Child without start',
-					color: 'gray',
-					end: Temporal.PlainDate.from('2025-01-07'),
-					linksInto: [],
-					children: []
-				},
-				{
-					id: '3.4',
-					data: 'Child without end',
-					color: 'gray',
-					start: Temporal.PlainDate.from('2025-01-07'),
-					linksInto: [],
-					children: []
-				},
-				{
-					id: '3.5',
-					data: 'Child without dates',
-					color: 'gray',
-					linksInto: [],
-					children: []
-				},
-				{
-					id: '3.2',
-					data: 'Child-parent',
-					color: 'gray',
-					start: Temporal.PlainDate.from('2025-01-08'),
-					end: Temporal.PlainDate.from('2025-01-09'),
-					linksInto: [],
-					children: [{
-						id: '3.2.1',
-						data: 'Grandchild 1',
-						color: 'gray',
-						start: Temporal.PlainDate.from('2025-01-09'),
-						end: Temporal.PlainDate.from('2025-01-10'),
-						linksInto: [],
-						children: []
-					}]
-				}
-			]
-		},
-		{
-			id: '2',
-			data: 'Standalone 2',
-			color: 'gray',
-			start: Temporal.PlainDate.from('2025-01-01'),
-			end: Temporal.PlainDate.from('2025-01-02'),
-			linksInto: [],
-			children: []
-		}
-	];
+	const {loading, ganttItems} = useRoadmapGanttItems();
 
-	const columns: ColumnDescriptor<GanttItem<string>, string>[] = [
+	const columns: ColumnDescriptor<GanttItem<ObjectiveDTO | KeyResultDTO | TaskDTO>, string>[] = [
 		{
 			columnId: 'name',
 			columnName: 'Name',
-			select: (row) => row.data,
+			select: (row) => {
+				return row.data.name
+			},
 			columnType: stringDataType,
 			hierarchyColumn: true,
 		}
 	];
 
 	return (
-		<Gantt items={rows}
-			   possibleColumns={columns}
-			   initialColumnIds={['name']}
-			   ganttKey={'roadmap-gantt'} />
+		<Stack w="100%" h="100vh" p="lg" style={{ overflow: 'hidden' }}>
+			<Group>
+				Here will be some buttons
+			</Group>
+			{
+				loading && <div>Loading...</div>
+			}
+			{
+				ganttItems.length > 0 && <Gantt items={ganttItems}
+												containerProps={{ w: '100%', style: { flexGrow: 1, flexShrink: 0 } }}
+												ganttKey={'sprint-settings'}
+												possibleColumns={columns}
+												initialColumnIds={['name']}
+				/>
+			}
+		</Stack>
 	);
 }
