@@ -2,11 +2,19 @@
 	"name": "@personal-okr/shared",
 	"version": "0.0.0",
 	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "tsc --watch"
+	},
 	"exports": {
-		".": "./src/index.ts"
+		".": {
+			"types": "./types/index.d.ts",
+			"default": "./dist/index.js"
+		}
 	},
 	"devDependencies": {
-		"temporal-polyfill": "^0.3.0"
+		"temporal-polyfill": "^0.3.0",
+		"typescript": "~5.9.3"
 	},
 	"packageManager": "yarn@4.9.2"
 }

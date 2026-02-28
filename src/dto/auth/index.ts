@@ -1,3 +1,3 @@
-export * from './LoginRequestDTO';
-export * from './RegisterRequestDTO';
-export * from './AuthResponseDTO';
+export * from './LoginRequestDTO.js';
+export * from './RegisterRequestDTO.js';
+export * from './AuthResponseDTO.js';

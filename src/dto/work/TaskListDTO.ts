@@ -1,4 +1,4 @@
-import type { TaskDTO } from './TaskDTO';
+import { TaskDTO } from './TaskDTO.js';
 
 export interface TaskListDTO {
 	readonly tasks: TaskDTO[];

@@ -1,5 +1,5 @@
-import type { KeyResultDTO } from './KeyResultDTO';
-import type { ObjectiveDeadlineDTO } from './ObjectiveDeadlineDTO';
+import { KeyResultDTO } from './KeyResultDTO.js';
+import { ObjectiveDeadlineDTO } from './ObjectiveDeadlineDTO.js';
 
 export interface ObjectiveDTO {
 	id: string;

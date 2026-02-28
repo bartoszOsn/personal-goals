@@ -1,4 +1,4 @@
-import type { SprintListDTO } from './SprintListDTO';
+import { SprintListDTO } from './SprintListDTO.js';
 
 export type SprintListChangeDTO = SprintChangeSuccessDTO | SprintChangeOverlapFailureDTO;
 

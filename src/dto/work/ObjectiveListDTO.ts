@@ -1,4 +1,4 @@
-import type { ObjectiveDTO } from './ObjectiveDTO';
+import { ObjectiveDTO } from './ObjectiveDTO.js';
 
 export interface ObjectiveListDTO {
 	objectives: ObjectiveDTO[];
