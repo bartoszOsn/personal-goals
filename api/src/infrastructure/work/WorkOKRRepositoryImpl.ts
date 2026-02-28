@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { WorkOKRRepository } from '../../app/work/WorkOKRRepository';
 import { User } from 'src/domain/auth/model/User';
 import { KeyResult, KeyResultId } from 'src/domain/work/model/KeyResult';
@@ -11,6 +11,8 @@ import { Repository } from 'typeorm';
 import { KeyResultEntity } from './entity/KeyResultEntity';
 import { UserEntity } from '../auth/entity/UserEntity';
 import { WorkOKREntityConverter } from './WorkOKREntityConverter';
+import { ProgressCalculationType } from '../../domain/work/model/ProgressCalculationType';
+import { TaskEntity } from './entity/TaskEntity';
 
 @Injectable()
 export class WorkOKRRepositoryImpl extends WorkOKRRepository {
@@ -86,6 +88,7 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 		} as unknown as ObjectiveEntity;
 		entity.description ??= '';
 		entity.progress ??= 0;
+		entity.progressCalculationType ??= 'PERCENTAGE';
 		const updated = await this.keyResultRepository.save(entity);
 		const updatedEntity = await this.keyResultRepository.findOne({
 			where: {
@@ -108,8 +111,41 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 		id: KeyResultId,
 		request: KeyResultRequest
 	): Promise<KeyResult> {
+		// Fetch existing key result to check calculation type
+		const existingEntity = await this.keyResultRepository.findOne({
+			where: {
+				id: id.id,
+				objective: {
+					user: { id: user.id.id }
+				}
+			},
+			relations: {
+				associatedTasks: true
+			}
+		});
+
+		if (!existingEntity) {
+			throw new NotFoundException('Key result not found');
+		}
+
+		// Determine the calculation type (use new one if provided, otherwise use existing)
+		const calculationType =
+			request.progressCalculationType !== null
+				? this.workOKREntityConverter['toProgressCalculationTypeEntity'](
+						request.progressCalculationType
+					)
+				: existingEntity.progressCalculationType;
+
+		// Validate progress update: only allow manual progress update for YES_NO and PERCENTAGE
+		if (request.progress !== null && calculationType === 'TASKS') {
+			throw new BadRequestException(
+				'Cannot manually update progress when calculation type is TASKS. Progress is calculated from associated tasks.'
+			);
+		}
+
 		const entity = this.workOKREntityConverter.toKeyResultEntity(request);
 		entity.id = id.id;
+
 		await this.keyResultRepository.update(
 			{
 				objective: {
@@ -118,7 +154,23 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 			},
 			entity
 		);
-		return this.workOKREntityConverter.fromKeyResultEntity(entity);
+
+		// Fetch updated entity with relations
+		const updatedEntity = await this.keyResultRepository.findOne({
+			where: {
+				id: id.id
+			},
+			relations: {
+				associatedTasks: true,
+				objective: true
+			}
+		});
+
+		if (!updatedEntity) {
+			throw new NotFoundException('Key result not found');
+		}
+
+		return this.workOKREntityConverter.fromKeyResultEntity(updatedEntity);
 	}
 
 	async deleteKeyResult(user: User, id: KeyResultId): Promise<void> {

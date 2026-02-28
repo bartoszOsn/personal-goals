@@ -23,6 +23,9 @@ export class KeyResultEntity {
 	@Column()
 	progress: number;
 
+	@Column()
+	progressCalculationType: 'YES_NO' | 'PERCENTAGE' | 'TASKS';
+
 	@ManyToOne(() => ObjectiveEntity, (objective) => objective.keyResults, {
 		onDelete: 'CASCADE'
 	})

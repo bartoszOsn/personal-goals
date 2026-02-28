@@ -17,6 +17,8 @@ import { User } from '../../domain/auth/model/User';
 import { UserEntity } from '../auth/entity/UserEntity';
 import { KeyResultRequest } from '../../domain/work/model/KeyResultRequest';
 import { TaskId } from '../../domain/work/model/TaskId';
+import { ProgressCalculationType } from '../../domain/work/model/ProgressCalculationType';
+import { TaskStatus } from '../../domain/work/model/TaskStatus';
 
 @Injectable()
 export class WorkOKREntityConverter {
@@ -72,6 +74,13 @@ export class WorkOKREntityConverter {
 			entity.progress = request.progress.progress;
 		}
 
+		if (request.progressCalculationType != null) {
+			entity.progressCalculationType =
+				this.toProgressCalculationTypeEntity(
+					request.progressCalculationType
+				);
+		}
+
 		return entity;
 	}
 
@@ -80,8 +89,16 @@ export class WorkOKREntityConverter {
 			new KeyResultId(kr.id),
 			kr.name,
 			new RichText(kr.description),
-			new KeyResultProgress(kr.progress),
-			kr.associatedTasks.map((task) => new TaskId(task.id))
+			new KeyResultProgress(
+				kr.progress,
+				this.fromProgressCalculationTypeEntity(
+					kr.progressCalculationType
+				)
+			),
+			kr.associatedTasks.map((task) => new TaskId(task.id)),
+			kr.associatedTasks.map((task) =>
+				this.fromTaskStatusEntity(task.status)
+			)
 		);
 	}
 
@@ -134,6 +151,51 @@ export class WorkOKREntityConverter {
 				return 'Q4';
 			default:
 				throw new UnreachableError(quarter);
+		}
+	}
+
+	private fromProgressCalculationTypeEntity(
+		type: KeyResultEntity['progressCalculationType']
+	): ProgressCalculationType {
+		switch (type) {
+			case 'YES_NO':
+				return ProgressCalculationType.YES_NO;
+			case 'PERCENTAGE':
+				return ProgressCalculationType.PERCENTAGE;
+			case 'TASKS':
+				return ProgressCalculationType.TASKS;
+			default:
+				throw new UnreachableError(type);
+		}
+	}
+
+	private toProgressCalculationTypeEntity(
+		type: ProgressCalculationType
+	): KeyResultEntity['progressCalculationType'] {
+		switch (type) {
+			case ProgressCalculationType.YES_NO:
+				return 'YES_NO';
+			case ProgressCalculationType.PERCENTAGE:
+				return 'PERCENTAGE';
+			case ProgressCalculationType.TASKS:
+				return 'TASKS';
+			default:
+				throw new UnreachableError(type);
+		}
+	}
+
+	private fromTaskStatusEntity(status: string): TaskStatus {
+		switch (status) {
+			case 'TODO':
+				return TaskStatus.TODO;
+			case 'IN_PROGRESS':
+				return TaskStatus.IN_PROGRESS;
+			case 'DONE':
+				return TaskStatus.DONE;
+			case 'FAILED':
+				return TaskStatus.FAILED;
+			default:
+				throw new UnreachableError(status as never);
 		}
 	}
 }

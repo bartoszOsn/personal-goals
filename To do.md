@@ -13,8 +13,8 @@
 5. Filtering tasks.
 6. Editing description in objective, KR and task.
 7. Custom rich text documents.
-8. Objectives with calculated progress based on KRs.
-    - KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
+8. ✅ Objectives with calculated progress based on KRs.
+    - ✅ KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
 9. Update page title and favicon
 10. Handle somehow the fact that after years there will be too much data to display on gantt chart. Filtering on roadmap as well?
 11. ✅ Change this "data view" bullshit into simple react composition:

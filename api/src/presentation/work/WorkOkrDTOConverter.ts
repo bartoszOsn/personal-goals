@@ -23,6 +23,7 @@ import {
 	ObjectiveDTO
 } from '@personal-okr/shared';
 import { TaskId } from '../../domain/work/model/TaskId';
+import { ProgressCalculationType } from '../../domain/work/model/ProgressCalculationType';
 
 @Injectable()
 export class WorkOkrDTOConverter {
@@ -51,7 +52,10 @@ export class WorkOkrDTOConverter {
 			id: keyResult.id.id,
 			name: keyResult.name,
 			description: keyResult.description.markdown,
-			progress: keyResult.progress.progress,
+			progress: keyResult.getCalculatedProgress(),
+			progressCalculationType: this.toProgressCalculationTypeDTO(
+				keyResult.progress.calculationType
+			),
 			associatedTaskIds: keyResult.associatedTasks.map(
 				(taskId) => taskId.id
 			)
@@ -69,12 +73,26 @@ export class WorkOkrDTOConverter {
 	}
 
 	fromKeyResultRequestDTO(request: KeyResultRequestDTO): KeyResultRequest {
+		const progressCalculationType =
+			request.progressCalculationType !== undefined
+				? this.fromProgressCalculationTypeDTO(
+						request.progressCalculationType
+					)
+				: null;
+
+		const progress =
+			request.progress !== undefined && progressCalculationType !== null
+				? new KeyResultProgress(
+						request.progress,
+						progressCalculationType
+					)
+				: null;
+
 		return new KeyResultRequest(
 			request.name ?? null,
 			request.description ? new RichText(request.description) : null,
-			request.progress !== undefined
-				? new KeyResultProgress(request.progress)
-				: null,
+			progress,
+			progressCalculationType,
 			this.fromKeyResultAssociatedTasksRequestDTO(request.associatedTasks)
 		);
 	}
@@ -155,5 +173,35 @@ export class WorkOkrDTOConverter {
 						: undefined
 				)
 		);
+	}
+
+	private toProgressCalculationTypeDTO(
+		type: ProgressCalculationType
+	): KeyResultDTO['progressCalculationType'] {
+		switch (type) {
+			case ProgressCalculationType.YES_NO:
+				return 'YES_NO';
+			case ProgressCalculationType.PERCENTAGE:
+				return 'PERCENTAGE';
+			case ProgressCalculationType.TASKS:
+				return 'TASKS';
+			default:
+				throw new UnreachableError(type);
+		}
+	}
+
+	private fromProgressCalculationTypeDTO(
+		type: NonNullable<KeyResultRequestDTO['progressCalculationType']>
+	): ProgressCalculationType {
+		switch (type) {
+			case 'YES_NO':
+				return ProgressCalculationType.YES_NO;
+			case 'PERCENTAGE':
+				return ProgressCalculationType.PERCENTAGE;
+			case 'TASKS':
+				return ProgressCalculationType.TASKS;
+			default:
+				throw new UnreachableError(type);
+		}
 	}
 }
