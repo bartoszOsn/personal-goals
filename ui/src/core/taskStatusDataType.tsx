@@ -24,14 +24,14 @@ export const taskStatusDataType: DataType<TaskStatusDTO> = {
 	),
 	Editor: ({ value, onCancel, onSubmit }) => {
 		const combobox = useCombobox({
-			opened: true
+			defaultOpened: true,
 		});
 
 		return <Combobox store={combobox}
 						 onOptionSubmit={(value) => onSubmit(value as TaskStatusDTO)}
 						onDismiss={onCancel} width='max-content'>
 			<Combobox.Target>
-				<Badge color={statusToColor[value]}
+				<Badge color={statusToColor[value]} tabIndex={0} autoFocus
 					   style={{ cursor: 'pointer' }}>{statusToName[value]}</Badge>
 			</Combobox.Target>
 			<Combobox.Dropdown>

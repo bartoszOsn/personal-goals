@@ -1,8 +1,7 @@
 import { ActionIcon, Button, Group, Stack, Title, Tooltip } from '@mantine/core';
 import { IconFileInvoice, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks';
-import { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
-import { taskStatusDataType } from '@/core/taskStatusDataType';
+import { TaskDTO } from '@personal-okr/shared';
 import { DataTable } from '@/base/data-table/api/DataTable';
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
@@ -13,6 +12,7 @@ import { useTaskModal } from '@/core/task/useTaskModal';
 import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
 import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
 import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
+import { TaskStatusInplace } from '@/core/task/inplace/TaskStatusInplace';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -36,16 +36,6 @@ export function TasksRoute() {
 		if (!isEqual) {
 			setSelected(newSelection);
 		}
-	};
-
-	const onUpdateStatus = async (task: TaskDTO, newStatus: TaskStatusDTO) => {
-		if (task.status === newStatus) {
-			return;
-		}
-
-		await updateTaskMutation.mutateAsync({
-			id: task.id, request: { status: newStatus }
-		});
 	};
 
 	const onUpdateKeyResult = async (task: TaskDTO, newKeyResultId: string | undefined) => {
@@ -72,17 +62,13 @@ export function TasksRoute() {
 		{
 			columnId: 'openTaskModal',
 			columnName: 'Open',
-			columnType: {
-				Presenter: ({ value: task }) => (
-					<Tooltip label='Open task'>
-						<ActionIcon size='xs' color='gray' onClick={() => openTaskDialog(task.id)}>
-							<IconFileInvoice />
-						</ActionIcon>
-					</Tooltip>
-				),
-				Editor: () => { throw new Error('Not implemented') }
-			},
-			select: (task: TaskDTO) => task,
+			render: (task) => (
+				<Tooltip label='Open task'>
+					<ActionIcon size='xs' color='gray' onClick={() => openTaskDialog(task.id)}>
+						<IconFileInvoice />
+					</ActionIcon>
+				</Tooltip>
+			)
 		},
 		{
 			columnId: 'name',
@@ -92,9 +78,7 @@ export function TasksRoute() {
 		{
 			columnId: 'status',
 			columnName: 'Status',
-			columnType: taskStatusDataType,
-			select: (task: TaskDTO) => task.status,
-			onChange: onUpdateStatus
+			render: (task) => <TaskStatusInplace task={task} />
 		},
 		{
 			columnId: 'startDate',
