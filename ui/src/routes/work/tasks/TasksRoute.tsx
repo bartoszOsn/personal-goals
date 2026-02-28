@@ -3,7 +3,6 @@ import { IconFileInvoice, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task/task-hooks';
 import { DataTable } from '@/base/data-table/api/DataTable';
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
-import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 import { sprintDataType } from '@/core/sprintDataType';
 import { useState } from 'react';
 import { useDataTableRows } from '@/base/data-table';
@@ -13,8 +12,8 @@ import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
 import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
 import { TaskStatusInplace } from '@/core/task/inplace/TaskStatusInplace';
 import { Task } from '@/models/Task';
-import { KeyResultId } from '@/models/KeyResult';
 import { SprintId } from '@/models/Sprint';
+import { TaskKeyResultInplace } from '@/core/task/inplace/TaskKeyResultInplace';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -38,18 +37,6 @@ export function TasksRoute() {
 		if (!isEqual) {
 			setSelected(newSelection);
 		}
-	};
-
-	const onUpdateKeyResult = async (task: Task, newKeyResultId: KeyResultId | undefined) => {
-		if (task.keyResultId === newKeyResultId) {
-			return;
-		}
-
-		await updateTaskMutation.mutateAsync({
-			id: task.id, request: {
-				keyResultId: newKeyResultId ?? null
-			}
-		});
 	};
 
 	const onUpdateSprints = async (task: Task, sprints: SprintId[]) => {
@@ -95,9 +82,7 @@ export function TasksRoute() {
 		{
 			columnId: 'keyResultId',
 			columnName: 'Key result',
-			columnType: keyResultIdDataType,
-			select: (task: Task) => task.keyResultId,
-			onChange: onUpdateKeyResult
+			render: (task) => <TaskKeyResultInplace task={task} />
 		},
 		{
 			columnId: 'sprints',
