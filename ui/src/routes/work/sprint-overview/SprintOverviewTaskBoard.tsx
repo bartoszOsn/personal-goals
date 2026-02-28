@@ -3,11 +3,12 @@ import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
 import { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
 import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
-import { DataView, stringDataType } from '@/base/data-type';
+import { DataView } from '@/base/data-type';
 import { Temporal } from 'temporal-polyfill';
 import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 import { sprintDataType } from '@/core/sprintDataType';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
+import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
 
 export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 	const tasksQuery = useTasksQuery();
@@ -48,9 +49,8 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 
 	const renderCard = (task: TaskDTO) => {
 		return <Stack gap={0}>
-			<DataView value={task.name}
-					  onChange={(newName) => taskUpdateMutation.mutateAsync({ id: task.id, request: { name: newName } }).then()}
-					  dataType={stringDataType} />
+			<Space h='md' />
+			<TaskNameInplace task={task} textProps={{ fw: 'bold' }} />
 			<Space h="sm" />
 			<Group wrap="nowrap" justify="space-between">
 				<Text size="xs" c="dimmed">Start date</Text>
