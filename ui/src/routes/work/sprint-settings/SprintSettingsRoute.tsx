@@ -1,4 +1,4 @@
-import { Group, Stack } from '@mantine/core';
+import { Group, Stack, Text } from '@mantine/core';
 import { Gantt, GanttItem } from '@/base/gantt';
 import { useSprintQuery, useUpdateSprintsMutation } from '@/api/sprint/sprint-hooks';
 import { SprintChangeOverlapFailureDTO } from '@personal-okr/shared';
@@ -12,7 +12,6 @@ import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { HttpError } from '@/base/http';
 import { notifications } from '@mantine/notifications';
 import { ColumnDescriptor } from '@/base/data-table';
-import { stringDataType } from '@/base/data-type';
 import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 import { Sprint, SprintChangeRequest, SprintId } from '@/models/Sprint';
 
@@ -54,8 +53,7 @@ export function SprintSettingsRoute() {
 		{
 			columnId: 'name',
 			columnName: 'Name',
-			select: (sprint: GanttItem<Sprint>) => getSprintName(sprint.data),
-			columnType: stringDataType
+			render: (sprint) => <Text inherit>{getSprintName(sprint.data)}</Text>
 		},
 		{
 			columnId: 'startDate',

@@ -20,4 +20,4 @@
 11. Change this "data view" bullshit into simple react composition:
     - ColumnDescription takes render function
     - change dataTypes into components
-    - Add maybe some utils for inplacing, but it's handled at the dataType component level.
+    - ✅ Add maybe some utils for inplacing, but it's handled at the dataType component level.
