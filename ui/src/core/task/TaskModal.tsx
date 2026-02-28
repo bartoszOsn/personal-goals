@@ -31,7 +31,7 @@ export function TaskModal({ taskId }: { taskId: TaskId }) {
 		<>
 			<Modal.Header>
 				<Modal.Title>
-					<TaskNameInplace task={taskQuery.data} textProps={{ size: 'lg'}} />
+					<TaskNameInplace task={taskQuery.data} textProps={{ inherit: false, size: 'xl'}} />
 				</Modal.Title>
 				<Modal.CloseButton />
 			</Modal.Header>
