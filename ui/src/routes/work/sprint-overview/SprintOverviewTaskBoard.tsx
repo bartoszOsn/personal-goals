@@ -9,6 +9,8 @@ import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType
 import { sprintDataType } from '@/core/sprintDataType';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
+import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
+import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
 
 export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 	const tasksQuery = useTasksQuery();
@@ -52,23 +54,15 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 			<Space h='md' />
 			<TaskNameInplace task={task} textProps={{ fw: 'bold' }} />
 			<Space h="sm" />
-			<Group wrap="nowrap" justify="space-between">
-				<Text size="xs" c="dimmed">Start date</Text>
-				<Text size="xs" c="dimmed">End date</Text>
-			</Group>
-			<Group wrap="nowrap" justify="space-between">
-				<DataView value={task.startDate ? Temporal.PlainDate.from(task.startDate) : null}
-						  onChange={(newDate) => taskUpdateMutation.mutateAsync({
-							  id: task.id,
-							  request: { startDate: newDate ? { value: newDate.toString() } : undefined }
-						  }).then()}
-						  dataType={plainDateDataType} />
-				<DataView value={task.endDate ? Temporal.PlainDate.from(task.endDate) : null}
-						  onChange={(newDate) => taskUpdateMutation.mutateAsync({
-							  id: task.id,
-							  request: { endDate: newDate ? { value: newDate.toString() } : undefined }
-						  }).then()}
-						  dataType={plainDateDataType} />
+			<Group gap='xl'>
+				<Stack gap={0}>
+					<Text size="xs" c="dimmed">Start date</Text>
+					<TaskStartDateInplace task={task} />
+				</Stack>
+				<Stack gap={0}>
+					<Text size="xs" c="dimmed">End date</Text>
+					<TaskEndDateInplace task={task} />
+				</Stack>
 			</Group>
 			<Space h="sm" />
 			<Text size="xs" c="dimmed">Sprints</Text>
