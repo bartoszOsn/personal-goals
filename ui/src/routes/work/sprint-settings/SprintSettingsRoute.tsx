@@ -7,13 +7,13 @@ import { quarterToColor } from '@/core/quarterToColor';
 import { getSprintName } from '@/core/getSprintName';
 import { useState } from 'react';
 import { DeleteSprintsButton } from '@/routes/work/sprint-settings/DeleteSprintsButton';
-import { Temporal } from 'temporal-polyfill';
 import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { HttpError } from '@/base/http';
 import { notifications } from '@mantine/notifications';
 import { ColumnDescriptor } from '@/base/data-table';
-import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 import { Sprint, SprintChangeRequest, SprintId } from '@/models/Sprint';
+import { SprintStartDateInplace } from '@/core/sprint/inplace/SprintStartDateInplace';
+import { SprintEndDateInplace } from '@/core/sprint/inplace/SprintEndDateInplace';
 
 export function SprintSettingsRoute() {
 	const sprints = useSprintQuery();
@@ -49,7 +49,7 @@ export function SprintSettingsRoute() {
 			})
 	}
 
-	const possibleColumns: ColumnDescriptor<GanttItem<Sprint>, any>[] = [
+	const possibleColumns: ColumnDescriptor<GanttItem<Sprint>>[] = [
 		{
 			columnId: 'name',
 			columnName: 'Name',
@@ -58,34 +58,12 @@ export function SprintSettingsRoute() {
 		{
 			columnId: 'startDate',
 			columnName: 'Start date',
-			select: (sprint: GanttItem<Sprint>) => Temporal.PlainDate.from(sprint.data.startDate),
-			columnType: plainDateDataType,
-			onChange: async (sprintItem, newDate) => {
-				const request: SprintChangeRequest = {
-					[sprintItem.id]: {
-						newStartDate: newDate,
-						newEndDate: sprintItem.end!
-					}
-				}
-
-				await updateSprints.mutateAsync(request)
-			}
+			render: (sprint) => <SprintStartDateInplace sprint={sprint.data} />
 		},
 		{
 			columnId: 'endDate',
 			columnName: 'End date',
-			select: (sprint: GanttItem<Sprint>) => Temporal.PlainDate.from(sprint.data.endDate),
-			columnType: plainDateDataType,
-			onChange: async (sprintItem, newDate) => {
-				const request: SprintChangeRequest = {
-					[sprintItem.id]: {
-						newStartDate: sprintItem.start!,
-						newEndDate: newDate
-					}
-				}
-
-				await updateSprints.mutateAsync(request)
-			}
+			render: (sprint) => <SprintEndDateInplace sprint={sprint.data} />
 		}
 	]
 

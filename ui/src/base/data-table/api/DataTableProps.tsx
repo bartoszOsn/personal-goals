@@ -6,7 +6,7 @@ import { RefObject } from 'react';
 
 export interface DataTableProps<TData, TId> {
 	rows: DataTableRow<TData, TId>[];
-	possibleColumns: ColumnDescriptor<TData, unknown>[];
+	possibleColumns: ColumnDescriptor<TData>[];
 	initialColumnIds: string[];
 	tableKey: string;
 	storage?: PropertyStorage;

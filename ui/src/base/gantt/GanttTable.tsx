@@ -73,7 +73,7 @@ export function GanttTable<TData>() {
 	return (
 		<Box w={rem(300)} h="100%">
 			<DataTable rows={dataTableRows}
-					   possibleColumns={context.props.possibleColumns as ColumnDescriptor<GanttItem<TData>, unknown>[]}
+					   possibleColumns={context.props.possibleColumns as ColumnDescriptor<GanttItem<TData>>[]}
 					   initialColumnIds={context.props.initialColumnIds}
 					   tableKey={`${context.props.ganttKey}-table`}
 					   tableProps={{ stickyHeader: true }}

@@ -3,20 +3,20 @@ import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
 
 export interface DataTableCustomizationPopoverProps<TData> {
-	allPossibleColumns: ColumnDescriptor<TData, unknown>[];
-	visibleColumns: ColumnDescriptor<TData, unknown>[];
-	setColumns: (columns: ColumnDescriptor<TData, unknown>[]) => void;
+	allPossibleColumns: ColumnDescriptor<TData>[];
+	visibleColumns: ColumnDescriptor<TData>[];
+	setColumns: (columns: ColumnDescriptor<TData>[]) => void;
 }
 
 export function DataTableCustomizationPopover<TData>(props: DataTableCustomizationPopoverProps<TData>) {
 	const visible = props.allPossibleColumns.filter(c => props.visibleColumns.includes(c));
 	const hidden = props.allPossibleColumns.filter(c => !props.visibleColumns.includes(c));
 
-	const showColumn = (column: ColumnDescriptor<TData, unknown>) => {
+	const showColumn = (column: ColumnDescriptor<TData>) => {
 		props.setColumns([...props.visibleColumns, column]);
 	};
 
-	const hideColumn = (column: ColumnDescriptor<TData, unknown>) => {
+	const hideColumn = (column: ColumnDescriptor<TData>) => {
 		props.setColumns(props.visibleColumns.filter(c => c !== column));
 	};
 

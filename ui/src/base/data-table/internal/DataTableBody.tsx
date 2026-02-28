@@ -1,6 +1,5 @@
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
 import { ActionIcon, Group, Space, Table } from '@mantine/core';
-import { DataView } from '@/base/data-type';
 import { useRowSelection } from '@/base/data-table/internal/useRowSelection';
 import { useEffect, useMemo } from 'react';
 import { useClickOutside, usePrevious } from '@mantine/hooks';
@@ -10,7 +9,7 @@ import { PER_LEVEL_OFFSET } from '@/base/data-table/internal/PER_LEVEL_OFFSET';
 import { deepEqual } from '@tanstack/react-router';
 
 export interface DataTableBodyProps<TData, TId> {
-	columns: ColumnDescriptor<TData, unknown>[];
+	columns: ColumnDescriptor<TData>[];
 	rowInfo: FlattenRowsInfo<TData, TId>;
 	onSelectionChange: (rows: TData[]) => void;
 	toggleRow: (row: TId) => void;
@@ -83,14 +82,7 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 												)
 											}
 											{
-												'columnType' in column
-												 	? (
-														<DataView value={column.select(row.data)}
-																  onChange={column.onChange ? (newValue) => column.onChange!(row.data, newValue) : undefined}
-																  readonly={!column.onChange}
-																  dataType={column.columnType} />
-													)
-													: column.render(row.data)
+												column.render(row.data)
 											}
 										</Group>
 									</Table.Td>

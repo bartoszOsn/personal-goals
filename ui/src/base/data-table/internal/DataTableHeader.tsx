@@ -7,10 +7,10 @@ import { useState } from 'react';
 
 interface DataTableHeaderProps<TData> {
 	tableHeaderProps?: TableTheadProps;
-	columns: ColumnDescriptor<TData, unknown>[];
-	allPossibleColumns: ColumnDescriptor<TData, unknown>[];
-	setColumns: (columns: ColumnDescriptor<TData, unknown>[]) => void;
-	onStartDrag: (column: ColumnDescriptor<TData, unknown>, e: React.MouseEvent) => void;
+	columns: ColumnDescriptor<TData>[];
+	allPossibleColumns: ColumnDescriptor<TData>[];
+	setColumns: (columns: ColumnDescriptor<TData>[]) => void;
+	onStartDrag: (column: ColumnDescriptor<TData>, e: React.MouseEvent) => void;
 }
 
 export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {

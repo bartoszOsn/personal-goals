@@ -1,7 +1,7 @@
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
 
 export interface DataTableColgroupProps<TData> {
-	columns: ColumnDescriptor<TData, unknown>[];
+	columns: ColumnDescriptor<TData>[];
 	widths: Map<string, number>;
 	tableWidth: number;
 }

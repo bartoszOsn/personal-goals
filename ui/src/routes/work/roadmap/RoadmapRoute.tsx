@@ -8,7 +8,7 @@ import { Task } from '@/models/Task';
 export function RoadmapRoute() {
 	const {loading, ganttItems} = useRoadmapGanttItems();
 
-	const columns: ColumnDescriptor<GanttItem<ObjectiveDTO | KeyResultDTO | Task>, string>[] = [
+	const columns: ColumnDescriptor<GanttItem<ObjectiveDTO | KeyResultDTO | Task>>[] = [
 		{
 			columnId: 'name',
 			columnName: 'Name',

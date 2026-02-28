@@ -37,7 +37,7 @@ export function TasksRoute() {
 		}
 	};
 
-	const columns: ColumnDescriptor<Task, unknown>[] = [
+	const columns: ColumnDescriptor<Task>[] = [
 		{
 			columnId: 'openTaskModal',
 			columnName: 'Open',

@@ -8,7 +8,7 @@ export interface GanttProps<TData> {
 	containerProps?: GroupProps;
 	setSelectedItemIds?: (itemIds: string[]) => void;
 	changeDates?: (items: Map<string, GanttNewItemDates>) => Promise<void>;
-	possibleColumns: ColumnDescriptor<GanttItem<TData>, string>[];
+	possibleColumns: ColumnDescriptor<GanttItem<TData>>[];
 	initialColumnIds: string[];
 	ganttKey: string;
 }

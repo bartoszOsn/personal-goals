@@ -36,7 +36,7 @@ export function useTableResizing<TData>(props: UseTableResizingProps) {
 	return {
 		loading,
 		columnWidths: columnWidthsMap,
-		startDrag: (column: ColumnDescriptor<TData, unknown>, e: React.MouseEvent) => {
+		startDrag: (column: ColumnDescriptor<TData>, e: React.MouseEvent) => {
 			if (props.tableRef.current === null) {
 				return;
 			}
