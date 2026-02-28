@@ -1,7 +1,6 @@
 import { ColumnDescriptor } from '@/base/data-table';
-import { stringDataType } from '@/base/data-type';
 import { Gantt, GanttItem } from '@/base/gantt';
-import { Group, Stack } from '@mantine/core';
+import { Group, Stack, Text } from '@mantine/core';
 import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
 import { KeyResultDTO, ObjectiveDTO } from '@personal-okr/shared';
 import { Task } from '@/models/Task';
@@ -13,11 +12,8 @@ export function RoadmapRoute() {
 		{
 			columnId: 'name',
 			columnName: 'Name',
-			select: (row) => {
-				return row.data.name
-			},
-			columnType: stringDataType,
 			hierarchyColumn: true,
+			render: (item) => <Text inherit>{item.data.name}</Text>
 		}
 	];
 
