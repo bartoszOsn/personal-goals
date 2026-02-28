@@ -1,20 +1,21 @@
 import { Badge, Group, Paper, Progress, Skeleton, Text, ThemeIcon } from '@mantine/core';
 import { IconArrowForwardUp } from '@tabler/icons-react';
-import { useSprintQuery } from '@/api/sprint-hooks';
+import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { getSprintName } from '@/core/getSprintName';
 import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
+import { SprintId } from '@/models/Sprint';
 
-export function SprintOverviewSprintInfo({ sprintId }: { sprintId: string }) {
+export function SprintOverviewSprintInfo({ sprintId }: { sprintId: SprintId }) {
 	const sprintQuery = useSprintQuery();
-	const currentSprint = sprintQuery.data?.sprints.find(s => s.id === sprintId);
+	const currentSprint = sprintQuery.data?.find(s => s.id === sprintId);
 
 	if (sprintQuery.isPending || !currentSprint) {
 		return <Skeleton w='100%' h={70} />
 	}
 
-	const start = Temporal.PlainDate.from(currentSprint.startDate);
-	const end = Temporal.PlainDate.from(currentSprint.endDate);
+	const start = currentSprint.startDate;
+	const end = currentSprint.endDate;
 
 	const timeStatus = getTimeStatus(start, end);
 	const color = colorMap[timeStatus];

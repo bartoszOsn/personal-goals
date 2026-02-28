@@ -2,7 +2,7 @@ import { Task } from '@/models/Task.ts';
 import { ComponentProps } from 'react';
 import { InplaceTextDisplay } from '@/base/inplace-editor/api/primitive/display/InplaceTextDisplay.tsx';
 import { InplaceMultiSelectEdit } from '@/base/inplace-editor/api/primitive/edit/InplaceMultiSelectEdit.tsx';
-import { useSprintQuery } from '@/api/sprint-hooks.ts';
+import { useSprintQuery } from '@/api/sprint/sprint-hooks.ts';
 import { SprintId } from '@/models/Sprint.ts';
 import { InplaceEditor } from '@/base/inplace-editor/api/InplaceEditor.tsx';
 import { InplaceEditorDisplay } from '@/base/inplace-editor/api/InplaceEditorDisplay.tsx';
@@ -21,9 +21,9 @@ export function TaskSprintInplace({task, textProps, multiSelectProps}: TaskSprin
 	const taskMutation = useUpdateTaskMutation();
 	const sprintQuery = useSprintQuery();
 
-	const allSprints = sprintQuery.data?.sprints ?? [];
+	const allSprints = sprintQuery.data ?? [];
 	const selectedSprints = allSprints
-		.filter(sprint => task.sprintIds.includes(sprint.id as SprintId)); // TODO: There won't be an error after creating sprint model.
+		.filter(sprint => task.sprintIds.includes(sprint.id));
 
 	const selectedSprintIds = selectedSprints.map(s => s.id);
 

@@ -1,20 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { SprintBulkCreateRequestDTO, SprintChangeRequestDTO, SprintListDTO } from '@personal-okr/shared';
-import { http } from '@/base/http';
+import { createSprints, deleteSprints, getSprints, updateSprints } from '@/api/sprint/sprint-request';
+import { dtoToSprints, sprintBulkCreateRequestToDTO, sprintChangeRequestToDTO } from './sprint-converters';
+import { SprintBulkCreateRequest, SprintChangeRequest, SprintId } from '@/models/Sprint';
 
 export function useSprintQuery() {
 	return useQuery({
 		queryKey: ['sprint'],
-		queryFn: () => http.get<SprintListDTO>('/api/time/sprint'),
+		queryFn: () => getSprints().then(dtoToSprints),
 	})
 }
 
 export function useCreateSprintsMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async (request: SprintBulkCreateRequestDTO) => {
-			await http.post('/api/time/sprint', request);
-		},
+		mutationFn: (request: SprintBulkCreateRequest) => createSprints(sprintBulkCreateRequestToDTO(request)),
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: ['sprint']});
 		}
@@ -24,9 +23,7 @@ export function useCreateSprintsMutation() {
 export function useUpdateSprintsMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async (request: SprintChangeRequestDTO) => {
-			await http.put('/api/time/sprint', request);
-		},
+		mutationFn: (request: SprintChangeRequest) => updateSprints(sprintChangeRequestToDTO(request)),
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: ['sprint']});
 		}
@@ -36,9 +33,7 @@ export function useUpdateSprintsMutation() {
 export function useDeleteSprintsMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async (ids: string[]) => {
-			await http.delete(`/api/time/sprint/${ids.join(',')}`);
-		},
+		mutationFn: async (ids: SprintId[]) => deleteSprints(ids),
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: ['sprint']});
 		}

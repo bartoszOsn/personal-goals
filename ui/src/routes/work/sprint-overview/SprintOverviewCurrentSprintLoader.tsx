@@ -1,5 +1,5 @@
 import { Group, Skeleton, Stack } from '@mantine/core';
-import { useSprintQuery } from '@/api/sprint-hooks';
+import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { useEffect } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
@@ -18,16 +18,16 @@ export function SprintOverviewCurrentSprintLoader() {
 			return;
 		}
 
-		const currentSprint = sprints.data.sprints
+		const currentSprint = sprints.data
 			.find(sprint => {
-				const start = Temporal.PlainDate.from(sprint.startDate);
-				const end = Temporal.PlainDate.from(sprint.endDate);
+				const start = sprint.startDate;
+				const end = sprint.endDate;
 				const now = Temporal.Now.plainDateISO();
 
 				return isPlainDate(now).afterOrEqual(start) && isPlainDate(now).beforeOrEqual(end);
 			});
 
-		const navigateTo = currentSprint ?? sprints.data.sprints[0];
+		const navigateTo = currentSprint ?? sprints.data[0];
 
 		if (navigateTo) {
 			navigate({ to: '/work/sprint-overview/{-$sprintId}', params: { sprintId: navigateTo.id }})

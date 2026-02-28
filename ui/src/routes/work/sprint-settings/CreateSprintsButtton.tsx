@@ -1,23 +1,25 @@
 import { Button, List, Modal, NumberInput, Select, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useCreateSprintsMutation } from '@/api/sprint-hooks';
+import { useCreateSprintsMutation } from '@/api/sprint/sprint-hooks';
 import { useState } from 'react';
-import { SprintBulkCreateRequestDTO, SprintCreateOverlapFailureDTO } from '@personal-okr/shared';
+import { SprintCreateOverlapFailureDTO } from '@personal-okr/shared';
 import { DateInput } from '@mantine/dates';
 import { HttpError } from '@/base/http';
 import { notifications } from '@mantine/notifications';
 import { getSprintName } from '@/core/getSprintName';
 import { Temporal } from 'temporal-polyfill';
+import { SprintBulkCreateRequest, SprintDuration } from '@/models/Sprint';
+import { dtoToSprint } from '@/api/sprint/sprint-converters';
 
 export function CreateSprintsButtton() {
 	const [opened, { open, close }] = useDisclosure(false);
 	const mutation = useCreateSprintsMutation();
 	const [startDate, setStartDate] = useState(Temporal.Now.plainDateISO());
 	const [numberOfSprints, setNumberOfSprints] = useState(1);
-	const [sprintDuration, setSprintDuration] = useState<SprintBulkCreateRequestDTO['sprintDuration']>('two-weeks');
+	const [sprintDuration, setSprintDuration] = useState<SprintDuration>(SprintDuration.TWO_WEEKS);
 
-	const request: SprintBulkCreateRequestDTO = {
-		startDate: startDate.toString(),
+	const request: SprintBulkCreateRequest = {
+		startDate: startDate,
 		numberOfSprints,
 		sprintDuration,
 	};
@@ -34,7 +36,7 @@ export function CreateSprintsButtton() {
 								<Text>Could not create sprints due to overlap with an existing sprint(s):</Text>
 								<List>
 									{err.data.conflictingSprings.sprints.map(sprint => (
-										<List.Item key={sprint.id}>{getSprintName(sprint)}</List.Item>
+										<List.Item key={sprint.id}>{getSprintName(dtoToSprint(sprint))}</List.Item>
 									))}
 								</List>
 							</>
@@ -63,12 +65,12 @@ export function CreateSprintsButtton() {
 					<Select
 						label="Sprint duration"
 						data={[
-							{ value: 'week', label: 'Week' },
-							{ value: 'two-weeks', label: 'Two weeks' },
-							{ value: 'month', label: 'Month' },
+							{ value: SprintDuration.WEEK, label: 'Week' },
+							{ value: SprintDuration.TWO_WEEKS, label: 'Two weeks' },
+							{ value: SprintDuration.MONTH, label: 'Month' },
 						]}
 						value={sprintDuration}
-						onChange={value => value && setSprintDuration(value as SprintBulkCreateRequestDTO['sprintDuration'])}
+						onChange={value => value && setSprintDuration(value as SprintDuration)}
 					/>
 					<Button onClick={submit} loading={mutation.isPending}>Create sprints</Button>
 				</Stack>
