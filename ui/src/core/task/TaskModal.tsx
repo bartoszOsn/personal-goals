@@ -20,8 +20,8 @@ export function TaskModal({ taskId }: { taskId: TaskId }) {
 			request: {
 				description: newDescription
 			}
-		})
-	}
+		});
+	};
 
 	if (taskQuery.isPending || !taskQuery.data) {
 		return <TaskModalSkeleton />;
@@ -29,15 +29,17 @@ export function TaskModal({ taskId }: { taskId: TaskId }) {
 
 	return (
 		<>
-			<Modal.Header>
-				<Modal.Title>
-					<TaskNameInplace task={taskQuery.data} textProps={{ inherit: false, size: 'xl'}} />
+			<Modal.Header style={{ gap: 'var(--mantine-spacing-md)'}}>
+				<Modal.Title flex={1}>
+					<TaskNameInplace task={taskQuery.data}
+									 textProps={{ inherit: false, size: 'xl' }}
+									 inputProps={{ w: '100%' }} />
 				</Modal.Title>
 				<Modal.CloseButton />
 			</Modal.Header>
 			<Modal.Body>
-				<Stack gap='xl'>
-					<Group gap='xl' align='flex-start'>
+				<Stack gap="xl">
+					<Group gap="xl" align="flex-start">
 						<Stack gap="xs">
 							<Text size="sm" c="dimmed">Start date</Text>
 							<TaskStartDateInplace task={taskQuery.data} />
@@ -60,7 +62,7 @@ export function TaskModal({ taskId }: { taskId: TaskId }) {
 						</Stack>
 					</Group>
 					<RichTextEditor content={taskQuery.data.description}
-									placeholder='Description'
+									placeholder="Description"
 									onChangeThrottle={onChangeTaskDescription} />
 				</Stack>
 			</Modal.Body>
