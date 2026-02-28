@@ -1,14 +1,14 @@
-import { TaskDTO } from '@personal-okr/shared';
-import { useUpdateTaskMutation } from '@/api/task-hooks.ts';
+import { useUpdateTaskMutation } from '@/api/task/task-hooks.ts';
 import { InplaceEditor } from '@/base/inplace-editor/api/InplaceEditor.tsx';
 import { InplaceEditorDisplay } from '@/base/inplace-editor/api/InplaceEditorDisplay.tsx';
 import { InplaceTextDisplay } from '@/base/inplace-editor/api/primitive/display/InplaceTextDisplay.tsx';
 import { InplaceEditorEdit } from '@/base/inplace-editor/api/InplaceEditorEdit.tsx';
 import { InplaceTextInputEdit } from '@/base/inplace-editor/api/primitive/edit/InplaceTextInputEdit.tsx';
 import { ComponentProps } from 'react';
+import { Task } from '@/models/Task';
 
 export interface TaskNameInplaceProps {
-	task: TaskDTO;
+	task: Task;
 	textProps?: ComponentProps<typeof InplaceTextDisplay>
 	inputProps?: ComponentProps<typeof InplaceTextInputEdit>;
 }

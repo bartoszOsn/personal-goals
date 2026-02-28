@@ -1,5 +1,4 @@
-import { TaskDTO } from '@personal-okr/shared';
-import { useUpdateTaskMutation } from '@/api/task-hooks.ts';
+import { useUpdateTaskMutation } from '@/api/task/task-hooks.ts';
 import { InplaceEditor } from '@/base/inplace-editor/api/InplaceEditor.tsx';
 import { InplaceEditorDisplay } from '@/base/inplace-editor/api/InplaceEditorDisplay.tsx';
 import { InplaceTextDisplay } from '@/base/inplace-editor/api/primitive/display/InplaceTextDisplay.tsx';
@@ -7,9 +6,10 @@ import { InplaceEditorEdit } from '@/base/inplace-editor/api/InplaceEditorEdit.t
 import { ComponentProps } from 'react';
 import { InplacePlainDateEdit } from '@/base/inplace-editor/api/primitive/edit/InplacePlainDateEdit.tsx';
 import { Temporal } from 'temporal-polyfill';
+import { Task } from '@/models/Task';
 
 export interface TaskStartDateInplaceProps {
-	task: TaskDTO;
+	task: Task;
 	textProps?: ComponentProps<typeof InplaceTextDisplay>
 	inputProps?: ComponentProps<typeof InplacePlainDateEdit>;
 }
@@ -21,7 +21,7 @@ export function TaskStartDateInplace({ task, textProps, inputProps }: TaskStartD
 		taskMutation.mutate({
 			id: task.id,
 			request: {
-				startDate: value === null ? { empty: true } : { value: value.toString() }
+				startDate: value
 			}
 		});
 	}
@@ -31,13 +31,13 @@ export function TaskStartDateInplace({ task, textProps, inputProps }: TaskStartD
 			<InplaceEditorDisplay>
 				{
 					task.startDate
-					? <InplaceTextDisplay {...textProps}>{task.startDate}</InplaceTextDisplay>
+					? <InplaceTextDisplay {...textProps}>{task.startDate.toLocaleString()}</InplaceTextDisplay>
 						: <InplaceTextDisplay c='dimmed' {...textProps}>No date</InplaceTextDisplay>
 				}
 
 			</InplaceEditorDisplay>
 			<InplaceEditorEdit>
-				<InplacePlainDateEdit {...inputProps} defaultValue={task.startDate} onValueSubmit={onValueSubmit} />
+				<InplacePlainDateEdit {...inputProps} defaultValue={task.startDate?.toJSON()} onValueSubmit={onValueSubmit} />
 			</InplaceEditorEdit>
 		</InplaceEditor>
 	)

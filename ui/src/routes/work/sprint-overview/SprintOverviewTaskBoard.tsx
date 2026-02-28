@@ -1,7 +1,6 @@
 import { Board } from '@/base/board/api/Board.tsx';
 import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
-import { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
-import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks.ts';
+import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task/task-hooks.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { DataView } from '@/base/data-type';
 import { sprintDataType } from '@/core/sprintDataType';
@@ -9,29 +8,31 @@ import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
 import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
 import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
+import { SprintId } from '@/models/Sprint';
+import { Task, TaskStatus } from '@/models/Task';
 
-export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
+export function SprintOverviewTaskBoard({ sprintId }: { sprintId: SprintId }) {
 	const tasksQuery = useTasksQuery();
 	const taskUpdateMutation = useUpdateTaskMutation();
 	const taskCreateMutation = useCreateTaskMutation();
-	const columns: BoardColumn<TaskStatusDTO>[] = [
+	const columns: BoardColumn<TaskStatus>[] = [
 		{
-			columnId: 'TODO',
+			columnId: TaskStatus.TODO,
 			name: 'To do',
 			color: 'gray'
 		},
 		{
-			columnId: 'IN_PROGRESS',
+			columnId: TaskStatus.IN_PROGRESS,
 			name: 'In progress',
 			color: 'blue'
 		},
 		{
-			columnId: 'FAILED',
+			columnId: TaskStatus.FAILED,
 			name: 'Failed',
 			color: 'red'
 		},
 		{
-			columnId: 'DONE',
+			columnId: TaskStatus.DONE,
 			name: 'Done',
 			color: 'green'
 		}
@@ -45,9 +46,9 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 		</Group>;
 	}
 
-	const tasksBySprint = tasksQuery.data.tasks.filter(task => task.sprintIds.includes(sprintId));
+	const tasksBySprint = tasksQuery.data.filter(task => task.sprintIds.includes(sprintId));
 
-	const renderCard = (task: TaskDTO) => {
+	const renderCard = (task: Task) => {
 		return <Stack gap={0}>
 			<Space h='md' />
 			<TaskNameInplace task={task} textProps={{ fw: 'bold' }} />
@@ -75,20 +76,20 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 			<DataView value={task.keyResultId}
 					  onChange={(newKeyResultId) => taskUpdateMutation.mutateAsync({
 						  id: task.id,
-						  request: { keyResult: newKeyResultId ? { value: newKeyResultId } : { empty: true } }
+						  request: { keyResultId: newKeyResultId ?? null }
 					  }).then()}
 					  dataType={keyResultIdDataType} />
 		</Stack>;
 	};
 
-	const onColumnChange = async (item: TaskDTO, newStatus: TaskStatusDTO) => {
+	const onColumnChange = async (item: Task, newStatus: TaskStatus) => {
 		await taskUpdateMutation.mutateAsync({
 			id: item.id,
 			request: { status: newStatus }
 		});
 	};
 
-	const onCreateTask = async (status: TaskStatusDTO) => {
+	const onCreateTask = async (status: TaskStatus) => {
 		await taskCreateMutation.mutateAsync({
 			status: status,
 			sprintIds: [sprintId]

@@ -1,0 +1,1 @@
+export type KeyResultId = string & { __brand: 'KeyResultId' };

@@ -3,12 +3,13 @@ import { stringDataType } from '@/base/data-type';
 import { Gantt, GanttItem } from '@/base/gantt';
 import { Group, Stack } from '@mantine/core';
 import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
-import { KeyResultDTO, ObjectiveDTO, TaskDTO } from '@personal-okr/shared';
+import { KeyResultDTO, ObjectiveDTO } from '@personal-okr/shared';
+import { Task } from '@/models/Task';
 
 export function RoadmapRoute() {
 	const {loading, ganttItems} = useRoadmapGanttItems();
 
-	const columns: ColumnDescriptor<GanttItem<ObjectiveDTO | KeyResultDTO | TaskDTO>, string>[] = [
+	const columns: ColumnDescriptor<GanttItem<ObjectiveDTO | KeyResultDTO | Task>, string>[] = [
 		{
 			columnId: 'name',
 			columnName: 'Name',

@@ -1,16 +1,18 @@
 import { Group, Modal, Stack, Text } from '@mantine/core';
-import { useTaskQuery, useUpdateTaskMutation } from '@/api/task-hooks.ts';
+import { useTaskQuery, useUpdateTaskMutation } from '@/api/task/task-hooks.ts';
 import { TaskModalSkeleton } from '@/core/task/TaskModalSkeleton.tsx';
 import { DataView, stringDataType } from '@/base/data-type';
 import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 import { Temporal } from 'temporal-polyfill';
 import { taskStatusDataType } from '@/core/taskStatusDataType';
-import { TaskStatusDTO } from '@personal-okr/shared';
 import { sprintDataType } from '@/core/sprintDataType';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 import { RichTextEditor } from '@/base/rich-text/RichTextEditor';
+import { TaskId, TaskStatus } from '@/models/Task';
+import { SprintId } from '@/models/Sprint';
+import { KeyResultId } from '@/models/KeyResult';
 
-export function TaskModal({ taskId }: { taskId: string }) {
+export function TaskModal({ taskId }: { taskId: TaskId }) {
 	const taskQuery = useTaskQuery(taskId);
 	const updateTaskMutation = useUpdateTaskMutation();
 
@@ -27,7 +29,7 @@ export function TaskModal({ taskId }: { taskId: string }) {
 		await updateTaskMutation.mutateAsync({
 			id: taskId,
 			request: {
-				startDate: newDate ? { value: newDate.toString() } : { empty: true }
+				startDate: newDate
 			}
 		});
 	};
@@ -36,12 +38,12 @@ export function TaskModal({ taskId }: { taskId: string }) {
 		await updateTaskMutation.mutateAsync({
 			id: taskId,
 			request: {
-				endDate: newDate ? { value: newDate.toString() } : { empty: true }
+				endDate: newDate
 			}
 		});
 	};
 
-	const onStatusChange = async (newStatus: TaskStatusDTO) => {
+	const onStatusChange = async (newStatus: TaskStatus) => {
 		await updateTaskMutation.mutateAsync({
 			id: taskId,
 			request: {
@@ -50,7 +52,7 @@ export function TaskModal({ taskId }: { taskId: string }) {
 		});
 	};
 
-	const onSprintChange = async (newSprintIds: string[]) => {
+	const onSprintChange = async (newSprintIds: SprintId[]) => {
 		await updateTaskMutation.mutateAsync({
 			id: taskId,
 			request: {
@@ -59,11 +61,11 @@ export function TaskModal({ taskId }: { taskId: string }) {
 		});
 	};
 
-	const onKeyResultChange = async (newKeyResultId: string | undefined) => {
+	const onKeyResultChange = async (newKeyResultId: KeyResultId | null) => {
 		await updateTaskMutation.mutateAsync({
 			id: taskId,
 			request: {
-				keyResult: newKeyResultId === undefined ? { empty: true } : { value: newKeyResultId }
+				keyResultId: newKeyResultId
 			}
 		});
 	};

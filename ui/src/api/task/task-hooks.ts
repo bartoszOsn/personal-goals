@@ -1,27 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { http } from '@/base/http';
-import { TaskRequestDTO, TaskListDTO } from '@personal-okr/shared';
+import { createTask, deleteTasks, getTask, getTasks, updateTask } from '@/api/task/task-request';
+import { dtoToTask, dtoToTasks, taskRequestToDTO } from '@/api/task/task-converters';
+import { TaskId, TaskRequest } from '@/models/Task';
 
 export function useTasksQuery() {
 	return useQuery({
 		queryKey: ['tasks'],
-		queryFn: () => http.get<TaskListDTO>('/api/work/task')
-	})
+		queryFn: () => getTasks()
+			.then(dtoToTasks)
+	});
 }
 
 export function useTaskQuery(taskId: string) {
 	return useQuery({
 		queryKey: ['tasks', taskId],
-		queryFn: () => http.get<TaskListDTO>('/api/work/task')
-			.then(list => list.tasks.find(task => task.id === taskId)!)
-	}); // TODO: add endpoint for fetching single task.
+		queryFn: () => getTask(taskId)
+			.then(dtoToTask)
+	});
 }
 
 export function useCreateTaskMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationKey: ['tasks', 'create'],
-		mutationFn: (request: TaskRequestDTO) => http.post('/api/work/task', request),
+		mutationFn: async (request: TaskRequest) => {
+			const dtoRequest = taskRequestToDTO(request);
+			await createTask(dtoRequest);
+		},
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks']})
 	})
 }
@@ -30,7 +35,7 @@ export function useUpdateTaskMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationKey: ['tasks', 'update'],
-		mutationFn: ({id, request}: { id: string, request: TaskRequestDTO }) => http.put(`/api/work/task/${id}`, request),
+		mutationFn: ({id, request}: { id: string, request: TaskRequest }) => updateTask(id, taskRequestToDTO(request)),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks']})
 	})
 }
@@ -39,7 +44,7 @@ export function useDeleteTasksMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationKey: ['tasks', 'delete'],
-		mutationFn: (ids: string[]) => http.delete(`/api/work/task/${ids.join(',')}`),
+		mutationFn: (ids: TaskId[]) => deleteTasks(ids),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks']})
 	})
 }

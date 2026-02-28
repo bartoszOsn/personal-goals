@@ -65,7 +65,7 @@ export function SprintSettingsRoute() {
 				const request: SprintChangeRequestDTO = {
 					[sprintItem.id]: {
 						newStartDate: newDate.toString(),
-						newEndDate: sprintItem.end.toString()
+						newEndDate: sprintItem.end!.toString()
 					}
 				}
 
@@ -80,7 +80,7 @@ export function SprintSettingsRoute() {
 			onChange: async (sprintItem, newDate) => {
 				const request: SprintChangeRequestDTO = {
 					[sprintItem.id]: {
-						newStartDate: sprintItem.start.toString(),
+						newStartDate: sprintItem.start!.toString(),
 						newEndDate: newDate.toString()
 					}
 				}

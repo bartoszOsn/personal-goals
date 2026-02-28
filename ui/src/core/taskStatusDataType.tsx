@@ -1,24 +1,24 @@
 import { DataType } from '@/base/data-type';
-import { TaskStatusDTO } from '@personal-okr/shared';
 import { Badge, ColorSwatch, Combobox, Group, MantineColor, Text, useCombobox } from '@mantine/core';
+import { TaskStatus } from '@/models/Task';
 
-const statusToName: Record<TaskStatusDTO, string> = {
-	TODO: 'To Do',
-	IN_PROGRESS: 'In Progress',
-	DONE: 'Done',
-	FAILED: 'Failed'
+const statusToName: Record<TaskStatus, string> = {
+	[TaskStatus.TODO]: 'To Do',
+	[TaskStatus.IN_PROGRESS]: 'In Progress',
+	[TaskStatus.DONE]: 'Done',
+	[TaskStatus.FAILED]: 'Failed'
 };
 
-const statusToColor: Record<TaskStatusDTO, MantineColor> = {
-	TODO: 'gray',
-	IN_PROGRESS: 'blue',
-	DONE: 'green',
-	FAILED: 'red'
+const statusToColor: Record<TaskStatus, MantineColor> = {
+	[TaskStatus.TODO]: 'gray',
+	[TaskStatus.IN_PROGRESS]: 'blue',
+	[TaskStatus.DONE]: 'green',
+	[TaskStatus.FAILED]: 'red'
 };
 
 const toCSSVar = (color: MantineColor) => `var(--mantine-color-${color}-5)`;
 
-export const taskStatusDataType: DataType<TaskStatusDTO> = {
+export const taskStatusDataType: DataType<TaskStatus> = {
 	Presenter: ({ value, onEdit }) => (
 		<Badge color={statusToColor[value]} onClick={onEdit} style={{ cursor: onEdit ? 'pointer' : 'default' }}>{statusToName[value]}</Badge>
 	),
@@ -28,7 +28,7 @@ export const taskStatusDataType: DataType<TaskStatusDTO> = {
 		});
 
 		return <Combobox store={combobox}
-						 onOptionSubmit={(value) => onSubmit(value as TaskStatusDTO)}
+						 onOptionSubmit={(value) => onSubmit(value as TaskStatus)}
 						onDismiss={onCancel} width='max-content'>
 			<Combobox.Target>
 				<Badge color={statusToColor[value]} tabIndex={0} autoFocus
@@ -36,7 +36,7 @@ export const taskStatusDataType: DataType<TaskStatusDTO> = {
 			</Combobox.Target>
 			<Combobox.Dropdown>
 				<Combobox.Options>
-					{(Object.entries(statusToName) as [TaskStatusDTO, string][]).map(([status, name]) => (
+					{(Object.entries(statusToName) as [TaskStatus, string][]).map(([status, name]) => (
 						<Combobox.Option key={status} value={status}>
 							<Group gap='xs'>
 								<ColorSwatch color={toCSSVar(statusToColor[status])} size={12} />

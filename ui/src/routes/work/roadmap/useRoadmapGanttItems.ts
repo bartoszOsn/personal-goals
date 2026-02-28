@@ -1,18 +1,19 @@
 import { useOkrQuery } from '@/api/okr-hooks.ts';
-import { useTasksQuery } from '@/api/task-hooks.ts';
+import { useTasksQuery } from '@/api/task/task-hooks.ts';
 import { useMemo } from 'react';
 import { GanttItem } from '@/base/gantt';
-import { KeyResultDTO, ObjectiveDeadlineDTO, ObjectiveDTO, TaskDTO } from '@personal-okr/shared';
+import { KeyResultDTO, ObjectiveDeadlineDTO, ObjectiveDTO } from '@personal-okr/shared';
 import { Temporal } from 'temporal-polyfill';
+import { Task } from '@/models/Task';
 
 export function useRoadmapGanttItems() {
 	const okrs = useOkrQuery();
 	const tasksQuery = useTasksQuery();
 
 	const objectives = okrs.data?.objectives ?? [];
-	const tasks = tasksQuery.data?.tasks ?? [];
+	const tasks = tasksQuery.data ?? [];
 
-	const ganttItems: GanttItem<ObjectiveDTO | KeyResultDTO | TaskDTO>[] = useMemo(() => {
+	const ganttItems: GanttItem<ObjectiveDTO | KeyResultDTO | Task>[] = useMemo(() => {
 		return [
 			...objectives.map((o) => objectiveToGanttItem(o, tasks)),
 			...tasks.filter(task => !task.keyResultId).map(taskToGanttItem)
@@ -25,7 +26,7 @@ export function useRoadmapGanttItems() {
 	}
 }
 
-function objectiveToGanttItem(objectiveDTO: ObjectiveDTO, tasks: TaskDTO[]): GanttItem<ObjectiveDTO | KeyResultDTO | TaskDTO> {
+function objectiveToGanttItem(objectiveDTO: ObjectiveDTO, tasks: Task[]): GanttItem<ObjectiveDTO | KeyResultDTO | Task> {
 	const [start, end] = getDatesFromDeadline(objectiveDTO.deadline);
 
 	return {
@@ -39,7 +40,7 @@ function objectiveToGanttItem(objectiveDTO: ObjectiveDTO, tasks: TaskDTO[]): Gan
 	};
 }
 
-function krToGanttItem(keyResultDTO: KeyResultDTO, tasks: TaskDTO[], parent: ObjectiveDTO): GanttItem<ObjectiveDTO | KeyResultDTO | TaskDTO> {
+function krToGanttItem(keyResultDTO: KeyResultDTO, tasks: Task[], parent: ObjectiveDTO): GanttItem<ObjectiveDTO | KeyResultDTO | Task> {
 	const [start, end] = getDatesFromDeadline(parent.deadline);
 
 	return {
@@ -47,7 +48,7 @@ function krToGanttItem(keyResultDTO: KeyResultDTO, tasks: TaskDTO[], parent: Obj
 		color: 'orange',
 		data: keyResultDTO,
 		children: keyResultDTO.associatedTaskIds.map(taskId => tasks.find(t => t.id === taskId))
-			.filter((task): task is TaskDTO => task !== undefined)
+			.filter((task): task is Task => task !== undefined)
 			.map(taskToGanttItem),
 		start,
 		end,
@@ -55,13 +56,13 @@ function krToGanttItem(keyResultDTO: KeyResultDTO, tasks: TaskDTO[], parent: Obj
 	};
 }
 
-function taskToGanttItem(task: TaskDTO): GanttItem<ObjectiveDTO | KeyResultDTO | TaskDTO> {
+function taskToGanttItem(task: Task): GanttItem<ObjectiveDTO | KeyResultDTO | Task> {
 	return {
 		id: task.id,
 		color: 'gray',
 		data: task,
-		start: task.startDate === undefined ? undefined : Temporal.PlainDate.from(task.startDate),
-		end: task.endDate === undefined ? undefined : Temporal.PlainDate.from(task.endDate),
+		start: task.startDate ?? undefined,
+		end: task.endDate ?? undefined,
 		children: [],
 		linksInto: []
 	};

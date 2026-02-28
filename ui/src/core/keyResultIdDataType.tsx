@@ -1,8 +1,9 @@
 import { DataType } from '@/base/data-type';
 import { ComboboxData, Select, Skeleton, Text } from '@mantine/core';
 import { useOkrQuery } from '@/api/okr-hooks.ts';
+import { KeyResultId } from '@/models/KeyResult';
 
-export const keyResultIdDataType: DataType<string | undefined> = {
+export const keyResultIdDataType: DataType<KeyResultId | null> = {
 	Presenter: ({ value, onEdit }) => {
 		const objectivesQuery = useOkrQuery();
 
@@ -13,7 +14,7 @@ export const keyResultIdDataType: DataType<string | undefined> = {
 		const kr = objectivesQuery.data?.objectives.flatMap(o => o.keyResults)
 			.find(kr => kr.id === value);
 
-		if (value === undefined || kr === undefined) {
+		if (value === null || kr === undefined) {
 			return <Text onClick={onEdit} inherit c="dimmed" style={{ cursor: onEdit ? 'pointer' : 'default' }}>No Key Result</Text>;
 		}
 
@@ -44,8 +45,8 @@ export const keyResultIdDataType: DataType<string | undefined> = {
 					allowDeselect
 					searchable
 					dropdownOpened={true}
-					onChange={(value) => onSubmit(value ?? undefined)}
-					onClear={() => onSubmit(undefined)}
+					onChange={(value) => onSubmit(value as KeyResultId ?? null)}
+					onClear={() => onSubmit(null)}
 					onBlur={onCancel} />
 		);
 	}

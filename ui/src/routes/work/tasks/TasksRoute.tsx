@@ -1,7 +1,6 @@
 import { ActionIcon, Button, Group, Stack, Title, Tooltip } from '@mantine/core';
 import { IconFileInvoice, IconPlus, IconTrash } from '@tabler/icons-react';
-import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks';
-import { TaskDTO } from '@personal-okr/shared';
+import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task/task-hooks';
 import { DataTable } from '@/base/data-table/api/DataTable';
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
@@ -13,6 +12,9 @@ import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
 import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
 import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
 import { TaskStatusInplace } from '@/core/task/inplace/TaskStatusInplace';
+import { Task } from '@/models/Task';
+import { KeyResultId } from '@/models/KeyResult';
+import { SprintId } from '@/models/Sprint';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -20,7 +22,7 @@ export function TasksRoute() {
 	const updateTaskMutation = useUpdateTaskMutation();
 	const deleteTaskMutation = useDeleteTasksMutation();
 	const openTaskDialog = useTaskModal();
-	const [selected, setSelected] = useState<TaskDTO[]>([]);
+	const [selected, setSelected] = useState<Task[]>([]);
 
 	const onCreate = () => {
 		createTaskMutation.mutate({});
@@ -30,7 +32,7 @@ export function TasksRoute() {
 		deleteTaskMutation.mutate(selected.map(i => i.id));
 	};
 
-	const onSelectionChange = (newSelection: TaskDTO[]) => {
+	const onSelectionChange = (newSelection: Task[]) => {
 		const isEqual = newSelection.length === selected.length && newSelection.every((t, i) => t.id === selected[i].id);
 
 		if (!isEqual) {
@@ -38,19 +40,19 @@ export function TasksRoute() {
 		}
 	};
 
-	const onUpdateKeyResult = async (task: TaskDTO, newKeyResultId: string | undefined) => {
+	const onUpdateKeyResult = async (task: Task, newKeyResultId: KeyResultId | undefined) => {
 		if (task.keyResultId === newKeyResultId) {
 			return;
 		}
 
 		await updateTaskMutation.mutateAsync({
 			id: task.id, request: {
-				keyResult: newKeyResultId === undefined ? { empty: true } : { value: newKeyResultId }
+				keyResultId: newKeyResultId ?? null
 			}
 		});
 	};
 
-	const onUpdateSprints = async (task: TaskDTO, sprints: string[]) => {
+	const onUpdateSprints = async (task: Task, sprints: SprintId[]) => {
 		await updateTaskMutation.mutateAsync({
 			id: task.id, request: {
 				sprintIds: sprints
@@ -58,7 +60,7 @@ export function TasksRoute() {
 		});
 	};
 
-	const columns: ColumnDescriptor<TaskDTO, any>[] = [
+	const columns: ColumnDescriptor<Task, any>[] = [
 		{
 			columnId: 'openTaskModal',
 			columnName: 'Open',
@@ -94,14 +96,14 @@ export function TasksRoute() {
 			columnId: 'keyResultId',
 			columnName: 'Key result',
 			columnType: keyResultIdDataType,
-			select: (task: TaskDTO) => task.keyResultId,
+			select: (task: Task) => task.keyResultId,
 			onChange: onUpdateKeyResult
 		},
 		{
 			columnId: 'sprints',
 			columnName: 'Sprints',
 			columnType: sprintDataType,
-			select: (task: TaskDTO) => task.sprintIds,
+			select: (task: Task) => task.sprintIds,
 			onChange: onUpdateSprints
 		}
 	];
@@ -109,7 +111,7 @@ export function TasksRoute() {
 	const initialColumnIds: string[] = ['name', 'status', 'startDate', 'endDate'];
 
 	const dataTableRows = useDataTableRows({
-		rawData: tasksQuery.data?.tasks ?? [],
+		rawData: tasksQuery.data ?? [],
 		getId: task => task.id,
 		getChildren: () => []
 	});

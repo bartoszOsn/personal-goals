@@ -2,8 +2,9 @@ import { DataType } from '@/base/data-type';
 import { ComboboxData, MultiSelect, Skeleton, Text } from '@mantine/core';
 import { useSprintQuery } from '@/api/sprint-hooks.ts';
 import { getSprintName } from '@/core/getSprintName.ts';
+import { SprintId } from '@/models/Sprint';
 
-export const sprintDataType: DataType<string[]> = {
+export const sprintDataType: DataType<SprintId[]> = {
 	Presenter: ({ value, onEdit }) => {
 		const sprintQuery = useSprintQuery();
 
@@ -12,7 +13,7 @@ export const sprintDataType: DataType<string[]> = {
 		}
 
 		const sprints = (sprintQuery.data?.sprints ?? [])
-			.filter(sprint => value.includes(sprint.id));
+			.filter(sprint => value.includes(sprint.id as SprintId)); // TODO: There won't be an error after creating sprint model.
 
 		if (sprints.length === 0) {
 			return <Text onClick={onEdit} inherit c="dimmed" style={{ cursor: onEdit ? 'pointer' : 'default' }}>No Sprints</Text>;
@@ -33,7 +34,7 @@ export const sprintDataType: DataType<string[]> = {
 
 		const allSprints = sprintQuery.data?.sprints ?? [];
 		const selectedSprintIds = allSprints
-			.filter(sprint => value.includes(sprint.id))
+			.filter(sprint => value.includes(sprint.id as SprintId)) // TODO: There won't be an error after creating sprint model.
 			.map(sprint => sprint.id);
 
 		const items: ComboboxData = allSprints.map(sprint => ({
@@ -46,7 +47,7 @@ export const sprintDataType: DataType<string[]> = {
 					value={selectedSprintIds}
 					searchable
 					dropdownOpened={true}
-					onChange={(value) => onSubmit(value)}
+					onChange={(value) => onSubmit(value as SprintId[])}  // TODO: There won't be an error after creating sprint model.
 					onClear={() => onSubmit([])}
 					onBlur={onCancel} />
 		);
