@@ -1,9 +1,8 @@
 import { ActionIcon, Button, Group, Stack, Title, Tooltip } from '@mantine/core';
 import { IconFileInvoice, IconPlus, IconTrash } from '@tabler/icons-react';
-import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task/task-hooks';
+import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery } from '@/api/task/task-hooks';
 import { DataTable } from '@/base/data-table/api/DataTable';
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
-import { sprintDataType } from '@/core/sprintDataType';
 import { useState } from 'react';
 import { useDataTableRows } from '@/base/data-table';
 import { useTaskModal } from '@/core/task/useTaskModal';
@@ -12,13 +11,12 @@ import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
 import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
 import { TaskStatusInplace } from '@/core/task/inplace/TaskStatusInplace';
 import { Task } from '@/models/Task';
-import { SprintId } from '@/models/Sprint';
 import { TaskKeyResultInplace } from '@/core/task/inplace/TaskKeyResultInplace';
+import { TaskSprintInplace } from '@/core/task/inplace/TaskSprintInplace';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
 	const createTaskMutation = useCreateTaskMutation();
-	const updateTaskMutation = useUpdateTaskMutation();
 	const deleteTaskMutation = useDeleteTasksMutation();
 	const openTaskDialog = useTaskModal();
 	const [selected, setSelected] = useState<Task[]>([]);
@@ -39,15 +37,7 @@ export function TasksRoute() {
 		}
 	};
 
-	const onUpdateSprints = async (task: Task, sprints: SprintId[]) => {
-		await updateTaskMutation.mutateAsync({
-			id: task.id, request: {
-				sprintIds: sprints
-			}
-		});
-	};
-
-	const columns: ColumnDescriptor<Task, any>[] = [
+	const columns: ColumnDescriptor<Task, unknown>[] = [
 		{
 			columnId: 'openTaskModal',
 			columnName: 'Open',
@@ -87,9 +77,7 @@ export function TasksRoute() {
 		{
 			columnId: 'sprints',
 			columnName: 'Sprints',
-			columnType: sprintDataType,
-			select: (task: Task) => task.sprintIds,
-			onChange: onUpdateSprints
+			render: (task) => <TaskSprintInplace task={task} />
 		}
 	];
 
