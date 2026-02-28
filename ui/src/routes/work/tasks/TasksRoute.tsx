@@ -1,11 +1,8 @@
 import { ActionIcon, Button, Group, Stack, Title, Tooltip } from '@mantine/core';
 import { IconFileInvoice, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks';
-import { stringDataType } from '@/base/data-type';
 import { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
 import { taskStatusDataType } from '@/core/taskStatusDataType';
-import { Temporal } from 'temporal-polyfill';
-import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 import { DataTable } from '@/base/data-table/api/DataTable';
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
@@ -13,6 +10,9 @@ import { sprintDataType } from '@/core/sprintDataType';
 import { useState } from 'react';
 import { useDataTableRows } from '@/base/data-table';
 import { useTaskModal } from '@/core/task/useTaskModal';
+import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
+import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
+import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -38,16 +38,6 @@ export function TasksRoute() {
 		}
 	};
 
-	const onUpdateName = async (task: TaskDTO, newName: string) => {
-		if (task.name === newName) {
-			return;
-		}
-
-		await updateTaskMutation.mutateAsync({
-			id: task.id, request: { name: newName }
-		});
-	};
-
 	const onUpdateStatus = async (task: TaskDTO, newStatus: TaskStatusDTO) => {
 		if (task.status === newStatus) {
 			return;
@@ -55,30 +45,6 @@ export function TasksRoute() {
 
 		await updateTaskMutation.mutateAsync({
 			id: task.id, request: { status: newStatus }
-		});
-	};
-
-	const onUpdateStartDate = async (task: TaskDTO, newDate: Temporal.PlainDate | null) => {
-		if ((task.startDate ?? null) === newDate?.toString()) {
-			return;
-		}
-
-		await updateTaskMutation.mutateAsync({
-			id: task.id, request: {
-				startDate: newDate === null ? { empty: true } : { value: newDate.toString() }
-			}
-		});
-	};
-
-	const onUpdateEndDate = async (task: TaskDTO, newDate: Temporal.PlainDate | null) => {
-		if ((task.endDate ?? null) === newDate?.toString()) {
-			return;
-		}
-
-		await updateTaskMutation.mutateAsync({
-			id: task.id, request: {
-				endDate: newDate === null ? { empty: true } : { value: newDate.toString() }
-			}
 		});
 	};
 
@@ -121,9 +87,7 @@ export function TasksRoute() {
 		{
 			columnId: 'name',
 			columnName: 'Task',
-			columnType: stringDataType,
-			select: (task: TaskDTO) => task.name,
-			onChange: onUpdateName
+			render: (task) => <TaskNameInplace task={task} />
 		},
 		{
 			columnId: 'status',
@@ -135,16 +99,12 @@ export function TasksRoute() {
 		{
 			columnId: 'startDate',
 			columnName: 'Start date',
-			columnType: plainDateDataType,
-			select: (task: TaskDTO) => !task.startDate ? null : Temporal.PlainDate.from(task.startDate),
-			onChange: onUpdateStartDate
+			render: (task) => <TaskStartDateInplace task={task} />
 		},
 		{
 			columnId: 'endDate',
 			columnName: 'End date',
-			columnType: plainDateDataType,
-			select: (task: TaskDTO) => !task.endDate ? null : Temporal.PlainDate.from(task.endDate),
-			onChange: onUpdateEndDate
+			render: (task) => <TaskEndDateInplace task={task} />
 		},
 		{
 			columnId: 'keyResultId',

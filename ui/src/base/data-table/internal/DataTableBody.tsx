@@ -82,10 +82,16 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 													</>
 												)
 											}
-											<DataView value={column.select(row.data)}
-													  onChange={column.onChange ? (newValue) => column.onChange!(row.data, newValue) : undefined}
-													  readonly={!column.onChange}
-													  dataType={column.columnType} />
+											{
+												'columnType' in column
+												 	? (
+														<DataView value={column.select(row.data)}
+																  onChange={column.onChange ? (newValue) => column.onChange!(row.data, newValue) : undefined}
+																  readonly={!column.onChange}
+																  dataType={column.columnType} />
+													)
+													: column.render(row.data)
+											}
 										</Group>
 									</Table.Td>
 								))

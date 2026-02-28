@@ -4,8 +4,6 @@ import { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
 import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { DataView } from '@/base/data-type';
-import { Temporal } from 'temporal-polyfill';
-import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 import { sprintDataType } from '@/core/sprintDataType';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
@@ -54,7 +52,7 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: string }) {
 			<Space h='md' />
 			<TaskNameInplace task={task} textProps={{ fw: 'bold' }} />
 			<Space h="sm" />
-			<Group gap='xl'>
+			<Group gap='xl' wrap='nowrap'>
 				<Stack gap={0}>
 					<Text size="xs" c="dimmed">Start date</Text>
 					<TaskStartDateInplace task={task} />

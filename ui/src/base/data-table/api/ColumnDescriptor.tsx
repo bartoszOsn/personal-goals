@@ -1,10 +1,17 @@
 import { DataType } from '@/base/data-type';
+import { ReactNode } from 'react';
 
-export interface ColumnDescriptor<TData, TValue> {
+export type ColumnDescriptor<TData, TValue> = {
 	columnId: string;
 	columnName: string;
+
+	hierarchyColumn?: boolean;
+} & ColumnDescriptorRender<TData, TValue>;
+
+type ColumnDescriptorRender<TData, TValue> = {
 	columnType: DataType<TValue>;
 	select: (data: TData) => TValue;
 	onChange?: (fullData: TData, newValue: TValue) => void | Promise<void>;
-	hierarchyColumn?: boolean;
-}
+} | {
+	render: (data: TData) => ReactNode;
+};
