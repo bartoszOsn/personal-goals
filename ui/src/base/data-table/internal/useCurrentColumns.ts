@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { PropertyStorage } from '@/base/property-storage/propertyStorage.ts';
-import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
+import { PropertyStorage } from '@/base/property-storage/propertyStorage.ts';
+import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
 
 export interface UseCurrentColumnsProps<TData> {
 	storage: PropertyStorage;

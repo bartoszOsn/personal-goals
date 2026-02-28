@@ -1,4 +1,4 @@
-import type { PropertyStorage } from '@/base/property-storage/propertyStorage.ts';
+import { PropertyStorage } from '@/base/property-storage/propertyStorage.ts';
 
 export const localStoragePropertyStorage: PropertyStorage = {
 	getItem: <T>(key: string) => {

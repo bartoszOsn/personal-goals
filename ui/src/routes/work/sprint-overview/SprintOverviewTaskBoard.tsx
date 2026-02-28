@@ -1,6 +1,6 @@
 import { Board } from '@/base/board/api/Board.tsx';
-import type { BoardColumn } from '@/base/board/api/BoardColumn.ts';
-import { type TaskDTO, type TaskStatusDTO } from '@personal-okr/shared';
+import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
+import { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
 import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { DataView, stringDataType } from '@/base/data-type';

@@ -1,6 +1,6 @@
 import { Temporal } from 'temporal-polyfill';
-import { type GanttItem } from '@/base/gantt';
-import type { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
+import { GanttItem } from '@/base/gantt';
+import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 
 export type DragData = {
 	status: 'idle'

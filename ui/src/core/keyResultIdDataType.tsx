@@ -1,5 +1,5 @@
-import type { DataType } from '@/base/data-type';
-import { type ComboboxData, Select, Skeleton, Text } from '@mantine/core';
+import { DataType } from '@/base/data-type';
+import { ComboboxData, Select, Skeleton, Text } from '@mantine/core';
 import { useOkrQuery } from '@/api/okr-hooks.ts';
 
 export const keyResultIdDataType: DataType<string | undefined> = {

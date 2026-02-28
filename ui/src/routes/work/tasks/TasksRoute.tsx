@@ -2,12 +2,12 @@ import { ActionIcon, Button, Group, Stack, Title, Tooltip } from '@mantine/core'
 import { IconFileInvoice, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task-hooks';
 import { stringDataType } from '@/base/data-type';
-import type { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
+import { TaskDTO, TaskStatusDTO } from '@personal-okr/shared';
 import { taskStatusDataType } from '@/core/taskStatusDataType';
 import { Temporal } from 'temporal-polyfill';
 import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 import { DataTable } from '@/base/data-table/api/DataTable';
-import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
+import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 import { sprintDataType } from '@/core/sprintDataType';
 import { useState } from 'react';

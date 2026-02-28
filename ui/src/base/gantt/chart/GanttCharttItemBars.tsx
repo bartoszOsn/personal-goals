@@ -1,7 +1,7 @@
 import { useGanttContext } from '@/base/gantt/GanttProvider.tsx';
 import { useDateRanges } from '@/base/gantt/hooks/useDateRanges.ts';
-import type { GanttItem } from '@/base/gantt';
-import type { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
+import { GanttItem } from '@/base/gantt';
+import { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 import { useDrag } from '@/base/gantt/hooks/useDrag';
 import { flatItems } from '@/base/gantt/FlatItems';
 import { useMemo } from 'react';

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { type AuthResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from '@personal-okr/shared';
+import { AuthResponseDTO, LoginRequestDTO, RegisterRequestDTO } from '@personal-okr/shared';
 import { http } from '@/base/http';
 import { setToken } from '@/api/query-auth.ts';
 

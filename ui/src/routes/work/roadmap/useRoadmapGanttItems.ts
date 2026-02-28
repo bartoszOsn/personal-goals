@@ -1,8 +1,8 @@
 import { useOkrQuery } from '@/api/okr-hooks.ts';
 import { useTasksQuery } from '@/api/task-hooks.ts';
 import { useMemo } from 'react';
-import type { GanttItem } from '@/base/gantt';
-import type { KeyResultDTO, ObjectiveDeadlineDTO, ObjectiveDTO, TaskDTO } from '@personal-okr/shared';
+import { GanttItem } from '@/base/gantt';
+import { KeyResultDTO, ObjectiveDeadlineDTO, ObjectiveDTO, TaskDTO } from '@personal-okr/shared';
 import { Temporal } from 'temporal-polyfill';
 
 export function useRoadmapGanttItems() {

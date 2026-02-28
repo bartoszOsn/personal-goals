@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { http } from '@/base/http';
-import type { KeyResultRequestDTO, ObjectiveListDTO, ObjectiveRequestDTO } from '@personal-okr/shared';
+import { KeyResultRequestDTO, ObjectiveListDTO, ObjectiveRequestDTO } from '@personal-okr/shared';
 
 export function useOkrQuery() {
 	return useQuery({

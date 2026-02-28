@@ -1,6 +1,6 @@
 import { Injectable, Scope, Inject } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import type { Request } from 'express';
+import { Request } from 'express';
 import { User, UserId } from '../../domain/auth/model/User';
 import { AuthRepository } from './AuthRepository';
 

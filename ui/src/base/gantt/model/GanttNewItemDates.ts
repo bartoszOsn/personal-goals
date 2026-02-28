@@ -1,4 +1,4 @@
-import type { Temporal } from 'temporal-polyfill';
+import { Temporal } from 'temporal-polyfill';
 
 export interface GanttNewItemDates {
 	startDate: Temporal.PlainDate;

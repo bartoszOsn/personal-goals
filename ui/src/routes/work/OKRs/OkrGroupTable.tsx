@@ -1,4 +1,4 @@
-import type { ObjectiveDeadlineDTO, ObjectiveDTO } from '@personal-okr/shared';
+import { ObjectiveDeadlineDTO, ObjectiveDTO } from '@personal-okr/shared';
 import { ActionIcon, Group, Stack, Text } from '@mantine/core';
 import { CreateObjectiveModal } from '@/routes/work/OKRs/CreateObjectiveModal';
 import { quarterToColor } from '@/core/quarterToColor';

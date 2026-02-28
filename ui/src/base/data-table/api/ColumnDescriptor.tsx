@@ -1,4 +1,4 @@
-import type { DataType } from '@/base/data-type';
+import { DataType } from '@/base/data-type';
 
 export interface ColumnDescriptor<TData, TValue> {
 	columnId: string;

@@ -11,11 +11,7 @@ import {
 } from '@nestjs/common';
 import { TaskService } from '../../app/work/TaskService';
 import { TaskDTOConverter } from './TaskDTOConverter';
-import type {
-	TaskDTO,
-	TaskListDTO,
-	TaskRequestDTO
-} from '@personal-okr/shared';
+import { TaskDTO, TaskListDTO, TaskRequestDTO } from '@personal-okr/shared';
 import { TaskId } from '../../domain/work/model/TaskId';
 
 @Controller('work/task')

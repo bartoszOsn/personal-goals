@@ -1,17 +1,17 @@
 import { Group, Stack } from '@mantine/core';
-import { Gantt, type GanttItem } from '@/base/gantt';
+import { Gantt, GanttItem } from '@/base/gantt';
 import { useSprintQuery, useUpdateSprintsMutation } from '@/api/sprint-hooks';
-import type { SprintChangeOverlapFailureDTO, SprintChangeRequestDTO, SprintDTO } from '@personal-okr/shared';
+import { SprintChangeOverlapFailureDTO, SprintChangeRequestDTO, SprintDTO } from '@personal-okr/shared';
 import { CreateSprintsButtton } from '@/routes/work/sprint-settings/CreateSprintsButtton';
 import { quarterToColor } from '@/core/quarterToColor';
 import { getSprintName } from '@/core/getSprintName';
 import { useState } from 'react';
 import { DeleteSprintsButton } from '@/routes/work/sprint-settings/DeleteSprintsButton';
 import { Temporal } from 'temporal-polyfill';
-import type { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
+import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { HttpError } from '@/base/http';
 import { notifications } from '@mantine/notifications';
-import { type ColumnDescriptor } from '@/base/data-table';
+import { ColumnDescriptor } from '@/base/data-table';
 import { stringDataType } from '@/base/data-type';
 import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 

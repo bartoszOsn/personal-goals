@@ -1,4 +1,5 @@
 import { Temporal } from 'temporal-polyfill';
+import { isPlainDate } from '@personal-okr/shared';
 
 export class TimeRange {
 	constructor(
@@ -8,14 +9,14 @@ export class TimeRange {
 
 	overlaps(other: TimeRange) {
 		const otherHaveStartInside =
-			Temporal.PlainDate.compare(other.startDate, this.startDate) >= 0 &&
-			Temporal.PlainDate.compare(other.startDate, this.endDate) <= 0;
+			isPlainDate(other.startDate).afterOrEqual(this.startDate) &&
+			isPlainDate(other.startDate).beforeOrEqual(this.endDate);
 		const otherHaveEndInside =
-			Temporal.PlainDate.compare(other.endDate, this.startDate) >= 0 &&
-			Temporal.PlainDate.compare(other.endDate, this.endDate) <= 0;
+			isPlainDate(other.endDate).afterOrEqual(this.startDate) &&
+			isPlainDate(other.endDate).beforeOrEqual(this.endDate);
 		const thisInsideOther =
-			Temporal.PlainDate.compare(this.startDate, other.startDate) >= 0 &&
-			Temporal.PlainDate.compare(this.endDate, other.endDate) <= 0;
+			isPlainDate(this.startDate).afterOrEqual(other.startDate) &&
+			isPlainDate(this.endDate).beforeOrEqual(other.endDate);
 		return otherHaveStartInside || otherHaveEndInside || thisInsideOther;
 	}
 }

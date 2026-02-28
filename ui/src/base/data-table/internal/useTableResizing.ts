@@ -1,6 +1,6 @@
-import { type RefObject, useEffect, useMemo, useState } from 'react';
-import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
-import type { PropertyStorage } from '@/base/property-storage/propertyStorage';
+import { RefObject, useEffect, useMemo, useState } from 'react';
+import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
+import { PropertyStorage } from '@/base/property-storage/propertyStorage';
 import * as React from 'react';
 
 export interface UseTableResizingProps {

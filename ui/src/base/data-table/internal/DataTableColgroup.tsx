@@ -1,4 +1,4 @@
-import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
+import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
 
 export interface DataTableColgroupProps<TData> {
 	columns: ColumnDescriptor<TData, unknown>[];

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { TimeService } from '../../app/time/TimeService';
 import { TimeDTOConverter } from './TimeDTOConverter';
-import type {
+import {
 	SprintBulkCreateRequestDTO,
 	SprintChangeRequestDTO,
 	SprintDeleteResultDTO,

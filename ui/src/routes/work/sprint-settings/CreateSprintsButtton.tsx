@@ -2,7 +2,7 @@ import { Button, List, Modal, NumberInput, Select, Stack, Text } from '@mantine/
 import { useDisclosure } from '@mantine/hooks';
 import { useCreateSprintsMutation } from '@/api/sprint-hooks';
 import { useState } from 'react';
-import type { SprintBulkCreateRequestDTO, SprintCreateOverlapFailureDTO } from '@personal-okr/shared';
+import { SprintBulkCreateRequestDTO, SprintCreateOverlapFailureDTO } from '@personal-okr/shared';
 import { DateInput } from '@mantine/dates';
 import { HttpError } from '@/base/http';
 import { notifications } from '@mantine/notifications';

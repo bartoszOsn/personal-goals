@@ -1,6 +1,6 @@
-import type { DataType } from '@/base/data-type';
-import type { TaskStatusDTO } from '@personal-okr/shared';
-import { Badge, ColorSwatch, Combobox, Group, type MantineColor, Text, useCombobox } from '@mantine/core';
+import { DataType } from '@/base/data-type';
+import { TaskStatusDTO } from '@personal-okr/shared';
+import { Badge, ColorSwatch, Combobox, Group, MantineColor, Text, useCombobox } from '@mantine/core';
 
 const statusToName: Record<TaskStatusDTO, string> = {
 	TODO: 'To Do',

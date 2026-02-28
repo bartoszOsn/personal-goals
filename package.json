@@ -2,7 +2,7 @@
 	"name": "@personal-okr/root",
 	"private": true,
 	"scripts": {
-		"dev": "yarn workspaces foreach -Rip --from @personal-okr/ui --from @personal-okr/api run dev"
+		"dev": "yarn workspaces foreach -Rip --from @personal-okr/ui --from @personal-okr/api --from @personal-okr/shared run dev"
 	},
 	"workspaces": [
 		"./ui",

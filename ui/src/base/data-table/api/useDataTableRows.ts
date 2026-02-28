@@ -1,4 +1,4 @@
-import type { DataTableRow } from '@/base/data-table/api/DataTableRow.ts';
+import { DataTableRow } from '@/base/data-table/api/DataTableRow.ts';
 import { useMemo } from 'react';
 
 export interface UseDataTableRowsProps<TData, TId> {

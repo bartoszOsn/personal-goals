@@ -1,4 +1,4 @@
-import type { ObjectiveDTO } from '@personal-okr/shared';
+import { ObjectiveDTO } from '@personal-okr/shared';
 import { ActionIcon, Box, Button, Center, Collapse, Group, Modal, RingProgress, Stack, Text, TextInput } from '@mantine/core';
 import { useKeyResultCreateMutation, useKeyResultDeleteMutation, useOkrDeleteMutation } from '@/api/okr-hooks';
 import { useDisclosure } from '@mantine/hooks';

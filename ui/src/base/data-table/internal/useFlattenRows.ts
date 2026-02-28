@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { DataTableRow } from '@/base/data-table/api/DataTableRow';
+import { DataTableRow } from '@/base/data-table/api/DataTableRow';
 
 export interface FlattenRowsInfo<TData, TId> {
 	maxLevels: number;

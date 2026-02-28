@@ -8,7 +8,7 @@ import { DataTableColgroup } from '@/base/data-table/internal/DataTableColgroup'
 import { useElementSize } from '@mantine/hooks';
 import { useRef } from 'react';
 import { useTableResizing } from '@/base/data-table/internal/useTableResizing';
-import type { DataTableProps } from '@/base/data-table/api/DataTableProps';
+import { DataTableProps } from '@/base/data-table/api/DataTableProps';
 import { useFlattenRows } from '@/base/data-table/internal/useFlattenRows';
 
 export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {

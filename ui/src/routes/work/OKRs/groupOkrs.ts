@@ -1,4 +1,4 @@
-import type { ObjectiveDTO } from '@personal-okr/shared';
+import { ObjectiveDTO } from '@personal-okr/shared';
 
 export interface OKRYear {
 	year: number;

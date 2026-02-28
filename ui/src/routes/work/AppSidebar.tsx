@@ -1,4 +1,4 @@
-import { Link, type LinkOptions } from '@tanstack/react-router';
+import { Link, LinkOptions } from '@tanstack/react-router';
 import { AppShell, Box, NavLink, type NavLinkProps, Text, Title } from '@mantine/core';
 
 export function AppSidebar() {

@@ -1,5 +1,5 @@
 import { Group } from '@mantine/core';
-import type { GanttProps } from '@/base/gantt/GanttProps.ts';
+import { GanttProps } from '@/base/gantt/GanttProps.ts';
 import { GanttProvider } from '@/base/gantt/GanttProvider.tsx';
 import { GanttTable } from '@/base/gantt/GanttTable.tsx';
 import { GanttChart } from '@/base/gantt/GanttChart.tsx';

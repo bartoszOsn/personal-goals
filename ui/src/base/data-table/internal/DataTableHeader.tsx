@@ -1,5 +1,5 @@
-import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
-import { ActionIcon, Box, CloseButton, Group, Popover, Table, type TableTheadProps, Text } from '@mantine/core';
+import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
+import { ActionIcon, Box, CloseButton, Group, Popover, Table, TableTheadProps, Text } from '@mantine/core';
 import { IconDots } from '@tabler/icons-react';
 import { DataTableCustomizationPopover } from '@/base/data-table/internal/DataTableCustomizationPopover';
 import * as React from 'react';

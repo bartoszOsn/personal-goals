@@ -1,4 +1,4 @@
-import { ScrollArea, type ScrollAreaAutosizeProps, Skeleton, Table, type TableProps } from '@mantine/core';
+import { ScrollArea, ScrollAreaAutosizeProps, Skeleton, Table, TableProps } from '@mantine/core';
 
 export interface DataTableSkeletonProps {
 	tableProps: TableProps;

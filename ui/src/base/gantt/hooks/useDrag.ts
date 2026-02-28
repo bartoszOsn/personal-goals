@@ -1,9 +1,9 @@
 import { useGanttContext } from '@/base/gantt/GanttProvider.tsx';
 import { Temporal } from 'temporal-polyfill';
-import type { GanttItem } from '@/base/gantt';
-import type { DragData } from '@/base/gantt/model/DragData.ts';
+import { GanttItem } from '@/base/gantt';
+import { DragData } from '@/base/gantt/model/DragData.ts';
 import { useDateRanges } from '@/base/gantt/hooks/useDateRanges';
-import type { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
+import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 
 export function useDrag() {
 	const context = useGanttContext();

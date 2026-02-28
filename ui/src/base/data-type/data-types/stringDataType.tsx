@@ -1,4 +1,4 @@
-import type { DataType } from '@/base/data-type';
+import { DataType } from '@/base/data-type';
 import { FocusTrap, Text, TextInput } from '@mantine/core';
 
 export const stringDataType: DataType<string> = {

@@ -1,4 +1,4 @@
-import type { ZoomLevel } from '@/base/gantt/model/ZoomLevel.ts';
+import { ZoomLevel } from '@/base/gantt/model/ZoomLevel.ts';
 
 export const zoomLevels: ZoomLevel[] = [
 	{

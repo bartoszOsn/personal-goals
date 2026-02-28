@@ -11,7 +11,7 @@ import { WorkOKRService } from '../../app/work/WorkOKRService';
 import { WorkOkrDTOConverter } from './WorkOkrDTOConverter';
 import { ObjectiveId } from '../../domain/work/model/Objective';
 import { KeyResultId } from '../../domain/work/model/KeyResult';
-import type {
+import {
 	KeyResultDTO,
 	KeyResultRequestDTO,
 	ObjectiveListDTO,

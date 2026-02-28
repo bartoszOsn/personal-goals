@@ -1,10 +1,10 @@
-import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
+import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
 import { ActionIcon, Group, Space, Table } from '@mantine/core';
 import { DataView } from '@/base/data-type';
 import { useRowSelection } from '@/base/data-table/internal/useRowSelection';
 import { useEffect, useMemo } from 'react';
 import { useClickOutside, usePrevious } from '@mantine/hooks';
-import type { FlattenRowsInfo } from '@/base/data-table/internal/useFlattenRows';
+import { FlattenRowsInfo } from '@/base/data-table/internal/useFlattenRows';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { PER_LEVEL_OFFSET } from '@/base/data-table/internal/PER_LEVEL_OFFSET';
 import { deepEqual } from '@tanstack/react-router';

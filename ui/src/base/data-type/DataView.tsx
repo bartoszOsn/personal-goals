@@ -1,4 +1,4 @@
-import type { DataType } from '@/base/data-type/DataType.ts';
+import { DataType } from '@/base/data-type/DataType.ts';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@mantine/core';
 

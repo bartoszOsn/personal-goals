@@ -1,5 +1,5 @@
 import { useSprintQuery } from '@/api/sprint-hooks.ts';
-import { type ComboboxData, Group, Pagination, Select, Skeleton } from '@mantine/core';
+import { ComboboxData, Group, Pagination, Select, Skeleton } from '@mantine/core';
 import { getSprintName } from '@/core/getSprintName';
 
 export function SprintOverviewSprintSwitcher

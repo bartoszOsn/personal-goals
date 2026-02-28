@@ -1,5 +1,5 @@
-import type { DataType } from '@/base/data-type';
-import { type ComboboxData, MultiSelect, Skeleton, Text } from '@mantine/core';
+import { DataType } from '@/base/data-type';
+import { ComboboxData, MultiSelect, Skeleton, Text } from '@mantine/core';
 import { useSprintQuery } from '@/api/sprint-hooks.ts';
 import { getSprintName } from '@/core/getSprintName.ts';
 

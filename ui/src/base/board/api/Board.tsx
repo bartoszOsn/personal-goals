@@ -1,5 +1,5 @@
-import type { BoardColumn } from '@/base/board/api/BoardColumn.ts';
-import { type ReactNode, useState } from 'react';
+import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
+import { ReactNode, useState } from 'react';
 import { Box, Button, Card, Center, Group, LoadingOverlay, ScrollArea, Stack, Text } from '@mantine/core';
 import { IconGripHorizontal, IconPlus } from '@tabler/icons-react';
 import { useBoardItemDrag } from '@/base/board/api/useBoardItemDrag';

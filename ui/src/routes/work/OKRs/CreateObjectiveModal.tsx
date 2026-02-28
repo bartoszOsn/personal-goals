@@ -1,5 +1,5 @@
-import type { ObjectiveDeadlineDTO } from '@personal-okr/shared';
-import { type ReactNode, useState } from 'react';
+import { ObjectiveDeadlineDTO } from '@personal-okr/shared';
+import { ReactNode, useState } from 'react';
 import { Button, Modal, Stack, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { ObjectiveDeadlinePicker } from '@/core/ObjectiveDeadlinePicker';

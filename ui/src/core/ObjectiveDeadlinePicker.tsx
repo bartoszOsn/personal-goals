@@ -1,4 +1,4 @@
-import type { ObjectiveDeadlineDTO } from '@personal-okr/shared';
+import { ObjectiveDeadlineDTO } from '@personal-okr/shared';
 import { YearPickerInput } from '@mantine/dates';
 import { Group, Input, Select } from '@mantine/core';
 

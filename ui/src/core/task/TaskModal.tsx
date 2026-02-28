@@ -5,7 +5,7 @@ import { DataView, stringDataType } from '@/base/data-type';
 import { plainDateDataType } from '@/base/data-type/data-types/plainDateDataType';
 import { Temporal } from 'temporal-polyfill';
 import { taskStatusDataType } from '@/core/taskStatusDataType';
-import { type TaskStatusDTO } from '@personal-okr/shared';
+import { TaskStatusDTO } from '@personal-okr/shared';
 import { sprintDataType } from '@/core/sprintDataType';
 import { keyResultIdDataType } from '@/core/keyResultIdDataType';
 import { RichTextEditor } from '@/base/rich-text/RichTextEditor';

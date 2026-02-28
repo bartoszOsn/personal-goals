@@ -2,10 +2,10 @@ import { Box, px, rem } from '@mantine/core';
 import { useGanttContext } from '@/base/gantt/GanttProvider';
 import { useElementSize } from '@mantine/hooks';
 import { useEffect, useRef, useState } from 'react';
-import type { RowPositionInfo } from './model/RowPositionInfo';
-import { type ColumnDescriptor, DataTable, useDataTableRows } from '@/base/data-table';
-import { type DataTableRow } from '@/base/data-table/api/DataTableRow';
-import { type GanttItem } from '@/base/gantt/GanttItem';
+import { RowPositionInfo } from './model/RowPositionInfo';
+import { ColumnDescriptor, DataTable, useDataTableRows } from '@/base/data-table';
+import { DataTableRow } from '@/base/data-table/api/DataTableRow';
+import { GanttItem } from '@/base/gantt/GanttItem';
 import { flatItems } from '@/base/gantt/FlatItems';
 
 export function GanttTable<TData>() {

@@ -1,9 +1,9 @@
-import type { GanttProps } from '@/base/gantt/GanttProps.ts';
-import { createContext, type ReactNode, type RefObject, useCallback, useContext, useMemo, useRef, useState } from 'react';
-import type { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
+import { GanttProps } from '@/base/gantt/GanttProps.ts';
+import { createContext, ReactNode, RefObject, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 import { zoomLevels } from '@/base/gantt/zoomLevels';
-import type { ZoomLevel } from '@/base/gantt/model/ZoomLevel';
-import type { DragData } from '@/base/gantt/model/DragData';
+import { ZoomLevel } from '@/base/gantt/model/ZoomLevel';
+import { DragData } from '@/base/gantt/model/DragData';
 
 export interface GanttContext<TData> {
 	props: GanttProps<TData>;

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { SprintBulkCreateRequestDTO, SprintChangeRequestDTO, SprintListDTO } from '@personal-okr/shared';
+import { SprintBulkCreateRequestDTO, SprintChangeRequestDTO, SprintListDTO } from '@personal-okr/shared';
 import { http } from '@/base/http';
 
 export function useSprintQuery() {

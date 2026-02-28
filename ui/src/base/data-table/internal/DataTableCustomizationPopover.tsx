@@ -1,5 +1,5 @@
 import { ActionIcon, Box, Group, ScrollArea, Stack, Text, Tooltip } from '@mantine/core';
-import type { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
+import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
 
 export interface DataTableCustomizationPopoverProps<TData> {

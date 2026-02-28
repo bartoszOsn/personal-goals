@@ -1,5 +1,5 @@
-import type { QuarterDTO } from '@personal-okr/shared';
-import type { MantineColor } from '@mantine/core';
+import { QuarterDTO } from '@personal-okr/shared';
+import { MantineColor } from '@mantine/core';
 
 export const quarterToColor: Record<QuarterDTO, MantineColor> = {
 	Q1: 'green',

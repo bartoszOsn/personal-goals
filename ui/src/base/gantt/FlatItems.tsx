@@ -1,4 +1,4 @@
-import type { GanttItem } from '@/base/gantt/GanttItem';
+import { GanttItem } from '@/base/gantt/GanttItem';
 
 export function flatItems<TData>(items: GanttItem<TData>[]): GanttItem<TData>[] {
 	const result: GanttItem<TData>[] = [];

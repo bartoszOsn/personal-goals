@@ -1,7 +1,7 @@
-import type { GanttItem } from '@/base/gantt/GanttItem.ts';
-import type { GroupProps } from '@mantine/core';
-import type { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
-import type { ColumnDescriptor } from '@/base/data-table';
+import { GanttItem } from '@/base/gantt/GanttItem.ts';
+import { GroupProps } from '@mantine/core';
+import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
+import { ColumnDescriptor } from '@/base/data-table';
 
 export interface GanttProps<TData> {
 	items: GanttItem<TData>[];

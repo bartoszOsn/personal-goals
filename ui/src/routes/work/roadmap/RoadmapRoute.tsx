@@ -1,9 +1,9 @@
-import { type ColumnDescriptor } from '@/base/data-table';
+import { ColumnDescriptor } from '@/base/data-table';
 import { stringDataType } from '@/base/data-type';
-import { Gantt, type GanttItem } from '@/base/gantt';
+import { Gantt, GanttItem } from '@/base/gantt';
 import { Group, Stack } from '@mantine/core';
 import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
-import type { KeyResultDTO, ObjectiveDTO, TaskDTO } from '@personal-okr/shared';
+import { KeyResultDTO, ObjectiveDTO, TaskDTO } from '@personal-okr/shared';
 
 export function RoadmapRoute() {
 	const {loading, ganttItems} = useRoadmapGanttItems();

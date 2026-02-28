@@ -9,6 +9,7 @@ import { Quarter } from './model/Quarter';
 import { SprintStatus } from './model/SprintStatus';
 import { UnreachableError } from '../../util/UnreachableError';
 import { Temporal } from 'temporal-polyfill';
+import { isPlainDate } from '@personal-okr/shared';
 
 export function getSprintsFromSprintRangesAndSettings(
 	ranges: SprintTimeRange[],
@@ -80,10 +81,10 @@ function getSprintStatusFromRange(
 	range: SprintTimeRange,
 	today: Temporal.PlainDate
 ): SprintStatus {
-	if (Temporal.PlainDate.compare(range.endDate, today) === -1) {
+	if (isPlainDate(range.endDate).before(today)) {
 		return SprintStatus.COMPLETED;
 	}
-	if (Temporal.PlainDate.compare(range.startDate, today) === 1) {
+	if (isPlainDate(range.startDate).after(today)) {
 		return SprintStatus.COMPLETED;
 	}
 

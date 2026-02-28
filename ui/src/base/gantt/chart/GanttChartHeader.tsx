@@ -1,5 +1,5 @@
 import { useGanttContext } from '@/base/gantt/GanttProvider.tsx';
-import type { HeaderType } from '@/base/gantt/model/ZoomLevel.ts';
+import { HeaderType } from '@/base/gantt/model/ZoomLevel.ts';
 import { useDateRanges } from '@/base/gantt/hooks/useDateRanges.ts';
 import { HtmlInSvg } from '@/base/gantt/chart/HtmlInSvg';
 import { Text } from '@mantine/core';

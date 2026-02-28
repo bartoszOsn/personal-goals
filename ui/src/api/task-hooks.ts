@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { http } from '@/base/http';
-import type { TaskRequestDTO, TaskListDTO } from '@personal-okr/shared';
+import { TaskRequestDTO, TaskListDTO } from '@personal-okr/shared';
 
 export function useTasksQuery() {
 	return useQuery({
