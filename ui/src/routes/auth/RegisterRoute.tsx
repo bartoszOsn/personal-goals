@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRegisterMutation } from '@/api/auth-hooks.ts';
+import { useRegisterMutation } from '@/api/auth/auth-hooks.ts';
 import { Anchor, Button, Card, PasswordInput, Stack, Text, TextInput } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
 

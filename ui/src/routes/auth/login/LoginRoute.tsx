@@ -1,6 +1,6 @@
 import { Anchor, Button, Card, PasswordInput, Stack, Text, TextInput } from '@mantine/core';
 import { useState } from 'react';
-import { useLoginMutation } from '@/api/auth-hooks';
+import { useLoginMutation } from '@/api/auth/auth-hooks';
 import { Link } from '@tanstack/react-router';
 
 export function LoginRoute() {

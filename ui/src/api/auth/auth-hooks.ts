@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AuthResponseDTO, LoginRequestDTO, RegisterRequestDTO } from '@personal-okr/shared';
 import { http } from '@/base/http';
-import { setToken } from '@/api/query-auth.ts';
+import { setToken } from '@/api/auth/query-auth.ts';
 
 export function useLoginMutation() {
 	const queryClient = useQueryClient();

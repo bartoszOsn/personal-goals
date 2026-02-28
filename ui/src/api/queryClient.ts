@@ -1,5 +1,5 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
-import { defaultRetry, getTokenFromLS, onError, setToken } from '@/api/query-auth';
+import { defaultRetry, getTokenFromLS, onError, setToken } from '@/api/auth/query-auth';
 
 export const queryClient = new QueryClient({
 	queryCache: new QueryCache({
