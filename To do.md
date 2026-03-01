@@ -13,18 +13,19 @@
     - Option to add warning on gantt - When task dates are outside of assigned sprint (small ! icon at to right top of a bar with a tooltip)
     - Columns for objectives and KRs
     - ✅ Option to color rows, both on data table and gantt chart - Objectives purple, KRs orange and tasks without color.
-5. Filtering tasks.
-6. Editing description in objective, KR and task.
-7. Custom rich text documents.
-8. ✅ Objectives with calculated progress based on KRs.
+5. Editing description in objective, KR and task.
+6. Custom rich text documents.
+7. ✅ Objectives with calculated progress based on KRs.
     - ✅ KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
-9. Update page title and favicon
-10. Handle somehow the fact that after years there will be too much data to display on gantt chart. Filtering on roadmap as well?
-11. ✅ Change this "data view" bullshit into simple react composition:
+8. Update page title and favicon
+9. Handle somehow the fact that after years there will be too much data to display on gantt chart. Filtering on roadmap as well?
+10. ✅ Change this "data view" bullshit into simple react composition:
     - ✅ ColumnDescription takes render function
     - ✅ change dataTypes into components
     - ✅ Add maybe some utils for inplacing, but it's handled at the dataType component level.
-12. Make sure it works on mobile.
+11. Make sure it works on mobile.
+12. Update "All OKRs" to use Data table - OR, maybe just remove this screen and make sure that all this can be done on roadmap
+13. Tooltip on gantt bar – on roadmap name of the work item
 
 ## First release
 
@@ -35,3 +36,6 @@
 5. Ability to change sprint settings
 6. Drag and drop on board - Changing order
 7. Drag and drop on roadmap - changing order, and moving tasks between KRs
+8. Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
+9. Clicking on the gantt chart selects items
+10. Filtering tasks.

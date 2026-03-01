@@ -53,6 +53,7 @@ export function TaskStatusInplace({ task, badgeProps, selectProps}: TaskStatusIn
 				<InplaceSelectEdit defaultValue={task.status}
 								   data={options}
 								   renderOption={renderOption}
+								   comboboxProps={{ width: '200px'}}
 								   onValueSubmit={(value) => value && onValueSubmit(value as TaskStatus)}
 								   {...selectProps} />
 			</InplaceEditorEdit>
