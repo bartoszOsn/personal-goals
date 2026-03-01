@@ -6,7 +6,7 @@ import { InplaceEditorEdit } from '@/base/inplace-editor/api/InplaceEditorEdit.t
 import { InplaceTextInputEdit } from '@/base/inplace-editor/api/primitive/edit/InplaceTextInputEdit.tsx';
 import { ComponentProps } from 'react';
 import { Task } from '@/models/Task';
-import { useTaskModal } from '@/core/task/useTaskModal';
+import { useTaskModal } from '@/core/task/modal/useTaskModal';
 import { ActionIcon, Group, Tooltip } from '@mantine/core';
 import { IconFileInvoice } from '@tabler/icons-react';
 

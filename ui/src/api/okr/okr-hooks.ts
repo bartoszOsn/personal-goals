@@ -12,6 +12,13 @@ export function useOkrQuery() {
 	});
 }
 
+export function useObjectiveQuery(objectiveId: ObjectiveId) {
+	return useQuery({
+		queryKey: ['okr', objectiveId],
+		queryFn: () => getOKR().then(dtoToObjectives).then(os => os.find(o => o.id === objectiveId)!) // TODO: Add route for that
+	})
+}
+
 export function useOkrCreateMutation() {
 	const client = useQueryClient();
 	return useMutation({

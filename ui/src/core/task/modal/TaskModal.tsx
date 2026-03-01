@@ -1,14 +1,14 @@
 import { Group, Modal, Stack, Text } from '@mantine/core';
 import { useTaskQuery, useUpdateTaskMutation } from '@/api/task/task-hooks.ts';
-import { TaskModalSkeleton } from '@/core/task/TaskModalSkeleton.tsx';
-import { RichTextEditor } from '@/base/rich-text/RichTextEditor';
-import { TaskId } from '@/models/Task';
-import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
-import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
-import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
-import { TaskStatusInplace } from '@/core/task/inplace/TaskStatusInplace';
-import { TaskSprintInplace } from '@/core/task/inplace/TaskSprintInplace';
-import { TaskKeyResultInplace } from '@/core/task/inplace/TaskKeyResultInplace';
+import { WorkItemModalSkeleton } from '@/core/WorkItemModalSkeleton.tsx';
+import { RichTextEditor } from '@/base/rich-text/RichTextEditor.tsx';
+import { TaskId } from '@/models/Task.ts';
+import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace.tsx';
+import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace.tsx';
+import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace.tsx';
+import { TaskStatusInplace } from '@/core/task/inplace/TaskStatusInplace.tsx';
+import { TaskSprintInplace } from '@/core/task/inplace/TaskSprintInplace.tsx';
+import { TaskKeyResultInplace } from '@/core/task/inplace/TaskKeyResultInplace.tsx';
 
 export function TaskModal({ taskId }: { taskId: TaskId }) {
 	const taskQuery = useTaskQuery(taskId);
@@ -24,7 +24,7 @@ export function TaskModal({ taskId }: { taskId: TaskId }) {
 	};
 
 	if (taskQuery.isPending || !taskQuery.data) {
-		return <TaskModalSkeleton />;
+		return <WorkItemModalSkeleton />;
 	}
 
 	return (
@@ -33,7 +33,7 @@ export function TaskModal({ taskId }: { taskId: TaskId }) {
 				<Modal.Title flex={1}>
 					<TaskNameInplace task={taskQuery.data}
 									 textProps={{ inherit: false, size: 'xl' }}
-									 inputProps={{ w: '100%' }} />
+									 inputProps={{ w: '100%' }} showDialogButton={false} />
 				</Modal.Title>
 				<Modal.CloseButton />
 			</Modal.Header>

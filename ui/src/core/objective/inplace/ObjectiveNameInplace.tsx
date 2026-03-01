@@ -8,6 +8,7 @@ import { ActionIcon, Group, Tooltip } from '@mantine/core';
 import { IconFileInvoice } from '@tabler/icons-react';
 import { Objective } from '@/models/Objective.ts';
 import { useOKRUpdateMutation } from '@/api/okr/okr-hooks.ts';
+import { useObjectiveModal } from '@/core/objective/modal/useObjectiveModal';
 
 export interface ObjectiveNameInplaceProps {
 	objective: Objective;
@@ -18,6 +19,7 @@ export interface ObjectiveNameInplaceProps {
 
 export function ObjectiveNameInplace({ objective, textProps, inputProps, showDialogButton = true }: ObjectiveNameInplaceProps) {
 	const objectiveMutation = useOKRUpdateMutation();
+	const openModal = useObjectiveModal();
 
 	const onValueSubmit = (value: string) => {
 		objectiveMutation.mutate({
@@ -35,7 +37,7 @@ export function ObjectiveNameInplace({ objective, textProps, inputProps, showDia
 					{
 						showDialogButton && (
 							<Tooltip label='Open objective'>
-								<ActionIcon size='xs' color='grape' variant='subtle' onClick={() => {}}>
+								<ActionIcon size='xs' color='grape' variant='subtle' onClick={() => openModal(objective.id)}>
 									<IconFileInvoice />
 								</ActionIcon>
 							</Tooltip>

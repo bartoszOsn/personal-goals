@@ -1,6 +1,6 @@
 import { Modal, Skeleton, Stack } from '@mantine/core';
 
-export function TaskModalSkeleton() {
+export function WorkItemModalSkeleton() {
 	return (
 		<>
 			<Modal.Header>

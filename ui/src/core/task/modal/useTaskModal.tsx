@@ -1,6 +1,6 @@
 import { useModals } from '@mantine/modals';
-import { TaskModal } from '@/core/task/TaskModal';
-import { TaskId } from '@/models/Task';
+import { TaskModal } from '@/core/task/modal/TaskModal.tsx';
+import { TaskId } from '@/models/Task.ts';
 
 export function useTaskModal() {
 	const modals = useModals();
