@@ -31,9 +31,9 @@ export function SprintOverviewSprintInfo({ sprintId }: { sprintId: SprintId }) {
 			: `${untilEnd} days left`
 
 	return (
-		<Paper radius="md" withBorder pos='relative' style={{ overflow: 'visible' }} p='xl' pt='calc(var(--mantine-spacing-xl) * 1.5 + 20px)' mt={20}>
-			<ThemeIcon color={color} pos='absolute' style={{ top: -20, left: 'calc(50% - 30px)' }} size={60} radius={60}>
-				<IconArrowForwardUp size={32} stroke={1.5} />
+		<Paper radius="md" withBorder pos='relative' style={{ overflow: 'visible', paddingTop: 'calc(var(--mantine-spacing-md) + 10px)' }} px='md' pb='md' mt={10}>
+			<ThemeIcon color={color} pos='absolute' style={{ top: -10, left: 'calc(50% - 15px)' }} size={30} radius={30}>
+				<IconArrowForwardUp size={16} stroke={1.5} />
 			</ThemeIcon>
 
 			<Text ta="center" fw={700}>

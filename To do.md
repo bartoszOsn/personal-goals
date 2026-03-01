@@ -1,15 +1,18 @@
-# What still needs to be done
+# What still needs to be 
+
+## MVP
 
 1. ✅ Non-editable columns on gantt and data table.
 2. ✅ Fix `erasableSyntaxOnly` and `verbatimModuleSyntax` on ui.
-3. Roadmap view with objectives, KRs and tasks on one gantt chart.
+3. Task links - Both backend and frontend.
+4. Roadmap view with objectives, KRs and tasks on one gantt chart.
     - ✅ Gantt must support child items.
     - ✅ Gantt must support items without or with only one date.
     - Gantt must support timeboxes
     - Gantt must support links between items
     - Option to add warning on gantt - When task dates are outside of assigned sprint (small ! icon at to right top of a bar with a tooltip)
+    - Columns for objectives and KRs
     - ✅ Option to color rows, both on data table and gantt chart - Objectives purple, KRs orange and tasks without color.
-4. Progress matrix.
 5. Filtering tasks.
 6. Editing description in objective, KR and task.
 7. Custom rich text documents.
@@ -22,3 +25,13 @@
     - ✅ change dataTypes into components
     - ✅ Add maybe some utils for inplacing, but it's handled at the dataType component level.
 12. Make sure it works on mobile.
+
+## First release
+
+1. Fix Data table – Better UX
+2. Fix Auth – Better security, ability to change password, recover account etc.
+3. Work on performance
+4. Better UI 
+5. Ability to change sprint settings
+6. Drag and drop on board - Changing order
+7. Drag and drop on roadmap - changing order, and moving tasks between KRs

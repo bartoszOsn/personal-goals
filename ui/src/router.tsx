@@ -3,9 +3,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { IndexRoute } from '@/routes/IndexRoute.tsx';
 import { WorkRoute } from '@/routes/work/WorkRoute.tsx';
 import { OKRsRoute } from '@/routes/work/OKRs/OKRsRoute.tsx';
-import { OKRProgressMatrixRoute } from '@/routes/work/okr-progress-matrix/OKRProgressMatrixRoute.tsx';
 import { TasksRoute } from '@/routes/work/tasks/TasksRoute.tsx';
-import { TaskBacklogRoute } from '@/routes/work/tasks-backlog/TaskBacklogRoute.tsx';
 import { SprintSettingsRoute } from '@/routes/work/sprint-settings/SprintSettingsRoute.tsx';
 import { AuthRoute } from '@/routes/auth/AuthRoute';
 import { LoginRoute } from '@/routes/auth/login/LoginRoute';
@@ -52,22 +50,10 @@ const okrsRoute = createRoute({
 	component: OKRsRoute
 });
 
-const okrsProgressMatrixRoute = createRoute({
-	getParentRoute: () => workRoute,
-	path: "/okrs/progress-matrix",
-	component: OKRProgressMatrixRoute
-});
-
 const tasksRoute = createRoute({
 	getParentRoute: () => workRoute,
 	path: "/tasks",
 	component: TasksRoute
-});
-
-const tasksBacklogRoute = createRoute({
-	getParentRoute: () => workRoute,
-	path: "/tasks/backlog",
-	component: TaskBacklogRoute
 });
 
 const sprintSettings = createRoute({
@@ -100,9 +86,7 @@ const routeTree = rootRoute.addChildren([
 		sprintOverviewRoute,
 		roadmapRoute,
 		okrsRoute,
-		okrsProgressMatrixRoute,
 		tasksRoute,
-		tasksBacklogRoute,
 		sprintSettings
 	]),
 	authRoute.addChildren([
