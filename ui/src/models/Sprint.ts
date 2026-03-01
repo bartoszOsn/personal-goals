@@ -1,4 +1,5 @@
 import { Temporal } from 'temporal-polyfill';
+import { Quarter } from '@/models/Quarter';
 
 export interface Sprint {
 	readonly id: SprintId;
@@ -24,13 +25,6 @@ export interface SprintBulkCreateRequest {
 }
 
 export type SprintId = string & { __brand: 'SprintId' };
-
-export enum Quarter {
-	Q1 = 'Q1',
-	Q2 = 'Q2',
-	Q3 = 'Q3',
-	Q4 = 'Q4'
-}
 
 export enum SprintStatus {
 	COMPLETED = 'COMPLETED',

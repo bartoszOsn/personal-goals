@@ -1,15 +1,15 @@
-import { ObjectiveDTO } from '@personal-okr/shared';
+import { Objective } from '@/models/Objective';
 
 export interface OKRYear {
 	year: number;
-	global: ObjectiveDTO[];
-	Q1: ObjectiveDTO[];
-	Q2: ObjectiveDTO[];
-	Q3: ObjectiveDTO[];
-	Q4: ObjectiveDTO[];
+	global: Objective[];
+	Q1: Objective[];
+	Q2: Objective[];
+	Q3: Objective[];
+	Q4: Objective[];
 }
 
-export function groupOkrs(okrs: ObjectiveDTO[]): OKRYear[] {
+export function groupOkrs(okrs: Objective[]): OKRYear[] {
 	 const map = new Map<number, OKRYear>();
 
 	for (const okr of okrs) {

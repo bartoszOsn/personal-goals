@@ -1,6 +1,7 @@
 import { QuarterDTO, SprintBulkCreateRequestDTO, SprintChangeRequestDTO, SprintDTO, SprintListDTO } from '@personal-okr/shared';
-import { Quarter, Sprint, SprintBulkCreateRequest, SprintChangeRequest, SprintDuration, SprintId, SprintStatus } from '@/models/Sprint.ts';
+import { Sprint, SprintBulkCreateRequest, SprintChangeRequest, SprintDuration, SprintId, SprintStatus } from '@/models/Sprint.ts';
 import { Temporal } from 'temporal-polyfill';
+import { Quarter } from '@/models/Quarter';
 
 export function dtoToSprints(list: SprintListDTO): Sprint[] {
 	return list.sprints.map(dtoToSprint);

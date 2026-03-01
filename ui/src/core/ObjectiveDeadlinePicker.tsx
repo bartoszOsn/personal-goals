@@ -1,10 +1,10 @@
-import { ObjectiveDeadlineDTO } from '@personal-okr/shared';
 import { YearPickerInput } from '@mantine/dates';
 import { Group, Input, Select } from '@mantine/core';
+import { ObjectiveDeadline } from '@/models/Objective';
 
 export interface ObjectiveDeadlinePickerProps {
-	value?: ObjectiveDeadlineDTO;
-	onChange?: (value?: ObjectiveDeadlineDTO) => void;
+	value?: ObjectiveDeadline;
+	onChange?: (value?: ObjectiveDeadline) => void;
 	label?: string;
 }
 
@@ -20,7 +20,7 @@ export function ObjectiveDeadlinePicker(props: ObjectiveDeadlinePickerProps) {
 						value={value }
 						flex={1}
 						placeholder='Year'
-						onChange={(year) => year !== null && props.onChange?.({ ...props.value, year: new Date(year).getUTCFullYear() })}
+						onChange={(year) => year !== null && props.onChange?.({ quarter: null, ...props.value, year: new Date(year).getUTCFullYear() })}
 					/>
 					<Select
 							data={['Q1', 'Q2', 'Q3', 'Q4']}

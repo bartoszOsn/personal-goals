@@ -1,4 +1,4 @@
-import { useOkrQuery } from '@/api/okr-hooks.ts';
+import { useOkrQuery } from '@/api/okr/okr-hooks.ts';
 import { NoOkrsSplashScreen } from '@/routes/work/OKRs/NoOkrsSplashScreen';
 import { useMemo } from 'react';
 import { groupOkrs } from '@/routes/work/OKRs/groupOkrs';
@@ -8,7 +8,7 @@ import { CreateObjectiveModal } from '@/routes/work/OKRs/CreateObjectiveModal';
 
 export function OKRs() {
 	const objectives = useOkrQuery();
-	const years = useMemo(() => groupOkrs(objectives.data?.objectives ?? []), [objectives.data?.objectives]);
+	const years = useMemo(() => groupOkrs(objectives.data ?? []), [objectives.data]);
 
 	if (years.length === 0) {
 		return <NoOkrsSplashScreen />
@@ -20,7 +20,7 @@ export function OKRs() {
 					<Stack key={year.year} pt='xl'>
 						<Group gap='xs'>
 							<Title c='blue'>{year.year}</Title>
-							<CreateObjectiveModal initialDeadline={{ year: year.year}}>
+							<CreateObjectiveModal initialDeadline={{ year: year.year, quarter: null }}>
 								{
 									open => <ActionIcon size='sm' variant="subtle" onClick={open}>+</ActionIcon>
 								}

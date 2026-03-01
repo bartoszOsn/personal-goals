@@ -1,12 +1,12 @@
-import { ObjectiveDeadlineDTO, ObjectiveDTO } from '@personal-okr/shared';
 import { ActionIcon, Group, Stack, Text } from '@mantine/core';
 import { CreateObjectiveModal } from '@/routes/work/OKRs/CreateObjectiveModal';
 import { quarterToColor } from '@/core/quarterToColor';
 import { OkRTable } from '@/routes/work/OKRs/OKRTable';
+import { Objective, ObjectiveDeadline } from '@/models/Objective';
 
 export interface OkrGroupTableProps {
-	objectives: ObjectiveDTO[];
-	deadline: ObjectiveDeadlineDTO;
+	objectives: Objective[];
+	deadline: ObjectiveDeadline;
 }
 
 export function OkrGroupTable(props: OkrGroupTableProps) {

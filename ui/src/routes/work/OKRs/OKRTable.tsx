@@ -1,12 +1,12 @@
-import { ObjectiveDTO } from '@personal-okr/shared';
 import { ActionIcon, Box, Button, Center, Collapse, Group, Modal, RingProgress, Stack, Text, TextInput } from '@mantine/core';
-import { useKeyResultCreateMutation, useKeyResultDeleteMutation, useOkrDeleteMutation } from '@/api/okr-hooks';
+import { useKeyResultCreateMutation, useKeyResultDeleteMutation, useOkrDeleteMutation } from '@/api/okr/okr-hooks';
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { IconChevronDown, IconChevronUp, IconClock, IconPercentage, IconTrash } from '@tabler/icons-react';
+import { Objective } from '@/models/Objective';
 
 export interface OKRTableProps {
-	objective: ObjectiveDTO;
+	objective: Objective;
 }
 
 export function OkRTable({ objective }: OKRTableProps) {
@@ -70,7 +70,7 @@ export function OkRTable({ objective }: OKRTableProps) {
 			<Collapse in={!collapsed}>
 				<Stack gap="xs" ml="xl">
 					{
-						objective.keyResults.map((keyResult, index) => (
+						objective.KeyResults.map((keyResult, index) => (
 							<Box bg="orange.1" pl="lg" pr='sm' py="xs" style={{ borderLeft: 'solid 2px var(--mantine-color-orange-5)' }}>
 								<Group wrap="nowrap">
 									<Text style={{ textWrap: 'nowrap' }} c="orange" fw="bold" size="lg">KR-{index + 1}:</Text>

@@ -7,7 +7,7 @@ import { InplaceEditor } from '@/base/inplace-editor/api/InplaceEditor.tsx';
 import { ComboboxData } from '@mantine/core';
 import { Task } from '@/models/Task';
 import { InplaceTextDisplay } from '@/base/inplace-editor/api/primitive/display/InplaceTextDisplay.tsx';
-import { useOkrQuery } from '@/api/okr-hooks.ts';
+import { useOkrQuery } from '@/api/okr/okr-hooks.ts';
 import { KeyResultId } from '@/models/KeyResult.ts';
 
 export interface TaskKeyResultInplaceProps {
@@ -29,12 +29,12 @@ export function TaskKeyResultInplace({ task, textProps, selectProps}: TaskKeyRes
 		});
 	}
 
-	const selectedKR = objectivesQuery.data?.objectives.flatMap(o => o.keyResults)
+	const selectedKR = objectivesQuery.data?.flatMap(o => o.KeyResults)
 		.find(kr => kr.id === task.keyResultId) ?? null;
 
-	const items: ComboboxData = objectivesQuery.data?.objectives.map(o => ({
+	const items: ComboboxData = objectivesQuery.data?.map(o => ({
 		group: o.name,
-		items: o.keyResults.map(kr => ({ value: kr.id, label: kr.name }))
+		items: o.KeyResults.map(kr => ({ value: kr.id, label: kr.name }))
 	})) ?? [];
 
 	return (

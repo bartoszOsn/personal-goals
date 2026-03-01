@@ -1,4 +1,4 @@
-import { useOkrQuery } from '@/api/okr-hooks';
+import { useOkrQuery } from '@/api/okr/okr-hooks';
 import { Stack } from '@mantine/core';
 import { OKRs } from '@/routes/work/OKRs/OKRs';
 

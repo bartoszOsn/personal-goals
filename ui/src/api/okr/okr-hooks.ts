@@ -1,18 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { http } from '@/base/http';
-import { KeyResultRequestDTO, ObjectiveListDTO, ObjectiveRequestDTO } from '@personal-okr/shared';
+import { createKeyResult, createOKR, deleteKeyResult, deleteOKR, getOKR } from '@/api/okr/okr-request';
+import { dtoToObjectives, objectiveRequestToDTO } from '@/api/okr/okr-converters';
+import { ObjectiveId, ObjectiveRequest } from '@/models/Objective';
+import { KeyResultId, KeyResultRequest } from '@/models/KeyResult';
 
 export function useOkrQuery() {
 	return useQuery({
 		queryKey: ['okr'],
-		queryFn: () => http.get<ObjectiveListDTO>('/api/work/okr/objective')
+		queryFn: () => getOKR()
+			.then(dtoToObjectives)
 	});
 }
 
 export function useOkrCreateMutation() {
 	const client = useQueryClient();
 	return useMutation({
-		mutationFn: (request: ObjectiveRequestDTO) => http.post('/api/work/okr/objective', request),
+		mutationFn: (request: ObjectiveRequest) => createOKR(objectiveRequestToDTO(request)),
 		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
 	});
 }
@@ -20,7 +23,7 @@ export function useOkrCreateMutation() {
 export function useOkrDeleteMutation() {
 	const client = useQueryClient();
 	return useMutation({
-		mutationFn: (objectiveId: string) => http.delete(`/api/work/okr/objective/${objectiveId}`),
+		mutationFn: (objectiveId: ObjectiveId) => deleteOKR(objectiveId),
 		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
 	})
 }
@@ -28,7 +31,7 @@ export function useOkrDeleteMutation() {
 export function useKeyResultCreateMutation() {
 	const client = useQueryClient();
 	return useMutation({
-		mutationFn: (props: { objectiveId: string, request: KeyResultRequestDTO }) => http.post(`/api/work/okr/key-result/${props.objectiveId}`, props.request),
+		mutationFn: (props: { objectiveId: ObjectiveId, request: KeyResultRequest }) => createKeyResult(props.objectiveId, props.request),
 		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
 	});
 }
@@ -36,7 +39,7 @@ export function useKeyResultCreateMutation() {
 export function useKeyResultDeleteMutation() {
 	const client = useQueryClient();
 	return useMutation({
-		mutationFn: (keyResultId: string) => http.delete(`/api/work/okr/key-result/${keyResultId}`),
+		mutationFn: (keyResultId: KeyResultId) => deleteKeyResult(keyResultId),
 		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
 	});
 }

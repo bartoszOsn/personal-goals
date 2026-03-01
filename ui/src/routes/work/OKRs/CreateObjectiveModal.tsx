@@ -1,12 +1,12 @@
-import { ObjectiveDeadlineDTO } from '@personal-okr/shared';
 import { ReactNode, useState } from 'react';
 import { Button, Modal, Stack, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { ObjectiveDeadlinePicker } from '@/core/ObjectiveDeadlinePicker';
-import { useOkrCreateMutation } from '@/api/okr-hooks';
+import { useOkrCreateMutation } from '@/api/okr/okr-hooks';
+import { ObjectiveDeadline } from '@/models/Objective';
 
 export interface CreateObjectiveModalProps {
-	initialDeadline?: ObjectiveDeadlineDTO;
+	initialDeadline?: ObjectiveDeadline;
 	children: (onClick: () => void) => ReactNode;
 }
 

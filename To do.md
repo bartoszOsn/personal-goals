@@ -21,3 +21,4 @@
     - ✅ ColumnDescription takes render function
     - ✅ change dataTypes into components
     - ✅ Add maybe some utils for inplacing, but it's handled at the dataType component level.
+12. Make sure it works on mobile.
