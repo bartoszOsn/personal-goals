@@ -2,32 +2,35 @@ import { useGanttContext } from '@/base/gantt/GanttProvider.tsx';
 import { useCallback, useMemo } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
+import { flatItems } from '@/base/gantt/FlatItems';
+import { GanttItem } from '@/base/gantt';
 
 export function useDateRanges() {
 	const context = useGanttContext();
-	const sortedItems = useMemo(
-		() => [...context.props.items].sort((a, b) => {
-			if (!a.start) {
-				return -1;
-			}
-
-			if (!b.start) {
-				return 1;
-			}
-
-			return Temporal.PlainDate.compare(a.start, b.start);
-		}),
+	const earliestItem = useMemo(
+		() => flatItems(context.props.items)
+			.filter((item): item is GanttItem<unknown> & { start: Temporal.PlainDate } => !!item.start)
+			.sort((a, b) => Temporal.PlainDate.compare(a.start, b.start))
+			.at(0),
 		[context.props.items]
 	);
+	const latestItem = useMemo(
+		() => flatItems(context.props.items)
+			.filter((item): item is GanttItem<unknown> & { end: Temporal.PlainDate } => !!item.end)
+			.sort((a, b) => Temporal.PlainDate.compare(a.end, b.end))
+			.at(-1),
+		[context.props.items]
+	);
+	
 	const pixelPerMillis = context.zoomLevel.pixelsPerDay / (1000 * 60 * 60 * 24);
 
 	const startDate = useMemo(
-		() => (sortedItems.map(i => i.start).filter(Boolean)[0] ?? Temporal.Now.plainDateISO()).subtract({ days: 10 }),
-		[sortedItems]
+		() => earliestItem?.start ?? Temporal.Now.plainDateISO().subtract({ days: 10 }),
+		[earliestItem]
 	);
 	const endDate = useMemo(
 		() => {
-			const lastItemEndDate = sortedItems.map(i => i.start).filter(Boolean)[sortedItems.length - 1];
+			const lastItemEndDate = latestItem?.end;
 			const screensEndDate = startDate.add({ milliseconds: context.chartViewportWidth / pixelPerMillis });
 
 			if (!lastItemEndDate) {
@@ -36,7 +39,7 @@ export function useDateRanges() {
 
 			return isPlainDate(lastItemEndDate).after(screensEndDate) ? lastItemEndDate.add({ days: 10 }) : screensEndDate;
 		},
-		[context.chartViewportWidth, pixelPerMillis, sortedItems, startDate]
+		[context.chartViewportWidth, latestItem?.end, pixelPerMillis, startDate]
 	);
 
 	const dateToPixelPos = useCallback((date: Temporal.PlainDate) => {
