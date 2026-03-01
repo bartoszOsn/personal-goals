@@ -6,6 +6,7 @@ import { Temporal } from 'temporal-polyfill';
 import { Task } from '@/models/Task';
 import { Objective, ObjectiveDeadline } from '@/models/Objective';
 import { KeyResult } from '@/models/KeyResult';
+import { WorkItemVariant } from '@/models/WorkItemVariant';
 
 export function useRoadmapGanttItems() {
 	const okrs = useOkrQuery();
@@ -14,7 +15,7 @@ export function useRoadmapGanttItems() {
 	const objectives = okrs.data ?? [];
 	const tasks = tasksQuery.data ?? [];
 
-	const ganttItems: GanttItem<Objective | KeyResult | Task>[] = useMemo(() => {
+	const ganttItems: GanttItem<WorkItemVariant>[] = useMemo(() => {
 		return [
 			...objectives.map((o) => objectiveToGanttItem(o, tasks)),
 			...tasks.filter(task => !task.keyResultId).map(taskToGanttItem)
@@ -27,13 +28,13 @@ export function useRoadmapGanttItems() {
 	}
 }
 
-function objectiveToGanttItem(objectiveDTO: Objective, tasks: Task[]): GanttItem<Objective | KeyResult | Task> {
+function objectiveToGanttItem(objectiveDTO: Objective, tasks: Task[]): GanttItem<WorkItemVariant> {
 	const [start, end] = getDatesFromDeadline(objectiveDTO.deadline);
 
 	return {
 		id: objectiveDTO.id,
 		color: 'grape',
-		data: objectiveDTO,
+		data: { objective: objectiveDTO },
 		children: objectiveDTO.KeyResults.map(kr => krToGanttItem(kr, tasks, objectiveDTO)),
 		start,
 		end,
@@ -41,13 +42,13 @@ function objectiveToGanttItem(objectiveDTO: Objective, tasks: Task[]): GanttItem
 	};
 }
 
-function krToGanttItem(keyResultDTO: KeyResult, tasks: Task[], parent: Objective): GanttItem<Objective | KeyResult | Task> {
+function krToGanttItem(keyResultDTO: KeyResult, tasks: Task[], parent: Objective): GanttItem<WorkItemVariant> {
 	const [start, end] = getDatesFromDeadline(parent.deadline);
 
 	return {
 		id: keyResultDTO.id,
 		color: 'orange',
-		data: keyResultDTO,
+		data: { keyResult: keyResultDTO },
 		children: keyResultDTO.associatedTaskIds.map(taskId => tasks.find(t => t.id === taskId))
 			.filter((task): task is Task => task !== undefined)
 			.map(taskToGanttItem),
@@ -57,11 +58,11 @@ function krToGanttItem(keyResultDTO: KeyResult, tasks: Task[], parent: Objective
 	};
 }
 
-function taskToGanttItem(task: Task): GanttItem<Objective | KeyResult | Task> {
+function taskToGanttItem(task: Task): GanttItem<WorkItemVariant> {
 	return {
 		id: task.id,
 		color: 'gray',
-		data: task,
+		data: { task: task },
 		start: task.startDate ?? undefined,
 		end: task.endDate ?? undefined,
 		children: [],

@@ -1,22 +1,21 @@
 import { ColumnDescriptor } from '@/base/data-table';
 import { Gantt, GanttItem } from '@/base/gantt';
-import { Group, Stack, Text } from '@mantine/core';
+import { Group, Stack } from '@mantine/core';
 import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
-import { Task } from '@/models/Task';
-import { Objective } from '@/models/Objective';
-import { KeyResult } from '@/models/KeyResult';
+import { mapColumnData } from '@/base/data-table/api/mapColumnData';
+import { WorkItemVariant } from '@/models/WorkItemVariant';
+import { taskColumns, workItemCommonColumns } from '@/core/columns';
 
 export function RoadmapRoute() {
 	const {loading, ganttItems} = useRoadmapGanttItems();
 
-	const columns: ColumnDescriptor<GanttItem<Objective | KeyResult | Task>>[] = [
-		{
-			columnId: 'name',
-			columnName: 'Name',
-			hierarchyColumn: true,
-			render: (item) => <Text inherit>{item.data.name}</Text>
-		}
-	];
+	const columns: ColumnDescriptor<GanttItem<WorkItemVariant>>[] = mapColumnData(
+		(item: GanttItem<WorkItemVariant>) => item.data,
+		[
+			...workItemCommonColumns,
+			...taskColumns
+		]
+	);
 
 	return (
 		<Stack w="100%" h="100vh" p="lg" style={{ overflow: 'hidden' }}>

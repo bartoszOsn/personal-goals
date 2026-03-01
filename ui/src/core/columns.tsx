@@ -17,7 +17,8 @@ export const workItemCommonColumns: ColumnDescriptor<WorkItemVariant>[] = [
 			task: (task) => <TaskNameInplace task={task} />,
 			objective: (o) => <Text inherit>{o.name}</Text>,
 			keyResult: (kr) => <Text inherit>{kr.name}</Text>,
-		})
+		}),
+		hierarchyColumn: true
 	},
 ]
 
