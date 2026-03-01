@@ -55,9 +55,15 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 						return null;
 					}
 
+					const bgColor = selectedRows.includes(row.id)
+						? 'blue.0'
+						: row.backgroundColor
+							? `${row.backgroundColor}.1`
+							: 'white';
+
 					return (
 						<Table.Tr key={`${row.id}`}
-								  bg={selectedRows.includes(row.id) ? 'blue.0' : 'white'}
+								  bg={bgColor}
 								  data-row-id={`${row.id}`}
 								  onClick={(e) => clickedOn(row.id, e.shiftKey)}>
 							{

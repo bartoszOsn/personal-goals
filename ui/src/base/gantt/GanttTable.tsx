@@ -61,7 +61,8 @@ export function GanttTable<TData>() {
 	const dataTableRows: DataTableRow<GanttItem<TData>, string>[] = useDataTableRows({
 		rawData: context.props.items,
 		getId: (item) => item.id,
-		getChildren: (item) => item.children
+		getChildren: (item) => item.children,
+		getColor: (item) => item.backgroundColor,
 	});
 
 	const onSelectionChange = (rows: GanttItem<TData>[]) => {

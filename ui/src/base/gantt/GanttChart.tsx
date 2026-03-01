@@ -9,6 +9,7 @@ import { GanttChartHeader } from '@/base/gantt/chart/GanttChartHeader';
 import { GanttZoomButtons } from '@/base/gantt/chart/GanttZoomButtons';
 import { useElementSize } from '@mantine/hooks';
 import { GanttChartWeekends } from '@/base/gantt/chart/GanttChartWeekends';
+import { GanttChartBackgroundColor } from '@/base/gantt/chart/GanttChartBackgroundColor';
 
 export function GanttChart<TData>() {
 	const context = useGanttContext<TData>();
@@ -33,6 +34,7 @@ export function GanttChart<TData>() {
 		<ScrollArea.Autosize style={{ flexGrow: 1 }} h="100%" viewportRef={viewportRef} onScrollPositionChange={({ y }) => context.setScrollY(y)}>
 			<svg ref={context.svg} height={context.scrollAreaHeight} width={dateToPixelPos(endDate)}>
 				<GanttChartWeekends />
+				<GanttChartBackgroundColor />
 				<GanttChartRowLines />
 				<GanttChartTodayLine />
 				<GanttCharttItemBars />

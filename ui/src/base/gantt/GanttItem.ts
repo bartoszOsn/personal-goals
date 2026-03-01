@@ -9,4 +9,5 @@ export interface GanttItem<TData> {
 	data: TData;
 	linksInto: string[];
 	children: GanttItem<TData>[];
+	backgroundColor?: MantineColor;
 }

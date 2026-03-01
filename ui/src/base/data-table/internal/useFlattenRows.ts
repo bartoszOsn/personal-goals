@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { DataTableRow } from '@/base/data-table/api/DataTableRow';
+import { MantineColor } from '@mantine/core';
 
 export interface FlattenRowsInfo<TData, TId> {
 	maxLevels: number;
@@ -13,6 +14,7 @@ export interface FlattenRow<TData, TId> {
 	hasChildren: boolean;
 	expanded: boolean;
 	visible: boolean;
+	backgroundColor?: MantineColor;
 }
 
 export function useFlattenRows<TData, TId>(rows: DataTableRow<TData, TId>[], onExpansionChange?: (rows: TId[]) => void) {
@@ -64,7 +66,8 @@ function flattenRows<TData, TId>(
 			level: currentLevel,
 			hasChildren: children.length > 0,
 			expanded: expanded.includes(datum.id),
-			visible: visible
+			visible: visible,
+			backgroundColor: datum.backgroundColor
 		};
 
 		result.push(row);

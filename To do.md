@@ -8,7 +8,7 @@
     - Gantt must support timeboxes
     - Gantt must support links between items
     - Option to add warning on gantt - When task dates are outside of assigned sprint (small ! icon at to right top of a bar with a tooltip)
-    - Option to color rows, both on data table and gantt chart - Objectives purple, KRs orange and tasks without color.
+    - ✅ Option to color rows, both on data table and gantt chart - Objectives purple, KRs orange and tasks without color.
 4. Progress matrix.
 5. Filtering tasks.
 6. Editing description in objective, KR and task.

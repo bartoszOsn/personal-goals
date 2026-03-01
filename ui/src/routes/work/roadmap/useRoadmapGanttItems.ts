@@ -38,7 +38,8 @@ function objectiveToGanttItem(objectiveDTO: Objective, tasks: Task[]): GanttItem
 		children: objectiveDTO.KeyResults.map(kr => krToGanttItem(kr, tasks, objectiveDTO)),
 		start,
 		end,
-		linksInto: []
+		linksInto: [],
+		backgroundColor: 'grape'
 	};
 }
 
@@ -54,7 +55,8 @@ function krToGanttItem(keyResultDTO: KeyResult, tasks: Task[], parent: Objective
 			.map(taskToGanttItem),
 		start,
 		end,
-		linksInto: []
+		linksInto: [],
+		backgroundColor: 'orange'
 	};
 }
 
