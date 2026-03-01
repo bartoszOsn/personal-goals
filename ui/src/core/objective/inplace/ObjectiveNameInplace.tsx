@@ -1,29 +1,27 @@
-import { useUpdateTaskMutation } from '@/api/task/task-hooks.ts';
 import { InplaceEditor } from '@/base/inplace-editor/api/InplaceEditor.tsx';
 import { InplaceEditorDisplay } from '@/base/inplace-editor/api/InplaceEditorDisplay.tsx';
 import { InplaceTextDisplay } from '@/base/inplace-editor/api/primitive/display/InplaceTextDisplay.tsx';
 import { InplaceEditorEdit } from '@/base/inplace-editor/api/InplaceEditorEdit.tsx';
 import { InplaceTextInputEdit } from '@/base/inplace-editor/api/primitive/edit/InplaceTextInputEdit.tsx';
 import { ComponentProps } from 'react';
-import { Task } from '@/models/Task';
-import { useTaskModal } from '@/core/task/useTaskModal';
 import { ActionIcon, Group, Tooltip } from '@mantine/core';
 import { IconFileInvoice } from '@tabler/icons-react';
+import { Objective } from '@/models/Objective.ts';
+import { useOKRUpdateMutation } from '@/api/okr/okr-hooks.ts';
 
-export interface TaskNameInplaceProps {
-	task: Task;
+export interface ObjectiveNameInplaceProps {
+	objective: Objective;
 	textProps?: ComponentProps<typeof InplaceTextDisplay>
 	inputProps?: ComponentProps<typeof InplaceTextInputEdit>;
 	showDialogButton?: boolean;
 }
 
-export function TaskNameInplace({ task, textProps, inputProps, showDialogButton = true }: TaskNameInplaceProps) {
-	const taskMutation = useUpdateTaskMutation();
-	const openTaskDialog = useTaskModal();
+export function ObjectiveNameInplace({ objective, textProps, inputProps, showDialogButton = true }: ObjectiveNameInplaceProps) {
+	const objectiveMutation = useOKRUpdateMutation();
 
 	const onValueSubmit = (value: string) => {
-		taskMutation.mutate({
-			id: task.id,
+		objectiveMutation.mutate({
+			id: objective.id,
 			request: {
 				name: value,
 			}
@@ -31,23 +29,23 @@ export function TaskNameInplace({ task, textProps, inputProps, showDialogButton 
 	}
 
 	return (
-		<InplaceEditor loading={taskMutation.isPending}>
+		<InplaceEditor loading={objectiveMutation.isPending}>
 			<InplaceEditorDisplay>
 				<Group gap='xs' wrap='nowrap' style={{ overflow: 'hidden' }}>
 					{
 						showDialogButton && (
-							<Tooltip label='Open task'>
-								<ActionIcon size='xs' color='gray' variant='subtle' onClick={() => openTaskDialog(task.id)}>
+							<Tooltip label='Open objective'>
+								<ActionIcon size='xs' color='grape' variant='subtle' onClick={() => {}}>
 									<IconFileInvoice />
 								</ActionIcon>
 							</Tooltip>
 						)
 					}
-					<InplaceTextDisplay {...textProps}>{task.name}</InplaceTextDisplay>
+					<InplaceTextDisplay {...textProps}>{objective.name}</InplaceTextDisplay>
 				</Group>
 			</InplaceEditorDisplay>
 			<InplaceEditorEdit>
-				<InplaceTextInputEdit {...inputProps} defaultValue={task.name} onValueSubmit={onValueSubmit} />
+				<InplaceTextInputEdit {...inputProps} defaultValue={objective.name} onValueSubmit={onValueSubmit} />
 			</InplaceEditorEdit>
 		</InplaceEditor>
 	)

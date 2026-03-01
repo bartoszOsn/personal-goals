@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	NotFoundException
+} from '@nestjs/common';
 import { WorkOKRRepository } from '../../app/work/WorkOKRRepository';
 import { User } from 'src/domain/auth/model/User';
 import { KeyResult, KeyResultId } from 'src/domain/work/model/KeyResult';
@@ -59,14 +63,13 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 		user: User,
 		id: ObjectiveId,
 		request: ObjectiveRequest
-	): Promise<Objective> {
+	): Promise<void> {
 		const entity = this.workOKREntityConverter.toObjectiveEntity(
 			user,
 			request
 		);
 		entity.id = id.id;
-		const updatedEntity = await this.objectiveRepository.save(entity);
-		return this.workOKREntityConverter.fromObjectiveEntity(updatedEntity);
+		await this.objectiveRepository.save(entity);
 	}
 
 	async deleteObjective(user: User, id: ObjectiveId): Promise<void> {
@@ -131,9 +134,9 @@ export class WorkOKRRepositoryImpl extends WorkOKRRepository {
 		// Determine the calculation type (use new one if provided, otherwise use existing)
 		const calculationType =
 			request.progressCalculationType !== null
-				? this.workOKREntityConverter['toProgressCalculationTypeEntity'](
-						request.progressCalculationType
-					)
+				? this.workOKREntityConverter[
+						'toProgressCalculationTypeEntity'
+					](request.progressCalculationType)
 				: existingEntity.progressCalculationType;
 
 		// Validate progress update: only allow manual progress update for YES_NO and PERCENTAGE

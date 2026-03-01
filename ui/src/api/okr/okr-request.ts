@@ -9,12 +9,20 @@ export function createOKR(request: ObjectiveRequestDTO) {
 	return http.post('/api/work/okr/objective', request);
 }
 
+export function updateOKR(id: string, request: ObjectiveRequestDTO) {
+	return http.put(`/api/work/okr/objective/${id}`, request);
+}
+
 export function deleteOKR(objectiveId: string) {
 	return http.delete(`/api/work/okr/objective/${objectiveId}`);
 }
 
 export function createKeyResult(objectiveId: string, request: KeyResultRequestDTO) {
 	return http.post(`/api/work/okr/key-result/${objectiveId}`, request)
+}
+
+export function updateKeyResult(keyResultId: string, request: KeyResultRequestDTO) {
+	return http.put(`/api/work/okr/key-result/${keyResultId}`, request)
 }
 
 export function deleteKeyResult(keyResultId: string) {

@@ -7,16 +7,17 @@ import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace.tsx';
 import { TaskKeyResultInplace } from '@/core/task/inplace/TaskKeyResultInplace.tsx';
 import { TaskSprintInplace } from '@/core/task/inplace/TaskSprintInplace.tsx';
 import { mapWorkItemVariant } from '@/core/mapWorkItemVariant.ts';
-import { Text } from '@mantine/core';
+import { ObjectiveNameInplace } from '@/core/objective/inplace/ObjectiveNameInplace';
+import { KeyResultNameInplace } from '@/core/key-result/inplace/KeyResultNameInplace';
 
 export const workItemCommonColumns: ColumnDescriptor<WorkItemVariant>[] = [
 	{
 		columnId: 'name',
 		columnName: 'Name',
 		render: (variant) => mapWorkItemVariant(variant, {
-			task: (task) => <TaskNameInplace task={task} />,
-			objective: (o) => <Text inherit>{o.name}</Text>,
-			keyResult: (kr) => <Text inherit>{kr.name}</Text>,
+			task: (task) => <TaskNameInplace task={task} textProps={{ style: { whiteSpace: 'nowrap' }} } />,
+			objective: (o) => <ObjectiveNameInplace objective={o} textProps={{ style: { whiteSpace: 'nowrap' }} } />,
+			keyResult: (kr) => <KeyResultNameInplace keyResult={kr} textProps={{ style: { whiteSpace: 'nowrap' }} } />,
 		}),
 		hierarchyColumn: true
 	},

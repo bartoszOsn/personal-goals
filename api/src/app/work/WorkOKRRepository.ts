@@ -14,7 +14,7 @@ export abstract class WorkOKRRepository {
 		user: User,
 		id: ObjectiveId,
 		request: ObjectiveRequest
-	): Promise<Objective>;
+	): Promise<void>;
 	abstract deleteObjective(user: User, id: ObjectiveId): Promise<void>;
 
 	abstract createKeyResult(

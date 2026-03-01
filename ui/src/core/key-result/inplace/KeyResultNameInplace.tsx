@@ -1,29 +1,27 @@
-import { useUpdateTaskMutation } from '@/api/task/task-hooks.ts';
 import { InplaceEditor } from '@/base/inplace-editor/api/InplaceEditor.tsx';
 import { InplaceEditorDisplay } from '@/base/inplace-editor/api/InplaceEditorDisplay.tsx';
 import { InplaceTextDisplay } from '@/base/inplace-editor/api/primitive/display/InplaceTextDisplay.tsx';
 import { InplaceEditorEdit } from '@/base/inplace-editor/api/InplaceEditorEdit.tsx';
 import { InplaceTextInputEdit } from '@/base/inplace-editor/api/primitive/edit/InplaceTextInputEdit.tsx';
 import { ComponentProps } from 'react';
-import { Task } from '@/models/Task';
-import { useTaskModal } from '@/core/task/useTaskModal';
 import { ActionIcon, Group, Tooltip } from '@mantine/core';
 import { IconFileInvoice } from '@tabler/icons-react';
+import { useKeyResultUpdateMutation } from '@/api/okr/okr-hooks.ts';
+import { KeyResult } from '@/models/KeyResult.ts';
 
-export interface TaskNameInplaceProps {
-	task: Task;
+export interface KeyResultNameInplaceProps {
+	keyResult: KeyResult;
 	textProps?: ComponentProps<typeof InplaceTextDisplay>
 	inputProps?: ComponentProps<typeof InplaceTextInputEdit>;
 	showDialogButton?: boolean;
 }
 
-export function TaskNameInplace({ task, textProps, inputProps, showDialogButton = true }: TaskNameInplaceProps) {
-	const taskMutation = useUpdateTaskMutation();
-	const openTaskDialog = useTaskModal();
+export function KeyResultNameInplace({ keyResult, textProps, inputProps, showDialogButton = true }: KeyResultNameInplaceProps) {
+	const keyResultMutation = useKeyResultUpdateMutation();
 
 	const onValueSubmit = (value: string) => {
-		taskMutation.mutate({
-			id: task.id,
+		keyResultMutation.mutate({
+			id: keyResult.id,
 			request: {
 				name: value,
 			}
@@ -31,23 +29,23 @@ export function TaskNameInplace({ task, textProps, inputProps, showDialogButton 
 	}
 
 	return (
-		<InplaceEditor loading={taskMutation.isPending}>
+		<InplaceEditor loading={keyResultMutation.isPending}>
 			<InplaceEditorDisplay>
 				<Group gap='xs' wrap='nowrap' style={{ overflow: 'hidden' }}>
 					{
 						showDialogButton && (
-							<Tooltip label='Open task'>
-								<ActionIcon size='xs' color='gray' variant='subtle' onClick={() => openTaskDialog(task.id)}>
+							<Tooltip label='Open key result'>
+								<ActionIcon size='xs' color='orange' variant='subtle' onClick={() => {}}>
 									<IconFileInvoice />
 								</ActionIcon>
 							</Tooltip>
 						)
 					}
-					<InplaceTextDisplay {...textProps}>{task.name}</InplaceTextDisplay>
+					<InplaceTextDisplay {...textProps}>{keyResult.name}</InplaceTextDisplay>
 				</Group>
 			</InplaceEditorDisplay>
 			<InplaceEditorEdit>
-				<InplaceTextInputEdit {...inputProps} defaultValue={task.name} onValueSubmit={onValueSubmit} />
+				<InplaceTextInputEdit {...inputProps} defaultValue={keyResult.name} onValueSubmit={onValueSubmit} />
 			</InplaceEditorEdit>
 		</InplaceEditor>
 	)

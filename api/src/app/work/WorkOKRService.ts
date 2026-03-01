@@ -26,9 +26,9 @@ export class WorkOKRService {
 	async updateObjective(
 		id: ObjectiveId,
 		request: ObjectiveRequest
-	): Promise<Objective> {
+	): Promise<void> {
 		const user = await this.userStorage.getUser();
-		return this.workOKRRepository.updateObjective(user, id, request);
+		await this.workOKRRepository.updateObjective(user, id, request);
 	}
 
 	async deleteObjective(id: ObjectiveId): Promise<void> {

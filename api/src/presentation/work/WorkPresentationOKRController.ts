@@ -47,15 +47,11 @@ export class WorkPresentationOKRController {
 	async updateObjective(
 		@Param('objectiveId') objectiveId: string,
 		@Body() request: ObjectiveRequestDTO
-	): Promise<ObjectiveDTO> {
+	): Promise<void> {
 		const domainRequest =
 			this.workOkrDTOConverter.fromObjectiveRequestDTO(request);
 		const id = new ObjectiveId(objectiveId);
-		const objective = await this.workOKRService.updateObjective(
-			id,
-			domainRequest
-		);
-		return this.workOkrDTOConverter.toObjectiveDTO(objective);
+		await this.workOKRService.updateObjective(id, domainRequest);
 	}
 
 	@Delete('objective/:objectiveId')

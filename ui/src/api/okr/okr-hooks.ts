@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createKeyResult, createOKR, deleteKeyResult, deleteOKR, getOKR } from '@/api/okr/okr-request';
+import { createKeyResult, createOKR, deleteKeyResult, deleteOKR, getOKR, updateKeyResult, updateOKR } from '@/api/okr/okr-request';
 import { dtoToObjectives, objectiveRequestToDTO } from '@/api/okr/okr-converters';
 import { ObjectiveId, ObjectiveRequest } from '@/models/Objective';
 import { KeyResultId, KeyResultRequest } from '@/models/KeyResult';
@@ -20,6 +20,14 @@ export function useOkrCreateMutation() {
 	});
 }
 
+export function useOKRUpdateMutation() {
+	const client = useQueryClient();
+	return useMutation({
+		mutationFn: (props: { id: ObjectiveId, request: ObjectiveRequest }) => updateOKR(props.id, objectiveRequestToDTO(props.request)),
+		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
+	})
+}
+
 export function useOkrDeleteMutation() {
 	const client = useQueryClient();
 	return useMutation({
@@ -32,6 +40,14 @@ export function useKeyResultCreateMutation() {
 	const client = useQueryClient();
 	return useMutation({
 		mutationFn: (props: { objectiveId: ObjectiveId, request: KeyResultRequest }) => createKeyResult(props.objectiveId, props.request),
+		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
+	});
+}
+
+export function useKeyResultUpdateMutation() {
+	const client = useQueryClient();
+	return useMutation({
+		mutationFn: (props: { id: KeyResultId, request: KeyResultRequest }) => updateKeyResult(props.id, props.request),
 		onSuccess: () => client.invalidateQueries({ queryKey: ['okr'] })
 	});
 }
