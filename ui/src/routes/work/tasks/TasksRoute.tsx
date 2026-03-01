@@ -3,15 +3,11 @@ import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateTaskMutation, useDeleteTasksMutation, useTasksQuery } from '@/api/task/task-hooks';
 import { DataTable } from '@/base/data-table/api/DataTable';
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDataTableRows } from '@/base/data-table';
-import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
-import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
-import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
-import { TaskStatusInplace } from '@/core/task/inplace/TaskStatusInplace';
 import { Task } from '@/models/Task';
-import { TaskKeyResultInplace } from '@/core/task/inplace/TaskKeyResultInplace';
-import { TaskSprintInplace } from '@/core/task/inplace/TaskSprintInplace';
+import { WorkItemTaskVariant, WorkItemVariant } from '@/models/WorkItemVariant';
+import { taskColumns, workItemCommonColumns } from '@/core/columns';
 
 export function TasksRoute() {
 	const tasksQuery = useTasksQuery();
@@ -27,52 +23,24 @@ export function TasksRoute() {
 		deleteTaskMutation.mutate(selected.map(i => i.id));
 	};
 
-	const onSelectionChange = (newSelection: Task[]) => {
-		const isEqual = newSelection.length === selected.length && newSelection.every((t, i) => t.id === selected[i].id);
+	const onSelectionChange = (newSelection: WorkItemTaskVariant[]) => {
+		const isEqual = newSelection.length === selected.length && newSelection.every((t, i) => t.task.id === selected[i].id);
 
 		if (!isEqual) {
-			setSelected(newSelection);
+			setSelected(newSelection.map(task => task.task));
 		}
 	};
 
-	const columns: ColumnDescriptor<Task>[] = [
-		{
-			columnId: 'name',
-			columnName: 'Task',
-			render: (task) => <TaskNameInplace task={task} />
-		},
-		{
-			columnId: 'status',
-			columnName: 'Status',
-			render: (task) => <TaskStatusInplace task={task} />
-		},
-		{
-			columnId: 'startDate',
-			columnName: 'Start date',
-			render: (task) => <TaskStartDateInplace task={task} />
-		},
-		{
-			columnId: 'endDate',
-			columnName: 'End date',
-			render: (task) => <TaskEndDateInplace task={task} />
-		},
-		{
-			columnId: 'keyResultId',
-			columnName: 'Key result',
-			render: (task) => <TaskKeyResultInplace task={task} />
-		},
-		{
-			columnId: 'sprints',
-			columnName: 'Sprints',
-			render: (task) => <TaskSprintInplace task={task} />
-		}
-	];
+	const columns: ColumnDescriptor<WorkItemVariant>[] = useMemo(
+		() => [...workItemCommonColumns, ...taskColumns],
+		[]
+	);
 
 	const initialColumnIds: string[] = ['name', 'status', 'startDate', 'endDate'];
 
 	const dataTableRows = useDataTableRows({
-		rawData: tasksQuery.data ?? [],
-		getId: task => task.id,
+		rawData: tasksQuery.data?.map(task => ({ task}) as WorkItemTaskVariant) ?? [],
+		getId: task => task.task.id,
 		getChildren: () => []
 	});
 

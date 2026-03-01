@@ -2,13 +2,14 @@ import { ColumnDescriptor } from '@/base/data-table';
 import { Gantt, GanttItem } from '@/base/gantt';
 import { Group, Stack, Text } from '@mantine/core';
 import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
-import { KeyResultDTO, ObjectiveDTO } from '@personal-okr/shared';
 import { Task } from '@/models/Task';
+import { Objective } from '@/models/Objective';
+import { KeyResult } from '@/models/KeyResult';
 
 export function RoadmapRoute() {
 	const {loading, ganttItems} = useRoadmapGanttItems();
 
-	const columns: ColumnDescriptor<GanttItem<ObjectiveDTO | KeyResultDTO | Task>>[] = [
+	const columns: ColumnDescriptor<GanttItem<Objective | KeyResult | Task>>[] = [
 		{
 			columnId: 'name',
 			columnName: 'Name',
