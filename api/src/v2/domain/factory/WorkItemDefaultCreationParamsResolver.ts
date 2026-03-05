@@ -10,6 +10,8 @@ import {
 	ManualWorkItemProgress,
 	Percentage
 } from '../model/WorkItemProgress';
+import { WorkItemDescription } from '../model/WorkItemDescription';
+import { WorkItemTitle } from '../model/WorkItemTitle';
 
 export class WorkItemDefaultCreationParamsResolver {
 	public static getDefaultCreationParamsForType(
@@ -39,8 +41,8 @@ export class WorkItemDefaultCreationParamsResolver {
 			WorkItemType.TASK,
 			WorkItemId.random(),
 			context,
-			'New task',
-			'',
+			new WorkItemTitle('New task'),
+			WorkItemDescription.empty(),
 			null,
 			WorkItemStatus.TO_DO,
 			new ManualWorkItemProgress(Percentage.zero())
@@ -54,8 +56,8 @@ export class WorkItemDefaultCreationParamsResolver {
 			WorkItemType.OBJECTIVE,
 			WorkItemId.random(),
 			context,
-			'New objective',
-			'',
+			new WorkItemTitle('New objective'),
+			WorkItemDescription.empty(),
 			null,
 			WorkItemStatus.TO_DO,
 			new ChildrenProgressBasedWorkItemProgress([])
@@ -69,8 +71,8 @@ export class WorkItemDefaultCreationParamsResolver {
 			WorkItemType.KEY_RESULT,
 			WorkItemId.random(),
 			context,
-			'New key result',
-			'',
+			new WorkItemTitle('New key result'),
+			WorkItemDescription.empty(),
 			null,
 			WorkItemStatus.TO_DO,
 			new ChildrenStatusBasedWorkItemProgress([])

@@ -4,6 +4,8 @@ import { WorkItemTimeFrame } from './WorkItemTimeFrame';
 import { ContextYear } from './ContextYear';
 import { WorkItemStatus } from './WorkItemStatus';
 import { WorkItemProgress } from './WorkItemProgress';
+import { WorkItemTitle } from './WorkItemTitle';
+import { WorkItemDescription } from './WorkItemDescription';
 
 export abstract class WorkItem {
 	protected _parent: WorkItem | null = null;
@@ -13,8 +15,8 @@ export abstract class WorkItem {
 		public readonly type: WorkItemType,
 		public readonly id: WorkItemId,
 		public readonly contextYear: ContextYear,
-		public readonly title: string,
-		public readonly description: string,
+		public readonly title: WorkItemTitle,
+		public readonly description: WorkItemDescription,
 		public readonly timeFrame: WorkItemTimeFrame | null,
 		public readonly status: WorkItemStatus,
 		public readonly progress: WorkItemProgress
@@ -43,7 +45,7 @@ export abstract class WorkItem {
 		return null;
 	}
 
-	protected setParent(parent: WorkItem) {
+	protected setParent(parent: WorkItem | null): void {
 		if (this._parent) {
 			parent._children = parent._children.filter(
 				(child: WorkItem) => child !== this

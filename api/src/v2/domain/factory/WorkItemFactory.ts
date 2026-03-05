@@ -5,6 +5,7 @@ import { WorkItemType } from '../model/WorkItemType';
 import { WorkItemCreationParams } from './WorkItemCreationParams';
 import { WorkItemDefaultCreationParamsResolver } from './WorkItemDefaultCreationParamsResolver';
 import { WorkItemId } from '../model/WorkItemId';
+import { WorkItemUpdateRequest } from '../model/WorkItemUpdateRequest';
 
 class WorkItemImpl extends WorkItem {
 	public setParent(parent: WorkItem) {
@@ -54,6 +55,56 @@ export class WorkItemFactory {
 				type
 			)
 		);
+	}
+
+	public update(updateRequest: WorkItemUpdateRequest): WorkItemFactory {
+		if (!this.current.id.equals(updateRequest.id)) {
+			throw new Error('Cannot update id of WorkItem');
+		}
+
+		const params: WorkItemCreationParams = [
+			updateRequest.type === undefined
+				? this.current.type
+				: updateRequest.type,
+			this.current.id,
+			updateRequest.contextYear === undefined
+				? this.current.contextYear
+				: updateRequest.contextYear,
+			updateRequest.title === undefined
+				? this.current.title
+				: updateRequest.title,
+			updateRequest.description === undefined
+				? this.current.description
+				: updateRequest.description,
+			updateRequest.timeFrame === undefined
+				? this.current.timeFrame
+				: updateRequest.timeFrame,
+			updateRequest.status === undefined
+				? this.current.status
+				: updateRequest.status,
+			updateRequest.progress === undefined
+				? this.current.progress
+				: updateRequest.progress
+		];
+
+		const newWorkItem = new WorkItemImpl(...params);
+		for (const child of this.current.children) {
+			if (updateRequest.contextYear !== undefined) {
+				const contextUpdateRequest = new WorkItemUpdateRequest(
+					child.id,
+					updateRequest.contextYear
+				);
+				this.find(child.id).update(contextUpdateRequest);
+			}
+			(child as WorkItemImpl).setParent(newWorkItem);
+		}
+
+		if (this.current.parent !== null) {
+			newWorkItem.setParent(this.current.parent);
+			this.current.setParent(null);
+		}
+
+		return new WorkItemFactory(this.root, newWorkItem);
 	}
 
 	public find(id: WorkItemId): WorkItemFactory {
