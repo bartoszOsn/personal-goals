@@ -39,3 +39,35 @@
 8. Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
 9. Clicking on the gantt chart selects items
 10. Filtering tasks.
+
+## Product Re-architecture
+
+Task, objective and KR are basically the same thing: A work item that has:
+
+- title
+- description
+- some kind of status
+  - Task: To do, in progress etc.
+  - Key result: Percentage progress.
+  - Objective: Percentage progress based on child key results.
+- Some kind of deadline
+  - Task: assigned dates and sprints.
+  - Objective: Year and optionally quarter.
+  - Key result: Parent objective's deadline.
+
+Things that can be united:
+- Deadline: Why should we limit deadline, that objectives can only last quarter or year, and tasks only sprint etc.? All work items can have:
+  - Sprint assigned
+  - Quarter assigned
+  - Year assigned
+  - No deadline assigned
+
+Things that have to work separately in different kinds of work items:
+- Hierarchy
+  - Objective cannot have parent.
+  - Key result's must have objective parent.
+  - Task can have Key result as a parent or don't have any parent.
+- Different kinds of status
+  - Task: To do, in progress etc.
+  - Key result: Percentage progress.
+  - Objective: Percentage progress based on child key results.
