@@ -6,6 +6,7 @@ import { WorkItemId } from '../domain/model/WorkItemId';
 import { WorkItem } from '../domain/model/WorkItem';
 import { WorkItemFactory } from '../domain/factory/WorkItemFactory';
 import { UserStorage } from '../../app/auth/UserStorage';
+import { WorkItemNotFoundError } from '../domain/error/WorkItemNotFoundError';
 
 @Injectable()
 export class WorkItemCreationService {
@@ -47,6 +48,10 @@ export class WorkItemCreationService {
 			parentId,
 			user
 		);
+
+		if (!root) {
+			throw new WorkItemNotFoundError(`Work item not found`);
+		}
 
 		const [updatedRoot, newWorkItem] = WorkItemFactory.ofExistingRoot(root)
 			.find(parentId)

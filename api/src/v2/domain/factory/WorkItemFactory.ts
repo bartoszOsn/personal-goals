@@ -6,6 +6,7 @@ import { WorkItemCreationParams } from './WorkItemCreationParams';
 import { WorkItemDefaultCreationParamsResolver } from './WorkItemDefaultCreationParamsResolver';
 import { WorkItemId } from '../model/WorkItemId';
 import { WorkItemUpdateRequest } from '../model/WorkItemUpdateRequest';
+import { WorkItemNotFoundError } from '../error/WorkItemNotFoundError';
 
 class WorkItemImpl extends WorkItem {
 	public setParent(parent: WorkItem) {
@@ -107,11 +108,20 @@ export class WorkItemFactory {
 		return new WorkItemFactory(this.root, newWorkItem);
 	}
 
+	public delete(): WorkItemFactory {
+		if (this.root.id.equals(this.current.id)) {
+			throw new Error('Cannot delete root work item from the tree');
+		}
+
+		this.current.setParent(null);
+		return new WorkItemFactory(this.root, this.root);
+	}
+
 	public find(id: WorkItemId): WorkItemFactory {
 		const current = this.root.find(id);
 
 		if (!current) {
-			throw new Error(`WorkItem with ID ${id} not found`);
+			throw new WorkItemNotFoundError(`WorkItem with ID ${id} not found`);
 		}
 
 		return new WorkItemFactory(this.root, current as WorkItemImpl);

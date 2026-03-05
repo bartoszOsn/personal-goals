@@ -4,6 +4,7 @@ import { WorkItemUpdateRequest } from '../domain/model/WorkItemUpdateRequest';
 import { WorkItemRepository } from './WorkItemRepository';
 import { UserStorage } from '../../app/auth/UserStorage';
 import { WorkItemFactory } from '../domain/factory/WorkItemFactory';
+import { WorkItemNotFoundError } from '../domain/error/WorkItemNotFoundError';
 
 @Injectable()
 export class WorkItemUpdateService {
@@ -21,6 +22,10 @@ export class WorkItemUpdateService {
 			updateRequest.id,
 			user
 		);
+
+		if (!root) {
+			throw new WorkItemNotFoundError(`Work item not found`);
+		}
 
 		const [updatedRoot, updatedCurrent] = WorkItemFactory.ofExistingRoot(
 			root
