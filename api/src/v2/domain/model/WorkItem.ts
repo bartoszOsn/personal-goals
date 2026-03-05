@@ -15,7 +15,7 @@ export abstract class WorkItem {
 		public readonly contextYear: ContextYear,
 		public readonly title: string,
 		public readonly description: string,
-		public readonly timeFrame: WorkItemTimeFrame,
+		public readonly timeFrame: WorkItemTimeFrame | null,
 		public readonly status: WorkItemStatus,
 		public readonly progress: WorkItemProgress
 	) {}
@@ -26,6 +26,21 @@ export abstract class WorkItem {
 
 	public get children(): ReadonlyArray<WorkItem> {
 		return this._children;
+	}
+
+	public find(id: WorkItemId): WorkItem | null {
+		if (id.equals(this.id)) {
+			return this;
+		}
+
+		for (const child of this._children) {
+			const found = child.find(id);
+			if (found) {
+				return found;
+			}
+		}
+
+		return null;
 	}
 
 	protected setParent(parent: WorkItem) {

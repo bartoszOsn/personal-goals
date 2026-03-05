@@ -2,7 +2,6 @@ import { WorkItemStatus } from './WorkItemStatus';
 
 export abstract class WorkItemProgress {
 	abstract getPercentage(): Percentage;
-	abstract canChange(): boolean;
 }
 
 export class ManualWorkItemProgress extends WorkItemProgress {
@@ -12,10 +11,6 @@ export class ManualWorkItemProgress extends WorkItemProgress {
 
 	getPercentage(): Percentage {
 		return this.percentage;
-	}
-
-	canChange(): boolean {
-		return true;
 	}
 }
 
@@ -31,10 +26,6 @@ export class ChildrenProgressBasedWorkItemProgress extends WorkItemProgress {
 			this.childProgresses.map((p) => p.getPercentage())
 		);
 	}
-
-	override canChange(): boolean {
-		return false;
-	}
 }
 
 export class ChildrenStatusBasedWorkItemProgress extends WorkItemProgress {
@@ -47,10 +38,6 @@ export class ChildrenStatusBasedWorkItemProgress extends WorkItemProgress {
 			(s) => s === WorkItemStatus.DONE
 		).length;
 		return Percentage.fraction(doneCount, this.childStatuses.length);
-	}
-
-	override canChange(): boolean {
-		return false;
 	}
 }
 
@@ -72,6 +59,10 @@ export class Percentage {
 
 	static fraction(value: number, outOf: number): Percentage {
 		return Percentage.from(value / outOf);
+	}
+
+	static zero(): Percentage {
+		return Percentage.from(0);
 	}
 
 	isFull(): boolean {
