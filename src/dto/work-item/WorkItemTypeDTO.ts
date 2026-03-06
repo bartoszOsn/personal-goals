@@ -1,0 +1,1 @@
+export type WorkItemTypeDTO = 'task' | 'objective' | 'keyResult';

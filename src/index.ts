@@ -18,6 +18,14 @@ export * from './dto/work/TaskDTO.js';
 export * from './dto/work/TaskRequestDTO.js';
 export * from './dto/work/TaskListDTO.js';
 
+export * from './dto/work-item/WorkItemDTO.js';
+export * from './dto/work-item/WorkItemProgressDTO.js';
+export * from './dto/work-item/WorkItemStatusDTO.js';
+export * from './dto/work-item/WorkItemTimeFrameDTO.js';
+export * from './dto/work-item/WorkItemTypeDTO.js';
+export * from './dto/work-item/WorkItemCreationRequestDTO.js';
+export * from './dto/work-item/WorkItemUpdateRequestDTO.js';
+
 export * from './dto/auth/index.js';
 
 export * from './temporal/isPlainDate.js';

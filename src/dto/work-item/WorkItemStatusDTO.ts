@@ -1,0 +1,1 @@
+export type WorkItemStatusDTO = 'todo' | 'inProgress' | 'done' | 'failed';
