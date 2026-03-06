@@ -9,6 +9,7 @@ import { SprintSettingsEntity } from '../../time/entity/SprintSettingsEntity';
 import { ObjectiveEntity } from '../../work/entity/ObjectiveEntity';
 import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
 import { TaskEntity } from '../../work/entity/TaskEntity';
+import { WorkItemEntity } from '../../../v2/inffrastructure/entity/WorkItemEntity';
 
 @Entity()
 export class UserEntity {
@@ -32,4 +33,7 @@ export class UserEntity {
 
 	@OneToMany(() => TaskEntity, (task) => task.user)
 	tasks: TaskEntity[];
+
+	@OneToMany(() => WorkItemEntity, (workItem) => workItem.user)
+	workItems: WorkItemEntity[];
 }
