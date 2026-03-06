@@ -10,6 +10,7 @@ export abstract class WorkItemProgress {
 	protected target: IObjectWithProgressAndStatus;
 
 	abstract getPercentage(): Percentage;
+	abstract canChange(): boolean;
 
 	setTarget(target: IObjectWithProgressAndStatus): void {
 		this.target = target;
@@ -21,8 +22,12 @@ export class ManualWorkItemProgress extends WorkItemProgress {
 		super();
 	}
 
-	getPercentage(): Percentage {
+	override getPercentage(): Percentage {
 		return this.percentage;
+	}
+
+	override canChange(): boolean {
+		return true;
 	}
 }
 
@@ -32,6 +37,10 @@ export class ChildrenProgressBasedWorkItemProgress extends WorkItemProgress {
 			this.target.children.map((c) => c.progress.getPercentage())
 		);
 	}
+
+	override canChange(): boolean {
+		return false;
+	}
 }
 
 export class ChildrenStatusBasedWorkItemProgress extends WorkItemProgress {
@@ -40,6 +49,10 @@ export class ChildrenStatusBasedWorkItemProgress extends WorkItemProgress {
 			(c) => c.status === WorkItemStatus.DONE
 		).length;
 		return Percentage.fraction(doneCount, this.target.children.length);
+	}
+
+	override canChange(): boolean {
+		return false;
 	}
 }
 

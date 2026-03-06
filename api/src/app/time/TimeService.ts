@@ -48,6 +48,18 @@ export class TimeService {
 		);
 	}
 
+	public async getSprintById(id: SprintId): Promise<Sprint> {
+		// TODO: refactor it
+		const sprints = await this.getSprints();
+		const find = sprints.find((s) => s.id === id);
+
+		if (!find) {
+			throw new Error(`Sprint with id ${id} not found`);
+		}
+
+		return find;
+	}
+
 	public async updateSprintRanges(
 		ranges: SprintTimeRange[]
 	): Promise<SprintChangeAttemptResult> {

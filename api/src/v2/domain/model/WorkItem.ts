@@ -52,12 +52,12 @@ export abstract class WorkItem implements IObjectWithProgressAndStatus {
 
 	protected setParent(parent: WorkItem | null): void {
 		if (this._parent) {
-			parent._children = parent._children.filter(
+			this._parent._children = this._parent._children.filter(
 				(child: WorkItem) => child !== this
 			);
 		}
 
 		this._parent = parent;
-		parent._children.push(this);
+		parent?._children.push(this);
 	}
 }
