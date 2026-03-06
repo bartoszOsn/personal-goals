@@ -1,7 +1,19 @@
 import { WorkItemStatus } from './WorkItemStatus';
 
+export interface IObjectWithProgressAndStatus {
+	status: WorkItemStatus;
+	progress: WorkItemProgress;
+	children: ReadonlyArray<IObjectWithProgressAndStatus>;
+}
+
 export abstract class WorkItemProgress {
+	protected target: IObjectWithProgressAndStatus;
+
 	abstract getPercentage(): Percentage;
+
+	setTarget(target: IObjectWithProgressAndStatus): void {
+		this.target = target;
+	}
 }
 
 export class ManualWorkItemProgress extends WorkItemProgress {
@@ -15,29 +27,19 @@ export class ManualWorkItemProgress extends WorkItemProgress {
 }
 
 export class ChildrenProgressBasedWorkItemProgress extends WorkItemProgress {
-	constructor(
-		private readonly childProgresses: ReadonlyArray<WorkItemProgress>
-	) {
-		super();
-	}
-
 	override getPercentage(): Percentage {
 		return Percentage.average(
-			this.childProgresses.map((p) => p.getPercentage())
+			this.target.children.map((c) => c.progress.getPercentage())
 		);
 	}
 }
 
 export class ChildrenStatusBasedWorkItemProgress extends WorkItemProgress {
-	constructor(private readonly childStatuses: ReadonlyArray<WorkItemStatus>) {
-		super();
-	}
-
 	override getPercentage(): Percentage {
-		const doneCount = this.childStatuses.filter(
-			(s) => s === WorkItemStatus.DONE
+		const doneCount = this.target.children.filter(
+			(c) => c.status === WorkItemStatus.DONE
 		).length;
-		return Percentage.fraction(doneCount, this.childStatuses.length);
+		return Percentage.fraction(doneCount, this.target.children.length);
 	}
 }
 

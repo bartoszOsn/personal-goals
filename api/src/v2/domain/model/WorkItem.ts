@@ -3,11 +3,14 @@ import { WorkItemId } from './WorkItemId';
 import { WorkItemTimeFrame } from './WorkItemTimeFrame';
 import { ContextYear } from './ContextYear';
 import { WorkItemStatus } from './WorkItemStatus';
-import { WorkItemProgress } from './WorkItemProgress';
+import {
+	IObjectWithProgressAndStatus,
+	WorkItemProgress
+} from './WorkItemProgress';
 import { WorkItemTitle } from './WorkItemTitle';
 import { WorkItemDescription } from './WorkItemDescription';
 
-export abstract class WorkItem {
+export abstract class WorkItem implements IObjectWithProgressAndStatus {
 	protected _parent: WorkItem | null = null;
 	protected _children: WorkItem[] = [];
 
@@ -20,7 +23,9 @@ export abstract class WorkItem {
 		public readonly timeFrame: WorkItemTimeFrame | null,
 		public readonly status: WorkItemStatus,
 		public readonly progress: WorkItemProgress
-	) {}
+	) {
+		progress.setTarget(this);
+	}
 
 	public get parent(): WorkItem | null {
 		return this._parent;

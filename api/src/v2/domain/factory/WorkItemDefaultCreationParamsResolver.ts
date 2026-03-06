@@ -60,7 +60,7 @@ export class WorkItemDefaultCreationParamsResolver {
 			WorkItemDescription.empty(),
 			null,
 			WorkItemStatus.TO_DO,
-			new ChildrenProgressBasedWorkItemProgress([])
+			new ChildrenProgressBasedWorkItemProgress()
 		];
 	}
 
@@ -75,7 +75,7 @@ export class WorkItemDefaultCreationParamsResolver {
 			WorkItemDescription.empty(),
 			null,
 			WorkItemStatus.TO_DO,
-			new ChildrenStatusBasedWorkItemProgress([])
+			new ChildrenStatusBasedWorkItemProgress()
 		];
 	}
 }
