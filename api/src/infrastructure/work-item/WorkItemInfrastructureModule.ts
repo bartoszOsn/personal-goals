@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { WorkItemRepository } from '../app/WorkItemRepository';
+import { WorkItemRepository } from '../../app/work-item/WorkItemRepository';
 import { WorkItemRepositoryImpl } from './WorkItemRepositoryImpl';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WorkItemEntity } from './entity/WorkItemEntity';

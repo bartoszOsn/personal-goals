@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthPresentationModule } from './auth/AuthPresentationModule';
 import { TimePresentationModule } from './time/TimePresentationModule';
 import { WorkPresentationModule } from './work/WorkPresentationModule';
-import { WorkItemPresentationModule } from '../v2/Presentation/WorkItemPresentationModule';
+import { WorkItemPresentationModule } from './work-item/WorkItemPresentationModule';
 
 @Module({
 	imports: [

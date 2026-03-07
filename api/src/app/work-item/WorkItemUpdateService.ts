@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { WorkItem } from '../domain/model/WorkItem';
-import { WorkItemUpdateRequest } from '../domain/model/WorkItemUpdateRequest';
+import { WorkItem } from '../../domain/work-item/model/WorkItem';
+import { WorkItemUpdateRequest } from '../../domain/work-item/model/WorkItemUpdateRequest';
 import { WorkItemRepository } from './WorkItemRepository';
-import { UserStorage } from '../../app/auth/UserStorage';
-import { WorkItemFactory } from '../domain/factory/WorkItemFactory';
-import { WorkItemNotFoundError } from '../domain/error/WorkItemNotFoundError';
+import { UserStorage } from '../auth/UserStorage';
+import { WorkItemFactory } from '../../domain/work-item/factory/WorkItemFactory';
+import { WorkItemNotFoundError } from '../../domain/work-item/error/WorkItemNotFoundError';
 
 @Injectable()
 export class WorkItemUpdateService {

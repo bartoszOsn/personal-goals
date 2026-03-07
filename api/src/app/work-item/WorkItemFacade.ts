@@ -3,13 +3,13 @@ import { WorkItemRepository } from './WorkItemRepository';
 import { WorkItemCreationService } from './WorkItemCreationService';
 import { WorkItemUpdateService } from './WorkItemUpdateService';
 import { WorkItemDeletionService } from './WorkItemDeletionService';
-import { ContextYear } from '../domain/model/ContextYear';
-import { WorkItem } from '../domain/model/WorkItem';
-import { UserStorage } from '../../app/auth/UserStorage';
-import { WorkItemId } from '../domain/model/WorkItemId';
-import { WorkItemNotFoundError } from '../domain/error/WorkItemNotFoundError';
-import { WorkItemType } from '../domain/model/WorkItemType';
-import { WorkItemUpdateRequest } from '../domain/model/WorkItemUpdateRequest';
+import { ContextYear } from '../../domain/work-item/model/ContextYear';
+import { WorkItem } from '../../domain/work-item/model/WorkItem';
+import { UserStorage } from '../auth/UserStorage';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
+import { WorkItemNotFoundError } from '../../domain/work-item/error/WorkItemNotFoundError';
+import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
+import { WorkItemUpdateRequest } from '../../domain/work-item/model/WorkItemUpdateRequest';
 
 @Injectable()
 export class WorkItemFacade {

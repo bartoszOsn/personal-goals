@@ -6,7 +6,7 @@ import {
 	PrimaryGeneratedColumn
 } from 'typeorm';
 import { UserEntity } from '../../auth/entity/UserEntity';
-import { WorkItemEntity } from '../../../v2/inffrastructure/entity/WorkItemEntity';
+import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
 
 @Entity()
 export class SprintTimeRangeEntity {

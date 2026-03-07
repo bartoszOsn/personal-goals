@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { WorkItemController } from './WorkItemController';
-import { WorkItemAppModule } from '../app/WorkItemAppModule';
-import { WorkItemInfrastructureModule } from '../inffrastructure/WorkItemInfrastructureModule';
+import { WorkItemAppModule } from '../../app/work-item/WorkItemAppModule';
+import { WorkItemInfrastructureModule } from '../../infrastructure/work-item/WorkItemInfrastructureModule';
 import { WorkItemDTOConverter } from './WorkItemDTOConverter';
 import { TimeAppModule } from '../../app/time/TimeAppModule';
 import { TimeInfrastructureModule } from '../../infrastructure/time/TimeInfrastructureModule';

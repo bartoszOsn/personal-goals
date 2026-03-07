@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { WorkItemRepository } from './WorkItemRepository';
-import { ContextYear } from '../domain/model/ContextYear';
-import { WorkItemType } from '../domain/model/WorkItemType';
-import { WorkItemId } from '../domain/model/WorkItemId';
-import { WorkItem } from '../domain/model/WorkItem';
-import { WorkItemFactory } from '../domain/factory/WorkItemFactory';
-import { UserStorage } from '../../app/auth/UserStorage';
-import { WorkItemNotFoundError } from '../domain/error/WorkItemNotFoundError';
+import { ContextYear } from '../../domain/work-item/model/ContextYear';
+import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
+import { WorkItem } from '../../domain/work-item/model/WorkItem';
+import { WorkItemFactory } from '../../domain/work-item/factory/WorkItemFactory';
+import { UserStorage } from '../auth/UserStorage';
+import { WorkItemNotFoundError } from '../../domain/work-item/error/WorkItemNotFoundError';
 
 @Injectable()
 export class WorkItemCreationService {

@@ -9,15 +9,15 @@ import {
 	Post,
 	Put
 } from '@nestjs/common';
-import { WorkItemFacade } from '../app/WorkItemFacade';
+import { WorkItemFacade } from '../../app/work-item/WorkItemFacade';
 import {
 	WorkItemCreationRequestDTO,
 	WorkItemDTO,
 	WorkItemUpdateRequestDTO
 } from '@personal-okr/shared';
 import { WorkItemDTOConverter } from './WorkItemDTOConverter';
-import { ContextYear } from '../domain/model/ContextYear';
-import { WorkItemId } from '../domain/model/WorkItemId';
+import { ContextYear } from '../../domain/work-item/model/ContextYear';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
 
 @Controller('work-item')
 export class WorkItemController {

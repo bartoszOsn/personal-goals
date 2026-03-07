@@ -7,7 +7,7 @@ import {
 	TreeChildren,
 	TreeParent
 } from 'typeorm';
-import { UserEntity } from '../../../infrastructure/auth/entity/UserEntity';
+import { UserEntity } from '../../auth/entity/UserEntity';
 import { WorkItemTimeFrameEntity } from './WorkItemTimeFrameEntity';
 import { WorkItemProgressEntity } from './WorkItemProgressEntity';
 

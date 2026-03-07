@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { WorkItem } from '../domain/model/WorkItem';
+import { WorkItem } from '../../domain/work-item/model/WorkItem';
 import {
 	WorkItemDTO,
 	WorkItemProgressDTO,
@@ -8,27 +8,27 @@ import {
 	WorkItemTypeDTO,
 	WorkItemUpdateRequestDTO
 } from '@personal-okr/shared';
-import { WorkItemType } from '../domain/model/WorkItemType';
-import { WorkItemUpdateRequest } from '../domain/model/WorkItemUpdateRequest';
-import { WorkItemId } from '../domain/model/WorkItemId';
-import { WorkItemStatus } from '../domain/model/WorkItemStatus';
+import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
+import { WorkItemUpdateRequest } from '../../domain/work-item/model/WorkItemUpdateRequest';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
+import { WorkItemStatus } from '../../domain/work-item/model/WorkItemStatus';
 import { UnreachableError } from '../../util/UnreachableError';
 import {
 	ManualWorkItemProgress,
 	Percentage,
 	WorkItemProgress
-} from '../domain/model/WorkItemProgress';
+} from '../../domain/work-item/model/WorkItemProgress';
 import {
 	CustomDateWorkItemTimeFrame,
 	QuarterWorkItemTimeFrame,
 	SprintWorkItemTimeFrame,
 	WholeYearWorkItemTimeFrame,
 	WorkItemTimeFrame
-} from '../domain/model/WorkItemTimeFrame';
-import { Quarter } from '../domain/model/Quarter';
-import { ContextYear } from '../domain/model/ContextYear';
-import { WorkItemTitle } from '../domain/model/WorkItemTitle';
-import { WorkItemDescription } from '../domain/model/WorkItemDescription';
+} from '../../domain/work-item/model/WorkItemTimeFrame';
+import { Quarter } from '../../domain/work-item/model/Quarter';
+import { ContextYear } from '../../domain/work-item/model/ContextYear';
+import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
+import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescription';
 import { Temporal } from 'temporal-polyfill';
 import { TimeService } from '../../app/time/TimeService';
 import { SprintId } from '../../domain/time/model/SprintId';

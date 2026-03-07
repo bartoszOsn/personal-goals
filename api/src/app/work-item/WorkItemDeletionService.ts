@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { WorkItemRepository } from './WorkItemRepository';
-import { UserStorage } from '../../app/auth/UserStorage';
-import { WorkItemId } from '../domain/model/WorkItemId';
-import { WorkItemFactory } from '../domain/factory/WorkItemFactory';
+import { UserStorage } from '../auth/UserStorage';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
+import { WorkItemFactory } from '../../domain/work-item/factory/WorkItemFactory';
 
 @Injectable()
 export class WorkItemDeletionService {

@@ -1,5 +1,5 @@
 import { Column, ManyToOne } from 'typeorm';
-import { SprintTimeRangeEntity } from '../../../infrastructure/time/entity/SprintTimeRangeEntity';
+import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
 
 export class WorkItemTimeFrameEntity {
 	@Column({ enum: ['null', 'wholeYear', 'quarter', 'customDate', 'sprint'] })

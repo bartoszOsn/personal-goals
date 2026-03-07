@@ -1,7 +1,7 @@
-import { WorkItemId } from '../domain/model/WorkItemId';
-import { WorkItem } from '../domain/model/WorkItem';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
+import { WorkItem } from '../../domain/work-item/model/WorkItem';
 import { User } from '../../domain/auth/model/User';
-import { ContextYear } from '../domain/model/ContextYear';
+import { ContextYear } from '../../domain/work-item/model/ContextYear';
 
 export abstract class WorkItemRepository {
 	abstract findByContextYear(
