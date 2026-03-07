@@ -23,17 +23,47 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 		context: ContextYear,
 		user: User
 	): Promise<WorkItem[]> {
-		const entities = await this.workItemRepository.findBy({
-			contextYear: context.year,
-			user: { id: user.id.id }
-		});
+		const roots = await this.workItemRepository
+			.createQueryBuilder('workItem')
+			.leftJoinAndSelect('workItem.parent', 'parent')
+			.where('workItem.contextYear = :year', { year: context.year })
+			.andWhere('workItem.user.id = :userId', { userId: user.id.id })
+			.andWhere('workItem.parent IS NULL')
+			.getMany();
+
+		const rootsWithChildren = await Promise.all(
+			roots.map(async (root) => {
+				return await this.workItemRepository.findDescendantsTree(root);
+			})
+		);
+
+		return rootsWithChildren.map((entity) =>
+			this.workItemEntityConverter.entityToWorkItem(entity)
+		);
 	}
 
 	async findRootByIncluded(
 		id: WorkItemId,
 		user: User
 	): Promise<WorkItem | null> {
-		return null;
+		const entity = await this.workItemRepository.findOne({
+			where: {
+				id: id.id,
+				user: { id: user.id.id }
+			}
+		});
+
+		if (!entity) {
+			return null;
+		}
+
+		const ancestors = await this.workItemRepository.findAncestors(entity);
+		const root = ancestors[0] || entity;
+
+		const rootWithChildren =
+			await this.workItemRepository.findDescendantsTree(root);
+
+		return this.workItemEntityConverter.entityToWorkItem(rootWithChildren);
 	}
 
 	async save(root: WorkItem, user: User): Promise<void> {
@@ -58,7 +88,9 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 		}
 	}
 
-	deleteRoot(root: WorkItem, user: User): Promise<void> {
-		throw new Error('Method not implemented.');
+	async deleteRoot(root: WorkItem, user: User): Promise<void> {
+		await this.workItemRepository.delete({
+			id: root.id.id
+		});
 	}
 }

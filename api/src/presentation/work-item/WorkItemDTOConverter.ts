@@ -50,7 +50,10 @@ export class WorkItemDTOConverter {
 			description: workItem.description.description,
 			timeFrame: this.toWorkItemTimeFrameDTO(workItem.timeFrame),
 			status: this.toWorkItemStatusDTO(workItem.status),
-			progress: this.toWorkItemProgressDTO(workItem.progress)
+			progress: this.toWorkItemProgressDTO(workItem.progress),
+			children: workItem.children.map((child) =>
+				this.toWorkItemDTO(child)
+			)
 		};
 	}
 
