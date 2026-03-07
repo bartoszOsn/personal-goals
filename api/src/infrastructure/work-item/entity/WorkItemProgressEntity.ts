@@ -7,5 +7,5 @@ export class WorkItemProgressEntity {
 	type: 'manual' | 'childrenProgressBased' | 'ChildrenStatusBased';
 
 	@Column({ nullable: true })
-	manualProgress: number;
+	manualProgress?: number;
 }

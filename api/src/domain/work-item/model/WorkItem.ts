@@ -50,6 +50,10 @@ export abstract class WorkItem implements IObjectWithProgressAndStatus {
 		return null;
 	}
 
+	public toFlat(): WorkItem[] {
+		return [this, ...this._children.flatMap((child) => child.toFlat())];
+	}
+
 	protected setParent(parent: WorkItem | null): void {
 		if (this._parent) {
 			this._parent._children = this._parent._children.filter(

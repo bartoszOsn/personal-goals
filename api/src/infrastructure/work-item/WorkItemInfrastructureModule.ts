@@ -3,11 +3,13 @@ import { WorkItemRepository } from '../../app/work-item/WorkItemRepository';
 import { WorkItemRepositoryImpl } from './WorkItemRepositoryImpl';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WorkItemEntity } from './entity/WorkItemEntity';
+import { WorkItemEntityConverter } from './WorkItemEntityConverter';
 
 @Module({
 	imports: [TypeOrmModule.forFeature([WorkItemEntity])],
 	providers: [
-		{ provide: WorkItemRepository, useClass: WorkItemRepositoryImpl }
+		{ provide: WorkItemRepository, useClass: WorkItemRepositoryImpl },
+		WorkItemEntityConverter
 	],
 	exports: [WorkItemRepository]
 })
