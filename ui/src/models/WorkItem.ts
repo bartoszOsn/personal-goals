@@ -10,6 +10,7 @@ export interface WorkItem {
 	readonly timeFrame: WorkItemTimeFrame | null;
 	readonly status: WorkItemStatus;
 	readonly progress: WorkItemProgress;
+	readonly children: WorkItem[];
 }
 
 export interface WorkItemCreationRequest {

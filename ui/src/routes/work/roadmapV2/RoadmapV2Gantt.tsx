@@ -1,10 +1,16 @@
-import { Center, Text } from '@mantine/core';
+import { Text } from '@mantine/core';
 import { useWorkItemsByContextQuery } from '@/api/work-item/work-item-hooks';
 import { RoadmapV2GanttSkeleton } from '@/routes/work/roadmapV2/RoadmapV2GanttSkeleton';
 import { RoadmapV2EmptySplashScreen } from '@/routes/work/roadmapV2/RoadmapV2EmptySplashScreen';
+import { Gantt, GanttItem } from '@/base/gantt';
+import { ColumnDescriptor } from '@/base/data-table';
+import { WorkItem } from '@/models/WorkItem';
+import { useRoadmapGanttItems } from '@/routes/work/roadmapV2/useRoadmapGanttItems';
 
 export function RoadmapV2Gantt({ context }: { context: number }) {
 	const workItemsQuery = useWorkItemsByContextQuery(context);
+
+	const ganttItems = useRoadmapGanttItems(workItemsQuery?.data ?? []);
 
 	if (workItemsQuery.isLoading || !workItemsQuery.data) {
 		return <RoadmapV2GanttSkeleton />
@@ -14,8 +20,21 @@ export function RoadmapV2Gantt({ context }: { context: number }) {
 		return <RoadmapV2EmptySplashScreen context={context} />
 	}
 
-	return <Center flex={1} bd='1px solid black'>
-		<Text>Roadmap V2 Gantt for year {context}</Text>
-		<Text>There's {workItemsQuery.data?.length} work items</Text>
-	</Center>
+	const columns: ColumnDescriptor<GanttItem<WorkItem>>[] = [
+		{
+			columnId: 'title',
+			columnName: 'Title',
+			hierarchyColumn: true,
+			render: (item) => <Text>{item.data.title}</Text>
+		}
+	];
+
+	return (
+		<Gantt items={ganttItems}
+			   containerProps={{ w: '100%', style: { flexGrow: 1, flexShrink: 0 } }}
+			   ganttKey={'roadmap-gantt'}
+			   possibleColumns={columns}
+			   initialColumnIds={['title']}
+		/>
+	)
 }

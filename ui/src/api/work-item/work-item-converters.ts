@@ -37,7 +37,8 @@ export function dtoToWorkItem(dto: WorkItemDTO): WorkItem {
 		description: dto.description,
 		timeFrame: dto.timeFrame ? dtoToWorkItemTimeFrame(dto.timeFrame) : null,
 		status: dtoToWorkItemStatus(dto.status),
-		progress: dtoToWorkItemProgress(dto.progress)
+		progress: dtoToWorkItemProgress(dto.progress),
+		children: dto.children.map(dtoToWorkItem)
 	};
 }
 
