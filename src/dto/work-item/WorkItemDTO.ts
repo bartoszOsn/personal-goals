@@ -12,4 +12,5 @@ export interface WorkItemDTO {
 	timeFrame?: WorkItemTimeFrameDTO;
 	status: WorkItemStatusDTO;
 	progress: WorkItemProgressDTO;
+	children: WorkItemDTO[];
 }
