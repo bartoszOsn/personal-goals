@@ -21,7 +21,8 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 		tableProps = {},
 		scrollAreaProps = {},
 		onSelectionChange,
-		onExpansionChange
+		onExpansionChange,
+		renderContextMenu
 	} = props;
 
 	const { ref: scrollAreaRef, width: scrollAreaWidth } = useElementSize();
@@ -65,6 +66,7 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 							   onSelectionChange={(rows) => onSelectionChange?.(rows)}
 							   rowInfo={rowInfo}
 							   toggleRow={toggleRow}
+							   renderContextMenu={renderContextMenu}
 				/>
 			</Table>
 		</ScrollArea.Autosize>

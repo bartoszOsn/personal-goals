@@ -92,6 +92,7 @@ export function GanttTable<TData>() {
 					   }}
 					   onSelectionChange={onSelectionChange}
 					   onExpansionChange={setExpandedItems}
+					   renderContextMenu={context.props.renderContextMenu}
 					   tableRef={ref} />
 		</Box>
 	);
