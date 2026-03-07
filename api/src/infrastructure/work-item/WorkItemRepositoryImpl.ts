@@ -25,7 +25,7 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 			contextYear: context.year,
 			user: { id: user.id.id }
 		});
-		throw new Error('Method not implemented.');
+		return [];
 	}
 	findRootByIncluded(id: WorkItemId, user: User): Promise<WorkItem | null> {
 		throw new Error('Method not implemented.');
