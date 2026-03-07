@@ -9,7 +9,7 @@ import { WorkItemUpdateRequest } from '../model/WorkItemUpdateRequest';
 import { WorkItemNotFoundError } from '../error/WorkItemNotFoundError';
 
 class WorkItemImpl extends WorkItem {
-	public setParent(parent: WorkItem) {
+	public setParent(parent: WorkItem | null) {
 		super.setParent(parent);
 	}
 }
@@ -121,7 +121,9 @@ export class WorkItemFactory {
 		const current = this.root.find(id);
 
 		if (!current) {
-			throw new WorkItemNotFoundError(`WorkItem with ID ${id} not found`);
+			throw new WorkItemNotFoundError(
+				`WorkItem with ID ${id.id} not found`
+			);
 		}
 
 		return new WorkItemFactory(this.root, current as WorkItemImpl);
