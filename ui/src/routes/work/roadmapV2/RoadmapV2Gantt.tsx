@@ -1,4 +1,3 @@
-import { Menu, Text } from '@mantine/core';
 import { useWorkItemsByContextQuery } from '@/api/work-item/work-item-hooks';
 import { RoadmapV2GanttSkeleton } from '@/routes/work/roadmapV2/RoadmapV2GanttSkeleton';
 import { RoadmapV2EmptySplashScreen } from '@/routes/work/roadmapV2/RoadmapV2EmptySplashScreen';
@@ -7,6 +6,8 @@ import { ColumnDescriptor } from '@/base/data-table';
 import { WorkItem } from '@/models/WorkItem';
 import { useRoadmapGanttItems } from '@/routes/work/roadmapV2/useRoadmapGanttItems';
 import { renderRoadmapV2GanttContextMenu } from '@/routes/work/roadmapV2/renderRoadmapV2GanttContextMenu';
+import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
+import { WorkItemStatusInplace } from '@/core/work-item/inplace/WorkItemStatusInplace';
 
 export function RoadmapV2Gantt({ context }: { context: number }) {
 	const workItemsQuery = useWorkItemsByContextQuery(context);
@@ -26,7 +27,12 @@ export function RoadmapV2Gantt({ context }: { context: number }) {
 			columnId: 'title',
 			columnName: 'Title',
 			hierarchyColumn: true,
-			render: (item) => <Text>{item.data.title}</Text>
+			render: (item) => <WorkItemTitleInplace workItem={item.data} />
+		},
+		{
+			columnId: 'status',
+			columnName: 'Status',
+			render: (item) => <WorkItemStatusInplace workItem={item.data} />
 		}
 	];
 
