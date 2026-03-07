@@ -58,7 +58,7 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 		}
 
 		const ancestors = await this.workItemRepository.findAncestors(entity);
-		const root = ancestors[0] || entity;
+		const root = ancestors.at(-1) ?? entity;
 
 		const rootWithChildren =
 			await this.workItemRepository.findDescendantsTree(root);
@@ -78,7 +78,9 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 		await this.workItemRepository.save(entitiesToSave);
 		const idsToDelete =
 			oldFlat
-				?.filter((item) => newFlat.find((flat) => flat.id === item.id))
+				?.filter(
+					(item) => !newFlat.some((flat) => flat.id.equals(item.id))
+				)
 				.map((item) => item.id.id) ?? [];
 
 		if (idsToDelete.length > 0) {
