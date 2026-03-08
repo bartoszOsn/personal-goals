@@ -131,7 +131,7 @@ export class WorkItemEntityConverter {
 		if (progress instanceof ManualWorkItemProgress) {
 			return {
 				type: 'manual',
-				manualProgress: progress.getPercentage().value
+				manualProgress: progress.getManualPercentage()?.value
 			};
 		}
 
