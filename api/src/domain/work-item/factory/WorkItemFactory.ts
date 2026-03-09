@@ -105,7 +105,10 @@ export class WorkItemFactory {
 			this.current.setParent(null);
 		}
 
-		return new WorkItemFactory(this.root, newWorkItem);
+		return new WorkItemFactory(
+			this.root.id.equals(newWorkItem.id) ? newWorkItem : this.root,
+			newWorkItem
+		);
 	}
 
 	public delete(): WorkItemFactory {

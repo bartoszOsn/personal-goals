@@ -26,6 +26,7 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 		const roots = await this.workItemRepository
 			.createQueryBuilder('workItem')
 			.leftJoinAndSelect('workItem.parent', 'parent')
+			.leftJoinAndSelect('workItem.timeFrame.sprint', 'sprint')
 			.where('workItem.contextYear = :year', { year: context.year })
 			.andWhere('workItem.user.id = :userId', { userId: user.id.id })
 			.andWhere('workItem.parent IS NULL')
@@ -33,7 +34,9 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 
 		const rootsWithChildren = await Promise.all(
 			roots.map(async (root) => {
-				return await this.workItemRepository.findDescendantsTree(root);
+				return await this.workItemRepository.findDescendantsTree(root, {
+					relations: ['timeFrame.sprint']
+				});
 			})
 		);
 
@@ -50,6 +53,11 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 			where: {
 				id: id.id,
 				user: { id: user.id.id }
+			},
+			relations: {
+				timeFrame: {
+					sprint: true
+				}
 			}
 		});
 
@@ -57,11 +65,15 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 			return null;
 		}
 
-		const ancestors = await this.workItemRepository.findAncestors(entity);
+		const ancestors = await this.workItemRepository.findAncestors(entity, {
+			relations: ['timeFrame.sprint']
+		});
 		const root = ancestors.at(-1) ?? entity;
 
 		const rootWithChildren =
-			await this.workItemRepository.findDescendantsTree(root);
+			await this.workItemRepository.findDescendantsTree(root, {
+				relations: ['timeFrame.sprint']
+			});
 
 		return this.workItemEntityConverter.entityToWorkItem(rootWithChildren);
 	}

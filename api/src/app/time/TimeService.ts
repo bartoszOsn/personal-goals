@@ -51,10 +51,10 @@ export class TimeService {
 	public async getSprintById(id: SprintId): Promise<Sprint> {
 		// TODO: refactor it
 		const sprints = await this.getSprints();
-		const find = sprints.find((s) => s.id === id);
+		const find = sprints.find((s) => s.id.equals(id));
 
 		if (!find) {
-			throw new Error(`Sprint with id ${id} not found`);
+			throw new Error(`Sprint with id ${id.value} not found`);
 		}
 
 		return find;

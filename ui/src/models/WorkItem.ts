@@ -1,5 +1,6 @@
 import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '@/models/Sprint';
+import { Quarter } from '@/models/Quarter';
 
 export interface WorkItem {
 	readonly id: WorkItemId;
@@ -61,7 +62,7 @@ export interface WholeYearWorkItemTimeFrame extends WorkItemTimeFrameBase {
 
 export interface QuarterWorkItemTimeFrame extends WorkItemTimeFrameBase {
 	readonly type: WorkItemTimeFrameType.QUARTER;
-	readonly quarter: 1 | 2 | 3 | 4;
+	readonly quarter: Quarter;
 }
 
 export interface CustomDateWorkItemTimeFrame extends WorkItemTimeFrameBase {

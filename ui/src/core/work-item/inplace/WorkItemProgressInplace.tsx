@@ -28,7 +28,7 @@ export function WorkItemProgressInplace({ workItem, inputProps }: WorkItemProgre
 	const display: ReactNode = (
 		<Group gap='xs' w='100%'>
 			<Progress color={workItem.progress.progress === 100 ? 'green' : 'blue'} value={workItem.progress.progress} flex={1} />
-			<Text size='xs' c='dimmed'>{workItem.progress.progress}%</Text>
+			<Text size='xs' c='dimmed' w={30}>{workItem.progress.progress}%</Text>
 		</Group>
 	)
 

@@ -23,6 +23,7 @@ import {
 } from '@/models/WorkItem';
 import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '@/models/Sprint';
+import { numberToQuarter, quarterToNumber } from '@/models/Quarter';
 
 export function dtoToWorkItems(dtos: WorkItemDTO[]): WorkItem[] {
 	return dtos.map(dtoToWorkItem);
@@ -154,7 +155,7 @@ function dtoToWorkItemTimeFrame(dto: WorkItemTimeFrameDTO): WorkItemTimeFrame {
 			return {
 				...base,
 				type: WorkItemTimeFrameType.QUARTER,
-				quarter: dto.quarter
+				quarter: numberToQuarter[dto.quarter]
 			} as QuarterWorkItemTimeFrame;
 		case 'custom-date':
 			return {
@@ -189,7 +190,7 @@ function workItemTimeFrameToDTO(timeFrame: WorkItemTimeFrame): WorkItemTimeFrame
 			return {
 				...base,
 				type: 'quarter',
-				quarter: timeFrame.quarter
+				quarter: quarterToNumber[timeFrame.quarter]
 			};
 		case WorkItemTimeFrameType.CUSTOM_DATE:
 			return {

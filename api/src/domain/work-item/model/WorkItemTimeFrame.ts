@@ -5,13 +5,7 @@ import { Sprint } from '../../time/model/Sprint';
 import { TimeFrameOutOfContextException } from '../error/TimeFrameOutOfContextException';
 
 export abstract class WorkItemTimeFrame {
-	protected constructor(public readonly context: ContextYear) {
-		if (!this.isFullyInContext()) {
-			throw new TimeFrameOutOfContextException(
-				'WorkItemTimeFrame must be fully in context'
-			);
-		}
-	}
+	protected constructor(public readonly context: ContextYear) {}
 
 	public abstract getStart(): Temporal.PlainDate;
 	public abstract getEnd(): Temporal.PlainDate;
@@ -29,6 +23,11 @@ export abstract class WorkItemTimeFrame {
 export class WholeYearWorkItemTimeFrame extends WorkItemTimeFrame {
 	constructor(context: ContextYear) {
 		super(context);
+		if (!this.isFullyInContext()) {
+			throw new TimeFrameOutOfContextException(
+				'WorkItemTimeFrame must be fully in context'
+			);
+		}
 	}
 
 	override getStart(): Temporal.PlainDate {
@@ -53,6 +52,11 @@ export class QuarterWorkItemTimeFrame extends WorkItemTimeFrame {
 		public readonly quarter: Quarter
 	) {
 		super(context);
+		if (!this.isFullyInContext()) {
+			throw new TimeFrameOutOfContextException(
+				'WorkItemTimeFrame must be fully in context'
+			);
+		}
 	}
 
 	override getStart(): Temporal.PlainDate {
@@ -75,6 +79,11 @@ export class CustomDateWorkItemTimeFrame extends WorkItemTimeFrame {
 		private readonly end: Temporal.PlainDate
 	) {
 		super(context);
+		if (!this.isFullyInContext()) {
+			throw new TimeFrameOutOfContextException(
+				'WorkItemTimeFrame must be fully in context'
+			);
+		}
 	}
 
 	override getStart(): Temporal.PlainDate {
@@ -92,6 +101,11 @@ export class SprintWorkItemTimeFrame extends WorkItemTimeFrame {
 		public readonly sprint: Sprint
 	) {
 		super(context);
+		if (!this.isFullyInContext()) {
+			throw new TimeFrameOutOfContextException(
+				'WorkItemTimeFrame must be fully in context'
+			);
+		}
 	}
 
 	override getStart(): Temporal.PlainDate {

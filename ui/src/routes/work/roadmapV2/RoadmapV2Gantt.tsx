@@ -9,6 +9,7 @@ import { renderRoadmapV2GanttContextMenu } from '@/routes/work/roadmapV2/renderR
 import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
 import { WorkItemStatusInplace } from '@/core/work-item/inplace/WorkItemStatusInplace';
 import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
+import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
 
 export function RoadmapV2Gantt({ context }: { context: number }) {
 	const workItemsQuery = useWorkItemsByContextQuery(context);
@@ -39,6 +40,11 @@ export function RoadmapV2Gantt({ context }: { context: number }) {
 			columnId: 'progress',
 			columnName: 'Progress',
 			render: (item) => <WorkItemProgressInplace workItem={item.data} />
+		},
+		{
+			columnId: 'timeFrame',
+			columnName: 'Time frame',
+			render: (item) => <WorkItemTimeFrameInplace workItem={item.data} />
 		}
 	];
 
