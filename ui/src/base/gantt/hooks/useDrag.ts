@@ -54,7 +54,7 @@ export function useDrag() {
 				status: 'resolving',
 				optimisticDates
 			});
-			context.props.changeDates?.(optimisticDates).then(() => {
+			context.props.changeDates?.(optimisticDates).finally(() => {
 				context.setDragData({ status: 'idle' });
 			})
 		}, { once: true });
