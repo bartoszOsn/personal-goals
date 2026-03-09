@@ -4,9 +4,11 @@ import { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 import { zoomLevels } from '@/base/gantt/zoomLevels';
 import { ZoomLevel } from '@/base/gantt/model/ZoomLevel';
 import { DragData } from '@/base/gantt/model/DragData';
+import { GanttItem } from '@/base/gantt/GanttItem';
 
 export interface GanttContext<TData> {
 	props: GanttProps<TData>;
+	flattenedItems: GanttItem<TData>[];
 	rows: RowPositionInfo[];
 	setRows(rows: RowPositionInfo[]): void;
 	scrollAreaHeight: number;
@@ -40,6 +42,18 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 	const [dragData, setDragData] = useState<DragData>({ status: 'idle' });
 	const svg = useRef<SVGSVGElement>(null);
 	const [chartHeaderSize, setChartHeaderSize] = useState(0);
+	const flattenedItems: GanttItem<TData>[] = useMemo(() => {
+		const result: GanttItem<TData>[] = [];
+		const stack = [...props.props.items];
+
+		while(stack.length > 0) {
+			const item = stack.shift()!;
+			result.push(item);
+			stack.unshift(...item.children)
+		}
+
+		return result;
+	}, [props.props.items])
 
 	const scrollYSubscribers = useRef<Set<(y: number) => void>>(new Set());
 	const subscribeToScrollY = useCallback((callback: (scrollY: number) => void) => {
@@ -64,8 +78,9 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 		dragData, setDragData,
 		svg,
 		chartHeaderSize, setChartHeaderSize,
-		selectedItemIdsRef
-	}), [props.props, rows, scrollAreaHeight, setScrollY, subscribeToScrollY, zoomLevel, chartViewportWidth, dragData, chartHeaderSize])
+		selectedItemIdsRef,
+		flattenedItems
+	}), [props.props, rows, scrollAreaHeight, setScrollY, subscribeToScrollY, zoomLevel, chartViewportWidth, dragData, chartHeaderSize, flattenedItems])
 
 	return (
 		<GanttContext.Provider value={context}>

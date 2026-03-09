@@ -73,18 +73,6 @@ function TimeFrameDisplay(props: WorkItemTimeFrameInplaceProps) {
 			<Text span c="dimmed"> ({sprintName})</Text>
 		}
 	</Text>
-
-	return <Stack gap={0}>
-		<Text size='xs'>
-			{props.workItem.timeFrame.startDate.toLocaleString()}
-			{' '}<IconArrowNarrowRight size={12} />{' '}
-			{props.workItem.timeFrame.endDate.toLocaleString()}
-		</Text>
-		{
-			props.workItem.timeFrame.type === WorkItemTimeFrameType.QUARTER &&
-			<Text c="dimmed" size='xs'>Quarter {props.workItem.timeFrame.quarter}</Text>
-		}
-	</Stack>;
 }
 
 function TimeFrameModal(props: WorkItemTimeFrameInplaceProps) {
