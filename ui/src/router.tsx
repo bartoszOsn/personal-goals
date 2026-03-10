@@ -2,14 +2,11 @@ import { createRootRoute, createRoute, createRouter, Outlet } from '@tanstack/re
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { IndexRoute } from '@/routes/IndexRoute.tsx';
 import { WorkRoute } from '@/routes/work/WorkRoute.tsx';
-import { OKRsRoute } from '@/routes/work/OKRs/OKRsRoute.tsx';
-import { TasksRoute } from '@/routes/work/tasks/TasksRoute.tsx';
 import { SprintSettingsRoute } from '@/routes/work/sprint-settings/SprintSettingsRoute.tsx';
 import { AuthRoute } from '@/routes/auth/AuthRoute';
 import { LoginRoute } from '@/routes/auth/login/LoginRoute';
 import { RegisterRoute } from '@/routes/auth/RegisterRoute';
 import { SprintOverviewRoute } from '@/routes/work/sprint-overview/SprintOverviewRoute';
-import { RoadmapRoute } from '@/routes/work/roadmap/RoadmapRoute';
 import { RoadmapV2Route } from '@/routes/work/roadmapV2/RoadmapV2Route';
 
 const rootRoute = createRootRoute({
@@ -39,28 +36,10 @@ const sprintOverviewRoute = createRoute({
 	component: SprintOverviewRoute
 });
 
-const roadmapRoute = createRoute({
-	getParentRoute: () => workRoute,
-	path: "/roadmap",
-	component: RoadmapRoute
-});
-
 const roadmapV2Route = createRoute({
 	getParentRoute: () => workRoute,
 	path: '/roadmap-v2/{-$context}',
 	component: RoadmapV2Route
-});
-
-const okrsRoute = createRoute({
-	getParentRoute: () => workRoute,
-	path: "/okrs",
-	component: OKRsRoute
-});
-
-const tasksRoute = createRoute({
-	getParentRoute: () => workRoute,
-	path: "/tasks",
-	component: TasksRoute
 });
 
 const sprintSettings = createRoute({
@@ -91,10 +70,7 @@ const routeTree = rootRoute.addChildren([
 	indexRoute,
 	workRoute.addChildren([
 		sprintOverviewRoute,
-		roadmapRoute,
 		roadmapV2Route,
-		okrsRoute,
-		tasksRoute,
 		sprintSettings
 	]),
 	authRoute.addChildren([
