@@ -29,3 +29,4 @@ export * from './dto/work-item/WorkItemUpdateRequestDTO.js';
 export * from './dto/auth/index.js';
 
 export * from './temporal/isPlainDate.js';
+export * from './temporal/maxPlainDate.js';
