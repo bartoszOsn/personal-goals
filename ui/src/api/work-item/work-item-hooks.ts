@@ -25,7 +25,7 @@ export function useWorkItemsByContextQuery(context: number) {
 	});
 }
 
-export function useWorkItemQuery(id: string) {
+export function useWorkItemQuery(id: WorkItemId) {
 	return useQuery({
 		queryKey: ['work-items', id],
 		queryFn: () => getWorkItemById(id).then(dtoToWorkItem)

@@ -6,8 +6,9 @@ import { InplaceTextInputEdit } from '@/base/inplace-editor/api/primitive/edit/I
 import { ComponentProps } from 'react';
 import { ActionIcon, Group, MantineColor, Tooltip } from '@mantine/core';
 import { IconFileInvoice } from '@tabler/icons-react';
-import { WorkItem, WorkItemId, WorkItemType } from '@/models/WorkItem.ts';
+import { WorkItem, WorkItemType } from '@/models/WorkItem.ts';
 import { useUpdateWorkItemMutation } from '@/api/work-item/work-item-hooks.ts';
+import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
 
 export interface WorkItemTitleInplaceProps {
 	workItem: WorkItem;
@@ -18,7 +19,7 @@ export interface WorkItemTitleInplaceProps {
 
 export function WorkItemTitleInplace({ workItem, textProps, inputProps, showDialogButton = true }: WorkItemTitleInplaceProps) {
 	const updateWorkItemMutation = useUpdateWorkItemMutation();
-	const openWorkItemModal = (id: WorkItemId) => { console.log(id) } // TODO
+	const openWorkItemModal = useWorkItemDetailsModal();
 
 	const onValueSubmit = (value: string) => {
 		updateWorkItemMutation.mutate({
