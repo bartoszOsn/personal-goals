@@ -11,10 +11,14 @@ import { WorkItemStatusInplace } from '@/core/work-item/inplace/WorkItemStatusIn
 import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
 import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
 import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
+import { Temporal } from 'temporal-polyfill';
 
 export function RoadmapV2Gantt({ context }: { context: number }) {
 	const workItemsQuery = useWorkItemsByContextQuery(context);
 	const updateWorkItemMutation = useUpdateWorkItemMutation();
+
+	const contextStartDate = Temporal.PlainDate.from({ year: context, month: 1, day: 1 });
+	const contextEndDate = Temporal.PlainDate.from({ year: context, month: 12, day: 31 });
 
 	const ganttItems = useRoadmapGanttItems(workItemsQuery?.data ?? []);
 
@@ -75,6 +79,7 @@ export function RoadmapV2Gantt({ context }: { context: number }) {
 			   possibleColumns={columns}
 			   initialColumnIds={['title']}
 			   changeDates={changeDates}
+			   bounds={[contextStartDate, contextEndDate]}
 			   renderContextMenu={(o, s) => renderRoadmapV2GanttContextMenu(o, s, context)}
 		/>
 	)
