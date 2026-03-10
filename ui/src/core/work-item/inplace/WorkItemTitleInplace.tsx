@@ -9,6 +9,7 @@ import { IconFileInvoice } from '@tabler/icons-react';
 import { WorkItem, WorkItemType } from '@/models/WorkItem.ts';
 import { useUpdateWorkItemMutation } from '@/api/work-item/work-item-hooks.ts';
 import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
+import { Link } from '@tanstack/react-router';
 
 export interface WorkItemTitleInplaceProps {
 	workItem: WorkItem;
@@ -37,7 +38,13 @@ export function WorkItemTitleInplace({ workItem, textProps, inputProps, showDial
 					{
 						showDialogButton && (
 							<Tooltip label='Open task'>
-								<ActionIcon size='xs' color={typeToAccentMap[workItem.type]} variant='subtle' onClick={() => openWorkItemModal(workItem.id)}>
+								<ActionIcon size="xs"
+											component={Link}
+											to='/work/details/$workItemId'
+											params={{ workItemId: workItem.id }}
+											color={typeToAccentMap[workItem.type]}
+											variant="subtle"
+											onClick={(e) => { e.preventDefault(); openWorkItemModal(workItem.id)}}>
 									<IconFileInvoice />
 								</ActionIcon>
 							</Tooltip>
