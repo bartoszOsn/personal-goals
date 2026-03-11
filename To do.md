@@ -15,16 +15,15 @@
     - ✅ KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
 7. Update page title and favicon
 8. ✅ Handle somehow the fact that after years there will be too much data to display on gantt chart. Filtering on roadmap as well?
-    - Handled by context
+    - ✅ Handled by context
 9. ✅ Change this "data view" bullshit into simple react composition:
    - ✅ ColumnDescription takes render function
    - ✅ change dataTypes into components
    - ✅ Add maybe some utils for inplacing, but it's handled at the dataType component level.
-10. Make sure it works on mobile.
-11. ✅ Update "All OKRs" to use Data table - OR, maybe just remove this screen and make sure that all this can be done on roadmap
-12. Tooltip on gantt bar – on roadmap name of the work item
-13. Board uses new work-item architecture
-14. Remove old architecture from code
+10. ✅ Update "All OKRs" to use Data table - OR, maybe just remove this screen and make sure that all this can be done on roadmap
+11. Tooltip on gantt bar – on roadmap name of the work item
+12. ✅ Board uses new work-item architecture
+13. ✅ Remove old architecture from code
 
 ## First release
 
@@ -32,9 +31,10 @@
 2. Fix Auth – Better security, ability to change password, recover account etc.
 3. Work on performance
 4. Better UI 
-5. Ability to change sprint settings
-6. Drag and drop on board - Changing order
-7. Drag and drop on roadmap - changing order, and moving tasks between KRs
-8. Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
-9. Clicking on the gantt chart selects items
-10. Filtering tasks.
+5. Make sure it works on mobile.
+6. Ability to change sprint settings
+7. Drag and drop on board - Changing order
+8. Drag and drop on roadmap - changing order, and moving tasks between KRs
+9. Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
+10. Clicking on the gantt chart selects items
+11. Filtering tasks.
