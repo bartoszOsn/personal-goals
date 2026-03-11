@@ -30,7 +30,7 @@ export function SprintOverviewCurrentSprintLoader() {
 		const navigateTo = currentSprint ?? sprints.data[0];
 
 		if (navigateTo) {
-			navigate({ to: '/work/sprint-overview/{-$sprintId}', params: { sprintId: navigateTo.id }})
+			navigate({ to: '.', params: (prev) => ({ ...prev, sprintId: navigateTo.id })})
 				.then();
 		}
 	}, [sprints.isPending, sprints.data, navigate]);

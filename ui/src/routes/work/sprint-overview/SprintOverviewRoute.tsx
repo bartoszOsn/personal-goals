@@ -4,7 +4,7 @@ import { SprintOverview } from '@/routes/work/sprint-overview/SprintOverview';
 import { SprintId } from '@/models/Sprint';
 
 export function SprintOverviewRoute() {
-	const sprintId = getRouteApi('/work/sprint-overview/{-$sprintId}').useParams({
+	const sprintId = getRouteApi('/work/$context/sprint-overview/{-$sprintId}').useParams({
 		select: (params) => params.sprintId as SprintId | undefined
 	});
 

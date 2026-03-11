@@ -4,28 +4,27 @@
 
 1. ✅ Non-editable columns on gantt and data table.
 2. ✅ Fix `erasableSyntaxOnly` and `verbatimModuleSyntax` on ui.
-3. Task links - Both backend and frontend.
-4. Roadmap view with objectives, KRs and tasks on one gantt chart.
+3. Roadmap view with objectives, KRs and tasks on one gantt chart.
     - ✅ Gantt must support child items.
     - ✅ Gantt must support items without or with only one date.
     - Gantt must support timeboxes
-    - Gantt must support links between items
-    - Option to add warning on gantt - When task dates are outside of assigned sprint (small ! icon at to right top of a bar with a tooltip)
-    - Columns for objectives and KRs
     - ✅ Option to color rows, both on data table and gantt chart - Objectives purple, KRs orange and tasks without color.
-5. Editing description in objective, KR and task.
-6. Custom rich text documents.
-7. ✅ Objectives with calculated progress based on KRs.
+4. ✅ Editing description in objective, KR and task.
+5. Custom rich text documents.
+6. ✅ Objectives with calculated progress based on KRs.
     - ✅ KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
-8. Update page title and favicon
-9. Handle somehow the fact that after years there will be too much data to display on gantt chart. Filtering on roadmap as well?
-10. ✅ Change this "data view" bullshit into simple react composition:
-    - ✅ ColumnDescription takes render function
-    - ✅ change dataTypes into components
-    - ✅ Add maybe some utils for inplacing, but it's handled at the dataType component level.
-11. Make sure it works on mobile.
-12. Update "All OKRs" to use Data table - OR, maybe just remove this screen and make sure that all this can be done on roadmap
-13. Tooltip on gantt bar – on roadmap name of the work item
+7. Update page title and favicon
+8. ✅ Handle somehow the fact that after years there will be too much data to display on gantt chart. Filtering on roadmap as well?
+    - Handled by context
+9. ✅ Change this "data view" bullshit into simple react composition:
+   - ✅ ColumnDescription takes render function
+   - ✅ change dataTypes into components
+   - ✅ Add maybe some utils for inplacing, but it's handled at the dataType component level.
+10. Make sure it works on mobile.
+11. ✅ Update "All OKRs" to use Data table - OR, maybe just remove this screen and make sure that all this can be done on roadmap
+12. Tooltip on gantt bar – on roadmap name of the work item
+13. Board uses new work-item architecture
+14. Remove old architecture from code
 
 ## First release
 
@@ -39,35 +38,3 @@
 8. Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
 9. Clicking on the gantt chart selects items
 10. Filtering tasks.
-
-## Product Re-architecture
-
-Task, objective and KR are basically the same thing: A work item that has:
-
-- title
-- description
-- some kind of status
-  - Task: To do, in progress etc.
-  - Key result: Percentage progress.
-  - Objective: Percentage progress based on child key results.
-- Some kind of deadline
-  - Task: assigned dates and sprints.
-  - Objective: Year and optionally quarter.
-  - Key result: Parent objective's deadline.
-
-Things that can be united:
-- Deadline: Why should we limit deadline, that objectives can only last quarter or year, and tasks only sprint etc.? All work items can have:
-  - Sprint assigned
-  - Quarter assigned
-  - Year assigned
-  - No deadline assigned
-
-Things that have to work separately in different kinds of work items:
-- Hierarchy
-  - Objective cannot have parent.
-  - Key result's must have objective parent.
-  - Task can have Key result as a parent or don't have any parent.
-- Different kinds of status
-  - Task: To do, in progress etc.
-  - Key result: Percentage progress.
-  - Objective: Percentage progress based on child key results.

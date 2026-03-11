@@ -27,7 +27,7 @@ const indexRoute = createRoute({
 
 const workRoute = createRoute({
 	getParentRoute: () => rootRoute,
-	path: "/work",
+	path: "/work/$context",
 	component: WorkRoute
 });
 
@@ -39,7 +39,7 @@ const sprintOverviewRoute = createRoute({
 
 const roadmapV2Route = createRoute({
 	getParentRoute: () => workRoute,
-	path: '/roadmap-v2/{-$context}',
+	path: '/roadmap-v2',
 	component: RoadmapV2Route
 });
 

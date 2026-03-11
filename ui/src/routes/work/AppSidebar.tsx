@@ -1,32 +1,35 @@
-import { Link, LinkOptions } from '@tanstack/react-router';
-import { AppShell, Box, NavLink, type NavLinkProps, Title } from '@mantine/core';
+import { createLink } from '@tanstack/react-router';
+import { AppShell, Box, NavLink, Title } from '@mantine/core';
+import { YearPickerInput } from '@mantine/dates';
+import { IconCalendar } from '@tabler/icons-react';
+import { Temporal } from 'temporal-polyfill';
 
-export function AppSidebar() {
+export function AppSidebar({ context, setContext }: { context: number, setContext: (next: number) => void }) {
+	const contextSwitcherValue = new Temporal.PlainDate(context, 1, 1).toString();
+	const onContextChange = (value: string | null) => {
+		if (!value) return;
+		const newValue = Temporal.PlainDate.from(value).year;
+		setContext(newValue);
+	}
+
 	return (
 		<AppShell.Navbar>
 			<Box p='md'>
+				<YearPickerInput value={contextSwitcherValue}
+								 w='100%'
+								 mb='xl'
+								 leftSection={<IconCalendar size={18} stroke={1.5} />}
+								 leftSectionPointerEvents="none"
+								 onChange={onContextChange} />
 				<Title order={3} pb='lg'>
 					Personal OKR
 				</Title>
-				<CustomNavLink href='/work/sprint-overview/{-$sprintId}' label='Sprint overview' exact={ false } />
-				<CustomNavLink href='/work/roadmap-v2/{-$context}' label='Roadmap' exact={ false } />
-				<CustomNavLink href='/work/sprint-settings' label='Sprint settings' />
+				<CustomNavLink to='/work/$context/sprint-overview/{-$sprintId}' params={{ context: context.toString() }} label='Sprint overview' />
+				<CustomNavLink to='/work/$context/roadmap-v2' params={{ context: context.toString() }} label='Roadmap' />
+				<CustomNavLink to='/work/$context/sprint-settings' params={{ context: context.toString() }} label='Sprint settings' />
 			</Box>
 		</AppShell.Navbar>
 	)
 }
 
-// function CustomNavLinkGroup({ label, ...nativeProps }: { label: string } & Omit<NavLinkProps, 'Component' | 'label' | 'defaultOpened'>) {
-// 	return <NavLink {...nativeProps} label={<Text c='gray'>{label}</Text>} href='#' defaultOpened />;
-// }
-
-function CustomNavLink({ href, exact = true, ...nativeProps }: { href: LinkOptions['to'], exact?: boolean } & Omit<NavLinkProps, 'Component'>) {
-	return (
-		<NavLink
-			{...nativeProps}
-			to={href}
-			component={Link}
-			activeOptions={{ exact }}
-		/>
-	);
-}
+const CustomNavLink = createLink(NavLink<'a'>);
