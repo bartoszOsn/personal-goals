@@ -1,6 +1,7 @@
 import { http, HttpError } from '@/base/http';
 import { router } from '@/router.tsx';
 import { QueryClient, useQuery } from '@tanstack/react-query';
+import { Temporal } from 'temporal-polyfill';
 
 const tokenKey = ['internal', 'token'];
 
@@ -28,7 +29,8 @@ export function setToken (token: string | null, queryClient: QueryClient) {
 		queryClient.setQueryData(tokenKey, token);
 		http.setAuthToken(token);
 		if (router.state.matches.some(math => math.routeId === '/auth')) {
-			router.navigate({ to: '/work'}).then();
+			router.navigate({ to: '/work/$context', params: { context: Temporal.Now.plainDateISO().year.toString() }})
+				.then();
 		}
 	}
 }
