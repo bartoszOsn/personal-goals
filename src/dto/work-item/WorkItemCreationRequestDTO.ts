@@ -1,5 +1,5 @@
 import { WorkItemTypeDTO } from './WorkItemTypeDTO.js';
-import { WorkItemUpdateRequestDTO } from '../../../types/index.js';
+import { WorkItemUpdateRequestDTO } from './WorkItemUpdateRequestDTO.js';
 
 export interface WorkItemCreationRequestDTO {
 	context: number;
