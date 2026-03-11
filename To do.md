@@ -7,7 +7,7 @@
 3. Roadmap view with objectives, KRs and tasks on one gantt chart.
     - ✅ Gantt must support child items.
     - ✅ Gantt must support items without or with only one date.
-    - Gantt must support timeboxes
+    - ✅ Gantt must support timeboxes
     - ✅ Option to color rows, both on data table and gantt chart - Objectives purple, KRs orange and tasks without color.
 4. ✅ Editing description in objective, KR and task.
 5. Custom rich text documents.

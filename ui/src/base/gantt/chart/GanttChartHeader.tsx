@@ -2,10 +2,11 @@ import { useGanttContext } from '@/base/gantt/GanttProvider.tsx';
 import { HeaderType } from '@/base/gantt/model/ZoomLevel.ts';
 import { useDateRanges } from '@/base/gantt/hooks/useDateRanges.ts';
 import { HtmlInSvg } from '@/base/gantt/chart/HtmlInSvg';
-import { Text } from '@mantine/core';
+import { MantineColor, Text, Tooltip } from '@mantine/core';
 import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
 import { useEffect, useRef } from 'react';
+import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
 
 export const headerCellHeight = 30;
 export const headerCellXMargin = 1;
@@ -16,7 +17,12 @@ export function GanttChartHeader() {
 	const { startDate, endDate, dateToPixelPos } = useDateRanges();
 	const headerCells = getHeaderCells(context.zoomLevel.header, startDate, endDate);
 	const subheaderCells = getHeaderCells(context.zoomLevel.subheader, startDate, endDate);
-	const headerHeight = headerCellHeight * 2 + headerRowYMargin * 2;
+	const timeboxCells = getTimeboxCells(context.props.timeboxes ?? []);
+	let headerHeight = headerCellHeight * 2 + headerRowYMargin * 2;
+
+	if (timeboxCells.length > 0) {
+		headerHeight += headerCellHeight + headerRowYMargin;
+	}
 
 	const groupRef = useRef<SVGGElement>(null);
 
@@ -35,6 +41,10 @@ export function GanttChartHeader() {
 			<rect x={0} y={0} width={dateToPixelPos(endDate)} height={headerHeight} fill="var(--mantine-color-body)" />
 			<HeaderRow cells={headerCells} offsetY={0} scrollY={0} />
 			<HeaderRow cells={subheaderCells} offsetY={headerCellHeight + headerRowYMargin} scrollY={0} />
+			{
+				timeboxCells.length > 0 &&
+					<HeaderRow cells={timeboxCells} offsetY={headerCellHeight * 2 + headerRowYMargin * 2} scrollY={0} />
+			}
 		</g>
 	);
 }
@@ -54,18 +64,20 @@ function HeaderRow(props: { cells: HeaderCell[], offsetY: number, scrollY: numbe
 					  y={y}
 					  width={width}
 					  height={height}
-					  fill='transparent'
-					  stroke="var(--mantine-color-gray-light)"
+					  fill={ cell.color ? `var(--mantine-color-${cell.color}-0)` : 'transparent'}
+					  stroke={ cell.color ? `var(--mantine-color-${cell.color}-light)` : "var(--mantine-color-gray-light)"}
 					  rx='4' />
 				<HtmlInSvg x={x}
 						   y={y}
 						   width={width}
 						   height={height}>
-					<Text h="100%"
-						  size="xs"
-						  c="dimmed"
-						  ta="center"
-						  style={{ alignContent: 'center' }}>{cell.label}</Text>
+					<Tooltip.Floating label={cell.label}>
+						<Text h="100%"
+							  size="xs"
+							  c="dimmed"
+							  ta="center"
+							  style={{ alignContent: 'center', textWrap: 'nowrap' }}>{cell.label}</Text>
+					</Tooltip.Floating>
 				</HtmlInSvg>
 			</g>
 		);
@@ -74,6 +86,7 @@ function HeaderRow(props: { cells: HeaderCell[], offsetY: number, scrollY: numbe
 
 interface HeaderCell {
 	label: string;
+	color?: MantineColor;
 	start: Temporal.PlainDate;
 	end: Temporal.PlainDate;
 }
@@ -87,6 +100,16 @@ function getHeaderCells(zoomLevel: HeaderType, startDate: Temporal.PlainDate, en
 		case 'day':
 			return getDayHeaderCells(startDate, endDate);
 	}
+}
+
+function getTimeboxCells(timeboxes: GanttTimebox[]): HeaderCell[] {
+	return [...timeboxes].sort((a, b) => Temporal.PlainDate.compare(a.startDate, b.startDate))
+		.map(timebox => ({
+			label: timebox.label,
+			color: timebox.color,
+			start: timebox.startDate,
+			end: timebox.endDate
+		}));
 }
 
 function getYearHeaderCells(startDate: Temporal.PlainDate, endDate: Temporal.PlainDate): HeaderCell[] {

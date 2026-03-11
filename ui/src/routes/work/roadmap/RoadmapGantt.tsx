@@ -12,10 +12,16 @@ import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgre
 import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
 import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { Temporal } from 'temporal-polyfill';
+import { useSprintQuery } from '@/api/sprint/sprint-hooks';
+import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
+import { getSprintName } from '@/core/getSprintName';
+import { quarterToColor } from '@/core/quarterToColor';
 
 export function RoadmapGantt({ context }: { context: number }) {
 	const workItemsQuery = useWorkItemsByContextQuery(context);
 	const updateWorkItemMutation = useUpdateWorkItemMutation();
+
+	const sprints = useSprintQuery();
 
 	const contextStartDate = Temporal.PlainDate.from({ year: context, month: 1, day: 1 });
 	const contextEndDate = Temporal.PlainDate.from({ year: context, month: 12, day: 31 });
@@ -40,7 +46,7 @@ export function RoadmapGantt({ context }: { context: number }) {
 		).then(() => void 0);
 	}
 
-	if (workItemsQuery.isLoading || !workItemsQuery.data) {
+	if (workItemsQuery.isLoading || !workItemsQuery.data || sprints.isLoading || !sprints.data) {
 		return <RoadmapGanttSkeleton />
 	}
 
@@ -72,6 +78,13 @@ export function RoadmapGantt({ context }: { context: number }) {
 		}
 	];
 
+	const timeboxes: GanttTimebox[] = sprints.data.map(sprint => ({
+		label: getSprintName(sprint),
+		startDate: sprint.startDate,
+		endDate: sprint.endDate,
+		color: quarterToColor[sprint.quarter]
+	}));
+
 	return (
 		<Gantt items={ganttItems}
 			   containerProps={{ w: '100%', style: { flexGrow: 1, flexShrink: 0 } }}
@@ -80,6 +93,7 @@ export function RoadmapGantt({ context }: { context: number }) {
 			   initialColumnIds={['title']}
 			   changeDates={changeDates}
 			   bounds={[contextStartDate, contextEndDate]}
+			   timeboxes={timeboxes}
 			   renderContextMenu={(o, s) => renderRoadmapGanttContextMenu(o, s, context)}
 		/>
 	)

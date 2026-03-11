@@ -4,6 +4,7 @@ import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { ColumnDescriptor } from '@/base/data-table';
 import { ReactNode } from 'react';
 import { Temporal } from 'temporal-polyfill';
+import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
 
 export interface GanttProps<TData> {
 	items: GanttItem<TData>[];
@@ -14,5 +15,6 @@ export interface GanttProps<TData> {
 	initialColumnIds: string[];
 	ganttKey: string;
 	bounds?: [start: Temporal.PlainDate, end: Temporal.PlainDate];
+	timeboxes?: GanttTimebox[];
 	renderContextMenu?: (openedOn: GanttItem<TData>, selected: GanttItem<TData>[]) => ReactNode;
 }
