@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { useCreateWorkItemMutation } from '@/api/work-item/work-item-hooks';
 import { WorkItemType } from '@/models/WorkItem';
 
-export function RoadmapV2EmptySplashScreen({ context }: { context: number }) {
+export function RoadmapEmptySplashScreen({ context }: { context: number }) {
 	const workItemMutation = useCreateWorkItemMutation();
 
 	const addObjective = () => {

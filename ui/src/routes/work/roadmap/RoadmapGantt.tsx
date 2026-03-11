@@ -1,11 +1,11 @@
 import { useUpdateWorkItemMutation, useWorkItemsByContextQuery } from '@/api/work-item/work-item-hooks';
-import { RoadmapV2GanttSkeleton } from '@/routes/work/roadmapV2/RoadmapV2GanttSkeleton';
-import { RoadmapV2EmptySplashScreen } from '@/routes/work/roadmapV2/RoadmapV2EmptySplashScreen';
+import { RoadmapGanttSkeleton } from '@/routes/work/roadmap/RoadmapGanttSkeleton';
+import { RoadmapEmptySplashScreen } from '@/routes/work/roadmap/RoadmapEmptySplashScreen';
 import { Gantt, GanttItem } from '@/base/gantt';
 import { ColumnDescriptor } from '@/base/data-table';
 import { WorkItem, WorkItemId, WorkItemTimeFrameType } from '@/models/WorkItem';
-import { useRoadmapGanttItems } from '@/routes/work/roadmapV2/useRoadmapGanttItems';
-import { renderRoadmapV2GanttContextMenu } from '@/routes/work/roadmapV2/renderRoadmapV2GanttContextMenu';
+import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
+import { renderRoadmapGanttContextMenu } from '@/routes/work/roadmap/renderRoadmapGanttContextMenu';
 import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
 import { WorkItemStatusInplace } from '@/core/work-item/inplace/WorkItemStatusInplace';
 import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
@@ -13,7 +13,7 @@ import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeF
 import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { Temporal } from 'temporal-polyfill';
 
-export function RoadmapV2Gantt({ context }: { context: number }) {
+export function RoadmapGantt({ context }: { context: number }) {
 	const workItemsQuery = useWorkItemsByContextQuery(context);
 	const updateWorkItemMutation = useUpdateWorkItemMutation();
 
@@ -41,11 +41,11 @@ export function RoadmapV2Gantt({ context }: { context: number }) {
 	}
 
 	if (workItemsQuery.isLoading || !workItemsQuery.data) {
-		return <RoadmapV2GanttSkeleton />
+		return <RoadmapGanttSkeleton />
 	}
 
 	if (workItemsQuery.data.length === 0) {
-		return <RoadmapV2EmptySplashScreen context={context} />
+		return <RoadmapEmptySplashScreen context={context} />
 	}
 
 	const columns: ColumnDescriptor<GanttItem<WorkItem>>[] = [
@@ -80,7 +80,7 @@ export function RoadmapV2Gantt({ context }: { context: number }) {
 			   initialColumnIds={['title']}
 			   changeDates={changeDates}
 			   bounds={[contextStartDate, contextEndDate]}
-			   renderContextMenu={(o, s) => renderRoadmapV2GanttContextMenu(o, s, context)}
+			   renderContextMenu={(o, s) => renderRoadmapGanttContextMenu(o, s, context)}
 		/>
 	)
 }

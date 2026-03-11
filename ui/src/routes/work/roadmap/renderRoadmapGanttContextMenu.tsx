@@ -5,11 +5,11 @@ import { Menu } from '@mantine/core';
 import { IconFile, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateWorkItemMutation, useDeleteWorkItemsMutation } from '@/api/work-item/work-item-hooks';
 
-export function renderRoadmapV2GanttContextMenu(clickedOn: GanttItem<WorkItem>, selected: GanttItem<WorkItem>[], context: number) {
-	return <RoadmapV2GanttContextMenu clickedOn={clickedOn} selected={selected} context={context} />;
+export function renderRoadmapGanttContextMenu(clickedOn: GanttItem<WorkItem>, selected: GanttItem<WorkItem>[], context: number) {
+	return <RoadmapGanttContextMenu clickedOn={clickedOn} selected={selected} context={context} />;
 }
 
-function RoadmapV2GanttContextMenu({ clickedOn, selected, context }: { clickedOn: GanttItem<WorkItem>, selected: GanttItem<WorkItem>[], context: number }) {
+function RoadmapGanttContextMenu({ clickedOn, selected, context }: { clickedOn: GanttItem<WorkItem>, selected: GanttItem<WorkItem>[], context: number }) {
 
 	const createWorkItemMutation = useCreateWorkItemMutation();
 	const deleteWorkItemsMutation = useDeleteWorkItemsMutation();

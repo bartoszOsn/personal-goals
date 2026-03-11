@@ -1,11 +1,11 @@
 import { getRouteApi } from '@tanstack/react-router';
 import { Temporal } from 'temporal-polyfill';
-import { RoadmapV2 } from '@/routes/work/roadmapV2/RoadmapV2';
+import { Roadmap } from '@/routes/work/roadmap/Roadmap';
 
-export function RoadmapV2Route() {
-	const context = getRouteApi('/work/$context/roadmap-v2')
+export function RoadmapRoute() {
+	const context = getRouteApi('/work/$context/roadmap')
 		.useParams({
 			select: (params) => isNaN(+params.context) ? Temporal.Now.plainDateISO().year : +params.context
 		});
-	return <RoadmapV2 context={context} />
+	return <Roadmap context={context} />
 }

@@ -7,7 +7,7 @@ import { AuthRoute } from '@/routes/auth/AuthRoute';
 import { LoginRoute } from '@/routes/auth/login/LoginRoute';
 import { RegisterRoute } from '@/routes/auth/RegisterRoute';
 import { SprintOverviewRoute } from '@/routes/work/sprint-overview/SprintOverviewRoute';
-import { RoadmapV2Route } from '@/routes/work/roadmapV2/RoadmapV2Route';
+import { RoadmapRoute } from '@/routes/work/roadmap/RoadmapRoute';
 import { DetailsRoute } from '@/routes/work/details/DetailsRoute';
 
 const rootRoute = createRootRoute({
@@ -39,8 +39,8 @@ const sprintOverviewRoute = createRoute({
 
 const roadmapV2Route = createRoute({
 	getParentRoute: () => workRoute,
-	path: '/roadmap-v2',
-	component: RoadmapV2Route
+	path: '/roadmap',
+	component: RoadmapRoute
 });
 
 const sprintSettings = createRoute({
