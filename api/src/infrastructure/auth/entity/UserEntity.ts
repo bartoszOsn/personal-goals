@@ -6,9 +6,7 @@ import {
 	PrimaryGeneratedColumn
 } from 'typeorm';
 import { SprintSettingsEntity } from '../../time/entity/SprintSettingsEntity';
-import { ObjectiveEntity } from '../../work/entity/ObjectiveEntity';
 import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
-import { TaskEntity } from '../../work/entity/TaskEntity';
 import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
 
 @Entity()
@@ -27,12 +25,6 @@ export class UserEntity {
 
 	@OneToOne(() => SprintSettingsEntity, (settings) => settings.user)
 	sprintSettings?: SprintSettingsEntity;
-
-	@OneToMany(() => ObjectiveEntity, (objective) => objective.user)
-	objectives: ObjectiveEntity[];
-
-	@OneToMany(() => TaskEntity, (task) => task.user)
-	tasks: TaskEntity[];
 
 	@OneToMany(() => WorkItemEntity, (workItem) => workItem.user)
 	workItems: WorkItemEntity[];

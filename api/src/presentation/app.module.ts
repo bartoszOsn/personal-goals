@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthPresentationModule } from './auth/AuthPresentationModule';
 import { TimePresentationModule } from './time/TimePresentationModule';
-import { WorkPresentationModule } from './work/WorkPresentationModule';
 import { WorkItemPresentationModule } from './work-item/WorkItemPresentationModule';
 
 @Module({
@@ -15,7 +14,6 @@ import { WorkItemPresentationModule } from './work-item/WorkItemPresentationModu
 		}),
 		AuthPresentationModule,
 		TimePresentationModule,
-		WorkPresentationModule,
 		WorkItemPresentationModule
 	],
 	controllers: []

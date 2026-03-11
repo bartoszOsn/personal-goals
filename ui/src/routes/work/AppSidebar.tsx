@@ -25,7 +25,7 @@ export function AppSidebar({ context, setContext }: { context: number, setContex
 					Personal OKR
 				</Title>
 				<CustomNavLink to='/work/$context/sprint-overview/{-$sprintId}' params={{ context: context.toString() }} label='Sprint overview' />
-				<CustomNavLink to='/work/$context/roadmap-v2' params={{ context: context.toString() }} label='Roadmap' />
+				<CustomNavLink to='/work/$context/roadmap' params={{ context: context.toString() }} label='Roadmap' />
 				<CustomNavLink to='/work/$context/sprint-settings' params={{ context: context.toString() }} label='Sprint settings' />
 			</Box>
 		</AppShell.Navbar>
