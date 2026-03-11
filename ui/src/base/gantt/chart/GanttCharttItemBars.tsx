@@ -5,6 +5,7 @@ import { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 import { useDrag } from '@/base/gantt/hooks/useDrag';
 import { flatItems } from '@/base/gantt/FlatItems';
 import { useMemo } from 'react';
+import { Tooltip } from '@mantine/core';
 
 const yMargin = 4;
 const dragHandleWidth = 10;
@@ -104,16 +105,18 @@ function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) 
 					<stop offset="100%" style={{ stopColor: endColor}} />
 				</linearGradient>
 			</defs>
-			<rect x={x}
-				  y={row.top + yMargin}
-				  width={width}
-				  height={row.height - yMargin * 2}
-				  onMouseDown={onMouseDownMain}
-				  style={{
-					  fill: `url(#${id})`,
-					  rx: 4,
-					  cursor: context.props.changeDates ? 'grab' : 'pointer',
-				  } as any} />
+			<Tooltip.Floating disabled={item.tooltip === undefined} label={item.tooltip ?? ''}>
+				<rect x={x}
+					  y={row.top + yMargin}
+					  width={width}
+					  height={row.height - yMargin * 2}
+					  onMouseDown={onMouseDownMain}
+					  style={{
+						  fill: `url(#${id})`,
+						  rx: 4,
+						  cursor: context.props.changeDates ? 'grab' : 'pointer',
+					  } as any} />
+			</Tooltip.Floating>
 			{
 				context.props.changeDates && actualStart && actualEnd && (
 					<>

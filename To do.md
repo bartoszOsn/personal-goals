@@ -4,7 +4,7 @@
 
 1. ✅ Non-editable columns on gantt and data table.
 2. ✅ Fix `erasableSyntaxOnly` and `verbatimModuleSyntax` on ui.
-3. Roadmap view with objectives, KRs and tasks on one gantt chart.
+3. ✅ Roadmap view with objectives, KRs and tasks on one gantt chart.
     - ✅ Gantt must support child items.
     - ✅ Gantt must support items without or with only one date.
     - ✅ Gantt must support timeboxes
@@ -21,7 +21,7 @@
    - ✅ change dataTypes into components
    - ✅ Add maybe some utils for inplacing, but it's handled at the dataType component level.
 10. ✅ Update "All OKRs" to use Data table - OR, maybe just remove this screen and make sure that all this can be done on roadmap
-11. Tooltip on gantt bar – on roadmap name of the work item
+11. ✅ Tooltip on gantt bar – on roadmap name of the work item
 12. ✅ Board uses new work-item architecture
 13. ✅ Remove old architecture from code
 
