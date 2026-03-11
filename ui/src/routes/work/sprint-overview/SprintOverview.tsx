@@ -5,11 +5,14 @@ import { SprintOverviewSprintInfo } from '@/routes/work/sprint-overview/SprintOv
 import { SprintOverviewTaskBoard } from '@/routes/work/sprint-overview/SprintOverviewTaskBoard';
 import { SprintId } from '@/models/Sprint';
 
-export function SprintOverview({ sprintId }: { sprintId: SprintId }) {
+export function SprintOverview({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const navigate = useNavigate();
 
 	const onSprintIdChange = (newId: string) => {
-		navigate({ to: `/work/sprint-overview/{-$sprintId}`, params: { sprintId: newId } })
+		navigate({
+			to: `.`,
+			params: (prev) => ({ ...prev, sprintId: newId })
+		})
 			.then();
 	}
 
@@ -17,7 +20,7 @@ export function SprintOverview({ sprintId }: { sprintId: SprintId }) {
 		<Stack p="lg">
 			<SprintOverviewSprintSwitcher sprintId={sprintId} onChange={onSprintIdChange} />
 			<SprintOverviewSprintInfo sprintId={sprintId} />
-			<SprintOverviewTaskBoard sprintId={sprintId} />
+			<SprintOverviewTaskBoard context={context} sprintId={sprintId} />
 		</Stack>
 	)
 }

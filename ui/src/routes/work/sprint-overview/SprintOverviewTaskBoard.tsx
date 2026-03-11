@@ -1,43 +1,44 @@
 import { Board } from '@/base/board/api/Board.tsx';
 import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
-import { useCreateTaskMutation, useTasksQuery, useUpdateTaskMutation } from '@/api/task/task-hooks.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
-import { TaskNameInplace } from '@/core/task/inplace/TaskNameInplace';
-import { TaskStartDateInplace } from '@/core/task/inplace/TaskStartDateInplace';
-import { TaskEndDateInplace } from '@/core/task/inplace/TaskEndDateInplace';
 import { SprintId } from '@/models/Sprint';
-import { Task, TaskStatus } from '@/models/Task';
-import { TaskSprintInplace } from '@/core/task/inplace/TaskSprintInplace';
-import { TaskKeyResultInplace } from '@/core/task/inplace/TaskKeyResultInplace';
+import { useCreateWorkItemMutation, useUpdateWorkItemMutation, useWorkItemsByContextQuery } from '@/api/work-item/work-item-hooks';
+import { WorkItem, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
+import { isPlainDate } from '@personal-okr/shared';
+import { useSprintQuery } from '@/api/sprint/sprint-hooks';
+import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
+import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
+import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
 
-export function SprintOverviewTaskBoard({ sprintId }: { sprintId: SprintId }) {
-	const tasksQuery = useTasksQuery();
-	const taskUpdateMutation = useUpdateTaskMutation();
-	const taskCreateMutation = useCreateTaskMutation();
-	const columns: BoardColumn<TaskStatus>[] = [
+export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
+	const workItems = useWorkItemsByContextQuery(context);
+	const sprints = useSprintQuery();
+	const updateWorkItem = useUpdateWorkItemMutation();
+	const createWorkItemMutation = useCreateWorkItemMutation();
+	const columns: BoardColumn<WorkItemStatus>[] = [
 		{
-			columnId: TaskStatus.TODO,
+			columnId: WorkItemStatus.TODO,
 			name: 'To do',
 			color: 'gray'
 		},
 		{
-			columnId: TaskStatus.IN_PROGRESS,
+			columnId: WorkItemStatus.IN_PROGRESS,
 			name: 'In progress',
 			color: 'blue'
 		},
 		{
-			columnId: TaskStatus.FAILED,
+			columnId: WorkItemStatus.FAILED,
 			name: 'Failed',
 			color: 'red'
 		},
 		{
-			columnId: TaskStatus.DONE,
+			columnId: WorkItemStatus.DONE,
 			name: 'Done',
 			color: 'green'
 		}
 	];
 
-	if (tasksQuery.isPending || !tasksQuery.data) {
+	if (workItems.isPending || !workItems.data || sprints.isPending || !sprints.data) {
 		return <Group>
 			<Skeleton h={300} />
 			<Skeleton h={300} />
@@ -45,43 +46,44 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: SprintId }) {
 		</Group>;
 	}
 
-	const tasksBySprint = tasksQuery.data.filter(task => task.sprintIds.includes(sprintId));
+	const sprint = sprints.data.find(sprint => sprint.id === sprintId);
+	if (!sprint) {
+		return <Group>
+			<Skeleton h={300} />
+			<Skeleton h={300} />
+			<Skeleton h={300} />
+		</Group>;
+	}
 
-	const renderCard = (task: Task) => {
+	const tasksBySprint = flatWorkItems(workItems.data)
+		.filter(workItem => workItem.type === WorkItemType.TASK)
+		.filter(task => task.timeFrame && isPlainDate(task.timeFrame.startDate).afterOrEqual(sprint.startDate) && isPlainDate(task.timeFrame.endDate).beforeOrEqual(sprint.endDate));
+
+	const renderCard = (task: WorkItem) => {
 		return <Stack gap={0}>
 			<Space h='md' />
-			<TaskNameInplace task={task} textProps={{ fw: 'bold' }} />
+			<WorkItemTitleInplace workItem={task} textProps={{ fw: 'bold' }} />
 			<Space h="sm" />
-			<Group gap='xl' wrap='nowrap'>
-				<Stack gap={0}>
-					<Text size="xs" c="dimmed">Start date</Text>
-					<TaskStartDateInplace task={task} />
-				</Stack>
-				<Stack gap={0}>
-					<Text size="xs" c="dimmed">End date</Text>
-					<TaskEndDateInplace task={task} />
-				</Stack>
-			</Group>
+			<Text size="xs" c="dimmed">Time frame</Text>
+			<WorkItemTimeFrameInplace workItem={task} />
 			<Space h="sm" />
-			<Text size="xs" c="dimmed">Sprints</Text>
-			<TaskSprintInplace task={task} />
-			<Space h="sm" />
-			<Text size="xs" c="dimmed">Key result</Text>
-			<TaskKeyResultInplace task={task} />
+			<Text size="xs" c="dimmed">Progress</Text>
+			<WorkItemProgressInplace workItem={task} />
 		</Stack>;
 	};
 
-	const onColumnChange = async (item: Task, newStatus: TaskStatus) => {
-		await taskUpdateMutation.mutateAsync({
+	const onColumnChange = async (item: WorkItem, newStatus: WorkItemStatus) => {
+		await updateWorkItem.mutateAsync({
 			id: item.id,
 			request: { status: newStatus }
 		});
 	};
 
-	const onCreateTask = async (status: TaskStatus) => {
-		await taskCreateMutation.mutateAsync({
-			status: status,
-			sprintIds: [sprintId]
+	const onCreateTask = async (status: WorkItemStatus) => {
+		// TODO: set status during creation
+		await createWorkItemMutation.mutateAsync({
+			context: context,
+			type: WorkItemType.TASK
 		});
 	};
 
@@ -99,4 +101,14 @@ export function SprintOverviewTaskBoard({ sprintId }: { sprintId: SprintId }) {
 				   createButtonText={'Create task'} />
 		</>
 	);
+}
+
+function flatWorkItems(workItems: WorkItem[]): WorkItem[] {
+	const result: WorkItem[] = [];
+	for (const workItem of workItems) {
+		result.push(workItem);
+		result.push(...flatWorkItems(workItem.children));
+	}
+
+	return result;
 }
