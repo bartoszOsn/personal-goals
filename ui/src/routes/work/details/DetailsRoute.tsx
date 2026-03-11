@@ -7,7 +7,7 @@ import { Stack } from '@mantine/core';
 import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
 
 export function DetailsRoute() {
-	const workItemId = getRouteApi('/work/details/$workItemId').useParams({
+	const workItemId = getRouteApi('/work/$context/details/$workItemId').useParams({
 		select: (params) => params.workItemId as WorkItemId
 	});
 
