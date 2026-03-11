@@ -18,6 +18,7 @@ export interface WorkItemCreationRequest {
 	readonly context: number;
 	readonly type: WorkItemType;
 	readonly parentId?: WorkItemId;
+	readonly fields?: WorkItemUpdateRequest;
 }
 
 export interface WorkItemUpdateRequest {

@@ -3,7 +3,7 @@ import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { SprintId } from '@/models/Sprint';
 import { useCreateWorkItemMutation, useUpdateWorkItemMutation, useWorkItemsByContextQuery } from '@/api/work-item/work-item-hooks';
-import { WorkItem, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
+import { WorkItem, WorkItemStatus, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
 import { isPlainDate } from '@personal-okr/shared';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
@@ -80,10 +80,19 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 	};
 
 	const onCreateTask = async (status: WorkItemStatus) => {
-		// TODO: set status during creation
 		await createWorkItemMutation.mutateAsync({
 			context: context,
-			type: WorkItemType.TASK
+			type: WorkItemType.TASK,
+			fields: {
+				timeFrame: {
+					type: WorkItemTimeFrameType.SPRINT,
+					sprintId: sprint.id,
+					startDate: sprint.startDate,
+					endDate: sprint.endDate,
+					context
+				},
+				status
+			}
 		});
 	};
 

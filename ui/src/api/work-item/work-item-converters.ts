@@ -47,7 +47,8 @@ export function workItemCreationRequestToDTO(request: WorkItemCreationRequest): 
 	return {
 		context: request.context,
 		type: workItemTypeToDTO(request.type),
-		parentId: request.parentId
+		parentId: request.parentId,
+		fields: request.fields ? workItemUpdateRequestToDTO(request.fields) : undefined,
 	};
 }
 

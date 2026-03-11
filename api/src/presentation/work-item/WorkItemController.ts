@@ -57,11 +57,22 @@ export class WorkItemController {
 			? new WorkItemId(request.parentId)
 			: undefined;
 
-		const workItem = await this.workItemFacade.createWorkItem(
+		let workItem = await this.workItemFacade.createWorkItem(
 			context,
 			type,
 			parent
 		);
+
+		const updateRequest = request.fields
+			? await this.workItemDTOConverter.fromWorkItemUpdateRequestDTO(
+					workItem.id,
+					request.fields
+				)
+			: undefined;
+
+		if (updateRequest) {
+			workItem = await this.workItemFacade.updateWorkItem(updateRequest);
+		}
 
 		return this.workItemDTOConverter.toWorkItemDTO(workItem);
 	}
