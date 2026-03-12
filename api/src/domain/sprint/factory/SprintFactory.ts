@@ -51,51 +51,8 @@ export class SprintFactory {
 	}
 
 	fill(): SprintFactory {
-		const context = this.collection.context;
-		const yearStart = context.getStartDate();
-		const yearEnd = context.getEndDate();
 		const twoWeeksInDays = 14;
-
-		const gaps: Array<{
-			start: Temporal.PlainDate;
-			end: Temporal.PlainDate;
-		}> = [];
-
-		if (this.collection.sprints.length === 0) {
-			gaps.push({ start: yearStart, end: yearEnd });
-		} else {
-			const sortedSprints = [...this.collection.sprints].sort((a, b) =>
-				Temporal.PlainDate.compare(a.startDate, b.startDate)
-			);
-
-			const firstSprintStart = sortedSprints[0].startDate;
-			if (Temporal.PlainDate.compare(yearStart, firstSprintStart) < 0) {
-				gaps.push({
-					start: yearStart,
-					end: firstSprintStart.subtract({ days: 1 })
-				});
-			}
-
-			for (let i = 0; i < sortedSprints.length - 1; i++) {
-				const currentEnd = sortedSprints[i].endDate;
-				const nextStart = sortedSprints[i + 1].startDate;
-				const gapStart = currentEnd.add({ days: 1 });
-
-				if (Temporal.PlainDate.compare(gapStart, nextStart) < 0) {
-					gaps.push({
-						start: gapStart,
-						end: nextStart.subtract({ days: 1 })
-					});
-				}
-			}
-
-			const lastSprintEnd =
-				sortedSprints[sortedSprints.length - 1].endDate;
-			const gapStart = lastSprintEnd.add({ days: 1 });
-			if (Temporal.PlainDate.compare(gapStart, yearEnd) <= 0) {
-				gaps.push({ start: gapStart, end: yearEnd });
-			}
-		}
+		const gaps = this.findAvailableGaps();
 
 		let factory: SprintFactory = this;
 
@@ -111,25 +68,7 @@ export class SprintFactory {
 					break;
 				}
 
-				const newSprintId = SprintId.random();
-				const newSprint = new SprintImpl(
-					newSprintId,
-					context,
-					currentStart,
-					potentialEnd
-				);
-
-				const newSprints = [
-					...factory.collection.sprints,
-					newSprint
-				].sort((a, b) =>
-					Temporal.PlainDate.compare(a.startDate, b.startDate)
-				);
-
-				factory = new SprintFactory(
-					new SprintContextCollectionImpl(context, newSprints)
-				);
-
+				factory = factory.addNewSprint(currentStart, potentialEnd);
 				currentStart = potentialEnd.add({ days: 1 });
 			}
 		}
@@ -138,7 +77,23 @@ export class SprintFactory {
 	}
 
 	createSprint(): SprintFactory {
-		return this; // TODO Implement
+		const twoWeeksInDays = 14;
+		const gaps = this.findAvailableGaps();
+
+		if (gaps.length === 0) {
+			return this;
+		}
+
+		for (const gap of gaps) {
+			const potentialEnd = gap.start.add({ days: twoWeeksInDays - 1 });
+
+			if (Temporal.PlainDate.compare(potentialEnd, gap.end) <= 0) {
+				return this.addNewSprint(gap.start, potentialEnd);
+			}
+		}
+
+		const firstGap = gaps[0];
+		return this.addNewSprint(firstGap.start, firstGap.end);
 	}
 
 	update(request: SprintUpdateRequest): SprintFactory {
@@ -228,5 +183,82 @@ export class SprintFactory {
 				throw new SprintOverlapError('Two sprints cannot overlap');
 			}
 		}
+	}
+
+	private findAvailableGaps(): Array<{
+		start: Temporal.PlainDate;
+		end: Temporal.PlainDate;
+	}> {
+		const context = this.collection.context;
+		const yearStart = Temporal.PlainDate.from({
+			year: context.year,
+			month: 1,
+			day: 1
+		});
+		const yearEnd = Temporal.PlainDate.from({
+			year: context.year,
+			month: 12,
+			day: 31
+		});
+
+		const gaps: Array<{
+			start: Temporal.PlainDate;
+			end: Temporal.PlainDate;
+		}> = [];
+
+		if (this.collection.sprints.length === 0) {
+			gaps.push({ start: yearStart, end: yearEnd });
+			return gaps;
+		}
+
+		const sortedSprints = [...this.collection.sprints].sort((a, b) =>
+			Temporal.PlainDate.compare(a.startDate, b.startDate)
+		);
+
+		const firstSprintStart = sortedSprints[0].startDate;
+		if (Temporal.PlainDate.compare(yearStart, firstSprintStart) < 0) {
+			gaps.push({
+				start: yearStart,
+				end: firstSprintStart.subtract({ days: 1 })
+			});
+		}
+
+		for (let i = 0; i < sortedSprints.length - 1; i++) {
+			const currentEnd = sortedSprints[i].endDate;
+			const nextStart = sortedSprints[i + 1].startDate;
+			const gapStart = currentEnd.add({ days: 1 });
+
+			if (Temporal.PlainDate.compare(gapStart, nextStart) < 0) {
+				gaps.push({
+					start: gapStart,
+					end: nextStart.subtract({ days: 1 })
+				});
+			}
+		}
+
+		const lastSprintEnd = sortedSprints[sortedSprints.length - 1].endDate;
+		const gapStart = lastSprintEnd.add({ days: 1 });
+		if (Temporal.PlainDate.compare(gapStart, yearEnd) <= 0) {
+			gaps.push({ start: gapStart, end: yearEnd });
+		}
+
+		return gaps;
+	}
+
+	private addNewSprint(
+		start: Temporal.PlainDate,
+		end: Temporal.PlainDate
+	): SprintFactory {
+		const context = this.collection.context;
+		const newSprintId = SprintId.random();
+		const newSprint = new SprintImpl(newSprintId, context, start, end);
+
+		const newSprints = [...this.collection.sprints, newSprint].sort(
+			(a, b) => Temporal.PlainDate.compare(a.startDate, b.startDate)
+		);
+
+		return new SprintFactory(
+			new SprintContextCollectionImpl(context, newSprints)
+		);
 	}
 }
