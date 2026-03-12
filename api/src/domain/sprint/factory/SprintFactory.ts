@@ -51,7 +51,90 @@ export class SprintFactory {
 	}
 
 	fill(): SprintFactory {
-		return this; // TODO Implement
+		const context = this.collection.context;
+		const yearStart = context.getStartDate();
+		const yearEnd = context.getEndDate();
+		const twoWeeksInDays = 14;
+
+		const gaps: Array<{
+			start: Temporal.PlainDate;
+			end: Temporal.PlainDate;
+		}> = [];
+
+		if (this.collection.sprints.length === 0) {
+			gaps.push({ start: yearStart, end: yearEnd });
+		} else {
+			const sortedSprints = [...this.collection.sprints].sort((a, b) =>
+				Temporal.PlainDate.compare(a.startDate, b.startDate)
+			);
+
+			const firstSprintStart = sortedSprints[0].startDate;
+			if (Temporal.PlainDate.compare(yearStart, firstSprintStart) < 0) {
+				gaps.push({
+					start: yearStart,
+					end: firstSprintStart.subtract({ days: 1 })
+				});
+			}
+
+			for (let i = 0; i < sortedSprints.length - 1; i++) {
+				const currentEnd = sortedSprints[i].endDate;
+				const nextStart = sortedSprints[i + 1].startDate;
+				const gapStart = currentEnd.add({ days: 1 });
+
+				if (Temporal.PlainDate.compare(gapStart, nextStart) < 0) {
+					gaps.push({
+						start: gapStart,
+						end: nextStart.subtract({ days: 1 })
+					});
+				}
+			}
+
+			const lastSprintEnd =
+				sortedSprints[sortedSprints.length - 1].endDate;
+			const gapStart = lastSprintEnd.add({ days: 1 });
+			if (Temporal.PlainDate.compare(gapStart, yearEnd) <= 0) {
+				gaps.push({ start: gapStart, end: yearEnd });
+			}
+		}
+
+		let factory: SprintFactory = this;
+
+		for (const gap of gaps) {
+			let currentStart = gap.start;
+
+			while (true) {
+				const potentialEnd = currentStart.add({
+					days: twoWeeksInDays - 1
+				});
+
+				if (Temporal.PlainDate.compare(potentialEnd, gap.end) > 0) {
+					break;
+				}
+
+				const newSprintId = SprintId.random();
+				const newSprint = new SprintImpl(
+					newSprintId,
+					context,
+					currentStart,
+					potentialEnd
+				);
+
+				const newSprints = [
+					...factory.collection.sprints,
+					newSprint
+				].sort((a, b) =>
+					Temporal.PlainDate.compare(a.startDate, b.startDate)
+				);
+
+				factory = new SprintFactory(
+					new SprintContextCollectionImpl(context, newSprints)
+				);
+
+				currentStart = potentialEnd.add({ days: 1 });
+			}
+		}
+
+		return factory;
 	}
 
 	createSprint(): SprintFactory {
