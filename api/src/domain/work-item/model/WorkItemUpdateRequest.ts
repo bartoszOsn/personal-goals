@@ -5,7 +5,7 @@ import { WorkItemDescription } from './WorkItemDescription';
 import { WorkItemTimeFrame } from './WorkItemTimeFrame';
 import { WorkItemStatus } from './WorkItemStatus';
 import { ManualWorkItemProgress } from './WorkItemProgress';
-import { ContextYear } from './ContextYear';
+import { ContextYear } from '../../common/model/ContextYear';
 
 export class WorkItemUpdateRequest {
 	constructor(

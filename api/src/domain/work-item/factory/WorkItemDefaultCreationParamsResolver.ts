@@ -1,4 +1,4 @@
-import { ContextYear } from '../model/ContextYear';
+import { ContextYear } from '../../common/model/ContextYear';
 import { WorkItemType } from '../model/WorkItemType';
 import { WorkItemCreationParams } from './WorkItemCreationParams';
 import { UnreachableError } from '../../../util/UnreachableError';

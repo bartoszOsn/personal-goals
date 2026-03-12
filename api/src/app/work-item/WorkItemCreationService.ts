@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { WorkItemRepository } from './WorkItemRepository';
-import { ContextYear } from '../../domain/work-item/model/ContextYear';
+import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
 import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
 import { WorkItem } from '../../domain/work-item/model/WorkItem';

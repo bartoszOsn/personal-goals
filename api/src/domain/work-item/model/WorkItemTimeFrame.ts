@@ -1,6 +1,6 @@
-import { ContextYear } from './ContextYear';
+import { ContextYear } from '../../common/model/ContextYear';
 import { Temporal } from 'temporal-polyfill';
-import { Quarter } from './Quarter';
+import { Quarter } from '../../common/model/Quarter';
 import { Sprint } from '../../time/model/Sprint';
 import { TimeFrameOutOfContextException } from '../error/TimeFrameOutOfContextException';
 

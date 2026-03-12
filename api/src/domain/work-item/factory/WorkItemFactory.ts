@@ -1,6 +1,6 @@
 import { WorkItem } from '../model/WorkItem';
 import { WorkItemHierarchyValidator } from './WorkItemHierarchyValidator';
-import { ContextYear } from '../model/ContextYear';
+import { ContextYear } from '../../common/model/ContextYear';
 import { WorkItemType } from '../model/WorkItemType';
 import { WorkItemCreationParams } from './WorkItemCreationParams';
 import { WorkItemDefaultCreationParamsResolver } from './WorkItemDefaultCreationParamsResolver';

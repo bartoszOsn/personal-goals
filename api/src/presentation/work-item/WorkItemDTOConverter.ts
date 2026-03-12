@@ -25,8 +25,8 @@ import {
 	WholeYearWorkItemTimeFrame,
 	WorkItemTimeFrame
 } from '../../domain/work-item/model/WorkItemTimeFrame';
-import { Quarter } from '../../domain/work-item/model/Quarter';
-import { ContextYear } from '../../domain/work-item/model/ContextYear';
+import { Quarter } from '../../domain/common/model/Quarter';
+import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
 import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescription';
 import { Temporal } from 'temporal-polyfill';

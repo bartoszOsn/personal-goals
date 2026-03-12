@@ -1,7 +1,7 @@
 import { WorkItemType } from './WorkItemType';
 import { WorkItemId } from './WorkItemId';
 import { WorkItemTimeFrame } from './WorkItemTimeFrame';
-import { ContextYear } from './ContextYear';
+import { ContextYear } from '../../common/model/ContextYear';
 import { WorkItemStatus } from './WorkItemStatus';
 import {
 	IObjectWithProgressAndStatus,

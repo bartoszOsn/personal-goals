@@ -3,7 +3,7 @@ import { WorkItemRepository } from './WorkItemRepository';
 import { WorkItemCreationService } from './WorkItemCreationService';
 import { WorkItemUpdateService } from './WorkItemUpdateService';
 import { WorkItemDeletionService } from './WorkItemDeletionService';
-import { ContextYear } from '../../domain/work-item/model/ContextYear';
+import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItem } from '../../domain/work-item/model/WorkItem';
 import { UserStorage } from '../auth/UserStorage';
 import { WorkItemId } from '../../domain/work-item/model/WorkItemId';

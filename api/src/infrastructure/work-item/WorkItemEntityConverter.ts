@@ -23,11 +23,11 @@ import {
 	Percentage
 } from '../../domain/work-item/model/WorkItemProgress';
 import { WorkItemProgressEntity } from './entity/WorkItemProgressEntity';
-import { quarterToNumber, Quarter } from '../../domain/work-item/model/Quarter';
+import { quarterToNumber, Quarter } from '../../domain/common/model/Quarter';
 import { DeepPartial } from 'typeorm/common/DeepPartial';
 import { WorkItemFactory } from '../../domain/work-item/factory/WorkItemFactory';
 import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
-import { ContextYear } from '../../domain/work-item/model/ContextYear';
+import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
 import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescription';
 import { Temporal } from 'temporal-polyfill';

@@ -16,7 +16,7 @@ import {
 	WorkItemUpdateRequestDTO
 } from '@personal-okr/shared';
 import { WorkItemDTOConverter } from './WorkItemDTOConverter';
-import { ContextYear } from '../../domain/work-item/model/ContextYear';
+import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
 
 @Controller('work-item')
