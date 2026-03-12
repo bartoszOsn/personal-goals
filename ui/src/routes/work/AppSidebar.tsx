@@ -1,7 +1,7 @@
 import { createLink } from '@tanstack/react-router';
-import { AppShell, Box, NavLink, Title } from '@mantine/core';
+import { AppShell, Box, Button, NavLink, Title } from '@mantine/core';
 import { YearPickerInput } from '@mantine/dates';
-import { IconCalendar } from '@tabler/icons-react';
+import { IconCalendar, IconPlus } from '@tabler/icons-react';
 import { Temporal } from 'temporal-polyfill';
 
 export function AppSidebar({ context, setContext }: { context: number, setContext: (next: number) => void }) {
@@ -26,6 +26,14 @@ export function AppSidebar({ context, setContext }: { context: number, setContex
 				</Title>
 				<CustomNavLink to='/work/$context/sprint-overview/{-$sprintId}' params={{ context: context.toString() }} label='Sprint overview' />
 				<CustomNavLink to='/work/$context/roadmap' params={{ context: context.toString() }} label='Roadmap' />
+				<NavLink label='Docs'>
+					<CustomNavLink to={'/'} label='Doc 1' />
+					<CustomNavLink to={'/'} label='Doc 2' />
+					<CustomNavLink to={'/'} label='Doc 3' />
+					<Button fullWidth color='gray' variant='subtle' leftSection={<IconPlus size={18} stroke={1.5} />}>
+						New document
+					</Button>
+				</NavLink>
 				<CustomNavLink to='/work/$context/sprint-settings' params={{ context: context.toString() }} label='Sprint settings' />
 			</Box>
 		</AppShell.Navbar>
