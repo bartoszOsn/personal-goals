@@ -8,6 +8,7 @@ import {
 import { SprintSettingsEntity } from '../../time/entity/SprintSettingsEntity';
 import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
 import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
+import { SprintEntity } from '../../sprint/entity/SprintEntity';
 
 @Entity()
 export class UserEntity {
@@ -20,8 +21,8 @@ export class UserEntity {
 	@Column()
 	passwordHash: string;
 
-	@OneToMany(() => SprintTimeRangeEntity, (sprint) => sprint.user)
-	sprints: SprintTimeRangeEntity[];
+	@OneToMany(() => SprintEntity, (sprint) => sprint.user)
+	sprints: SprintEntity[];
 
 	@OneToOne(() => SprintSettingsEntity, (settings) => settings.user)
 	sprintSettings?: SprintSettingsEntity;

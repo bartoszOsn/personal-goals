@@ -5,36 +5,43 @@ import { SprintRepository } from './SprintRepository';
 import { SprintFactory } from '../../domain/sprint/factory/SprintFactory';
 import { SprintUpdateRequest } from '../../domain/sprint/model/SprintUpdateRequest';
 import { SprintId } from '../../domain/sprint/model/SprintId';
+import { UserStorage } from '../auth/UserStorage';
 
 @Injectable()
 export class SprintService {
-	constructor(private readonly sprintRepository: SprintRepository) {}
+	constructor(
+		private readonly sprintRepository: SprintRepository,
+		private readonly userStorage: UserStorage
+	) {}
 
-	getSprintsByContext(
+	async getSprintsByContext(
 		context: ContextYear
 	): Promise<SprintContextCollection> {
-		return this.sprintRepository.getSprintsByContext(context);
+		const user = await this.userStorage.getUser();
+		return this.sprintRepository.getSprintsByContext(context, user);
 	}
 
 	async createSprint(context: ContextYear): Promise<SprintContextCollection> {
+		const user = await this.userStorage.getUser();
 		const oldSprintCollection =
-			await this.sprintRepository.getSprintsByContext(context);
+			await this.sprintRepository.getSprintsByContext(context, user);
 		const newSprintCollection = SprintFactory.from(oldSprintCollection)
 			.createSprint()
 			.build();
 
-		await this.sprintRepository.save(newSprintCollection);
+		await this.sprintRepository.save(newSprintCollection, user);
 		return newSprintCollection;
 	}
 
 	async fillSprints(context: ContextYear): Promise<SprintContextCollection> {
+		const user = await this.userStorage.getUser();
 		const oldSprintCollection =
-			await this.sprintRepository.getSprintsByContext(context);
+			await this.sprintRepository.getSprintsByContext(context, user);
 		const newSprintCollection = SprintFactory.from(oldSprintCollection)
 			.fill()
 			.build();
 
-		await this.sprintRepository.save(newSprintCollection);
+		await this.sprintRepository.save(newSprintCollection, user);
 		return newSprintCollection;
 	}
 
@@ -42,13 +49,14 @@ export class SprintService {
 		context: ContextYear,
 		requests: SprintUpdateRequest[]
 	): Promise<SprintContextCollection> {
+		const user = await this.userStorage.getUser();
 		const oldSprintCollection =
-			await this.sprintRepository.getSprintsByContext(context);
+			await this.sprintRepository.getSprintsByContext(context, user);
 		const newSprintCollection = SprintFactory.from(oldSprintCollection)
 			.updateMany(requests)
 			.build();
 
-		await this.sprintRepository.save(newSprintCollection);
+		await this.sprintRepository.save(newSprintCollection, user);
 		return newSprintCollection;
 	}
 
@@ -56,13 +64,14 @@ export class SprintService {
 		context: ContextYear,
 		ids: SprintId[]
 	): Promise<SprintContextCollection> {
+		const user = await this.userStorage.getUser();
 		const oldSprintCollection =
-			await this.sprintRepository.getSprintsByContext(context);
+			await this.sprintRepository.getSprintsByContext(context, user);
 		const newSprintCollection = SprintFactory.from(oldSprintCollection)
 			.deleteMany(ids)
 			.build();
 
-		await this.sprintRepository.save(newSprintCollection);
+		await this.sprintRepository.save(newSprintCollection, user);
 		return newSprintCollection;
 	}
 }
