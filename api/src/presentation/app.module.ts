@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthPresentationModule } from './auth/AuthPresentationModule';
 import { TimePresentationModule } from './time/TimePresentationModule';
 import { WorkItemPresentationModule } from './work-item/WorkItemPresentationModule';
+import { SprintPresentationModule } from './sprint/SprintPresentationModule';
 
 @Module({
 	imports: [
@@ -14,7 +15,8 @@ import { WorkItemPresentationModule } from './work-item/WorkItemPresentationModu
 		}),
 		AuthPresentationModule,
 		TimePresentationModule,
-		WorkItemPresentationModule
+		WorkItemPresentationModule,
+		SprintPresentationModule
 	],
 	controllers: []
 })

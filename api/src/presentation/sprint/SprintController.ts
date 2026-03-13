@@ -36,7 +36,7 @@ export class SprintController {
 	@Post(':context')
 	async createSprint(
 		@Param('context', new ParseIntPipe()) contextRaw: number
-	): Promise<SprintDTO> {
+	): Promise<SprintDTO[]> {
 		const context = new ContextYear(contextRaw);
 		const sprintCollection = await this.sprintService.createSprint(context);
 		return this.sprintDTOConverter.toSprintsDTO(sprintCollection);
