@@ -3,6 +3,7 @@ import { Temporal } from 'temporal-polyfill';
 import { SprintId } from './SprintId';
 import { isPlainDate } from '@personal-okr/shared';
 import { Quarter } from '../../common/model/Quarter';
+import { SprintStatus } from './SprintStatus';
 
 export abstract class Sprint {
 	private _index: number;
@@ -66,6 +67,17 @@ export abstract class Sprint {
 
 	get name(): string {
 		return `${this.context.year}-${this.quarter}-${(this.index + 1).toString().padStart(2, '0')}`;
+	}
+
+	getStatus(now: Temporal.PlainDate): SprintStatus {
+		if (isPlainDate(now).after(this.endDate)) {
+			return SprintStatus.COMPLETED;
+		}
+		if (isPlainDate(now).before(this.startDate)) {
+			return SprintStatus.FUTURE;
+		}
+
+		return SprintStatus.ACTIVE;
 	}
 
 	overlapWithRange(start: Temporal.PlainDate, end: Temporal.PlainDate) {
