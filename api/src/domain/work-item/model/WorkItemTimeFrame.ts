@@ -1,7 +1,7 @@
 import { ContextYear } from '../../common/model/ContextYear';
 import { Temporal } from 'temporal-polyfill';
 import { Quarter } from '../../common/model/Quarter';
-import { Sprint } from '../../time/model/Sprint';
+import { Sprint } from '../../sprint/model/Sprint';
 import { TimeFrameOutOfContextException } from '../error/TimeFrameOutOfContextException';
 
 export abstract class WorkItemTimeFrame {

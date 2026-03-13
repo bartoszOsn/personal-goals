@@ -6,6 +6,7 @@ import { SprintFactory } from '../../domain/sprint/factory/SprintFactory';
 import { SprintUpdateRequest } from '../../domain/sprint/model/SprintUpdateRequest';
 import { SprintId } from '../../domain/sprint/model/SprintId';
 import { UserStorage } from '../auth/UserStorage';
+import { Sprint } from '../../domain/sprint/model/Sprint';
 
 @Injectable()
 export class SprintService {
@@ -19,6 +20,11 @@ export class SprintService {
 	): Promise<SprintContextCollection> {
 		const user = await this.userStorage.getUser();
 		return this.sprintRepository.getSprintsByContext(context, user);
+	}
+
+	async getSprintById(id: SprintId): Promise<Sprint | null> {
+		const user = await this.userStorage.getUser();
+		return this.sprintRepository.getSprintById(id, user);
 	}
 
 	async createSprint(context: ContextYear): Promise<SprintContextCollection> {

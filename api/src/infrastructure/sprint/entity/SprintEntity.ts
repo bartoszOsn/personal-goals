@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserEntity } from '../../auth/entity/UserEntity';
+import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
 
 @Entity()
 export class SprintEntity {
@@ -17,4 +18,7 @@ export class SprintEntity {
 
 	@ManyToOne(() => UserEntity, (user) => user.sprints)
 	user: UserEntity;
+
+	@OneToMany(() => WorkItemEntity, (workItem) => workItem.timeFrame.sprint)
+	timeFrames: WorkItemEntity[];
 }

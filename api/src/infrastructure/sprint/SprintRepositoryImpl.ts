@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SprintEntity } from './entity/SprintEntity';
 import { In, Repository } from 'typeorm';
 import { SprintEntityConverter } from './SprintEntityConverter';
+import { SprintId } from '../../domain/sprint/model/SprintId';
+import { Sprint } from '../../domain/sprint/model/Sprint';
 
 @Injectable()
 export class SprintRepositoryImpl extends SprintRepository {
@@ -28,6 +30,25 @@ export class SprintRepositoryImpl extends SprintRepository {
 		});
 
 		return this.sprintEntityConverter.fromEntities(context, entities);
+	}
+
+	async getSprintById(id: SprintId, user: User): Promise<Sprint | null> {
+		const entity = await this.sprintRepository.findOneBy({
+			user: { id: user.id.id },
+			id: id.value
+		});
+
+		if (!entity) {
+			return null;
+		}
+
+		const context = new ContextYear(entity.context);
+
+		return (
+			(await this.getSprintsByContext(context, user)).sprints.find(
+				(sprint) => sprint.id.equals(id)
+			) ?? null
+		);
 	}
 
 	async save(

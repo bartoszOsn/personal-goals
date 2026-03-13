@@ -1,5 +1,5 @@
 import { Column, ManyToOne } from 'typeorm';
-import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
+import { SprintEntity } from '../../sprint/entity/SprintEntity';
 
 export class WorkItemTimeFrameEntity {
 	@Column({ enum: ['null', 'wholeYear', 'quarter', 'customDate', 'sprint'] })
@@ -17,9 +17,9 @@ export class WorkItemTimeFrameEntity {
 	endDate?: string;
 
 	// For sprint
-	@ManyToOne(() => SprintTimeRangeEntity, (sprint) => sprint.timeFrames, {
+	@ManyToOne(() => SprintEntity, (sprint) => sprint.timeFrames, {
 		nullable: true,
 		onDelete: 'RESTRICT'
 	})
-	sprint?: SprintTimeRangeEntity;
+	sprint?: SprintEntity;
 }

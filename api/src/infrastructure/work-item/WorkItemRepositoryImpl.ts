@@ -40,8 +40,10 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 			})
 		);
 
-		return rootsWithChildren.map((entity) =>
-			this.workItemEntityConverter.entityToWorkItem(entity)
+		return Promise.all(
+			rootsWithChildren.map((entity) =>
+				this.workItemEntityConverter.entityToWorkItem(entity)
+			)
 		);
 	}
 
@@ -75,7 +77,9 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 				relations: ['timeFrame.sprint']
 			});
 
-		return this.workItemEntityConverter.entityToWorkItem(rootWithChildren);
+		return await this.workItemEntityConverter.entityToWorkItem(
+			rootWithChildren
+		);
 	}
 
 	async save(root: WorkItem, user: User): Promise<void> {

@@ -30,12 +30,12 @@ import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
 import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescription';
 import { Temporal } from 'temporal-polyfill';
-import { TimeService } from '../../app/time/TimeService';
-import { SprintId } from '../../domain/time/model/SprintId';
+import { SprintId } from '../../domain/sprint/model/SprintId';
+import { SprintService } from '../../app/sprint/SprintService';
 
 @Injectable()
 export class WorkItemDTOConverter {
-	constructor(private readonly timeService: TimeService) {}
+	constructor(private readonly sprintService: SprintService) {}
 
 	toWorkItemsDTO(workItems: WorkItem[]): WorkItemDTO[] {
 		return workItems.map((wi) => this.toWorkItemDTO(wi));
@@ -227,13 +227,15 @@ export class WorkItemDTOConverter {
 					Temporal.PlainDate.from(timeFrame.value.startDate),
 					Temporal.PlainDate.from(timeFrame.value.endDate)
 				);
-			case 'sprint':
-				return new SprintWorkItemTimeFrame(
-					context,
-					await this.timeService.getSprintById(
-						new SprintId(timeFrame.value.sprintId)
-					)
+			case 'sprint': {
+				const sprint = await this.sprintService.getSprintById(
+					new SprintId(timeFrame.value.sprintId)
 				);
+				if (!sprint) {
+					throw new Error('Sprint not found');
+				}
+				return new SprintWorkItemTimeFrame(context, sprint);
+			}
 		}
 	}
 

@@ -19,11 +19,11 @@ import {
 	ChildrenProgressBasedWorkItemProgress,
 	ChildrenStatusBasedWorkItemProgress,
 	ManualWorkItemProgress,
-	WorkItemProgress,
-	Percentage
+	Percentage,
+	WorkItemProgress
 } from '../../domain/work-item/model/WorkItemProgress';
 import { WorkItemProgressEntity } from './entity/WorkItemProgressEntity';
-import { quarterToNumber, Quarter } from '../../domain/common/model/Quarter';
+import { Quarter, quarterToNumber } from '../../domain/common/model/Quarter';
 import { DeepPartial } from 'typeorm/common/DeepPartial';
 import { WorkItemFactory } from '../../domain/work-item/factory/WorkItemFactory';
 import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
@@ -31,17 +31,15 @@ import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
 import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescription';
 import { Temporal } from 'temporal-polyfill';
-import { Sprint } from '../../domain/time/model/Sprint';
-import { SprintId } from '../../domain/time/model/SprintId';
-import { Year } from '../../domain/time/model/Year';
-import { Quarter as TimeQuarter } from '../../domain/time/model/Quarter';
-import { SprintStatus } from '../../domain/time/model/SprintStatus';
+import { SprintId } from '../../domain/sprint/model/SprintId';
+import { SprintService } from '../../app/sprint/SprintService';
 
 @Injectable()
 export class WorkItemEntityConverter {
 	constructor(
 		@InjectRepository(WorkItemEntity)
-		private readonly workItemRepository: Repository<WorkItemEntity>
+		private readonly workItemRepository: Repository<WorkItemEntity>,
+		private readonly sprintService: SprintService
 	) {}
 
 	flatWorkItemToEntity(workItem: WorkItem, user: User): WorkItemEntity {
@@ -150,14 +148,14 @@ export class WorkItemEntityConverter {
 		throw new Error('Unknown progress type');
 	}
 
-	entityToWorkItem(entity: WorkItemEntity): WorkItem {
+	async entityToWorkItem(entity: WorkItemEntity): Promise<WorkItem> {
 		let factory = WorkItemFactory.ofRoot(
 			this.entityToWorkItemType(entity.type),
 			new WorkItemId(entity.id),
 			new ContextYear(entity.contextYear),
 			new WorkItemTitle(entity.title),
 			new WorkItemDescription(entity.description),
-			this.entityToWorkItemTimeFrame(
+			await this.entityToWorkItemTimeFrame(
 				entity.timeFrame,
 				new ContextYear(entity.contextYear)
 			),
@@ -165,15 +163,15 @@ export class WorkItemEntityConverter {
 			this.entityToWorkItemProgress(entity.progress)
 		);
 
-		factory = this.addChildrenRecursively(factory, entity.children);
+		factory = await this.addChildrenRecursively(factory, entity.children);
 
 		return factory.buildRoot();
 	}
 
-	private addChildrenRecursively(
+	private async addChildrenRecursively(
 		factory: WorkItemFactory,
 		children: WorkItemEntity[]
-	): WorkItemFactory {
+	): Promise<WorkItemFactory> {
 		if (!children || children.length === 0) {
 			return factory;
 		}
@@ -185,7 +183,7 @@ export class WorkItemEntityConverter {
 				new ContextYear(child.contextYear),
 				new WorkItemTitle(child.title),
 				new WorkItemDescription(child.description),
-				this.entityToWorkItemTimeFrame(
+				await this.entityToWorkItemTimeFrame(
 					child.timeFrame,
 					new ContextYear(child.contextYear)
 				),
@@ -193,7 +191,7 @@ export class WorkItemEntityConverter {
 				this.entityToWorkItemProgress(child.progress)
 			);
 
-			this.addChildrenRecursively(childFactory, child.children);
+			await this.addChildrenRecursively(childFactory, child.children);
 		}
 
 		return factory;
@@ -229,10 +227,10 @@ export class WorkItemEntityConverter {
 		}
 	}
 
-	private entityToWorkItemTimeFrame(
+	private async entityToWorkItemTimeFrame(
 		timeFrameEntity: WorkItemTimeFrameEntity,
 		context: ContextYear
-	): WorkItemTimeFrame | null {
+	): Promise<WorkItemTimeFrame | null> {
 		if (timeFrameEntity.type === 'null') {
 			return null;
 		}
@@ -253,33 +251,12 @@ export class WorkItemEntityConverter {
 		}
 
 		if (timeFrameEntity.type === 'sprint') {
-			const startDate = Temporal.PlainDate.from(
-				timeFrameEntity.sprint!.startDate
+			const sprint = await this.sprintService.getSprintById(
+				new SprintId(timeFrameEntity.sprint!.id)
 			);
-			const endDate = Temporal.PlainDate.from(
-				timeFrameEntity.sprint!.endDate
-			);
-
-			// Determine quarter from start date
-			const month = startDate.month;
-			const timeQuarter =
-				month <= 3
-					? TimeQuarter.Q1
-					: month <= 6
-						? TimeQuarter.Q2
-						: month <= 9
-							? TimeQuarter.Q3
-							: TimeQuarter.Q4;
-
-			const sprint = new Sprint(
-				new SprintId(timeFrameEntity.sprint!.id),
-				Year.of(startDate.year),
-				timeQuarter,
-				0, // yearlyIndex - not available from entity, using default
-				startDate,
-				endDate,
-				SprintStatus.ACTIVE // status - not available from entity, using default
-			);
+			if (!sprint) {
+				throw new Error('Unable to find sprint');
+			}
 			return new SprintWorkItemTimeFrame(context, sprint);
 		}
 

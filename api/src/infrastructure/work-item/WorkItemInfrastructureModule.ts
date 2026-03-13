@@ -4,9 +4,14 @@ import { WorkItemRepositoryImpl } from './WorkItemRepositoryImpl';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WorkItemEntity } from './entity/WorkItemEntity';
 import { WorkItemEntityConverter } from './WorkItemEntityConverter';
+import { SprintAppModule } from '../../app/sprint/SprintAppModule';
+import { SprintInfrastructureModule } from '../sprint/SprintInfrastructureModule';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([WorkItemEntity])],
+	imports: [
+		TypeOrmModule.forFeature([WorkItemEntity]),
+		SprintAppModule.withRepositories(SprintInfrastructureModule)
+	],
 	providers: [
 		{ provide: WorkItemRepository, useClass: WorkItemRepositoryImpl },
 		WorkItemEntityConverter

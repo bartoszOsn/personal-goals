@@ -1,12 +1,4 @@
-import {
-	Column,
-	Entity,
-	OneToMany,
-	OneToOne,
-	PrimaryGeneratedColumn
-} from 'typeorm';
-import { SprintSettingsEntity } from '../../time/entity/SprintSettingsEntity';
-import { SprintTimeRangeEntity } from '../../time/entity/SprintTimeRangeEntity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
 import { SprintEntity } from '../../sprint/entity/SprintEntity';
 
@@ -23,9 +15,6 @@ export class UserEntity {
 
 	@OneToMany(() => SprintEntity, (sprint) => sprint.user)
 	sprints: SprintEntity[];
-
-	@OneToOne(() => SprintSettingsEntity, (settings) => settings.user)
-	sprintSettings?: SprintSettingsEntity;
 
 	@OneToMany(() => WorkItemEntity, (workItem) => workItem.user)
 	workItems: WorkItemEntity[];
