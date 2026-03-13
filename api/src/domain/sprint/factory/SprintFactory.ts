@@ -7,8 +7,19 @@ import { SprintUpdateRequest } from '../model/SprintUpdateRequest';
 import { InvalidSprintContextError } from '../error/InvalidSprintContextError';
 import { SprintOverlapError } from '../error/SprintOverlapError';
 
-class SprintImpl extends Sprint {}
+class SprintImpl extends Sprint {
+	public setIndex(value: number) {
+		super.setIndex(value);
+	}
+}
 class SprintContextCollectionImpl extends SprintContextCollection {
+	constructor(context: ContextYear, sprints: ReadonlyArray<SprintImpl>) {
+		super(context, sprints);
+		for (let i = 0; i < sprints.length; i++) {
+			sprints[i].setIndex(i);
+		}
+	}
+
 	declare sprints: ReadonlyArray<SprintImpl>;
 }
 
