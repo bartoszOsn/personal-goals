@@ -1,5 +1,4 @@
 export * from './dto/time/QuarterDTO.js';
-export * from './dto/time/SprintDTO.js';
 export * from './dto/time/SprintListDTO.js';
 export * from './dto/time/SprintSettingsDTO.js';
 export * from './dto/time/SprintChangeRequestDTO.js';
@@ -15,6 +14,9 @@ export * from './dto/work-item/WorkItemTimeFrameDTO.js';
 export * from './dto/work-item/WorkItemTypeDTO.js';
 export * from './dto/work-item/WorkItemCreationRequestDTO.js';
 export * from './dto/work-item/WorkItemUpdateRequestDTO.js';
+
+export * from './dto/sprint/SprintDTO.js';
+export * from './dto/sprint/SprintsUpdateRequestDTO.js';
 
 export * from './dto/auth/index.js';
 
