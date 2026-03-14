@@ -24,7 +24,8 @@
 11. ✅ Tooltip on gantt bar – on roadmap name of the work item
 12. ✅ Board uses new work-item architecture
 13. ✅ Remove old architecture from code
-14. Sprints per context year
+14. ✅ Sprints per context year
+15. Fix Table deselecting when clicking a button (See: DeleteSprintsButton.tsx)
 
 ## First release
 
