@@ -9,6 +9,10 @@ export async function createSprints(context: number) {
 	await http.post(`/api/sprint/${context}`, void 0);
 }
 
+export async function fillSprints(context: number) {
+	await http.post(`/api/sprint/${context}/fill`, void 0);
+}
+
 export async function updateSprints(request: SprintChangeRequestDTO) {
 	await http.put('/api/time/sprint', request);
 }

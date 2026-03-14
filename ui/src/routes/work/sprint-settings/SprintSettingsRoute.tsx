@@ -15,6 +15,7 @@ import { SprintStartDateInplace } from '@/core/sprint/inplace/SprintStartDateInp
 import { SprintEndDateInplace } from '@/core/sprint/inplace/SprintEndDateInplace';
 import { getRouteApi } from '@tanstack/react-router';
 import { Temporal } from 'temporal-polyfill';
+import { FillSprintsButton } from '@/routes/work/sprint-settings/FillSprintsButton';
 
 export function SprintSettingsRoute() {
 	const context = getRouteApi('/work/$context/sprint-settings')
@@ -77,6 +78,7 @@ export function SprintSettingsRoute() {
 		<Stack w="100%" h="100vh" p="lg" style={{ overflow: 'hidden' }}>
 			<Group>
 				<CreateSprintsButtton context={context} />
+				<FillSprintsButton context={context} />
 				<DeleteSprintsButton context={context} sprintIds={selectedItemIds} />
 			</Group>
 			{
