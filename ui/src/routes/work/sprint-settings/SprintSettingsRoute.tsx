@@ -76,7 +76,7 @@ export function SprintSettingsRoute() {
 	return (
 		<Stack w="100%" h="100vh" p="lg" style={{ overflow: 'hidden' }}>
 			<Group>
-				<CreateSprintsButtton />
+				<CreateSprintsButtton context={context} />
 				<DeleteSprintsButton sprintIds={selectedItemIds} />
 			</Group>
 			{

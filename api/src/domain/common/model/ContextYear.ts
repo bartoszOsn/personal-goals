@@ -18,8 +18,8 @@ export class ContextYear {
 
 	doesIncludeDate(date: Temporal.PlainDate): boolean {
 		return (
-			isPlainDate(date).after(this.getStartDate()) &&
-			isPlainDate(date).before(this.getEndDate())
+			isPlainDate(date).afterOrEqual(this.getStartDate()) &&
+			isPlainDate(date).beforeOrEqual(this.getEndDate())
 		);
 	}
 }

@@ -1,12 +1,12 @@
 import { http } from '@/base/http';
-import { SprintBulkCreateRequestDTO, SprintChangeRequestDTO, SprintDTO } from '@personal-okr/shared';
+import { SprintChangeRequestDTO, SprintDTO } from '@personal-okr/shared';
 
 export function getSprints(context: number) {
 	return http.get<SprintDTO[]>(`/api/sprint/${context}`);
 }
 
-export async function createSprints(request: SprintBulkCreateRequestDTO) {
-	await http.post('/api/time/sprint', request);
+export async function createSprints(context: number) {
+	await http.post(`/api/sprint/${context}`, void 0);
 }
 
 export async function updateSprints(request: SprintChangeRequestDTO) {

@@ -1,5 +1,5 @@
-import { QuarterDTO, SprintBulkCreateRequestDTO, SprintChangeRequestDTO, SprintDTO } from '@personal-okr/shared';
-import { Sprint, SprintBulkCreateRequest, SprintChangeRequest, SprintDuration, SprintId, SprintStatus } from '@/models/Sprint.ts';
+import { QuarterDTO, SprintChangeRequestDTO, SprintDTO } from '@personal-okr/shared';
+import { Sprint, SprintChangeRequest, SprintId, SprintStatus } from '@/models/Sprint.ts';
 import { Temporal } from 'temporal-polyfill';
 import { numberToQuarter, Quarter } from '@/models/Quarter';
 
@@ -17,14 +17,6 @@ export function dtoToSprint(dto: SprintDTO): Sprint {
 		endDate: Temporal.PlainDate.from(dto.endDate),
 		status: dtoToSprintStatus(dto.status),
 	};
-}
-
-export function sprintBulkCreateRequestToDTO(request: SprintBulkCreateRequest): SprintBulkCreateRequestDTO {
-	return {
-		startDate: request.startDate.toJSON(),
-		numberOfSprints: request.numberOfSprints,
-		sprintDuration: dtoToSprintDuration(request.sprintDuration)
-	}
 }
 
 export function sprintChangeRequestToDTO(request: SprintChangeRequest): SprintChangeRequestDTO {
@@ -61,18 +53,5 @@ function dtoToSprintStatus(status: SprintDTO['status']): SprintStatus {
 			return SprintStatus.FUTURE;
 		default:
 			throw new Error(`Unknown status: ${status}`);
-	}
-}
-
-function dtoToSprintDuration(dto: SprintDuration): SprintBulkCreateRequestDTO['sprintDuration'] {
-	switch (dto) {
-		case SprintDuration.WEEK:
-			return 'week';
-		case SprintDuration.TWO_WEEKS:
-			return 'two-weeks';
-		case SprintDuration.MONTH:
-			return 'month';
-		default:
-			throw new Error(`Unknown duration: ${dto}`);
 	}
 }

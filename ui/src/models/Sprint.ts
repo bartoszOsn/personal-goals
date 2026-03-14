@@ -18,22 +18,10 @@ export interface SprintChangeRequest {
 	}
 }
 
-export interface SprintBulkCreateRequest {
-	startDate: Temporal.PlainDate;
-	numberOfSprints: number;
-	sprintDuration: SprintDuration;
-}
-
 export type SprintId = string & { __brand: 'SprintId' };
 
 export enum SprintStatus {
 	COMPLETED = 'COMPLETED',
 	ACTIVE = 'ACTIVE',
 	FUTURE = 'FUTURE'
-}
-
-export enum SprintDuration {
-	WEEK = 'WEEK',
-	TWO_WEEKS = 'TWO_WEEKS',
-	MONTH = 'MONTH'
 }

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createSprints, deleteSprints, getSprints, updateSprints } from '@/api/sprint/sprint-request';
-import { dtoToSprints, sprintBulkCreateRequestToDTO, sprintChangeRequestToDTO } from './sprint-converters';
-import { SprintBulkCreateRequest, SprintChangeRequest, SprintId } from '@/models/Sprint';
+import { dtoToSprints, sprintChangeRequestToDTO } from './sprint-converters';
+import { SprintChangeRequest, SprintId } from '@/models/Sprint';
 
 export function useSprintQuery(context: number) {
 	return useQuery({
@@ -10,10 +10,10 @@ export function useSprintQuery(context: number) {
 	})
 }
 
-export function useCreateSprintsMutation() {
+export function useCreateSprintsMutation(context: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (request: SprintBulkCreateRequest) => createSprints(sprintBulkCreateRequestToDTO(request)),
+		mutationFn: () => createSprints(context),
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: ['sprint']});
 		}
