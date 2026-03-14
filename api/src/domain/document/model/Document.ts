@@ -8,10 +8,10 @@ export class Document {
 		public readonly id: DocumentId,
 		public readonly title: DocumentTitle,
 		public readonly description: DocumentDescription,
-		public readonly editedAt: Temporal.PlainDate
+		public readonly editedAt: Temporal.PlainDateTime
 	) {}
 
-	static defaultDocument(now: Temporal.PlainDate): Document {
+	static defaultDocument(now: Temporal.PlainDateTime): Document {
 		return new Document(
 			DocumentId.random(),
 			DocumentTitle.defaultTitle(),
@@ -20,13 +20,13 @@ export class Document {
 		);
 	}
 
-	withTitle(newTitle: DocumentTitle, now: Temporal.PlainDate) {
+	withTitle(newTitle: DocumentTitle, now: Temporal.PlainDateTime) {
 		return new Document(this.id, newTitle, this.description, now);
 	}
 
 	withDescription(
 		newDescription: DocumentDescription,
-		now: Temporal.PlainDate
+		now: Temporal.PlainDateTime
 	) {
 		return new Document(this.id, this.title, newDescription, now);
 	}
