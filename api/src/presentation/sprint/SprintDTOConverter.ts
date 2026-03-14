@@ -18,6 +18,7 @@ export class SprintDTOConverter {
 		return sprintCollection.sprints.map((sprint) => ({
 			id: sprint.id.value,
 			name: sprint.name,
+			context: sprint.context.year,
 			quarter: quarterToNumber(sprint.quarter),
 			startDate: sprint.startDate.toString(),
 			endDate: sprint.endDate.toString(),

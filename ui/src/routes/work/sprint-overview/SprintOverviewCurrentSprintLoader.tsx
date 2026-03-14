@@ -6,7 +6,7 @@ import { isPlainDate } from '@personal-okr/shared';
 import { useNavigate } from '@tanstack/react-router';
 
 export function SprintOverviewCurrentSprintLoader() {
-	const sprints = useSprintQuery();
+	const sprints = useSprintQuery(Temporal.Now.plainDateISO().year);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -34,6 +34,10 @@ export function SprintOverviewCurrentSprintLoader() {
 				.then();
 		}
 	}, [sprints.isPending, sprints.data, navigate]);
+
+	if (sprints.data?.length === 0) {
+		return "No sprints found";
+	}
 
 	return (
 		<Stack w="100%" h="100vh" p="lg">

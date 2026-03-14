@@ -4,8 +4,8 @@ import { getSprintName } from '@/core/getSprintName';
 import { SprintId } from '@/models/Sprint';
 
 export function SprintOverviewSprintSwitcher
-({ sprintId, onChange }: { sprintId: SprintId, onChange: (value: SprintId) => void }) {
-	const sprintQuery = useSprintQuery();
+({ context, sprintId, onChange }: { context: number, sprintId: SprintId, onChange: (value: SprintId) => void }) {
+	const sprintQuery = useSprintQuery(context);
 
 	if (sprintQuery.isPending || !sprintQuery.data) {
 		return <Skeleton w="100%" h={36} />

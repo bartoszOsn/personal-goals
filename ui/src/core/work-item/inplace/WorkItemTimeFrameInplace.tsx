@@ -42,7 +42,7 @@ export function WorkItemTimeFrameInplace(props: WorkItemTimeFrameInplaceProps) {
 }
 
 function TimeFrameDisplay(props: WorkItemTimeFrameInplaceProps) {
-	const sprints = useSprintQuery();
+	const sprints = useSprintQuery(props.workItem.contextYear);
 
 	const sprint = sprints.data?.find(sprint => props.workItem.timeFrame?.type === WorkItemTimeFrameType.SPRINT && props.workItem.timeFrame.sprintId === sprint.id);
 	const sprintName = sprint ? getSprintName(sprint) : undefined;
@@ -76,7 +76,7 @@ function TimeFrameDisplay(props: WorkItemTimeFrameInplaceProps) {
 }
 
 function TimeFrameModal(props: WorkItemTimeFrameInplaceProps) {
-	const sprintsQuery = useSprintQuery();
+	const sprintsQuery = useSprintQuery(props.workItem.contextYear);
 
 	if (sprintsQuery.isLoading || !sprintsQuery.data) {
 		return <Loader />;

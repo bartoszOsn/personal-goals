@@ -14,9 +14,16 @@ import { ColumnDescriptor } from '@/base/data-table';
 import { Sprint, SprintChangeRequest, SprintId } from '@/models/Sprint';
 import { SprintStartDateInplace } from '@/core/sprint/inplace/SprintStartDateInplace';
 import { SprintEndDateInplace } from '@/core/sprint/inplace/SprintEndDateInplace';
+import { getRouteApi } from '@tanstack/react-router';
+import { Temporal } from 'temporal-polyfill';
 
 export function SprintSettingsRoute() {
-	const sprints = useSprintQuery();
+	const context = getRouteApi('/work/$context/sprint-settings')
+		.useParams({
+			select: (params) => isNaN(+params.context) ? Temporal.Now.plainDateISO().year : +params.context
+		});
+
+	const sprints = useSprintQuery(context);
 	const updateSprints = useUpdateSprintsMutation();
 
 	const ganttItems: GanttItem<Sprint>[] = !sprints.data ? [] : sprints.data.map(sprint => ({

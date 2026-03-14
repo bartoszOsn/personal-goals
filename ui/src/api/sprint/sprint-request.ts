@@ -1,8 +1,8 @@
 import { http } from '@/base/http';
-import { SprintBulkCreateRequestDTO, SprintChangeRequestDTO, SprintListDTO } from '@personal-okr/shared';
+import { SprintBulkCreateRequestDTO, SprintChangeRequestDTO, SprintDTO } from '@personal-okr/shared';
 
-export function getSprints() {
-	return http.get<SprintListDTO>('/api/time/sprint');
+export function getSprints(context: number) {
+	return http.get<SprintDTO[]>(`/api/sprint/${context}`);
 }
 
 export async function createSprints(request: SprintBulkCreateRequestDTO) {

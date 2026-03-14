@@ -5,7 +5,7 @@ export interface Sprint {
 	readonly id: SprintId;
 	readonly year: number;
 	readonly quarter: Quarter;
-	readonly yearlyIndex: number;
+	readonly name: string;
 	readonly startDate: Temporal.PlainDate;
 	readonly endDate: Temporal.PlainDate;
 	readonly status: SprintStatus;

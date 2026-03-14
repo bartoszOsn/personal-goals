@@ -21,7 +21,7 @@ export function RoadmapGantt({ context }: { context: number }) {
 	const workItemsQuery = useWorkItemsByContextQuery(context);
 	const updateWorkItemMutation = useUpdateWorkItemMutation();
 
-	const sprints = useSprintQuery();
+	const sprints = useSprintQuery(context);
 
 	const contextStartDate = Temporal.PlainDate.from({ year: context, month: 1, day: 1 });
 	const contextEndDate = Temporal.PlainDate.from({ year: context, month: 12, day: 31 });

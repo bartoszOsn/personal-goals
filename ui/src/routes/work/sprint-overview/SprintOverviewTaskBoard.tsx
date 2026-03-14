@@ -12,7 +12,7 @@ import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgre
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemsByContextQuery(context);
-	const sprints = useSprintQuery();
+	const sprints = useSprintQuery(context);
 	const updateWorkItem = useUpdateWorkItemMutation();
 	const createWorkItemMutation = useCreateWorkItemMutation();
 	const columns: BoardColumn<WorkItemStatus>[] = [

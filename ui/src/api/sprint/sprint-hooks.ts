@@ -3,10 +3,10 @@ import { createSprints, deleteSprints, getSprints, updateSprints } from '@/api/s
 import { dtoToSprints, sprintBulkCreateRequestToDTO, sprintChangeRequestToDTO } from './sprint-converters';
 import { SprintBulkCreateRequest, SprintChangeRequest, SprintId } from '@/models/Sprint';
 
-export function useSprintQuery() {
+export function useSprintQuery(context: number) {
 	return useQuery({
-		queryKey: ['sprint'],
-		queryFn: () => getSprints().then(dtoToSprints),
+		queryKey: ['sprint', context],
+		queryFn: () => getSprints(context).then(dtoToSprints),
 	})
 }
 

@@ -6,8 +6,8 @@ import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
 import { SprintId } from '@/models/Sprint';
 
-export function SprintOverviewSprintInfo({ sprintId }: { sprintId: SprintId }) {
-	const sprintQuery = useSprintQuery();
+export function SprintOverviewSprintInfo({ context, sprintId }: { context: number, sprintId: SprintId }) {
+	const sprintQuery = useSprintQuery(context);
 	const currentSprint = sprintQuery.data?.find(s => s.id === sprintId);
 
 	if (sprintQuery.isPending || !currentSprint) {

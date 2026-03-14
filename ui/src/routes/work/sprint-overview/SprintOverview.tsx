@@ -18,8 +18,8 @@ export function SprintOverview({ context, sprintId }: { context: number, sprintI
 
 	return (
 		<Stack p="lg">
-			<SprintOverviewSprintSwitcher sprintId={sprintId} onChange={onSprintIdChange} />
-			<SprintOverviewSprintInfo sprintId={sprintId} />
+			<SprintOverviewSprintSwitcher context={context} sprintId={sprintId} onChange={onSprintIdChange} />
+			<SprintOverviewSprintInfo context={context} sprintId={sprintId} />
 			<SprintOverviewTaskBoard context={context} sprintId={sprintId} />
 		</Stack>
 	)
