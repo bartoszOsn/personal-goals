@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
 import { SprintEntity } from '../../sprint/entity/SprintEntity';
+import { DocumentEntity } from '../../document/entity/DocumentEntity';
 
 @Entity()
 export class UserEntity {
@@ -18,4 +19,7 @@ export class UserEntity {
 
 	@OneToMany(() => WorkItemEntity, (workItem) => workItem.user)
 	workItems: WorkItemEntity[];
+
+	@OneToMany(() => DocumentEntity, (document) => document.user)
+	documents: DocumentEntity[];
 }
