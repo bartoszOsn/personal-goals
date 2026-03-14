@@ -15,7 +15,7 @@ export interface SprintStartDateInplaceProps {
 }
 
 export function SprintStartDateInplace({sprint, textProps, inputProps}: SprintStartDateInplaceProps) {
-	const sprintMutation = useUpdateSprintsMutation();
+	const sprintMutation = useUpdateSprintsMutation(sprint.year);
 
 	const onValueSubmit = (value: Temporal.PlainDate | null) => {
 		sprintMutation.mutate({

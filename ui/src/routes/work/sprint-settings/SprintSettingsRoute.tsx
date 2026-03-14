@@ -24,7 +24,7 @@ export function SprintSettingsRoute() {
 		});
 
 	const sprints = useSprintQuery(context);
-	const updateSprints = useUpdateSprintsMutation();
+	const updateSprints = useUpdateSprintsMutation(context);
 
 	const ganttItems: GanttItem<Sprint>[] = !sprints.data ? [] : sprints.data.map(sprint => ({
 		id: sprint.id,

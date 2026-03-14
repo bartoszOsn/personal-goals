@@ -1,7 +1,7 @@
-import { QuarterDTO, SprintChangeRequestDTO, SprintDTO } from '@personal-okr/shared';
+import { SprintDTO, SprintsUpdateRequestDTO } from '@personal-okr/shared';
 import { Sprint, SprintChangeRequest, SprintId, SprintStatus } from '@/models/Sprint.ts';
 import { Temporal } from 'temporal-polyfill';
-import { numberToQuarter, Quarter } from '@/models/Quarter';
+import { numberToQuarter } from '@/models/Quarter';
 
 export function dtoToSprints(list: SprintDTO[]): Sprint[] {
 	return list.map(dtoToSprint);
@@ -19,28 +19,13 @@ export function dtoToSprint(dto: SprintDTO): Sprint {
 	};
 }
 
-export function sprintChangeRequestToDTO(request: SprintChangeRequest): SprintChangeRequestDTO {
+export function sprintChangeRequestToDTO(request: SprintChangeRequest): SprintsUpdateRequestDTO {
 	return Object.fromEntries(
 		Object.entries(request).map(([sprintId, value]) => [sprintId, {
-			newStartDate: value.newStartDate.toJSON(),
-			newEndDate: value.newEndDate.toJSON(),
+			startDate: value.newStartDate?.toJSON(),
+			endDate: value.newEndDate?.toJSON(),
 		}])
 	);
-}
-
-export function dtoToQuarter(dto: QuarterDTO): Quarter {
-	switch (dto) {
-		case 'Q1':
-			return Quarter.Q1;
-		case 'Q2':
-			return Quarter.Q2;
-		case 'Q3':
-			return Quarter.Q3;
-		case 'Q4':
-			return Quarter.Q4;
-		default:
-			throw new Error(`Unknown dto: ${dto}`);
-	}
 }
 
 function dtoToSprintStatus(status: SprintDTO['status']): SprintStatus {

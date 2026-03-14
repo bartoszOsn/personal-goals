@@ -13,8 +13,8 @@ export interface Sprint {
 
 export interface SprintChangeRequest {
 	[sprintId: SprintId]: {
-		newStartDate: Temporal.PlainDate;
-		newEndDate: Temporal.PlainDate;
+		newStartDate?: Temporal.PlainDate;
+		newEndDate?: Temporal.PlainDate;
 	}
 }
 

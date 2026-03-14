@@ -111,7 +111,7 @@ export class SprintFactory {
 		const context = this.collection.context;
 		const sprints = this.collection.sprints
 			.map((sprint) => {
-				if (sprint.id === request.id) {
+				if (sprint.id.equals(request.id)) {
 					return new SprintImpl(
 						sprint.id,
 						this.collection.context,

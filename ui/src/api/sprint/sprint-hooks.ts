@@ -30,10 +30,10 @@ export function useFillSprintsMutation(context: number) {
 	})
 }
 
-export function useUpdateSprintsMutation() {
+export function useUpdateSprintsMutation(context: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (request: SprintChangeRequest) => updateSprints(sprintChangeRequestToDTO(request)),
+		mutationFn: (request: SprintChangeRequest) => updateSprints(context, sprintChangeRequestToDTO(request)),
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: ['sprint']});
 		}
