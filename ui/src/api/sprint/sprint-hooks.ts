@@ -30,10 +30,10 @@ export function useUpdateSprintsMutation() {
 	})
 }
 
-export function useDeleteSprintsMutation() {
+export function useDeleteSprintsMutation(context: number) {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async (ids: SprintId[]) => deleteSprints(ids),
+		mutationFn: async (ids: SprintId[]) => deleteSprints(context, ids),
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: ['sprint']});
 		}

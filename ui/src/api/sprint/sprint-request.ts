@@ -13,6 +13,6 @@ export async function updateSprints(request: SprintChangeRequestDTO) {
 	await http.put('/api/time/sprint', request);
 }
 
-export async function deleteSprints(sprints: string[]) {
-	await http.delete(`/api/time/sprint/${sprints.join(',')}`);
+export async function deleteSprints(context: number, sprints: string[]) {
+	await http.delete(`/api/sprint/${context}/${sprints.join(',')}`);
 }

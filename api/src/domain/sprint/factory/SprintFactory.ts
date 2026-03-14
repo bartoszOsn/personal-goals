@@ -146,7 +146,7 @@ export class SprintFactory {
 	delete(id: SprintId): SprintFactory {
 		const context = this.collection.context;
 		const sprints = this.collection.sprints.filter(
-			(sprint) => sprint.id !== id
+			(sprint) => !sprint.id.equals(id)
 		);
 
 		return new SprintFactory(
