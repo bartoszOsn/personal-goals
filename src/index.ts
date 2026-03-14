@@ -9,6 +9,10 @@ export * from './dto/work-item/WorkItemUpdateRequestDTO.js';
 export * from './dto/sprint/SprintDTO.js';
 export * from './dto/sprint/SprintsUpdateRequestDTO.js';
 
+export * from './dto/document/DocumentDTO.js';
+export * from './dto/document/DocumentDetailsDTO.js';
+export * from './dto/document/DocumentsRequestDTO.js';
+
 export * from './dto/auth/index.js';
 
 export * from './temporal/isPlainDate.js';
