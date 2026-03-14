@@ -14,7 +14,6 @@ import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { Temporal } from 'temporal-polyfill';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
-import { getSprintName } from '@/core/getSprintName';
 import { quarterToColor } from '@/core/quarterToColor';
 
 export function RoadmapGantt({ context }: { context: number }) {
@@ -79,7 +78,7 @@ export function RoadmapGantt({ context }: { context: number }) {
 	];
 
 	const timeboxes: GanttTimebox[] = sprints.data.map(sprint => ({
-		label: getSprintName(sprint),
+		label: sprint.name,
 		startDate: sprint.startDate,
 		endDate: sprint.endDate,
 		color: quarterToColor[sprint.quarter]

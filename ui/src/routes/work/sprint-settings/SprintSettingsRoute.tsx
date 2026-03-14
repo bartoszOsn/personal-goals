@@ -4,7 +4,6 @@ import { useSprintQuery, useUpdateSprintsMutation } from '@/api/sprint/sprint-ho
 import { SprintChangeOverlapFailureDTO } from '@personal-okr/shared';
 import { CreateSprintsButtton } from '@/routes/work/sprint-settings/CreateSprintsButtton';
 import { quarterToColor } from '@/core/quarterToColor';
-import { getSprintName } from '@/core/getSprintName';
 import { useState } from 'react';
 import { DeleteSprintsButton } from '@/routes/work/sprint-settings/DeleteSprintsButton';
 import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
@@ -60,7 +59,7 @@ export function SprintSettingsRoute() {
 		{
 			columnId: 'name',
 			columnName: 'Name',
-			render: (sprint) => <Text inherit>{getSprintName(sprint.data)}</Text>
+			render: (sprint) => <Text inherit>{sprint.data.name}</Text>
 		},
 		{
 			columnId: 'startDate',

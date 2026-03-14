@@ -8,7 +8,6 @@ import { Temporal } from 'temporal-polyfill';
 import { DatePickerInput } from '@mantine/dates';
 import { Sprint } from '@/models/Sprint';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
-import { getSprintName } from '@/core/getSprintName';
 import { useUpdateWorkItemMutation } from '@/api/work-item/work-item-hooks';
 
 export interface WorkItemTimeFrameInplaceProps {
@@ -45,7 +44,7 @@ function TimeFrameDisplay(props: WorkItemTimeFrameInplaceProps) {
 	const sprints = useSprintQuery(props.workItem.contextYear);
 
 	const sprint = sprints.data?.find(sprint => props.workItem.timeFrame?.type === WorkItemTimeFrameType.SPRINT && props.workItem.timeFrame.sprintId === sprint.id);
-	const sprintName = sprint ? getSprintName(sprint) : undefined;
+	const sprintName = sprint?.name;
 
 	if (props.workItem.timeFrame === null) {
 		return <Text c="dimmed" size='sm'>No time frame</Text>;
@@ -198,7 +197,7 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 					<Accordion.Control icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.SPRINT} />}>Sprint</Accordion.Control>
 					<Accordion.Panel>
 						<Select value={sprint.id}
-								data={props.sprints.map(sprint => ({ label: getSprintName(sprint), value: sprint.id }))}
+								data={props.sprints.map(sprint => ({ label: sprint.name, value: sprint.id }))}
 								onChange={id => setSprint(props.sprints.find(s => s.id === id)!)} />
 					</Accordion.Panel>
 				</Accordion.Item>

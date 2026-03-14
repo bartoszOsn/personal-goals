@@ -6,7 +6,6 @@ import { SprintCreateOverlapFailureDTO } from '@personal-okr/shared';
 import { DateInput } from '@mantine/dates';
 import { HttpError } from '@/base/http';
 import { notifications } from '@mantine/notifications';
-import { getSprintName } from '@/core/getSprintName';
 import { Temporal } from 'temporal-polyfill';
 import { SprintBulkCreateRequest, SprintDuration } from '@/models/Sprint';
 import { dtoToSprint } from '@/api/sprint/sprint-converters';
@@ -36,7 +35,7 @@ export function CreateSprintsButtton() {
 								<Text>Could not create sprints due to overlap with an existing sprint(s):</Text>
 								<List>
 									{err.data.conflictingSprings.sprints.map(sprint => (
-										<List.Item key={sprint.id}>{getSprintName(dtoToSprint(sprint))}</List.Item>
+										<List.Item key={sprint.id}>{dtoToSprint(sprint).name}</List.Item>
 									))}
 								</List>
 							</>

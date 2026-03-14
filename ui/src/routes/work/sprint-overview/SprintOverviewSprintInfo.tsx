@@ -1,7 +1,6 @@
 import { Badge, Group, Paper, Progress, Skeleton, Text, ThemeIcon } from '@mantine/core';
 import { IconArrowForwardUp } from '@tabler/icons-react';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
-import { getSprintName } from '@/core/getSprintName';
 import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
 import { SprintId } from '@/models/Sprint';
@@ -37,7 +36,7 @@ export function SprintOverviewSprintInfo({ context, sprintId }: { context: numbe
 			</ThemeIcon>
 
 			<Text ta="center" fw={700}>
-				{ getSprintName(currentSprint) }
+				{ currentSprint.name }
 			</Text>
 			<Text c="dimmed" ta="center" fz="sm">
 				{start.toLocaleString()} → {end.toLocaleString()}

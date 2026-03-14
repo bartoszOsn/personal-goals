@@ -1,6 +1,5 @@
 import { useSprintQuery } from '@/api/sprint/sprint-hooks.ts';
 import { ComboboxData, Group, Pagination, Select, Skeleton } from '@mantine/core';
-import { getSprintName } from '@/core/getSprintName';
 import { SprintId } from '@/models/Sprint';
 
 export function SprintOverviewSprintSwitcher
@@ -18,7 +17,7 @@ export function SprintOverviewSprintSwitcher
 		onChange(sprintQuery.data[index - 1].id);
 	}
 
-	const data: ComboboxData = sprintQuery.data.map(s => ({ value: s.id, label: getSprintName(s) }));
+	const data: ComboboxData = sprintQuery.data.map(s => ({ value: s.id, label: s.name }));
 
 	return (
 		<Pagination.Root value={value} total={total} size={36} onChange={onSprintSelect}>
