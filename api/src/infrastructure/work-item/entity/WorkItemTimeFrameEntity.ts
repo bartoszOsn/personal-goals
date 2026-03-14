@@ -21,5 +21,5 @@ export class WorkItemTimeFrameEntity {
 		nullable: true,
 		onDelete: 'RESTRICT'
 	})
-	sprint?: SprintEntity;
+	sprint?: SprintEntity | null;
 }

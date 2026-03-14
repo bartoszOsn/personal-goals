@@ -25,7 +25,7 @@
 12. ✅ Board uses new work-item architecture
 13. ✅ Remove old architecture from code
 14. ✅ Sprints per context year
-15. Fix Table deselecting when clicking a button (See: DeleteSprintsButton.tsx)
+15. ✅ Fix Table deselecting when clicking a button (See: DeleteSprintsButton.tsx)
 
 ## First release
 

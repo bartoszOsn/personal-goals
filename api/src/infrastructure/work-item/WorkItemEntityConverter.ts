@@ -91,17 +91,18 @@ export class WorkItemEntityConverter {
 		timeFrame: WorkItemTimeFrame | null
 	): DeepPartial<WorkItemTimeFrameEntity> {
 		if (timeFrame === null) {
-			return { type: 'null' };
+			return { type: 'null', sprint: null };
 		}
 
 		if (timeFrame instanceof WholeYearWorkItemTimeFrame) {
-			return { type: 'wholeYear' };
+			return { type: 'wholeYear', sprint: null };
 		}
 
 		if (timeFrame instanceof QuarterWorkItemTimeFrame) {
 			return {
 				type: 'quarter',
-				quarter: quarterToNumber(timeFrame.quarter)
+				quarter: quarterToNumber(timeFrame.quarter),
+				sprint: null
 			};
 		}
 
@@ -109,7 +110,8 @@ export class WorkItemEntityConverter {
 			return {
 				type: 'customDate',
 				startDate: timeFrame.getStart().toString(),
-				endDate: timeFrame.getEnd().toString()
+				endDate: timeFrame.getEnd().toString(),
+				sprint: null
 			};
 		}
 

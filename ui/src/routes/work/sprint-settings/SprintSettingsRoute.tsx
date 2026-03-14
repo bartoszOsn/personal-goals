@@ -1,14 +1,11 @@
 import { Group, Stack, Text } from '@mantine/core';
 import { Gantt, GanttItem } from '@/base/gantt';
 import { useSprintQuery, useUpdateSprintsMutation } from '@/api/sprint/sprint-hooks';
-import { SprintChangeOverlapFailureDTO } from '@personal-okr/shared';
 import { CreateSprintsButtton } from '@/routes/work/sprint-settings/CreateSprintsButtton';
 import { quarterToColor } from '@/core/quarterToColor';
 import { useState } from 'react';
 import { DeleteSprintsButton } from '@/routes/work/sprint-settings/DeleteSprintsButton';
 import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
-import { HttpError } from '@/base/http';
-import { notifications } from '@mantine/notifications';
 import { ColumnDescriptor } from '@/base/data-table';
 import { Sprint, SprintChangeRequest, SprintId } from '@/models/Sprint';
 import { SprintStartDateInplace } from '@/core/sprint/inplace/SprintStartDateInplace';
@@ -44,16 +41,6 @@ export function SprintSettingsRoute() {
 		);
 
 		await updateSprints.mutateAsync(request)
-			.catch(err => {
-				if (HttpError.is<SprintChangeOverlapFailureDTO>(err, 409)) {
-					notifications.show({
-						message: 'Sprint overlap detected. Please resolve conflicts before saving.',
-						color: 'red'
-					})
-				} else {
-					throw err;
-				}
-			})
 	}
 
 	const possibleColumns: ColumnDescriptor<GanttItem<Sprint>>[] = [

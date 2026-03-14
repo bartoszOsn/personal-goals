@@ -49,7 +49,7 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 	const [contextMenuInfo, setContextMenuInfo] = useState<{opened: TId, selected: TId[]} | null>(null);
 	const tBodyRef = useClickOutside(() => {
 		clickOutside();
-	});
+	}, ['mouseup', 'touchend']);
 
 	const onTrClick = ((row: FlattenRow<TData, TId>, e: React.MouseEvent) => {
 		clickedOn(row.id, e.shiftKey);
