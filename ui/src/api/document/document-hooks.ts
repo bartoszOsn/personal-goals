@@ -1,11 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createDocument, getDocuments } from '@/api/document/document-request.ts';
-import { dtoToDocuments } from '@/api/document/document-converters.ts';
+import { createDocument, getDocumentDetails, getDocuments } from '@/api/document/document-request.ts';
+import { dtoToDocumentDetails, dtoToDocuments } from '@/api/document/document-converters.ts';
+import { DocumentId } from '@/models/Document';
 
 export function useDocumentsQuery(context: number) {
 	return useQuery({
 		queryKey: ['document', context],
 		queryFn: () => getDocuments(context).then(dtoToDocuments),
+	})
+}
+
+export function useDocumentDetailsQuery(documentId: DocumentId) {
+	return useQuery({
+		queryKey: ['document', 'details', documentId],
+		queryFn: () => getDocumentDetails(documentId).then(dtoToDocumentDetails),
 	})
 }
 

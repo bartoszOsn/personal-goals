@@ -26,6 +26,7 @@
 13. ✅ Remove old architecture from code
 14. ✅ Sprints per context year
 15. ✅ Fix Table deselecting when clicking a button (See: DeleteSprintsButton.tsx)
+16. Backend errors are mapped to user friendly messages and displayed in notifications
 
 ## First release
 
@@ -39,4 +40,4 @@
 8. Drag and drop on roadmap - changing order, and moving tasks between KRs
 9. Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
 10. Clicking on the gantt chart selects items
-11. Filtering tasks.
+11. Filtering tasks

@@ -38,7 +38,7 @@ export function AppSidebar({ context, setContext }: { context: number, setContex
 								: (
 									<>
 										{
-											documentsQuery.data.map(d => <CustomNavLink key={d.id} to={'/'} label={d.name} />)
+											documentsQuery.data.map(d => <CustomNavLink key={d.id} to={'/work/$context/document/$documentId'} params={{ context: context.toString(), documentId: d.id }} label={d.name} />)
 										}
 										<Button fullWidth
 												color="gray"

@@ -1,5 +1,5 @@
-import { DocumentDTO } from '@personal-okr/shared';
-import { Document, DocumentId } from '@/models/Document.ts';
+import { DocumentDetailsDTO, DocumentDTO } from '@personal-okr/shared';
+import { Document, DocumentDetails, DocumentId } from '@/models/Document.ts';
 import { Temporal } from 'temporal-polyfill';
 
 export function dtoToDocuments(dtos: DocumentDTO[]): Document[] {
@@ -11,5 +11,12 @@ export function dtoToDocument(dto: DocumentDTO): Document {
 		id: dto.id as DocumentId,
 		name: dto.name,
 		editedAt: Temporal.PlainDateTime.from(dto.editedAt)
+	}
+}
+
+export function dtoToDocumentDetails(dto: DocumentDetailsDTO): DocumentDetails {
+	return {
+		...dtoToDocument(dto),
+		description: dto.description
 	}
 }
