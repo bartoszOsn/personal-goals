@@ -62,8 +62,8 @@ export function SprintSettingsRoute() {
 	]
 
 	return (
-		<Stack w="100%" h="calc(100vh - 50px)" p="lg" style={{ overflow: 'hidden' }}>
-			<Group>
+		<Stack w="100%" h="calc(100vh - 50px)" gap='xs' p="lg" style={{ overflow: 'hidden' }}>
+			<Group gap='xs'>
 				<CreateSprintsButtton context={context} />
 				<FillSprintsButton context={context} />
 				<DeleteSprintsButton context={context} sprintIds={selectedItemIds} />
