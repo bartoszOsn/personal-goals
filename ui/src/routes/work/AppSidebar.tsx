@@ -1,7 +1,8 @@
-import { createLink } from '@tanstack/react-router';
-import { AppShell, Box, Button, Loader, NavLink, ScrollAreaAutosize } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+import { createLink, Link } from '@tanstack/react-router';
+import { AppShell, Box, Button, Loader, Menu, NavLink, ScrollAreaAutosize } from '@mantine/core';
+import { IconExternalLink, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateDocumentMutation, useDocumentsQuery } from '@/api/document/document-hooks';
+import { ContextMenu } from '@/base/context-menu/api/ContextMenu';
 
 export function AppSidebar({ context }: { context: number }) {
 	const documentsQuery = useDocumentsQuery(context);
@@ -20,7 +21,18 @@ export function AppSidebar({ context }: { context: number }) {
 								: (
 									<>
 										{
-											documentsQuery.data.map(d => <CustomNavLink key={d.id} to={'/work/$context/document/$documentId'} params={{ context: context.toString(), documentId: d.id }} label={d.name} />)
+											documentsQuery.data.map(d => (
+												<ContextMenu dropdown={(
+													<>
+														<MenuItemLink to={'/work/$context/document/$documentId'}
+																	  params={{ context: context.toString(), documentId: d.id }}
+																	  target="_blank">Open in new tab</MenuItemLink>
+														<Menu.Item leftSection={<IconTrash size={18} stroke={1.5} />} color='red'>Delete</Menu.Item>
+													</>
+												)}>
+													<CustomNavLink key={d.id} to={'/work/$context/document/$documentId'} params={{ context: context.toString(), documentId: d.id }} label={d.name} />
+												</ContextMenu>
+											))
 										}
 										<Button fullWidth
 												color="gray"
@@ -42,3 +54,4 @@ export function AppSidebar({ context }: { context: number }) {
 }
 
 const CustomNavLink = createLink(NavLink<'a'>);
+const MenuItemLink = createLink(Menu.Item.withProps({ component: Link, leftSection: <IconExternalLink size={18} stroke={1.5} /> }));

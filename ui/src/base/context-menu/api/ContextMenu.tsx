@@ -25,7 +25,11 @@ export function ContextMenu({ children, dropdown, onChange, disabled = false }: 
 	}
 
 	const targetRef = useEventListener('contextmenu', e => {
-		change(true, e);
+		if (!open) {
+			change(true, e);
+		} else {
+			change(false);
+		}
 	});
 
 	useWindowEvent('scroll', () => setOpen(false), { capture: true});
