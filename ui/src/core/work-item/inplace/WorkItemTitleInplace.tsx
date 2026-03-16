@@ -40,8 +40,8 @@ export function WorkItemTitleInplace({ workItem, textProps, inputProps, showDial
 							<Tooltip label='Open task'>
 								<ActionIcon size="xs"
 											component={Link}
-											to='/work/details/$workItemId'
-											params={{ workItemId: workItem.id }}
+											to='/work/$context/details/$workItemId'
+											params={{ context: workItem.contextYear.toString(), workItemId: workItem.id }}
 											color={typeToAccentMap[workItem.type]}
 											variant="subtle"
 											onClick={(e) => { e.preventDefault(); openWorkItemModal(workItem.id)}}>
