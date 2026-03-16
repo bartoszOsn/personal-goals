@@ -1,5 +1,5 @@
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
-import { ActionIcon, Group, Menu, Space, Table } from '@mantine/core';
+import { ActionIcon, Group, Space, Table } from '@mantine/core';
 import { useRowSelection } from '@/base/data-table/internal/useRowSelection';
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useClickOutside, usePrevious } from '@mantine/hooks';
@@ -7,6 +7,7 @@ import { FlattenRow, FlattenRowsInfo } from '@/base/data-table/internal/useFlatt
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { PER_LEVEL_OFFSET } from '@/base/data-table/internal/PER_LEVEL_OFFSET';
 import { deepEqual } from '@tanstack/react-router';
+import { ContextMenu } from '@/base/context-menu/api/ContextMenu';
 
 export interface DataTableBodyProps<TData, TId> {
 	columns: ColumnDescriptor<TData>[];
@@ -55,10 +56,9 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 		clickedOn(row.id, e.shiftKey);
 	});
 
-	const onTrContextMenu = ((row: FlattenRow<TData, TId>, e: React.MouseEvent) => {
+	const onTrContextMenu = ((row: FlattenRow<TData, TId>) => {
 		if (props.renderContextMenu) {
 			setContextMenuInfo({ opened: row.id, selected: selectedRows });
-			e.preventDefault();
 		}
 	});
 
@@ -77,54 +77,48 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 							: 'white';
 
 					return (
-						<Menu opened={!!contextMenuInfo && contextMenuInfo.opened === row.id} onClose={() => setContextMenuInfo(null)}>
-							<Menu.Target>
-								<Table.Tr key={`${row.id}`}
-										  bg={bgColor}
-										  data-row-id={`${row.id}`}
-										  onContextMenu={(e) => onTrContextMenu(row, e)}
-										  onClick={(e) => onTrClick(row, e)}>
-									{
-										columns.map((column) => (
-											<Table.Td key={column.columnId}>
-												<Group wrap="nowrap"
-													   gap="sm"
-													   pl={column.hierarchyColumn && rowInfo.maxLevels > 0 ? (row.level * PER_LEVEL_OFFSET + (row.hasChildren ? 0 : PER_LEVEL_OFFSET)) : 0}>
-													{
-														column.hierarchyColumn && (
-															<>
-																{
-																	row.hasChildren ? (
-																		<ActionIcon variant="transparent" color="gray" size="xs" onClick={() => toggleRow(row.id)}>
-																			{
-																				row.expanded ? <IconChevronDown /> : <IconChevronRight />
-																			}
-																		</ActionIcon>
-																	) : <Space />
-																}
-															</>
-														)
-													}
-													{
-														column.render(row.data)
-													}
-												</Group>
-											</Table.Td>
-										))
-									}
-								</Table.Tr>
-							</Menu.Target>
-							<Menu.Dropdown>
+						<ContextMenu disabled={!props.renderContextMenu} onChange={(o) => o ? onTrContextMenu(row) : setContextMenuInfo(null)} dropdown={
+							props.renderContextMenu
+							&& contextMenuInfo
+							&& props.renderContextMenu(
+								rowInfo.rows.find((r) => contextMenuInfo && r.id === contextMenuInfo.opened)!.data,
+								rowInfo.rows.filter((r) => contextMenuInfo && contextMenuInfo.selected.includes(r.id))!.map((r) => r.data)
+							)
+						}>
+							<Table.Tr key={`${row.id}`}
+									  bg={bgColor}
+									  data-row-id={`${row.id}`}
+									  onClick={(e) => onTrClick(row, e)}>
 								{
-									props.renderContextMenu
-									&& contextMenuInfo
-									&& props.renderContextMenu(
-										rowInfo.rows.find((r) => contextMenuInfo && r.id === contextMenuInfo.opened)!.data,
-										rowInfo.rows.filter((r) => contextMenuInfo && contextMenuInfo.selected.includes(r.id))!.map((r) => r.data)
-									)
+									columns.map((column) => (
+										<Table.Td key={column.columnId}>
+											<Group wrap="nowrap"
+												   gap="sm"
+												   pl={column.hierarchyColumn && rowInfo.maxLevels > 0 ? (row.level * PER_LEVEL_OFFSET + (row.hasChildren ? 0 : PER_LEVEL_OFFSET)) : 0}>
+												{
+													column.hierarchyColumn && (
+														<>
+															{
+																row.hasChildren ? (
+																	<ActionIcon variant="transparent" color="gray" size="xs" onClick={() => toggleRow(row.id)}>
+																		{
+																			row.expanded ? <IconChevronDown /> : <IconChevronRight />
+																		}
+																	</ActionIcon>
+																) : <Space />
+															}
+														</>
+													)
+												}
+												{
+													column.render(row.data)
+												}
+											</Group>
+										</Table.Td>
+									))
 								}
-							</Menu.Dropdown>
-						</Menu>
+							</Table.Tr>
+						</ContextMenu>
 					);
 				})
 			}
