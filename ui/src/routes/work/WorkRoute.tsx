@@ -3,6 +3,7 @@ import { AppSidebar } from '@/routes/work/AppSidebar.tsx';
 import { AppShell } from '@mantine/core';
 import { useCallback } from 'react';
 import { Temporal } from 'temporal-polyfill';
+import { AppHeader } from '@/routes/work/AppHeader';
 
 export function WorkRoute() {
 	const navigate = useNavigate();
@@ -20,8 +21,11 @@ export function WorkRoute() {
 		<AppShell navbar={{
 			width: 250,
 			breakpoint: 'sm'
+		}} header={{
+			height: 50
 		}}>
-			<AppSidebar context={context} setContext={setContext} />
+			<AppHeader context={context} setContext={setContext} />
+			<AppSidebar context={context} />
 			<AppShell.Main>
 				<Outlet />
 			</AppShell.Main>

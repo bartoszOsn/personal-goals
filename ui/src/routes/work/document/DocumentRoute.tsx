@@ -10,7 +10,7 @@ export function DocumentRoute() {
 		});
 
 	return (
-		<Box p='xl' mih='100vh'>
+		<Box p='xl' mih='calc(100vh - 50px)'>
 			<DocumentDetails documentId={documentId} />
 		</Box>
 	)

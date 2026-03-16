@@ -62,7 +62,7 @@ export function SprintSettingsRoute() {
 	]
 
 	return (
-		<Stack w="100%" h="100vh" p="lg" style={{ overflow: 'hidden' }}>
+		<Stack w="100%" h="calc(100vh - 50px)" p="lg" style={{ overflow: 'hidden' }}>
 			<Group>
 				<CreateSprintsButtton context={context} />
 				<FillSprintsButton context={context} />
