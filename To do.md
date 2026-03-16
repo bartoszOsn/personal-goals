@@ -13,7 +13,7 @@
 5. Custom rich text documents.
 6. ✅ Objectives with calculated progress based on KRs.
     - ✅ KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
-7. Update page title and favicon
+7. ✅ Update page title and favicon
 8. ✅ Handle somehow the fact that after years there will be too much data to display on gantt chart. Filtering on roadmap as well?
     - ✅ Handled by context
 9. ✅ Change this "data view" bullshit into simple react composition:
