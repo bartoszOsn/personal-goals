@@ -8,7 +8,7 @@ import { isPlainDate } from '@personal-okr/shared';
 import { useEffect, useRef } from 'react';
 import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
 
-export const headerCellHeight = 30;
+export const headerCellHeight = 16;
 export const headerCellXMargin = 1;
 export const headerRowYMargin = 4;
 

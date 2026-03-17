@@ -10,7 +10,7 @@
     - ✅ Gantt must support timeboxes
     - ✅ Option to color rows, both on data table and gantt chart - Objectives purple, KRs orange and tasks without color.
 4. ✅ Editing description in objective, KR and task.
-5. Custom rich text documents.
+5. ✅ Custom rich text documents.
 6. ✅ Objectives with calculated progress based on KRs.
     - ✅ KRs can have progress based on: Yes/no; Percentage or by assigned tasks completion.
 7. ✅ Update page title and favicon
@@ -32,12 +32,10 @@
 
 1. Fix Data table – Better UX
 2. Fix Auth – Better security, ability to change password, recover account etc.
+    - Can send emails via https://documentation.mailgun.com
 3. Work on performance
 4. Better UI 
 5. Make sure it works on mobile.
-6. Ability to change sprint settings
-7. Drag and drop on board - Changing order
-8. Drag and drop on roadmap - changing order, and moving tasks between KRs
-9. Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
-10. Clicking on the gantt chart selects items
-11. Filtering tasks
+6. Drag and drop on board - Changing order
+7. Drag and drop on roadmap - changing order, and moving tasks between KRs
+8. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
