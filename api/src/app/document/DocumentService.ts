@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ContextYear } from '../../domain/common/model/ContextYear';
 import { Document } from '../../domain/document/model/Document';
 import { DocumentId } from '../../domain/document/model/DocumentId';

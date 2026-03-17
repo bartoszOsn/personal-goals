@@ -6,7 +6,7 @@ import { Quarter } from '../../common/model/Quarter';
 import { SprintStatus } from './SprintStatus';
 
 export abstract class Sprint {
-	private _index: number;
+	private _index: number = -1;
 
 	constructor(
 		public readonly id: SprintId,

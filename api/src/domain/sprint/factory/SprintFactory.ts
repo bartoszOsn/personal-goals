@@ -8,7 +8,7 @@ import { InvalidSprintContextError } from '../error/InvalidSprintContextError';
 import { SprintOverlapError } from '../error/SprintOverlapError';
 
 class SprintImpl extends Sprint {
-	public setIndex(value: number) {
+	public override setIndex(value: number) {
 		super.setIndex(value);
 	}
 }
@@ -16,7 +16,7 @@ class SprintContextCollectionImpl extends SprintContextCollection {
 	constructor(context: ContextYear, sprints: ReadonlyArray<SprintImpl>) {
 		super(context, sprints);
 		for (let i = 0; i < sprints.length; i++) {
-			sprints[i].setIndex(i);
+			sprints[i]?.setIndex(i);
 		}
 	}
 
@@ -104,6 +104,10 @@ export class SprintFactory {
 		}
 
 		const firstGap = gaps[0];
+		if (!firstGap) {
+			return this;
+		}
+
 		return this.addNewSprint(firstGap.start, firstGap.end);
 	}
 
@@ -226,7 +230,12 @@ export class SprintFactory {
 			Temporal.PlainDate.compare(a.startDate, b.startDate)
 		);
 
-		const firstSprintStart = sortedSprints[0].startDate;
+		const firstSprintStart = sortedSprints[0]?.startDate;
+
+		if (!firstSprintStart) {
+			return [{ start: yearStart, end: yearEnd }];
+		}
+
 		if (Temporal.PlainDate.compare(yearStart, firstSprintStart) < 0) {
 			gaps.push({
 				start: yearStart,
@@ -235,8 +244,15 @@ export class SprintFactory {
 		}
 
 		for (let i = 0; i < sortedSprints.length - 1; i++) {
-			const currentEnd = sortedSprints[i].endDate;
-			const nextStart = sortedSprints[i + 1].startDate;
+			const current = sortedSprints[i];
+			const next = sortedSprints[i + 1];
+
+			if (!current || !next) {
+				continue;
+			}
+
+			const currentEnd = current.endDate;
+			const nextStart = next.startDate;
 			const gapStart = currentEnd.add({ days: 1 });
 
 			if (Temporal.PlainDate.compare(gapStart, nextStart) < 0) {
@@ -247,7 +263,12 @@ export class SprintFactory {
 			}
 		}
 
-		const lastSprintEnd = sortedSprints[sortedSprints.length - 1].endDate;
+		const lastSprintEnd = sortedSprints[sortedSprints.length - 1]?.endDate;
+
+		if (!lastSprintEnd) {
+			return gaps;
+		}
+
 		const gapStart = lastSprintEnd.add({ days: 1 });
 		if (Temporal.PlainDate.compare(gapStart, yearEnd) <= 0) {
 			gaps.push({ start: gapStart, end: yearEnd });

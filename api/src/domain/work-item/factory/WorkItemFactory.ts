@@ -9,7 +9,7 @@ import { WorkItemUpdateRequest } from '../model/WorkItemUpdateRequest';
 import { WorkItemNotFoundError } from '../error/WorkItemNotFoundError';
 
 class WorkItemImpl extends WorkItem {
-	public setParent(parent: WorkItem | null) {
+	public override setParent(parent: WorkItem | null) {
 		super.setParent(parent);
 	}
 }

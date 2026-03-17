@@ -6,20 +6,20 @@ import { DocumentEntity } from '../../document/entity/DocumentEntity';
 @Entity()
 export class UserEntity {
 	@PrimaryGeneratedColumn('uuid')
-	id: string;
+	id!: string;
 
 	@Column({ unique: true })
-	email: string;
+	email!: string;
 
 	@Column()
-	passwordHash: string;
+	passwordHash!: string;
 
 	@OneToMany(() => SprintEntity, (sprint) => sprint.user)
-	sprints: SprintEntity[];
+	sprints!: SprintEntity[];
 
 	@OneToMany(() => WorkItemEntity, (workItem) => workItem.user)
-	workItems: WorkItemEntity[];
+	workItems!: WorkItemEntity[];
 
 	@OneToMany(() => DocumentEntity, (document) => document.user)
-	documents: DocumentEntity[];
+	documents!: DocumentEntity[];
 }

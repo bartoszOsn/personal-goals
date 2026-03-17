@@ -7,7 +7,7 @@ import { AuthService } from './AuthService';
 @Module({
 	imports: [
 		JwtModule.register({
-			secret: process.env.JWT_SECRET || 'your-secret-key', // TODO: Move to config
+			secret: process.env['JWT_SECRET'] || 'your-secret-key', // TODO: Move to config
 			signOptions: { expiresIn: '7d' }
 		})
 	],
@@ -20,7 +20,7 @@ export class AuthAppModule {
 			module: AuthAppModule,
 			imports: [
 				JwtModule.register({
-					secret: process.env.JWT_SECRET || 'your-secret-key',
+					secret: process.env['JWT_SECRET'] || 'your-secret-key',
 					signOptions: { expiresIn: '7d' }
 				}),
 				repositoryModule

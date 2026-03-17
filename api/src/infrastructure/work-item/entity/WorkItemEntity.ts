@@ -15,34 +15,34 @@ import { WorkItemProgressEntity } from './WorkItemProgressEntity';
 @Tree('closure-table')
 export class WorkItemEntity {
 	@PrimaryColumn({ type: 'uuid' })
-	id: string;
+	id!: string;
 
 	@Column({ enum: ['task', 'objective', 'keyResult'] })
-	type: 'task' | 'objective' | 'keyResult';
+	type!: 'task' | 'objective' | 'keyResult';
 
 	@Column()
-	contextYear: number;
+	contextYear!: number;
 
 	@Column()
-	title: string;
+	title!: string;
 
 	@Column()
-	description: string;
+	description!: string;
 
 	@Column({ enum: ['todo', 'inProgress', 'done', 'failed'] })
-	status: 'todo' | 'inProgress' | 'done' | 'failed';
+	status!: 'todo' | 'inProgress' | 'done' | 'failed';
 
 	@Column(() => WorkItemTimeFrameEntity)
-	timeFrame: WorkItemTimeFrameEntity;
+	timeFrame!: WorkItemTimeFrameEntity;
 
 	@Column(() => WorkItemProgressEntity)
-	progress: WorkItemProgressEntity;
+	progress!: WorkItemProgressEntity;
 
 	@ManyToOne(() => UserEntity, (user) => user.workItems)
-	user: UserEntity;
+	user!: UserEntity;
 
 	@TreeChildren()
-	children: WorkItemEntity[];
+	children!: WorkItemEntity[];
 
 	@TreeParent({ onDelete: 'CASCADE' })
 	parent?: WorkItemEntity;

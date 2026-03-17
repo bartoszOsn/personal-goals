@@ -3,7 +3,7 @@ import { SprintEntity } from '../../sprint/entity/SprintEntity';
 
 export class WorkItemTimeFrameEntity {
 	@Column({ enum: ['null', 'wholeYear', 'quarter', 'customDate', 'sprint'] })
-	type: 'null' | 'wholeYear' | 'quarter' | 'customDate' | 'sprint';
+	type!: 'null' | 'wholeYear' | 'quarter' | 'customDate' | 'sprint';
 
 	// For quarter
 	@Column({ enum: [1, 2, 3, 4], nullable: true })

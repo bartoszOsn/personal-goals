@@ -4,20 +4,20 @@ import { UserEntity } from '../../auth/entity/UserEntity';
 @Entity()
 export class DocumentEntity {
 	@PrimaryColumn('uuid')
-	id: string;
+	id!: string;
 
 	@Column()
-	context: number;
+	context!: number;
 
 	@Column()
-	title: string;
+	title!: string;
 
 	@Column()
-	description: string;
+	description!: string;
 
 	@Column()
-	updatedAt: string;
+	updatedAt!: string;
 
 	@ManyToOne(() => UserEntity, (user) => user.documents)
-	user: UserEntity;
+	user!: UserEntity;
 }

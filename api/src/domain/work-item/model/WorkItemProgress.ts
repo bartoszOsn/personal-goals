@@ -7,7 +7,7 @@ export interface IObjectWithProgressAndStatus {
 }
 
 export abstract class WorkItemProgress {
-	protected target: IObjectWithProgressAndStatus;
+	private target: IObjectWithProgressAndStatus | null = null;
 
 	abstract getPercentage(): Percentage;
 	abstract getManualPercentage(): Percentage | null;
@@ -15,6 +15,13 @@ export abstract class WorkItemProgress {
 
 	setTarget(target: IObjectWithProgressAndStatus): void {
 		this.target = target;
+	}
+
+	protected getTargetOrThrow(): IObjectWithProgressAndStatus {
+		if (!this.target) {
+			throw new Error('Target not set');
+		}
+		return this.target;
 	}
 }
 
@@ -24,7 +31,7 @@ export class ManualWorkItemProgress extends WorkItemProgress {
 	}
 
 	override getPercentage(): Percentage {
-		if (this.target.status === WorkItemStatus.DONE) {
+		if (this.getTargetOrThrow().status === WorkItemStatus.DONE) {
 			return Percentage.full();
 		}
 		return this.percentage;
@@ -35,14 +42,16 @@ export class ManualWorkItemProgress extends WorkItemProgress {
 	}
 
 	override canChange(): boolean {
-		return this.target.status !== WorkItemStatus.DONE;
+		return this.getTargetOrThrow().status !== WorkItemStatus.DONE;
 	}
 }
 
 export class ChildrenProgressBasedWorkItemProgress extends WorkItemProgress {
 	override getPercentage(): Percentage {
 		return Percentage.average(
-			this.target.children.map((c) => c.progress.getPercentage())
+			this.getTargetOrThrow().children.map((c) =>
+				c.progress.getPercentage()
+			)
 		);
 	}
 
@@ -57,10 +66,13 @@ export class ChildrenProgressBasedWorkItemProgress extends WorkItemProgress {
 
 export class ChildrenStatusBasedWorkItemProgress extends WorkItemProgress {
 	override getPercentage(): Percentage {
-		const doneCount = this.target.children.filter(
+		const doneCount = this.getTargetOrThrow().children.filter(
 			(c) => c.status === WorkItemStatus.DONE
 		).length;
-		return Percentage.fraction(doneCount, this.target.children.length);
+		return Percentage.fraction(
+			doneCount,
+			this.getTargetOrThrow().children.length
+		);
 	}
 
 	override getManualPercentage(): Percentage | null {

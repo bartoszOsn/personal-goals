@@ -5,20 +5,20 @@ import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
 @Entity()
 export class SprintEntity {
 	@PrimaryColumn('uuid')
-	id: string;
+	id!: string;
 
 	@Column()
-	context: number;
+	context!: number;
 
 	@Column()
-	startDate: string;
+	startDate!: string;
 
 	@Column()
-	endDate: string;
+	endDate!: string;
 
 	@ManyToOne(() => UserEntity, (user) => user.sprints)
-	user: UserEntity;
+	user!: UserEntity;
 
 	@OneToMany(() => WorkItemEntity, (workItem) => workItem.timeFrame.sprint)
-	timeFrames: WorkItemEntity[];
+	timeFrames!: WorkItemEntity[];
 }

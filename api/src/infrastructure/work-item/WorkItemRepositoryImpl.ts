@@ -106,7 +106,7 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 		}
 	}
 
-	async deleteRoot(root: WorkItem, user: User): Promise<void> {
+	async deleteRoot(root: WorkItem, _user: User): Promise<void> {
 		await this.workItemRepository.delete({
 			id: root.id.id
 		});
