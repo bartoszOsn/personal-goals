@@ -1,5 +1,8 @@
-import { DocumentDTO } from './DocumentDTO.js';
+import z from 'zod';
+import { DocumentDTO, DocumentDTOSchema } from './DocumentDTO.js';
 
-export interface DocumentDetailsDTO extends DocumentDTO {
-	readonly description: string;
-}
+export const DocumentDetailsDTOSchema = DocumentDTOSchema.extend({
+	description: z.string()
+});
+
+export type DocumentDetailsDTO = z.infer<typeof DocumentDetailsDTOSchema>;

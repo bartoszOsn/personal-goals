@@ -1,16 +1,20 @@
-import { WorkItemTypeDTO } from './WorkItemTypeDTO.js';
-import { WorkItemStatusDTO } from './WorkItemStatusDTO.js';
-import { WorkItemProgressDTO } from './WorkItemProgressDTO.js';
-import { WorkItemTimeFrameDTO } from './WorkItemTimeFrameDTO.js';
+import { WorkItemTypeDTOSchema } from './WorkItemTypeDTO.js';
+import { WorkItemStatusDTOSchema } from './WorkItemStatusDTO.js';
+import { WorkItemProgressDTOSchema } from './WorkItemProgressDTO.js';
+import { WorkItemTimeFrameDTOSchema } from './WorkItemTimeFrameDTO.js';
+import { z } from 'zod';
+import { WorkItemIdDTOSchema } from './WorkItemIdDTO.js';
 
-export interface WorkItemDTO {
-	id: string;
-	type: WorkItemTypeDTO;
-	contextYear: number;
-	title: string;
-	description: string;
-	timeFrame?: WorkItemTimeFrameDTO;
-	status: WorkItemStatusDTO;
-	progress: WorkItemProgressDTO;
-	children: WorkItemDTO[];
-}
+export const WorkItemDTOSchema = z.object({
+	id: WorkItemIdDTOSchema,
+	type: WorkItemTypeDTOSchema,
+	contextYear: z.int(),
+	title: z.string(),
+	description: z.string(),
+	timeFrame: WorkItemTimeFrameDTOSchema.optional(),
+	status: WorkItemStatusDTOSchema,
+	progress: WorkItemProgressDTOSchema,
+	get children(): z.ZodArray<typeof WorkItemDTOSchema> { return z.array(WorkItemDTOSchema); }
+});
+
+export type WorkItemDTO = z.infer<typeof WorkItemDTOSchema>;

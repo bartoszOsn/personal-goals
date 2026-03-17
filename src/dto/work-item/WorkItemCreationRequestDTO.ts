@@ -1,9 +1,13 @@
-import { WorkItemTypeDTO } from './WorkItemTypeDTO.js';
-import { WorkItemUpdateRequestDTO } from './WorkItemUpdateRequestDTO.js';
+import { WorkItemTypeDTOSchema } from './WorkItemTypeDTO.js';
+import { WorkItemUpdateRequestDTOSchema } from './WorkItemUpdateRequestDTO.js';
+import { z } from 'zod';
+import { WorkItemIdDTOSchema } from './WorkItemIdDTO.js';
 
-export interface WorkItemCreationRequestDTO {
-	context: number;
-	type: WorkItemTypeDTO;
-	parentId?: string;
-	fields?: WorkItemUpdateRequestDTO;
-}
+export const WorkItemCreationRequestDTOSchema = z.object({
+	context: z.int(),
+	type: WorkItemTypeDTOSchema,
+	parentId: WorkItemIdDTOSchema.optional(),
+	fields: WorkItemUpdateRequestDTOSchema.optional()
+});
+
+export type WorkItemCreationRequestDTO = z.infer<typeof WorkItemCreationRequestDTOSchema>;
