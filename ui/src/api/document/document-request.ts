@@ -13,3 +13,7 @@ export function getDocumentDetails(documentId: DocumentId) {
 export function createDocument(context: number) {
 	return http.post(`/api/document/${context}`, void 0);
 }
+
+export function deleteDocument(context: number, ids: DocumentId[]) {
+	return http.delete(`/api/document/${context}/${ids.join(',')}`);
+}

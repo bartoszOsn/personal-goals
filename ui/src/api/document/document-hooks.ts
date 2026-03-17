@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createDocument, getDocumentDetails, getDocuments } from '@/api/document/document-request.ts';
+import { createDocument, deleteDocument, getDocumentDetails, getDocuments } from '@/api/document/document-request.ts';
 import { dtoToDocumentDetails, dtoToDocuments } from '@/api/document/document-converters.ts';
 import { DocumentId } from '@/models/Document';
 
@@ -22,5 +22,18 @@ export function useCreateDocumentMutation(context: number) {
 	return useMutation({
 		mutationFn: () => createDocument(context),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['document', context]})
+	})
+}
+
+export function useDeleteDocumentMutation(context: number) {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (ids: DocumentId[]) => deleteDocument(context, ids),
+		onSuccess: (_, variables) => {
+			return Promise.all([
+				queryClient.invalidateQueries({ queryKey: ['document', context] }),
+				...variables.map(id => queryClient.invalidateQueries({ queryKey: ['document', 'details', id] }))
+			])
+		}
 	})
 }

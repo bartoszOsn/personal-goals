@@ -11,6 +11,12 @@ export function DocumentDetails({ documentId }: { documentId: DocumentId }) {
 		return <DocumentDetailsSkeleton />;
 	}
 
+	if (detailsQuery.error) {
+		if (detailsQuery.error.statusCode === 404) {
+			return "Document Not Found";
+		}
+	}
+
 	return <Stack gap='xl'>
 		<Title order={2}>{detailsQuery.data.name}</Title>
 		<RichTextEditor content={detailsQuery.data.description} placeholder={'Document content'} />

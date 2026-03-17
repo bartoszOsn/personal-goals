@@ -1,13 +1,13 @@
 import { createLink, Link } from '@tanstack/react-router';
 import { AppShell, Box, Button, Loader, Menu, NavLink, ScrollAreaAutosize } from '@mantine/core';
 import { IconExternalLink, IconPlus, IconTrash } from '@tabler/icons-react';
-import { useCreateDocumentMutation, useDocumentsQuery } from '@/api/document/document-hooks';
+import { useCreateDocumentMutation, useDeleteDocumentMutation, useDocumentsQuery } from '@/api/document/document-hooks';
 import { ContextMenu } from '@/base/context-menu/api/ContextMenu';
 
 export function AppSidebar({ context }: { context: number }) {
 	const documentsQuery = useDocumentsQuery(context);
 	const createDocumentMutation = useCreateDocumentMutation(context);
-
+	const deleteDocumentMutation = useDeleteDocumentMutation(context);
 	return (
 		<AppShell.Navbar>
 			<AppShell.Section component={ScrollAreaAutosize}>
@@ -27,10 +27,16 @@ export function AppSidebar({ context }: { context: number }) {
 														<MenuItemLink to={'/work/$context/document/$documentId'}
 																	  params={{ context: context.toString(), documentId: d.id }}
 																	  target="_blank">Open in new tab</MenuItemLink>
-														<Menu.Item leftSection={<IconTrash size={18} stroke={1.5} />} color='red'>Delete</Menu.Item>
+														<Menu.Item leftSection={<IconTrash size={18} stroke={1.5} />}
+																   color="red"
+																   onClick={() => deleteDocumentMutation.mutate([d.id])}>Delete</Menu.Item>
 													</>
 												)}>
-													<CustomNavLink key={d.id} to={'/work/$context/document/$documentId'} params={{ context: context.toString(), documentId: d.id }} label={d.name} />
+													<CustomNavLink key={d.id}
+																   to={'/work/$context/document/$documentId'}
+																   params={{ context: context.toString(), documentId: d.id }}
+																   leftSection={deleteDocumentMutation.variables?.includes(d.id) && <Loader color="red" size='sm' />}
+																   label={d.name} />
 												</ContextMenu>
 											))
 										}
