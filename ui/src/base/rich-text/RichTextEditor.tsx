@@ -1,9 +1,9 @@
-import { useThrottledCallback } from '@mantine/hooks';
+import { useDebouncedCallback } from '@mantine/hooks';
 import { useCallback } from 'react';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
-import { RichTextEditor as MantineRichTextEditor, Link } from '@mantine/tiptap';
+import { Link, RichTextEditor as MantineRichTextEditor } from '@mantine/tiptap';
 import './RichTextEditor.css';
 
 export interface RichTextEditorProps {
@@ -18,11 +18,11 @@ export function RichTextEditor(props: RichTextEditorProps) {
 		props.onChange?.(text);
 	}, [props])
 	
-	const onChangeThrottle = useThrottledCallback(
+	const onChangeThrottle = useDebouncedCallback(
 		useCallback((value: string) => {
 			props.onChangeThrottle?.(value);
 		}, [props]),
-		500
+		1000
 	);
 
 	const editor = useEditor({

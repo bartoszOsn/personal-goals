@@ -1,5 +1,5 @@
-import { DocumentDetailsDTO, DocumentDTO } from '@personal-okr/shared';
-import { Document, DocumentDetails, DocumentId } from '@/models/Document.ts';
+import { DocumentDetailsDTO, DocumentDTO, DocumentsRequestDTO } from '@personal-okr/shared';
+import { Document, DocumentDetails, DocumentId, DocumentsRequest } from '@/models/Document.ts';
 import { Temporal } from 'temporal-polyfill';
 
 export function dtoToDocuments(dtos: DocumentDTO[]): Document[] {
@@ -19,4 +19,8 @@ export function dtoToDocumentDetails(dto: DocumentDetailsDTO): DocumentDetails {
 		...dtoToDocument(dto),
 		description: dto.description
 	}
+}
+
+export function documentsRequestToDTO(request: DocumentsRequest): DocumentsRequestDTO {
+	return request as DocumentsRequestDTO;
 }

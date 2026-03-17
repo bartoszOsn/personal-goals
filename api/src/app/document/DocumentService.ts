@@ -49,7 +49,7 @@ export class DocumentService {
 		const updatedDocuments = documents
 			.filter((d) => requests.some((req) => d.id.equals(req.id)))
 			.map((document) => {
-				const request = requests.find((r) => r.id === document.id);
+				const request = requests.find((r) => r.id.equals(document.id));
 				if (!request) return document;
 				return document.updated(request, now);
 			});

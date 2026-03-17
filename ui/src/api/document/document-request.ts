@@ -1,5 +1,5 @@
 import { http } from '@/base/http';
-import { DocumentDetailsDTO, DocumentDTO } from '@personal-okr/shared';
+import { DocumentDetailsDTO, DocumentDTO, DocumentsRequestDTO } from '@personal-okr/shared';
 import { DocumentId } from '@/models/Document';
 
 export function getDocuments(context: number) {
@@ -12,6 +12,10 @@ export function getDocumentDetails(documentId: DocumentId) {
 
 export function createDocument(context: number) {
 	return http.post(`/api/document/${context}`, void 0);
+}
+
+export function updateDocument(context: number, request: DocumentsRequestDTO) {
+	return http.put(`/api/document/${context}`, request);
 }
 
 export function deleteDocument(context: number, ids: DocumentId[]) {
