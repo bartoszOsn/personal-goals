@@ -39,7 +39,7 @@ export function dtoToWorkItem(dto: WorkItemDTO): WorkItem {
 		timeFrame: dto.timeFrame ? dtoToWorkItemTimeFrame(dto.timeFrame) : null,
 		status: dtoToWorkItemStatus(dto.status),
 		progress: dtoToWorkItemProgress(dto.progress),
-		children: dto.children.map(dtoToWorkItem)
+		children: dto.children.map((child: WorkItemDTO) => dtoToWorkItem(child))
 	};
 }
 

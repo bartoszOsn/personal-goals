@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SprintContextCollection } from '../../domain/sprint/model/SprintContextCollection';
-import {
-	SprintDTO,
-	SprintsUpdateRequestDTO,
-	SprintUpdateRequestDTO
-} from '@personal-okr/shared';
+import { SprintDTO, SprintsUpdateRequestDTO } from '@personal-okr/shared';
 import { quarterToNumber } from '../../domain/common/model/Quarter';
 import { SprintUpdateRequest } from '../../domain/sprint/model/SprintUpdateRequest';
 import { SprintId } from '../../domain/sprint/model/SprintId';
@@ -32,7 +28,7 @@ export class SprintDTOConverter {
 		dto: SprintsUpdateRequestDTO
 	): SprintUpdateRequest[] {
 		return Object.entries(dto).map(
-			([id, sprint]: [string, SprintUpdateRequestDTO]) =>
+			([id, sprint]) =>
 				new SprintUpdateRequest(
 					new SprintId(id),
 					sprint.startDate === undefined

@@ -37,7 +37,8 @@
 		"rxjs": "^7.8.1",
 		"sqlite3": "^5.1.7",
 		"temporal-polyfill": "^0.3.0",
-		"typeorm": "^0.3.28"
+		"typeorm": "^0.3.28",
+		"zod": "^4.3.6"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.2.0",
