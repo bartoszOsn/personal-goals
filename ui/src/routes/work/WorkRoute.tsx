@@ -4,6 +4,8 @@ import { AppShell } from '@mantine/core';
 import { useCallback } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { AppHeader } from '@/routes/work/AppHeader';
+import { notifications } from '@mantine/notifications';
+import { useQueryOrMutationError } from '@/base/query-x/api/useQueryOrMutationError';
 
 export function WorkRoute() {
 	const navigate = useNavigate();
@@ -16,6 +18,14 @@ export function WorkRoute() {
 		navigate({ to: '.', params: (prev) => ({ ...prev, context: context.toString() }) })
 			.then();
 	}, [navigate]);
+
+	useQueryOrMutationError(err => {
+		notifications.show({
+			color: 'red',
+			title: `Http error ${err.statusCode}`,
+			message: 'Unknown error'
+		});
+	});
 
 	return (
 		<AppShell navbar={{
