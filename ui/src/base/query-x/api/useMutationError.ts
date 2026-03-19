@@ -14,7 +14,7 @@ export function useMutationError(handler: (err: DefaultError) => void) {
 		const subscribedObserversToUnsub = new Map<MutationObserver, () => void>();
 
 		const unsub = queryClient.getMutationCache().subscribe((event: MutationCacheNotifyEvent) => {
-			if (event.type === 'observerAdded') {
+			if (event.type === 'observerAdded' && !event.mutation.meta?.silent) {
 				subscribedObserversToUnsub.set(
 					event.observer,
 					event.observer.subscribe(onError)

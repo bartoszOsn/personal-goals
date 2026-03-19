@@ -7,7 +7,7 @@ export function useQueryError(handler: (err: DefaultError) => void) {
 	useEffect(() => {
 		const unsub = queryClient.getQueryCache().subscribe((event: QueryCacheNotifyEvent) => {
 			if (event.type === 'observerResultsUpdated') {
-				if (event.query.state.status === 'error') {
+				if (event.query.state.status === 'error' && !event.query.meta?.silent) {
 					handler(event.query.state.error)
 				}
 			}

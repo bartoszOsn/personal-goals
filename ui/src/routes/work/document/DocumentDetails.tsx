@@ -1,5 +1,5 @@
 import { DocumentId } from '@/models/Document.ts';
-import { useDocumentDetailsQuery, useUpdateDocument } from '@/api/document/document-hooks';
+import { useDocumentDetailsQuery, useUpdateDocumentMutation } from '@/api/document/document-hooks';
 import { DocumentDetailsSkeleton } from '@/routes/work/document/DocumentDetailsSkeleton';
 import { Stack, Text, Title } from '@mantine/core';
 import { RichTextEditor } from '@/base/rich-text/RichTextEditor';
@@ -11,7 +11,7 @@ import { InplaceEditorEdit } from '@/base/inplace-editor/api/InplaceEditorEdit';
 
 export function DocumentDetails({ context, documentId }: { context: number, documentId: DocumentId }) {
 	const detailsQuery = useDocumentDetailsQuery(documentId);
-	const updateDocument = useUpdateDocument(context)
+	const updateDocument = useUpdateDocumentMutation(context)
 
 	if (detailsQuery.isPending || !detailsQuery.data) {
 		return <DocumentDetailsSkeleton />;
