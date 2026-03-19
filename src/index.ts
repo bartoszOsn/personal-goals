@@ -1,4 +1,5 @@
-export * from './dto/common/QuarterDTO.js'
+export * from './dto/common/QuarterDTO.js';
+export * from './dto/common/BasicErrorDTO.js';
 
 export * from './dto/work-item/WorkItemDTO.js';
 export * from './dto/work-item/WorkItemProgressDTO.js';
