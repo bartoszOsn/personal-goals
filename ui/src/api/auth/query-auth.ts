@@ -6,13 +6,13 @@ import { Temporal } from 'temporal-polyfill';
 const tokenKey = ['internal', 'token'];
 
 export function onError(err: HttpError, queryClient: QueryClient) {
-	if (HttpError.is(err, 401)) {
+	if (err.statusCode === 401) {
 		setToken(null, queryClient);
 	}
 }
 
 export function defaultRetry(count: number, err: HttpError) {
-	if (HttpError.is(err, 401)) {
+	if (err.statusCode === 401) {
 		return false;
 	}
 	return count < 3;

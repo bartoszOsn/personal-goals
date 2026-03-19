@@ -6,6 +6,8 @@ import { Temporal } from 'temporal-polyfill';
 import { AppHeader } from '@/routes/work/AppHeader';
 import { notifications } from '@mantine/notifications';
 import { useQueryOrMutationError } from '@/base/query-x/api/useQueryOrMutationError';
+import { BasicErrorDTOSchema } from '@personal-okr/shared';
+import { HttpError } from '@/base/http';
 
 export function WorkRoute() {
 	const navigate = useNavigate();
@@ -20,11 +22,13 @@ export function WorkRoute() {
 	}, [navigate]);
 
 	useQueryOrMutationError(err => {
-		notifications.show({
-			color: 'red',
-			title: `Http error ${err.statusCode}`,
-			message: 'Unknown error'
-		});
+		if (HttpError.is(err, BasicErrorDTOSchema)) {
+			notifications.show({
+				color: err.data.severity === 'error' ? 'red' : 'yellow',
+				title: err.data.title,
+				message: err.data.message
+			});
+		}
 	});
 
 	return (

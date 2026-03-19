@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export class HttpError<TData = unknown> extends Error {
 	public readonly statusCode: number;
 	public readonly data: TData;
@@ -11,11 +13,11 @@ export class HttpError<TData = unknown> extends Error {
 		this.statusCode = statusCode;
 	}
 
-	isOfType<TNarrow>(code: number): this is HttpError<TNarrow> {
-		return this.statusCode === code;
+	is<TSchema extends z.ZodType>(schema: TSchema): this is HttpError<z.infer<TSchema>> {
+		return z.safeParse(schema, this.data).success;
 	}
 
-	static is<TNarrow>(error: any, code: number): error is HttpError<TNarrow> {
-		return error instanceof HttpError && error.statusCode === code;
+	static is<TSchema extends z.ZodType>(error: any, schema: TSchema): error is HttpError<z.infer<TSchema>> {
+		return error instanceof HttpError && error.is(schema);
 	}
 }

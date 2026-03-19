@@ -4,6 +4,8 @@ import { AuthPresentationModule } from './auth/AuthPresentationModule';
 import { WorkItemPresentationModule } from './work-item/WorkItemPresentationModule';
 import { SprintPresentationModule } from './sprint/SprintPresentationModule';
 import { DocumentPresentationModule } from './document/DocumentPresentationModule';
+import { APP_FILTER } from '@nestjs/core';
+import { GlobalExceptionFilter } from './GlobalExceptionFilter';
 
 @Module({
 	imports: [
@@ -18,6 +20,11 @@ import { DocumentPresentationModule } from './document/DocumentPresentationModul
 		SprintPresentationModule,
 		DocumentPresentationModule
 	],
-	controllers: []
+	providers: [
+		{
+			provide: APP_FILTER,
+			useClass: GlobalExceptionFilter
+		}
+	]
 })
 export class AppModule {}
