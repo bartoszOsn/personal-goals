@@ -1,0 +1,27 @@
+{
+	"name": "@personal-okr/shared",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "tsc --watch"
+	},
+	"types": "./types/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./types/index.d.ts",
+			"default": "./dist/index.js",
+			"require": "./dist/index.js",
+			"node": "./dist/index.js",
+			"import": "./dist/index.js"
+		}
+	},
+	"devDependencies": {
+		"typescript": "~5.9.3"
+	},
+	"peerDependencies": {
+		"temporal-polyfill": "^0.3.0",
+		"zod": "^4.3.6"
+	},
+	"packageManager": "yarn@4.9.2"
+}
