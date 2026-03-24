@@ -73,7 +73,7 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 					const bgColor = selectedRows.includes(row.id)
 						? 'blue.0'
 						: row.backgroundColor
-							? `${row.backgroundColor}.1`
+							? `${row.backgroundColor}.0`
 							: 'white';
 
 					return (

@@ -10,7 +10,7 @@ export function GanttChartBackgroundColor() {
 		const itemColor = flatItems(context.props.items)
 			.find(item => item.id === row.id)?.backgroundColor;
 
-		const fill = itemColor ? `var(--mantine-color-${itemColor}-3)` : 'transparent';
+		const fill = itemColor ? `var(--mantine-color-${itemColor}-1)` : 'transparent';
 
 		return (
 			<rect key={row.id}

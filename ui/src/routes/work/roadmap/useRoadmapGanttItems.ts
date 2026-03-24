@@ -14,7 +14,7 @@ function workItemToGanttItem(wi: WorkItem): GanttItem<WorkItem> {
 		start: wi.timeFrame?.startDate,
 		end: wi.timeFrame?.endDate,
 		color: statusToColor(wi.status),
-		backgroundColor: typeToColor(wi.type),
+		backgroundColor: wi.type === WorkItemType.TASK ? undefined : typeToColor(wi.type),
 		tooltip: wi.title,
 		linksInto: [],
 		children: wi.children.map(workItemToGanttItem)
