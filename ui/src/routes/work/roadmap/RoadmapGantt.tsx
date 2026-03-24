@@ -16,7 +16,7 @@ import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
 import { quarterToColor } from '@/core/quarterToColor';
 
-export function RoadmapGantt({ context }: { context: number }) {
+export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: number, onSelectedWorkItemsChange: (workItemIds: WorkItemId[]) => void }) {
 	const workItemsQuery = useWorkItemsByContextQuery(context);
 	const updateWorkItemMutation = useUpdateWorkItemMutation();
 
@@ -93,6 +93,7 @@ export function RoadmapGantt({ context }: { context: number }) {
 			   changeDates={changeDates}
 			   bounds={[contextStartDate, contextEndDate]}
 			   timeboxes={timeboxes}
+			   setSelectedItemIds={(ids) => onSelectedWorkItemsChange(ids as WorkItemId[])}
 			   renderContextMenu={(o, s) => renderRoadmapGanttContextMenu(o, s, context)}
 		/>
 	)

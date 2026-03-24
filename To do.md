@@ -1,4 +1,4 @@
-# What still needs to be 
+# What still needs to be done
 
 ## MVP
 
@@ -27,6 +27,7 @@
 14. ✅ Sprints per context year
 15. ✅ Fix Table deselecting when clicking a button (See: DeleteSprintsButton.tsx)
 16. ✅ Backend errors are mapped to user friendly messages and displayed in notifications
+17. ✅ Header on roadmap
 
 ## First release
 
