@@ -59,7 +59,7 @@ function HeaderRow(props: { cells: HeaderCell[], offsetY: number, scrollY: numbe
 		const height = headerCellHeight;
 
 		return (
-			<g>
+			<g key={cell.start.toString()}>
 				<rect x={x}
 					  y={y}
 					  width={width}

@@ -77,7 +77,7 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 							: 'white';
 
 					return (
-						<ContextMenu disabled={!props.renderContextMenu} onChange={(o) => o ? onTrContextMenu(row) : setContextMenuInfo(null)} dropdown={
+						<ContextMenu key={`${row.id}`} disabled={!props.renderContextMenu} onChange={(o) => o ? onTrContextMenu(row) : setContextMenuInfo(null)} dropdown={
 							props.renderContextMenu
 							&& contextMenuInfo
 							&& props.renderContextMenu(
@@ -85,7 +85,7 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 								rowInfo.rows.filter((r) => contextMenuInfo && contextMenuInfo.selected.includes(r.id))!.map((r) => r.data)
 							)
 						}>
-							<Table.Tr key={`${row.id}`}
+							<Table.Tr
 									  bg={bgColor}
 									  data-row-id={`${row.id}`}
 									  onClick={(e) => onTrClick(row, e)}>

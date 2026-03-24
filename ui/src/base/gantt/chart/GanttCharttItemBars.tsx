@@ -25,7 +25,7 @@ export function GanttCharttItemBars() {
 						return null;
 					}
 
-					return <Bar item={item} row={row} />;
+					return <Bar key={item.id} item={item} row={row} />;
 				})
 			}
 		</>

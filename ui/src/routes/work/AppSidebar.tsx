@@ -22,7 +22,7 @@ export function AppSidebar({ context }: { context: number }) {
 									<>
 										{
 											documentsQuery.data.map(d => (
-												<ContextMenu dropdown={(
+												<ContextMenu key={d.id} dropdown={(
 													<>
 														<MenuItemLink to={'/work/$context/document/$documentId'}
 																	  params={{ context: context.toString(), documentId: d.id }}
