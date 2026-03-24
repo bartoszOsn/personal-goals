@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { Menu } from '@mantine/core';
 import { IconFile, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateWorkItemMutation, useDeleteWorkItemsMutation } from '@/api/work-item/work-item-hooks';
+import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
 
 export function renderRoadmapGanttContextMenu(clickedOn: GanttItem<WorkItem>, selected: GanttItem<WorkItem>[], context: number) {
 	return <RoadmapGanttContextMenu clickedOn={clickedOn} selected={selected} context={context} />;
@@ -13,6 +14,7 @@ function RoadmapGanttContextMenu({ clickedOn, selected, context }: { clickedOn: 
 
 	const createWorkItemMutation = useCreateWorkItemMutation();
 	const deleteWorkItemsMutation = useDeleteWorkItemsMutation();
+	const openWorkItemModal = useWorkItemDetailsModal();
 
 
 	const createChildKeyResult = () => {
@@ -40,7 +42,7 @@ function RoadmapGanttContextMenu({ clickedOn, selected, context }: { clickedOn: 
 	}
 
 	const options: ReactNode[] = [
-		<Menu.Item leftSection={<IconFile size={14} />}>
+		<Menu.Item leftSection={<IconFile size={14} />} onClick={() => openWorkItemModal(clickedOn.data.id)}>
 			Details
 		</Menu.Item>,
 	];
@@ -63,7 +65,7 @@ function RoadmapGanttContextMenu({ clickedOn, selected, context }: { clickedOn: 
 
 	if (selected.some(s => s.id === clickedOn.id) && selected.length > 1) {
 		options.push(
-			<Menu.Item leftSection={<IconPlus size={14} />} onClick={deleteSelected}>
+			<Menu.Item color='red' leftSection={<IconTrash size={14} />} onClick={deleteSelected}>
 				Delete {selected.length} selected
 			</Menu.Item>
 		)
