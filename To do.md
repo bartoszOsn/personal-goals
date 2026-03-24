@@ -26,7 +26,7 @@
 13. ✅ Remove old architecture from code
 14. ✅ Sprints per context year
 15. ✅ Fix Table deselecting when clicking a button (See: DeleteSprintsButton.tsx)
-16. Backend errors are mapped to user friendly messages and displayed in notifications
+16. ✅ Backend errors are mapped to user friendly messages and displayed in notifications
 
 ## First release
 

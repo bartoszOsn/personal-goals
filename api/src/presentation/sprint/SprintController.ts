@@ -7,15 +7,18 @@ import {
 	ParseArrayPipe,
 	ParseIntPipe,
 	Post,
-	Put
+	Put,
+	UseFilters
 } from '@nestjs/common';
 import { SprintDTO, SprintsUpdateRequestDTO } from '@personal-okr/shared';
 import { ContextYear } from '../../domain/common/model/ContextYear';
 import { SprintId } from '../../domain/sprint/model/SprintId';
 import { SprintService } from '../../app/sprint/SprintService';
 import { SprintDTOConverter } from './SprintDTOConverter';
+import { SprintDomainErrorExceptionFillter } from './SprintDomainErrorExceptionFillter';
 
 @Controller('sprint')
+@UseFilters(SprintDomainErrorExceptionFillter)
 export class SprintController {
 	constructor(
 		private readonly sprintService: SprintService,

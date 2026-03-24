@@ -7,7 +7,8 @@ import {
 	ParseArrayPipe,
 	ParseIntPipe,
 	Post,
-	Put
+	Put,
+	UseFilters
 } from '@nestjs/common';
 import {
 	DocumentDetailsDTO,
@@ -18,8 +19,10 @@ import { DocumentService } from '../../app/document/DocumentService';
 import { DocumentDTOConverter } from './DocumentDTOConverter';
 import { ContextYear } from '../../domain/common/model/ContextYear';
 import { DocumentId } from '../../domain/document/model/DocumentId';
+import { DocumentDomainErrorExceptionFilter } from './DocumentDomainErrorExceptionFilter';
 
 @Controller('document')
+@UseFilters(DocumentDomainErrorExceptionFilter)
 export class DocumentController {
 	constructor(
 		private readonly documentService: DocumentService,

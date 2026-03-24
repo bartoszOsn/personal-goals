@@ -7,7 +7,8 @@ import {
 	ParseArrayPipe,
 	ParseIntPipe,
 	Post,
-	Put
+	Put,
+	UseFilters
 } from '@nestjs/common';
 import { WorkItemFacade } from '../../app/work-item/WorkItemFacade';
 import {
@@ -18,8 +19,10 @@ import {
 import { WorkItemDTOConverter } from './WorkItemDTOConverter';
 import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
+import { WorkItemDomainErrorExceptionFilter } from './WorkItemDomainErrorExceptionFilter';
 
 @Controller('work-item')
+@UseFilters(WorkItemDomainErrorExceptionFilter)
 export class WorkItemController {
 	constructor(
 		private readonly workItemFacade: WorkItemFacade,
