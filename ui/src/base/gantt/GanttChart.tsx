@@ -31,7 +31,12 @@ export function GanttChart<TData>() {
 	}, [context, width]);
 
 	return (
-		<ScrollArea.Autosize style={{ flexGrow: 1 }} h="100%" viewportRef={viewportRef} onScrollPositionChange={({ y }) => context.setScrollY(y)}>
+		<ScrollArea.Autosize style={{ flexGrow: 1 }}
+							 h="100%"
+							 styles={{ root: { height: '100%' } }}
+							 viewportRef={viewportRef}
+							 viewportProps={{ style: { height: '100%' } }}
+							 onScrollPositionChange={({ y }) => context.setScrollY(y)}>
 			<svg ref={context.svg} height={context.scrollAreaHeight} width={dateToPixelPos(endDate)}>
 				<GanttChartWeekends />
 				<GanttChartBackgroundColor />
@@ -40,7 +45,7 @@ export function GanttChart<TData>() {
 				<GanttCharttItemBars />
 				<GanttChartHeader />
 			</svg>
-				<GanttZoomButtons />
+			<GanttZoomButtons />
 		</ScrollArea.Autosize>
 	);
 }

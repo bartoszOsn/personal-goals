@@ -10,13 +10,15 @@ import { flatItems } from '@/base/gantt/FlatItems';
 
 export function GanttTable<TData>() {
 	const context = useGanttContext<TData>();
-	const { ref, height } = useElementSize<HTMLTableElement>();
+	const { ref: tableRef, height: tableHeight } = useElementSize<HTMLTableElement>();
+	const { ref: boxRef, height: boxHeight } = useElementSize<HTMLDivElement>();
 	const viewportRef = useRef<HTMLDivElement>(null);
 	const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
 	useEffect(() => {
-		context.setScrollAreaHeight(height);
-	}, [context, height]);
+		const actualHeight = Math.max(tableHeight, boxHeight - 10); // Why `- 10`? Who knows ¯\_(ツ)_/¯ It doesn't work properly without it.
+		context.setScrollAreaHeight(actualHeight);
+	}, [context, tableHeight, boxHeight]);
 
 	useEffect(() => {
 		return context.subscribeToScrollY(y => {
@@ -29,7 +31,7 @@ export function GanttTable<TData>() {
 	}, [context]);
 
 	useEffect(() => {
-		const table = ref.current;
+		const table = tableRef.current;
 
 		if (!table) return;
 
@@ -56,7 +58,7 @@ export function GanttTable<TData>() {
 		if (JSON.stringify(rows) !== JSON.stringify(context.rows)) {
 			context.setRows(rows);
 		}
-	}, [context, context.props.items, ref, expandedItems]);
+	}, [context, context.props.items, tableRef, expandedItems]);
 
 	const dataTableRows: DataTableRow<GanttItem<TData>, string>[] = useDataTableRows({
 		rawData: context.props.items,
@@ -72,7 +74,7 @@ export function GanttTable<TData>() {
 	};
 
 	return (
-		<Box w={rem(300)} h="100%">
+		<Box w={rem(300)} h="100%" ref={boxRef}>
 			<DataTable rows={dataTableRows}
 					   possibleColumns={context.props.possibleColumns as ColumnDescriptor<GanttItem<TData>>[]}
 					   initialColumnIds={context.props.initialColumnIds}
@@ -82,8 +84,9 @@ export function GanttTable<TData>() {
 						   h: '100%',
 						   viewportRef: viewportRef,
 						   onScrollPositionChange: ({ y }) => context.setScrollY(y),
+						   styles: { root: { height: '100%' } },
 						   viewportProps: {
-							   style: { paddingBottom: 0 }
+							   style: { paddingBottom: 0, height: '100%' },
 						   }
 					   }}
 					   tableHeaderProps={{
@@ -93,7 +96,7 @@ export function GanttTable<TData>() {
 					   onSelectionChange={onSelectionChange}
 					   onExpansionChange={setExpandedItems}
 					   renderContextMenu={context.props.renderContextMenu}
-					   tableRef={ref} />
+					   tableRef={tableRef} />
 		</Box>
 	);
 }
