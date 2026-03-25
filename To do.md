@@ -34,7 +34,8 @@
 1. Fix Data table – Better UX
 2. Fix Auth – Better security, ability to change password, recover account etc.
     - Can send emails via https://documentation.mailgun.com
-3. Work on performance
+3. ✅ Work on performance
+    - It turns out it's not a problem in a production build
 4. Better UI 
 5. Make sure it works on mobile.
 6. Drag and drop on board - Changing order
