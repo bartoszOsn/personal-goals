@@ -21,8 +21,6 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 		<Table.Thead {...props.tableHeaderProps}>
 			<Table.Tr>
 				{props.columns.map((column, index) => {
-					const isLastColumn = index === props.columns.length - 1;
-
 					return (
 						<Table.Th key={column.columnId} data-column-id={column.columnId}>
 							<Group gap={2} justify='space-between'>
@@ -32,31 +30,25 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 									</Text>
 									<CloseButton disabled={!isMoreThanOneColumn} size="xs" onClick={() => props.setColumns(props.columns.filter((_, i) => i !== index))} />
 								</Group>
-								{
-									!isLastColumn && (
-										<Box w={2} h={18} bg='gray.1' style={{ cursor: 'ew-resize' }} onMouseDown={(e) => props.onStartDrag(column, e)} />
-									)
-								}
-								{
-									isLastColumn && (
-										<Popover shadow='md' withArrow opened={popoverOpened} onChange={setPopoverOpened}>
-											<Popover.Target>
-												<ActionIcon size="xs" variant='subtle' color='gray' onClick={() => setPopoverOpened(o => !o)}>
-													<IconDots size={12} />
-												</ActionIcon>
-											</Popover.Target>
-											<Popover.Dropdown>
-												<DataTableCustomizationPopover allPossibleColumns={props.allPossibleColumns}
-																			   visibleColumns={props.columns}
-																			   setColumns={props.setColumns} />
-											</Popover.Dropdown>
-										</Popover>
-									)
-								}
+								<Box w={2} h={18} bg='gray.1' style={{ cursor: 'ew-resize' }} onMouseDown={(e) => props.onStartDrag(column, e)} />
 							</Group>
 						</Table.Th>
 					);
 				})}
+				<Table.Th style={{ position: 'sticky', right: '0px' }}>
+					<Popover shadow='md' withArrow opened={popoverOpened} onChange={setPopoverOpened}>
+						<Popover.Target>
+							<ActionIcon size="xs" variant='subtle' color='gray' onClick={() => setPopoverOpened(o => !o)}>
+								<IconDots size={12} />
+							</ActionIcon>
+						</Popover.Target>
+						<Popover.Dropdown>
+							<DataTableCustomizationPopover allPossibleColumns={props.allPossibleColumns}
+														   visibleColumns={props.columns}
+														   setColumns={props.setColumns} />
+						</Popover.Dropdown>
+					</Popover>
+				</Table.Th>
 			</Table.Tr>
 		</Table.Thead>
 	)
