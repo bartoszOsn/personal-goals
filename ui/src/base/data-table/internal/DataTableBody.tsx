@@ -91,9 +91,11 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 									  onClick={(e) => onTrClick(row, e)}>
 								{
 									columns.map((column, i) => (
-										<Table.Td key={column.columnId} colSpan={i === columns.length - 1 ? 2 : 1}>
+										<Table.Td key={column.columnId}
+												  style={{ overflow: 'hidden' }} colSpan={i === columns.length - 1 ? 2 : 1}>
 											<Group wrap="nowrap"
 												   gap="sm"
+												   h={20}
 												   pl={column.hierarchyColumn && rowInfo.maxLevels > 0 ? (row.level * PER_LEVEL_OFFSET + (row.hasChildren ? 0 : PER_LEVEL_OFFSET)) : 0}>
 												{
 													column.hierarchyColumn && (
