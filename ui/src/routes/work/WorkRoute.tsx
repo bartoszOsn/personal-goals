@@ -23,6 +23,10 @@ export function WorkRoute() {
 
 	useQueryOrMutationError(err => {
 		if (HttpError.is(err, BasicErrorDTOSchema)) {
+			if (err.data.code === 401) {
+				return;
+			}
+
 			notifications.show({
 				color: err.data.severity === 'error' ? 'red' : 'yellow',
 				title: err.data.title,

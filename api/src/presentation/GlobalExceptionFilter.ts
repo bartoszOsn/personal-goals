@@ -2,6 +2,7 @@ import {
 	ArgumentsHost,
 	Catch,
 	ExceptionFilter,
+	HttpException,
 	HttpStatus
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -9,7 +10,22 @@ import { BasicErrorDTO } from '@personal-okr/shared';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-	public catch(_exception: any, host: ArgumentsHost) {
+	public catch(exception: any, host: ArgumentsHost) {
+		if (exception instanceof HttpException) {
+			const ctx = host.switchToHttp();
+
+			const response: Response = ctx.getResponse();
+
+			const data: BasicErrorDTO = {
+				code: exception.getStatus(),
+				title: exception.name,
+				message: exception.message,
+				severity: 'error'
+			};
+
+			response.status(exception.getStatus()).json(data);
+		}
+
 		const ctx = host.switchToHttp();
 
 		const response: Response = ctx.getResponse();
