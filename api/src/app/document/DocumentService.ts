@@ -17,7 +17,13 @@ export class DocumentService {
 
 	async getDocumentsByContext(context: ContextYear): Promise<Document[]> {
 		const user = await this.userStorage.getUser();
-		return this.documentRepository.findByContext(context, user);
+		const documents = await this.documentRepository.findByContext(
+			context,
+			user
+		);
+		return documents.toSorted((a, b) =>
+			Temporal.PlainDateTime.compare(b.editedAt, a.editedAt)
+		);
 	}
 
 	async getDocumentById(id: DocumentId): Promise<Document> {
