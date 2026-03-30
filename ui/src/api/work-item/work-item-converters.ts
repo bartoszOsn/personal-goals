@@ -1,10 +1,10 @@
 import {
-	WorkItemCreationRequestDTO,
-	WorkItemDTO,
-	WorkItemStatusDTO,
-	WorkItemTimeFrameDTO,
-	WorkItemTypeDTO,
-	WorkItemUpdateRequestDTO
+	WorkItemCreationRequestDTOOld,
+	WorkItemDTOOld,
+	WorkItemStatusDTOOld,
+	WorkItemTimeFrameDTOOld,
+	WorkItemTypeDTOOld,
+	WorkItemUpdateRequestDTOOld
 } from '@personal-okr/shared';
 import {
 	CustomDateWorkItemTimeFrame,
@@ -25,11 +25,11 @@ import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '@/models/Sprint';
 import { numberToQuarter, quarterToNumber } from '@/models/Quarter';
 
-export function dtoToWorkItems(dtos: WorkItemDTO[]): WorkItem[] {
+export function dtoToWorkItems(dtos: WorkItemDTOOld[]): WorkItem[] {
 	return dtos.map(dtoToWorkItem);
 }
 
-export function dtoToWorkItem(dto: WorkItemDTO): WorkItem {
+export function dtoToWorkItem(dto: WorkItemDTOOld): WorkItem {
 	return {
 		id: dto.id as WorkItemId,
 		type: dtoToWorkItemType(dto.type),
@@ -39,11 +39,11 @@ export function dtoToWorkItem(dto: WorkItemDTO): WorkItem {
 		timeFrame: dto.timeFrame ? dtoToWorkItemTimeFrame(dto.timeFrame) : null,
 		status: dtoToWorkItemStatus(dto.status),
 		progress: dtoToWorkItemProgress(dto.progress),
-		children: dto.children.map((child: WorkItemDTO) => dtoToWorkItem(child))
+		children: dto.children.map((child: WorkItemDTOOld) => dtoToWorkItem(child))
 	};
 }
 
-export function workItemCreationRequestToDTO(request: WorkItemCreationRequest): WorkItemCreationRequestDTO {
+export function workItemCreationRequestToDTO(request: WorkItemCreationRequest): WorkItemCreationRequestDTOOld {
 	return {
 		context: request.context,
 		type: workItemTypeToDTO(request.type),
@@ -52,7 +52,7 @@ export function workItemCreationRequestToDTO(request: WorkItemCreationRequest): 
 	};
 }
 
-export function workItemUpdateRequestToDTO(request: WorkItemUpdateRequest): WorkItemUpdateRequestDTO {
+export function workItemUpdateRequestToDTO(request: WorkItemUpdateRequest): WorkItemUpdateRequestDTOOld {
 	const timeFrameToDTO = (timeFrame?: WorkItemTimeFrame | null) => {
 		if (timeFrame === undefined) {
 			return undefined;
@@ -76,7 +76,7 @@ export function workItemUpdateRequestToDTO(request: WorkItemUpdateRequest): Work
 	};
 }
 
-function dtoToWorkItemType(dto: WorkItemTypeDTO): WorkItemType {
+function dtoToWorkItemType(dto: WorkItemTypeDTOOld): WorkItemType {
 	switch (dto) {
 		case 'task':
 			return WorkItemType.TASK;
@@ -89,7 +89,7 @@ function dtoToWorkItemType(dto: WorkItemTypeDTO): WorkItemType {
 	}
 }
 
-function workItemTypeToDTO(type: WorkItemType): WorkItemTypeDTO {
+function workItemTypeToDTO(type: WorkItemType): WorkItemTypeDTOOld {
 	switch (type) {
 		case WorkItemType.TASK:
 			return 'task';
@@ -102,7 +102,7 @@ function workItemTypeToDTO(type: WorkItemType): WorkItemTypeDTO {
 	}
 }
 
-function dtoToWorkItemStatus(dto: WorkItemStatusDTO): WorkItemStatus {
+function dtoToWorkItemStatus(dto: WorkItemStatusDTOOld): WorkItemStatus {
 	switch (dto) {
 		case 'todo':
 			return WorkItemStatus.TODO;
@@ -117,7 +117,7 @@ function dtoToWorkItemStatus(dto: WorkItemStatusDTO): WorkItemStatus {
 	}
 }
 
-function workItemStatusToDTO(status: WorkItemStatus): WorkItemStatusDTO {
+function workItemStatusToDTO(status: WorkItemStatus): WorkItemStatusDTOOld {
 	switch (status) {
 		case WorkItemStatus.TODO:
 			return 'todo';
@@ -139,7 +139,7 @@ function dtoToWorkItemProgress(dto: { progress: number; canChange: boolean }): W
 	};
 }
 
-function dtoToWorkItemTimeFrame(dto: WorkItemTimeFrameDTO): WorkItemTimeFrame {
+function dtoToWorkItemTimeFrame(dto: WorkItemTimeFrameDTOOld): WorkItemTimeFrame {
 	const base = {
 		startDate: Temporal.PlainDate.from(dto.startDate),
 		endDate: Temporal.PlainDate.from(dto.endDate),
@@ -174,7 +174,7 @@ function dtoToWorkItemTimeFrame(dto: WorkItemTimeFrameDTO): WorkItemTimeFrame {
 	}
 }
 
-function workItemTimeFrameToDTO(timeFrame: WorkItemTimeFrame): WorkItemTimeFrameDTO {
+function workItemTimeFrameToDTO(timeFrame: WorkItemTimeFrame): WorkItemTimeFrameDTOOld {
 	const base = {
 		startDate: timeFrame.startDate.toString(),
 		endDate: timeFrame.endDate.toString(),

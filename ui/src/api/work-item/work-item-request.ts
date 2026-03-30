@@ -1,24 +1,24 @@
 import { http } from '@/base/http';
 import {
-	WorkItemCreationRequestDTO,
-	WorkItemDTO,
-	WorkItemUpdateRequestDTO
+	WorkItemCreationRequestDTOOld,
+	WorkItemDTOOld,
+	WorkItemUpdateRequestDTOOld
 } from '@personal-okr/shared';
 
 export function getWorkItemsByContext(context: number) {
-	return http.get<WorkItemDTO[]>(`/api/work-item/${context}`);
+	return http.get<WorkItemDTOOld[]>(`/api/work-item/${context}`);
 }
 
 export function getWorkItemById(id: string) {
-	return http.get<WorkItemDTO>(`/api/work-item/details/${id}`);
+	return http.get<WorkItemDTOOld>(`/api/work-item/details/${id}`);
 }
 
-export function createWorkItem(request: WorkItemCreationRequestDTO) {
-	return http.post<WorkItemDTO, WorkItemCreationRequestDTO>('/api/work-item', request);
+export function createWorkItem(request: WorkItemCreationRequestDTOOld) {
+	return http.post<WorkItemDTOOld, WorkItemCreationRequestDTOOld>('/api/work-item', request);
 }
 
-export function updateWorkItem(id: string, request: WorkItemUpdateRequestDTO) {
-	return http.put<WorkItemDTO, WorkItemUpdateRequestDTO>(`/api/work-item/${id}`, request);
+export function updateWorkItem(id: string, request: WorkItemUpdateRequestDTOOld) {
+	return http.put<WorkItemDTOOld, WorkItemUpdateRequestDTOOld>(`/api/work-item/${id}`, request);
 }
 
 export function deleteWorkItems(ids: string[]) {

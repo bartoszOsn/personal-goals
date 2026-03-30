@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import { WorkItemFacade } from '../../app/work-item/WorkItemFacade';
 import {
-	WorkItemCreationRequestDTO,
-	WorkItemDTO,
-	WorkItemUpdateRequestDTO
+	WorkItemCreationRequestDTOOld,
+	WorkItemDTOOld,
+	WorkItemUpdateRequestDTOOld
 } from '@personal-okr/shared';
 import { WorkItemDTOConverter } from './WorkItemDTOConverter';
 import { ContextYear } from '../../domain/common/model/ContextYear';
@@ -32,7 +32,7 @@ export class WorkItemController {
 	@Get('/:context')
 	public async getWorkItemsByContext(
 		@Param('context', new ParseIntPipe()) contextRaw: number
-	): Promise<WorkItemDTO[]> {
+	): Promise<WorkItemDTOOld[]> {
 		const context = new ContextYear(contextRaw);
 		const workItems =
 			await this.workItemFacade.getWorkItemsByContext(context);
@@ -42,7 +42,7 @@ export class WorkItemController {
 	@Get('/details/:id')
 	public async getWorkItemById(
 		@Param('id') idRaw: string
-	): Promise<WorkItemDTO> {
+	): Promise<WorkItemDTOOld> {
 		const id = new WorkItemId(idRaw);
 		const workItem = await this.workItemFacade.getWorkItemById(id);
 		return this.workItemDTOConverter.toWorkItemDTO(workItem);
@@ -50,8 +50,8 @@ export class WorkItemController {
 
 	@Post()
 	public async createWorkItem(
-		@Body() request: WorkItemCreationRequestDTO
-	): Promise<WorkItemDTO> {
+		@Body() request: WorkItemCreationRequestDTOOld
+	): Promise<WorkItemDTOOld> {
 		const context = new ContextYear(request.context);
 		const type = this.workItemDTOConverter.fromWorkItemTypeDTO(
 			request.type
@@ -83,8 +83,8 @@ export class WorkItemController {
 	@Put('/:id')
 	public async updateWorkItem(
 		@Param('id') idRaw: string,
-		@Body() requestRaw: WorkItemUpdateRequestDTO
-	): Promise<WorkItemDTO> {
+		@Body() requestRaw: WorkItemUpdateRequestDTOOld
+	): Promise<WorkItemDTOOld> {
 		const id = new WorkItemId(idRaw);
 		const request =
 			await this.workItemDTOConverter.fromWorkItemUpdateRequestDTO(

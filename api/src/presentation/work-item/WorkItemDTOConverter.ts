@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { WorkItem } from '../../domain/work-item/model/WorkItem';
 import {
-	WorkItemDTO,
-	WorkItemProgressDTO,
-	WorkItemStatusDTO,
-	WorkItemTimeFrameDTO,
-	WorkItemTypeDTO,
-	WorkItemUpdateRequestDTO
+	WorkItemDTOOld,
+	WorkItemProgressDTOOld,
+	WorkItemStatusDTOOld,
+	WorkItemTimeFrameDTOOld,
+	WorkItemTypeDTOOld,
+	WorkItemUpdateRequestDTOOld
 } from '@personal-okr/shared';
 import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
 import { WorkItemUpdateRequest } from '../../domain/work-item/model/WorkItemUpdateRequest';
@@ -37,11 +37,11 @@ import { SprintService } from '../../app/sprint/SprintService';
 export class WorkItemDTOConverter {
 	constructor(private readonly sprintService: SprintService) {}
 
-	toWorkItemsDTO(workItems: WorkItem[]): WorkItemDTO[] {
+	toWorkItemsDTO(workItems: WorkItem[]): WorkItemDTOOld[] {
 		return workItems.map((wi) => this.toWorkItemDTO(wi));
 	}
 
-	toWorkItemDTO(workItem: WorkItem): WorkItemDTO {
+	toWorkItemDTO(workItem: WorkItem): WorkItemDTOOld {
 		return {
 			id: workItem.id.id,
 			type: this.toWorkItemTypeDTO(workItem.type),
@@ -57,7 +57,7 @@ export class WorkItemDTOConverter {
 		};
 	}
 
-	fromWorkItemTypeDTO(type: WorkItemTypeDTO): WorkItemType {
+	fromWorkItemTypeDTO(type: WorkItemTypeDTOOld): WorkItemType {
 		switch (type) {
 			case 'task':
 				return WorkItemType.TASK;
@@ -70,7 +70,7 @@ export class WorkItemDTOConverter {
 		}
 	}
 
-	private toWorkItemTypeDTO(type: WorkItemType): WorkItemTypeDTO {
+	private toWorkItemTypeDTO(type: WorkItemType): WorkItemTypeDTOOld {
 		switch (type) {
 			case WorkItemType.TASK:
 				return 'task';
@@ -85,7 +85,7 @@ export class WorkItemDTOConverter {
 
 	async fromWorkItemUpdateRequestDTO(
 		id: WorkItemId,
-		requestRaw: WorkItemUpdateRequestDTO
+		requestRaw: WorkItemUpdateRequestDTOOld
 	): Promise<WorkItemUpdateRequest> {
 		return new WorkItemUpdateRequest(
 			id,
@@ -115,7 +115,7 @@ export class WorkItemDTOConverter {
 		);
 	}
 
-	private toWorkItemStatusDTO(status: WorkItemStatus): WorkItemStatusDTO {
+	private toWorkItemStatusDTO(status: WorkItemStatus): WorkItemStatusDTOOld {
 		switch (status) {
 			case WorkItemStatus.TO_DO:
 				return 'todo';
@@ -132,7 +132,7 @@ export class WorkItemDTOConverter {
 
 	private toWorkItemProgressDTO(
 		progress: WorkItemProgress
-	): WorkItemProgressDTO {
+	): WorkItemProgressDTOOld {
 		return {
 			progress: progress.getPercentage().value,
 			canChange: progress.canChange()
@@ -141,7 +141,7 @@ export class WorkItemDTOConverter {
 
 	private toWorkItemTimeFrameDTO(
 		timeFrame: WorkItemTimeFrame | null
-	): WorkItemTimeFrameDTO | undefined {
+	): WorkItemTimeFrameDTOOld | undefined {
 		if (!timeFrame) {
 			return undefined;
 		}
@@ -199,7 +199,7 @@ export class WorkItemDTOConverter {
 	}
 
 	private async fromTimeFrameRequestDTO(
-		timeFrame: NonNullable<WorkItemUpdateRequestDTO['timeFrame']>
+		timeFrame: NonNullable<WorkItemUpdateRequestDTOOld['timeFrame']>
 	): Promise<WorkItemTimeFrame | null> {
 		if ('empty' in timeFrame) {
 			return null;
@@ -239,7 +239,9 @@ export class WorkItemDTOConverter {
 		}
 	}
 
-	private fromWorkItemStatusDTO(status: WorkItemStatusDTO): WorkItemStatus {
+	private fromWorkItemStatusDTO(
+		status: WorkItemStatusDTOOld
+	): WorkItemStatus {
 		switch (status) {
 			case 'todo':
 				return WorkItemStatus.TO_DO;
