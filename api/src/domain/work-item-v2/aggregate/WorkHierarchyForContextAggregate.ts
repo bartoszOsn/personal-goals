@@ -9,10 +9,8 @@ import { WorkItemId } from '../model/WorkItemId';
 import { WorkItemNotFoundError } from '../error/WorkItemNotFoundError';
 import { LexicalRank } from '../../common/model/LexicalRank';
 import { WorkItemsUpdateRequest } from '../model/WorkItemsUpdateRequest';
-import {
-	WorkItemHierarchyMoveRequest,
-	WorkItemHierarchyMoveRequestOrder
-} from '../model/WorkItemHierarchyMoveRequest';
+import { WorkItemHierarchyMoveRequest } from '../model/WorkItemHierarchyMoveRequest';
+import { MoveRequestOrder } from '../model/MoveRequestOrder';
 
 export class WorkHierarchyForContextAggregate {
 	constructor(
@@ -65,6 +63,7 @@ export class WorkHierarchyForContextAggregate {
 	move(request: WorkItemHierarchyMoveRequest): void {
 		const item = this.findById(request.id);
 		if (request.parentId === null) {
+			this.fillOrders(this.roots);
 			const allRanks = this.roots.map((root) => root.hierarchyOrder);
 			const newRank = this.getNewRank(request.order, allRanks);
 			item.hierarchyOrder = newRank;
@@ -74,6 +73,7 @@ export class WorkHierarchyForContextAggregate {
 			);
 		} else {
 			const parent = this.findById(request.parentId);
+			this.fillOrders(parent.children);
 			const allRanks = parent.children.map(
 				(child) => child.hierarchyOrder
 			);
@@ -137,10 +137,7 @@ export class WorkHierarchyForContextAggregate {
 		throw new WorkItemNotFoundError(`Can't find work item with id ${id}`);
 	}
 
-	private getNewRank(
-		order: WorkItemHierarchyMoveRequestOrder,
-		allRanks: LexicalRank[]
-	) {
+	private getNewRank(order: MoveRequestOrder, allRanks: LexicalRank[]) {
 		if (order.isFirst()) {
 			return LexicalRank.beforeAll(allRanks);
 		} else if (order.isLast()) {
@@ -150,6 +147,28 @@ export class WorkHierarchyForContextAggregate {
 				this.findById(order.after).hierarchyOrder,
 				this.findById(order.before).hierarchyOrder
 			);
+		}
+	}
+
+	private fillOrders(workItems: WorkItem[]) {
+		workItems.sort((a: WorkItem, b: WorkItem) =>
+			LexicalRank.compare(a.hierarchyOrder, b.hierarchyOrder)
+		);
+
+		for (let i = 0; i < workItems.length; i++) {
+			const workItem = workItems[i];
+			if (workItem.hierarchyOrder) {
+				continue;
+			}
+
+			if (i === 0) {
+				workItem.hierarchyOrder = LexicalRank.single();
+			} else {
+				const prevWorkItem = workItems[i - 1];
+				workItem.hierarchyOrder = LexicalRank.afterAll([
+					prevWorkItem.hierarchyOrder
+				]);
+			}
 		}
 	}
 }
