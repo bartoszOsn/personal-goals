@@ -115,6 +115,22 @@ export class LexicalRank {
 		);
 	}
 
+	static compare(a: unknown, b: unknown): number {
+		if (!(a instanceof LexicalRank) && !(b instanceof LexicalRank)) {
+			return 0;
+		}
+
+		if (!(a instanceof LexicalRank)) {
+			return 1;
+		}
+
+		if (!(b instanceof LexicalRank)) {
+			return -1;
+		}
+
+		return a.asString().localeCompare(b.asString());
+	}
+
 	private static betweenRankRaw(a: Character[], b: Character[]): Character[] {
 		const resultRank: Character[] = [];
 
