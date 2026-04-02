@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { WorkItemAppModule } from '../../app/work-item/WorkItemAppModule';
-import { WorkItemInfrastructureModule } from '../../infrastructure/work-item/WorkItemInfrastructureModule';
+import { WorkItemInfrastructureModule } from '../../infrastructure/work-item-v2/WorkItemInfrastructureModule';
 import { WorkItemDTOConverter } from './WorkItemDTOConverter';
 import { SprintAppModule } from '../../app/sprint/SprintAppModule';
 import { SprintInfrastructureModule } from '../../infrastructure/sprint/SprintInfrastructureModule';
 import { WorkItemControllerV2 } from './WorkItemControllerV2';
+import { WorkItemAppModule } from '../../app/work-item-v2/WorkItemAppModule';
 
 @Module({
 	imports: [
