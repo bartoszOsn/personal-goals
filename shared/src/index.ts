@@ -9,6 +9,20 @@ export * from './dto/work-item/WorkItemTypeDTOOld.js';
 export * from './dto/work-item/WorkItemCreationRequestDTOOld.js';
 export * from './dto/work-item/WorkItemUpdateRequestDTOOld.js';
 
+export * from './dto/work-item-v2/WorkItemDTO.js';
+export * from './dto/work-item-v2/WorkItemHierarchyDTO.js';
+export * from './dto/work-item-v2/WorkItemIdDTO.js';
+export * from './dto/work-item-v2/WorkItemProgressDTO.js';
+export * from './dto/work-item-v2/WorkItemSprintOverviewDTO.js';
+export * from './dto/work-item-v2/WorkItemSprintOverviewMoveRequestDTO.js';
+export * from './dto/work-item-v2/WorkItemStatusDTO.js';
+export * from './dto/work-item-v2/WorkItemsUpdateRequestDTO.js';
+export * from './dto/work-item-v2/WorkItemHierarchyMoveRequestDTO.js';
+export * from './dto/work-item-v2/WorkItemHierarchyCreateRequestDTO.js';
+export * from './dto/work-item-v2/WorkItemMoveOrderDTO.js';
+export * from './dto/work-item-v2/WorkItemTimeFrameDTO.js';
+export * from './dto/work-item-v2/WorkItemTypeDTO.js';
+
 export * from './dto/sprint/SprintDTO.js';
 export * from './dto/sprint/SprintsUpdateRequestDTO.js';
 

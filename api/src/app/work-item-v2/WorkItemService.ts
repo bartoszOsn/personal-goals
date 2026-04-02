@@ -31,7 +31,7 @@ export class WorkItemService {
 	async createInHierarchy(
 		context: ContextYear,
 		type: WorkItemType,
-		parent?: WorkItem
+		parent?: WorkItemId
 	): Promise<WorkHierarchyForContextAggregate> {
 		const user = await this.userStorage.getUser();
 		const aggregate = await this.workItemRepository.getHierarchyForContext(

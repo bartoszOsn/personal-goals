@@ -22,8 +22,9 @@ export class WorkHierarchyForContextAggregate {
 		}
 	}
 
-	create(type: WorkItemType, parent?: WorkItem): void {
+	create(type: WorkItemType, parentId?: WorkItemId): void {
 		const item = this.instantiateDefaultWorkItem(type);
+		const parent = parentId ? this.findById(parentId) : undefined;
 
 		if (parent) {
 			item.parent = parent;
@@ -39,7 +40,7 @@ export class WorkHierarchyForContextAggregate {
 	}
 
 	update(request: WorkItemsUpdateRequest): void {
-		for (let update of request.updates) {
+		for (const update of request.updates) {
 			const workItem = this.findById(update.id);
 
 			if (update.title !== undefined) {

@@ -6,6 +6,7 @@ import { SprintPresentationModule } from './sprint/SprintPresentationModule';
 import { DocumentPresentationModule } from './document/DocumentPresentationModule';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalExceptionFilter } from './GlobalExceptionFilter';
+import { WorkItemPresentationModuleV2 } from './work-item-v2/WorkItemPresentationModuleV2';
 
 @Module({
 	imports: [
@@ -17,6 +18,7 @@ import { GlobalExceptionFilter } from './GlobalExceptionFilter';
 		}),
 		AuthPresentationModule,
 		WorkItemPresentationModule,
+		WorkItemPresentationModuleV2,
 		SprintPresentationModule,
 		DocumentPresentationModule
 	],
