@@ -4,7 +4,6 @@ import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkHierarchyForContextAggregate } from '../../domain/work-item-v2/aggregate/WorkHierarchyForContextAggregate';
 import { UserStorage } from '../auth/UserStorage';
 import { WorkItemType } from '../../domain/work-item-v2/model/WorkItemType';
-import { WorkItem } from '../../domain/work-item-v2/model/WorkItem';
 import { WorkItemsUpdateRequest } from '../../domain/work-item-v2/model/WorkItemsUpdateRequest';
 import { WorkItemHierarchyMoveRequest } from '../../domain/work-item-v2/model/WorkItemHierarchyMoveRequest';
 import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';

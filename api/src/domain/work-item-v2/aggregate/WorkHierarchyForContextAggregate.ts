@@ -65,9 +65,10 @@ export class WorkHierarchyForContextAggregate {
 		const item = this.findById(request.id);
 		if (request.parentId === null) {
 			this.fillOrders(this.roots);
-			const allRanks = this.roots.map((root) => root.hierarchyOrder);
-			const newRank = this.getNewRank(request.order, allRanks);
-			item.hierarchyOrder = newRank;
+			const allRanks = this.roots
+				.map((root) => root.hierarchyOrder)
+				.filter((rank) => rank !== null);
+			item.hierarchyOrder = this.getNewRank(request.order, allRanks);
 			item.parent = null;
 			this.roots.sort((a, b) =>
 				LexicalRank.compare(a.hierarchyOrder, b.hierarchyOrder)
@@ -75,11 +76,10 @@ export class WorkHierarchyForContextAggregate {
 		} else {
 			const parent = this.findById(request.parentId);
 			this.fillOrders(parent.children);
-			const allRanks = parent.children.map(
-				(child) => child.hierarchyOrder
-			);
-			const newRank = this.getNewRank(request.order, allRanks);
-			item.hierarchyOrder = newRank;
+			const allRanks = parent.children
+				.map((child) => child.hierarchyOrder)
+				.filter((rank) => rank !== null);
+			item.hierarchyOrder = this.getNewRank(request.order, allRanks);
 			item.parent = parent;
 			parent.children.sort((a, b) =>
 				LexicalRank.compare(a.hierarchyOrder, b.hierarchyOrder)
@@ -88,11 +88,11 @@ export class WorkHierarchyForContextAggregate {
 	}
 
 	delete(itemIds: WorkItemId[]) {
-		let toDelete = [...itemIds];
+		const toDelete = [...itemIds];
 		const queue = [...this.roots];
 
 		while (queue.length > 0) {
-			const item = queue.shift();
+			const item = queue.shift()!;
 			if (toDelete.some((id) => id.equals(item.id))) {
 				if (item.parent) {
 					item.parent = null;
@@ -127,7 +127,7 @@ export class WorkHierarchyForContextAggregate {
 	private findById(id: WorkItemId): WorkItem {
 		const queue = [...this.roots];
 		while (queue.length > 0) {
-			const item = queue.shift();
+			const item = queue.shift()!;
 			if (item.id.equals(id)) {
 				return item;
 			}
@@ -135,20 +135,27 @@ export class WorkHierarchyForContextAggregate {
 			queue.push(...item.children);
 		}
 
-		throw new WorkItemNotFoundError(`Can't find work item with id ${id}`);
+		throw new WorkItemNotFoundError(
+			`Can't find work item with id ${id.id}`
+		);
 	}
 
-	private getNewRank(order: MoveRequestOrder, allRanks: LexicalRank[]) {
+	private getNewRank(
+		order: MoveRequestOrder,
+		allRanks: LexicalRank[]
+	): LexicalRank {
 		if (order.isFirst()) {
 			return LexicalRank.beforeAll(allRanks);
 		} else if (order.isLast()) {
 			return LexicalRank.afterAll(allRanks);
 		} else if (order.isBetween()) {
 			return LexicalRank.between(
-				this.findById(order.after).hierarchyOrder,
-				this.findById(order.before).hierarchyOrder
+				this.findById(order.after).hierarchyOrder!,
+				this.findById(order.before).hierarchyOrder!
 			);
 		}
+
+		return LexicalRank.beforeAll(allRanks);
 	}
 
 	private fillOrders(workItems: WorkItem[]) {
@@ -157,7 +164,7 @@ export class WorkHierarchyForContextAggregate {
 		);
 
 		for (let i = 0; i < workItems.length; i++) {
-			const workItem = workItems[i];
+			const workItem = workItems[i]!;
 			if (workItem.hierarchyOrder) {
 				continue;
 			}
@@ -165,9 +172,9 @@ export class WorkHierarchyForContextAggregate {
 			if (i === 0) {
 				workItem.hierarchyOrder = LexicalRank.single();
 			} else {
-				const prevWorkItem = workItems[i - 1];
+				const prevWorkItem = workItems[i - 1]!;
 				workItem.hierarchyOrder = LexicalRank.afterAll([
-					prevWorkItem.hierarchyOrder
+					prevWorkItem.hierarchyOrder!
 				]);
 			}
 		}

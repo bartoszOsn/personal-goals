@@ -27,16 +27,16 @@ export class TaskSprintOverviewAggregate {
 		this.fillOrders();
 		if (request.order.isFirst()) {
 			task.sprintOverviewOrder = LexicalRank.beforeAll(
-				this.tasks.map((task) => task.sprintOverviewOrder)
+				this.tasks.map((task) => task.sprintOverviewOrder!)
 			);
 		} else if (request.order.isLast()) {
 			task.sprintOverviewOrder = LexicalRank.afterAll(
-				this.tasks.map((task) => task.sprintOverviewOrder)
+				this.tasks.map((task) => task.sprintOverviewOrder!)
 			);
 		} else if (request.order.isBetween()) {
 			task.sprintOverviewOrder = LexicalRank.between(
-				this.findById(request.order.after).sprintOverviewOrder,
-				this.findById(request.order.before).sprintOverviewOrder
+				this.findById(request.order.after).sprintOverviewOrder!,
+				this.findById(request.order.before).sprintOverviewOrder!
 			);
 		}
 
@@ -61,7 +61,7 @@ export class TaskSprintOverviewAggregate {
 		);
 
 		for (let i = 0; i < this.tasks.length; i++) {
-			const task = this.tasks[i];
+			const task = this.tasks[i]!;
 			if (task.sprintOverviewOrder) {
 				continue;
 			}
@@ -69,9 +69,9 @@ export class TaskSprintOverviewAggregate {
 			if (i === 0) {
 				task.sprintOverviewOrder = LexicalRank.single();
 			} else {
-				const prevTask = this.tasks[i - 1];
+				const prevTask = this.tasks[i - 1]!;
 				task.sprintOverviewOrder = LexicalRank.afterAll([
-					prevTask.sprintOverviewOrder
+					prevTask.sprintOverviewOrder!
 				]);
 			}
 		}
