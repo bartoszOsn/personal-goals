@@ -1,6 +1,6 @@
-import { createWorkItem, deleteWorkItems, getWorkItemById, getWorkItemsByContext, updateWorkItem } from '@/api/work-item/work-item-request';
-import { dtoToWorkItem, dtoToWorkItems, workItemCreationRequestToDTO, workItemUpdateRequestToDTO } from '@/api/work-item/work-item-converters';
-import { WorkItemCreationRequest, WorkItemId, WorkItemUpdateRequest } from '@/models/WorkItem';
+import { createWorkItem, deleteWorkItems, getWorkItemById, getWorkItemsByContext, updateWorkItem } from '@/api/work-item-old/work-item-request';
+import { dtoToWorkItem, dtoToWorkItems, workItemCreationRequestToDTO, workItemUpdateRequestToDTO } from '@/api/work-item-old/work-item-converters';
+import { WorkItemCreationRequest, WorkItemId, WorkItemUpdateRequest } from '@/models/WorkItemOld';
 import { createQuery } from '@/base/query-x/api/createQuery';
 import { createMutation } from '@/base/query-x/api/createMutation';
 

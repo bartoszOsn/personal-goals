@@ -1,16 +1,16 @@
 import { GanttItem } from '@/base/gantt';
-import { WorkItem, WorkItemId, WorkItemType } from '@/models/WorkItem.ts';
+import { WorkItemOld, WorkItemId, WorkItemType } from '@/models/WorkItemOld.ts';
 import { ReactNode } from 'react';
 import { Menu } from '@mantine/core';
 import { IconFile, IconPlus, IconTrash } from '@tabler/icons-react';
-import { useCreateWorkItemMutation, useDeleteWorkItemsMutation } from '@/api/work-item/work-item-hooks';
+import { useCreateWorkItemMutation, useDeleteWorkItemsMutation } from '@/api/work-item-old/work-item-hooks';
 import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
 
-export function renderRoadmapGanttContextMenu(clickedOn: GanttItem<WorkItem>, selected: GanttItem<WorkItem>[], context: number) {
+export function renderRoadmapGanttContextMenu(clickedOn: GanttItem<WorkItemOld>, selected: GanttItem<WorkItemOld>[], context: number) {
 	return <RoadmapGanttContextMenu clickedOn={clickedOn} selected={selected} context={context} />;
 }
 
-function RoadmapGanttContextMenu({ clickedOn, selected, context }: { clickedOn: GanttItem<WorkItem>, selected: GanttItem<WorkItem>[], context: number }) {
+function RoadmapGanttContextMenu({ clickedOn, selected, context }: { clickedOn: GanttItem<WorkItemOld>, selected: GanttItem<WorkItemOld>[], context: number }) {
 
 	const createWorkItemMutation = useCreateWorkItemMutation();
 	const deleteWorkItemsMutation = useDeleteWorkItemsMutation();

@@ -1,4 +1,4 @@
-import { WorkItem, WorkItemTimeFrame, WorkItemTimeFrameType, WorkItemUpdateRequest } from '@/models/WorkItem.ts';
+import { WorkItemOld, WorkItemTimeFrame, WorkItemTimeFrameType, WorkItemUpdateRequest } from '@/models/WorkItemOld.ts';
 import { Accordion, Button, Checkbox, Group, Loader, Radio, Select, Stack, Text, UnstyledButton } from '@mantine/core';
 import { ComponentProps, useMemo, useState } from 'react';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
@@ -8,10 +8,10 @@ import { Temporal } from 'temporal-polyfill';
 import { DatePickerInput } from '@mantine/dates';
 import { Sprint } from '@/models/Sprint';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
-import { useUpdateWorkItemMutation } from '@/api/work-item/work-item-hooks';
+import { useUpdateWorkItemMutation } from '@/api/work-item-old/work-item-hooks';
 
 export interface WorkItemTimeFrameInplaceProps {
-	workItem: WorkItem;
+	workItem: WorkItemOld;
 	displayButtonProps?: ComponentProps<typeof UnstyledButton>;
 }
 

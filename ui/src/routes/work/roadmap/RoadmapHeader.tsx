@@ -1,7 +1,7 @@
-import { WorkItemId, WorkItemType } from '@/models/WorkItem.ts';
+import { WorkItemId, WorkItemType } from '@/models/WorkItemOld.ts';
 import { Button, Group } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
-import { useCreateWorkItemMutation, useDeleteWorkItemsMutation } from '@/api/work-item/work-item-hooks';
+import { useCreateWorkItemMutation, useDeleteWorkItemsMutation } from '@/api/work-item-old/work-item-hooks';
 
 export function RoadmapHeader({ context, selectedWorkItemIds }: { context: number, selectedWorkItemIds: WorkItemId[] }) {
 	const createWorkItemMutation = useCreateWorkItemMutation();

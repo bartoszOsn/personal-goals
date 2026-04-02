@@ -7,11 +7,11 @@ import { InplaceEditorEdit } from '@/base/inplace-editor/api/InplaceEditorEdit.t
 import { InplaceEditor } from '@/base/inplace-editor/api/InplaceEditor.tsx';
 import { ComboboxItem, ComboboxLikeRenderOptionInput, Group, MantineColor, Text } from '@mantine/core';
 import { IconCheck, IconProgress, IconProgressCheck, IconProgressHelp, IconProgressX, IconProps } from '@tabler/icons-react';
-import { useUpdateWorkItemMutation } from '@/api/work-item/work-item-hooks.ts';
-import { WorkItem, WorkItemStatus } from '@/models/WorkItem.ts';
+import { useUpdateWorkItemMutation } from '@/api/work-item-old/work-item-hooks.ts';
+import { WorkItemOld, WorkItemStatus } from '@/models/WorkItemOld.ts';
 
 export interface WorkItemStatusInplaceProps {
-	workItem: WorkItem;
+	workItem: WorkItemOld;
 	badgeProps?: ComponentProps<typeof InplaceBadgeDisplay>
 	selectProps?: ComponentProps<typeof InplaceSelectEdit>;
 }

@@ -6,13 +6,13 @@ import { InplaceTextInputEdit } from '@/base/inplace-editor/api/primitive/edit/I
 import { ComponentProps } from 'react';
 import { ActionIcon, Group, MantineColor, Tooltip } from '@mantine/core';
 import { IconFileInvoice } from '@tabler/icons-react';
-import { WorkItem, WorkItemType } from '@/models/WorkItem.ts';
-import { useUpdateWorkItemMutation } from '@/api/work-item/work-item-hooks.ts';
+import { WorkItemOld, WorkItemType } from '@/models/WorkItemOld.ts';
+import { useUpdateWorkItemMutation } from '@/api/work-item-old/work-item-hooks.ts';
 import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
 import { Link } from '@tanstack/react-router';
 
 export interface WorkItemTitleInplaceProps {
-	workItem: WorkItem;
+	workItem: WorkItemOld;
 	textProps?: ComponentProps<typeof InplaceTextDisplay>
 	inputProps?: ComponentProps<typeof InplaceTextInputEdit>;
 	showDialogButton?: boolean;

@@ -1,5 +1,5 @@
-import { WorkItemId } from '@/models/WorkItem.ts';
-import { useWorkItemQuery } from '@/api/work-item/work-item-hooks.ts';
+import { WorkItemId } from '@/models/WorkItemOld.ts';
+import { useWorkItemQuery } from '@/api/work-item-old/work-item-hooks.ts';
 import { WorkItemModalSkeleton } from '@/core/WorkItemModalSkeleton.tsx';
 import { WorkItemDetails } from '@/core/work-item/details/WorkItemDetails.tsx';
 import { Modal } from '@mantine/core';

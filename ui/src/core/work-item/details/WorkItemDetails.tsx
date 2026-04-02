@@ -1,12 +1,12 @@
-import { WorkItem } from '@/models/WorkItem';
+import { WorkItemOld } from '@/models/WorkItemOld';
 import { Group, Stack, Text } from '@mantine/core';
 import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace.tsx';
 import { WorkItemStatusInplace } from '@/core/work-item/inplace/WorkItemStatusInplace.tsx';
 import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace.tsx';
 import { RichTextEditor } from '@/base/rich-text/RichTextEditor.tsx';
-import { useUpdateWorkItemMutation } from '@/api/work-item/work-item-hooks.ts';
+import { useUpdateWorkItemMutation } from '@/api/work-item-old/work-item-hooks.ts';
 
-export function WorkItemDetails({ workItem }: { workItem: WorkItem}) {
+export function WorkItemDetails({ workItem }: { workItem: WorkItemOld}) {
 	const updateWorkItemMutation = useUpdateWorkItemMutation();
 	const onChangeWorkItemDescription = (newDescription: string) => {
 		updateWorkItemMutation.mutate({

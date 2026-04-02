@@ -2,7 +2,7 @@ import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '@/models/Sprint';
 import { Quarter } from '@/models/Quarter';
 
-export interface WorkItem {
+export interface WorkItemOld {
 	readonly id: WorkItemId;
 	readonly type: WorkItemType;
 	readonly contextYear: number;
@@ -11,7 +11,7 @@ export interface WorkItem {
 	readonly timeFrame: WorkItemTimeFrame | null;
 	readonly status: WorkItemStatus;
 	readonly progress: WorkItemProgress;
-	readonly children: WorkItem[];
+	readonly children: WorkItemOld[];
 }
 
 export interface WorkItemCreationRequest {

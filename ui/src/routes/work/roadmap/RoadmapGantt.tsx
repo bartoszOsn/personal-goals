@@ -1,9 +1,9 @@
-import { useUpdateWorkItemMutation, useWorkItemsByContextQuery } from '@/api/work-item/work-item-hooks';
+import { useUpdateWorkItemMutation, useWorkItemsByContextQuery } from '@/api/work-item-old/work-item-hooks';
 import { RoadmapGanttSkeleton } from '@/routes/work/roadmap/RoadmapGanttSkeleton';
 import { RoadmapEmptySplashScreen } from '@/routes/work/roadmap/RoadmapEmptySplashScreen';
 import { Gantt, GanttItem } from '@/base/gantt';
 import { ColumnDescriptor } from '@/base/data-table';
-import { WorkItem, WorkItemId, WorkItemTimeFrameType } from '@/models/WorkItem';
+import { WorkItemOld, WorkItemId, WorkItemTimeFrameType } from '@/models/WorkItemOld';
 import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
 import { renderRoadmapGanttContextMenu } from '@/routes/work/roadmap/renderRoadmapGanttContextMenu';
 import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
@@ -53,7 +53,7 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 		return <RoadmapEmptySplashScreen context={context} />
 	}
 
-	const columns: ColumnDescriptor<GanttItem<WorkItem>>[] = [
+	const columns: ColumnDescriptor<GanttItem<WorkItemOld>>[] = [
 		{
 			columnId: 'title',
 			columnName: 'Title',

@@ -1,6 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router';
-import { WorkItemId } from '@/models/WorkItem';
-import { useWorkItemQuery } from '@/api/work-item/work-item-hooks';
+import { WorkItemId } from '@/models/WorkItemOld';
+import { useWorkItemQuery } from '@/api/work-item-old/work-item-hooks';
 import { WorkItemDetailsSkeleton } from '@/core/work-item/details/WorkItemDetailsSkeleton';
 import { WorkItemDetails } from '@/core/work-item/details/WorkItemDetails';
 import { Stack } from '@mantine/core';

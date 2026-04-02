@@ -1,8 +1,8 @@
 import { Button, Group, Stack, Text } from '@mantine/core';
 import { IconFilePlus, IconFileX } from '@tabler/icons-react';
 import { ReactNode } from 'react';
-import { useCreateWorkItemMutation } from '@/api/work-item/work-item-hooks';
-import { WorkItemType } from '@/models/WorkItem';
+import { useCreateWorkItemMutation } from '@/api/work-item-old/work-item-hooks';
+import { WorkItemType } from '@/models/WorkItemOld';
 
 export function RoadmapEmptySplashScreen({ context }: { context: number }) {
 	const workItemMutation = useCreateWorkItemMutation();

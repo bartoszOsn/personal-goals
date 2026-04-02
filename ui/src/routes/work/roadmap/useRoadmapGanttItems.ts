@@ -1,13 +1,13 @@
-import { WorkItem, WorkItemStatus, WorkItemType } from '@/models/WorkItem.ts';
+import { WorkItemOld, WorkItemStatus, WorkItemType } from '@/models/WorkItemOld.ts';
 import { GanttItem } from '@/base/gantt';
 import { MantineColor } from '@mantine/core';
 import { useMemo } from 'react';
 
-export function useRoadmapGanttItems(items: WorkItem[]): GanttItem<WorkItem>[] {
+export function useRoadmapGanttItems(items: WorkItemOld[]): GanttItem<WorkItemOld>[] {
 	return useMemo(() => items.map(workItemToGanttItem), [items]);
 }
 
-function workItemToGanttItem(wi: WorkItem): GanttItem<WorkItem> {
+function workItemToGanttItem(wi: WorkItemOld): GanttItem<WorkItemOld> {
 	return {
 		id: wi.id,
 		data: wi,

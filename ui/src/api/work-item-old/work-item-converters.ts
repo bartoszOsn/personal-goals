@@ -11,7 +11,7 @@ import {
 	QuarterWorkItemTimeFrame,
 	SprintWorkItemTimeFrame,
 	WholeYearWorkItemTimeFrame,
-	WorkItem,
+	WorkItemOld,
 	WorkItemCreationRequest,
 	WorkItemId,
 	WorkItemProgress,
@@ -20,16 +20,16 @@ import {
 	WorkItemTimeFrameType,
 	WorkItemType,
 	WorkItemUpdateRequest
-} from '@/models/WorkItem';
+} from '@/models/WorkItemOld';
 import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '@/models/Sprint';
 import { numberToQuarter, quarterToNumber } from '@/models/Quarter';
 
-export function dtoToWorkItems(dtos: WorkItemDTOOld[]): WorkItem[] {
+export function dtoToWorkItems(dtos: WorkItemDTOOld[]): WorkItemOld[] {
 	return dtos.map(dtoToWorkItem);
 }
 
-export function dtoToWorkItem(dto: WorkItemDTOOld): WorkItem {
+export function dtoToWorkItem(dto: WorkItemDTOOld): WorkItemOld {
 	return {
 		id: dto.id as WorkItemId,
 		type: dtoToWorkItemType(dto.type),

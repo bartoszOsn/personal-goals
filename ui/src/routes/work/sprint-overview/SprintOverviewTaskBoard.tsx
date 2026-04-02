@@ -2,8 +2,8 @@ import { Board } from '@/base/board/api/Board.tsx';
 import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { SprintId } from '@/models/Sprint';
-import { useCreateWorkItemMutation, useUpdateWorkItemMutation, useWorkItemsByContextQuery } from '@/api/work-item/work-item-hooks';
-import { WorkItem, WorkItemStatus, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
+import { useCreateWorkItemMutation, useUpdateWorkItemMutation, useWorkItemsByContextQuery } from '@/api/work-item-old/work-item-hooks';
+import { WorkItemOld, WorkItemStatus, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItemOld';
 import { isPlainDate } from '@personal-okr/shared';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
@@ -59,7 +59,7 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 		.filter(workItem => workItem.type === WorkItemType.TASK)
 		.filter(task => task.timeFrame && isPlainDate(task.timeFrame.startDate).afterOrEqual(sprint.startDate) && isPlainDate(task.timeFrame.endDate).beforeOrEqual(sprint.endDate));
 
-	const renderCard = (task: WorkItem) => {
+	const renderCard = (task: WorkItemOld) => {
 		return <Stack gap={0}>
 			<Space h='md' />
 			<WorkItemTitleInplace workItem={task} textProps={{ fw: 'bold' }} />
@@ -72,7 +72,7 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 		</Stack>;
 	};
 
-	const onColumnChange = async (item: WorkItem, newStatus: WorkItemStatus) => {
+	const onColumnChange = async (item: WorkItemOld, newStatus: WorkItemStatus) => {
 		await updateWorkItem.mutateAsync({
 			id: item.id,
 			request: { status: newStatus }
@@ -112,8 +112,8 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 	);
 }
 
-function flatWorkItems(workItems: WorkItem[]): WorkItem[] {
-	const result: WorkItem[] = [];
+function flatWorkItems(workItems: WorkItemOld[]): WorkItemOld[] {
+	const result: WorkItemOld[] = [];
 	for (const workItem of workItems) {
 		result.push(workItem);
 		result.push(...flatWorkItems(workItem.children));

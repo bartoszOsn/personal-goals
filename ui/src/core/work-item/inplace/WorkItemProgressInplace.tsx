@@ -3,13 +3,13 @@ import { InplaceEditorDisplay } from '@/base/inplace-editor/api/InplaceEditorDis
 import { InplaceEditorEdit } from '@/base/inplace-editor/api/InplaceEditorEdit.tsx';
 import { ComponentProps, ReactNode } from 'react';
 import { Group, Progress, Text } from '@mantine/core';
-import { WorkItem } from '@/models/WorkItem.ts';
-import { useUpdateWorkItemMutation } from '@/api/work-item/work-item-hooks.ts';
+import { WorkItemOld } from '@/models/WorkItemOld.ts';
+import { useUpdateWorkItemMutation } from '@/api/work-item-old/work-item-hooks.ts';
 import { InplaceCustomDisplayWrapper } from '@/base/inplace-editor/api/primitive/display/InplaceCustomDisplayWrapper.tsx';
 import { InplaceNumberInputEdit } from '@/base/inplace-editor/api/primitive/edit/InplaceNumberInputEdit.tsx';
 
 export interface WorkItemProgressInplaceProps {
-	workItem: WorkItem;
+	workItem: WorkItemOld;
 	inputProps?: ComponentProps<typeof InplaceNumberInputEdit>;
 }
 

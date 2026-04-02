@@ -1,7 +1,7 @@
 import { Stack } from '@mantine/core';
 import { RoadmapGantt } from '@/routes/work/roadmap/RoadmapGantt';
 import { useState } from 'react';
-import { WorkItemId } from '@/models/WorkItem';
+import { WorkItemId } from '@/models/WorkItemOld';
 import { RoadmapHeader } from '@/routes/work/roadmap/RoadmapHeader';
 
 export function Roadmap({ context }: { context: number }) {
