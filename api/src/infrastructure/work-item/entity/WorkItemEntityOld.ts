@@ -13,7 +13,7 @@ import { WorkItemProgressEntity } from './WorkItemProgressEntity';
 
 @Entity()
 @Tree('closure-table')
-export class WorkItemEntity {
+export class WorkItemEntityOld {
 	@PrimaryColumn({ type: 'uuid' })
 	id!: string;
 
@@ -42,8 +42,8 @@ export class WorkItemEntity {
 	user!: UserEntity;
 
 	@TreeChildren()
-	children!: WorkItemEntity[];
+	children!: WorkItemEntityOld[];
 
 	@TreeParent({ onDelete: 'CASCADE' })
-	parent?: WorkItemEntity;
+	parent?: WorkItemEntityOld;
 }

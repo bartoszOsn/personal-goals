@@ -5,15 +5,15 @@ import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItem } from '../../domain/work-item/model/WorkItem';
 import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
 import { InjectRepository } from '@nestjs/typeorm';
-import { WorkItemEntity } from './entity/WorkItemEntity';
+import { WorkItemEntityOld } from './entity/WorkItemEntityOld';
 import { In, TreeRepository } from 'typeorm';
 import { WorkItemEntityConverter } from './WorkItemEntityConverter';
 
 @Injectable()
 export class WorkItemRepositoryImpl extends WorkItemRepository {
 	constructor(
-		@InjectRepository(WorkItemEntity)
-		private readonly workItemRepository: TreeRepository<WorkItemEntity>,
+		@InjectRepository(WorkItemEntityOld)
+		private readonly workItemRepository: TreeRepository<WorkItemEntityOld>,
 		private readonly workItemEntityConverter: WorkItemEntityConverter
 	) {
 		super();

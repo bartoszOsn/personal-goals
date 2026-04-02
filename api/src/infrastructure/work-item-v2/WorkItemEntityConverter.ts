@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { WorkItem } from '../../domain/work-item/model/WorkItem';
-import { WorkItemEntityOld } from './entity/WorkItemEntityOld';
+import { WorkItem } from '../../domain/work-item-v2/model/WorkItem';
+import { WorkItemEntity } from './entity/WorkItemEntity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
 import { UnreachableError } from '../../util/UnreachableError';
 import { User } from '../../domain/auth/model/User';
 import { WorkItemStatus } from '../../domain/work-item/model/WorkItemStatus';
@@ -13,19 +12,10 @@ import {
 	SprintWorkItemTimeFrame,
 	WholeYearWorkItemTimeFrame,
 	WorkItemTimeFrame
-} from '../../domain/work-item/model/WorkItemTimeFrame';
+} from '../../domain/work-item-v2/model/WorkItemTimeFrame';
 import { WorkItemTimeFrameEntity } from './entity/WorkItemTimeFrameEntity';
-import {
-	ChildrenProgressBasedWorkItemProgress,
-	ChildrenStatusBasedWorkItemProgress,
-	ManualWorkItemProgress,
-	Percentage,
-	WorkItemProgress
-} from '../../domain/work-item/model/WorkItemProgress';
-import { WorkItemProgressEntity } from './entity/WorkItemProgressEntity';
 import { Quarter, quarterToNumber } from '../../domain/common/model/Quarter';
 import { DeepPartial } from 'typeorm/common/DeepPartial';
-import { WorkItemFactory } from '../../domain/work-item/factory/WorkItemFactory';
 import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
 import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
@@ -33,16 +23,21 @@ import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescri
 import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '../../domain/sprint/model/SprintId';
 import { SprintService } from '../../app/sprint/SprintService';
+import { WorkItemType } from '../../domain/work-item-v2/model/WorkItemType';
+import { Task } from '../../domain/work-item-v2/model/Task';
+import { LexicalRank } from '../../domain/common/model/LexicalRank';
+import { Goal } from '../../domain/work-item-v2/model/Goal';
+import { Group } from '../../domain/work-item-v2/model/Group';
 
 @Injectable()
 export class WorkItemEntityConverter {
 	constructor(
-		@InjectRepository(WorkItemEntityOld)
-		private readonly workItemRepository: Repository<WorkItemEntityOld>,
+		@InjectRepository(WorkItemEntity)
+		private readonly workItemRepository: Repository<WorkItemEntity>,
 		private readonly sprintService: SprintService
 	) {}
 
-	flatWorkItemToEntity(workItem: WorkItem, user: User): WorkItemEntityOld {
+	flatWorkItemToEntity(workItem: WorkItem, user: User): WorkItemEntity {
 		return this.workItemRepository.create({
 			id: workItem.id.id,
 			type: this.workItemTypeToEntity(workItem.type),
@@ -51,22 +46,21 @@ export class WorkItemEntityConverter {
 			description: workItem.description.description,
 			status: this.workItemStatusToEntity(workItem.status),
 			timeFrame: this.workItemTimeFrameToEntity(workItem.timeFrame),
-			progress: this.workItemProgressToEntity(workItem.progress),
 			user: { id: user.id.id },
-			parent: workItem.parent ? { id: workItem.parent.id.id } : undefined
+			parent: workItem.parent ? { id: workItem.parent.id.id } : undefined,
+			hierarchyOrder: workItem.hierarchyOrder?.asString(),
+			sprintOverviewOrder: workItem.sprintOverviewOrder?.asString()
 		});
 	}
 
-	private workItemTypeToEntity(
-		type: WorkItemType
-	): WorkItemEntityOld['type'] {
+	private workItemTypeToEntity(type: WorkItemType): WorkItemEntity['type'] {
 		switch (type) {
 			case WorkItemType.TASK:
 				return 'task';
-			case WorkItemType.KEY_RESULT:
-				return 'keyResult';
-			case WorkItemType.OBJECTIVE:
-				return 'objective';
+			case WorkItemType.GOAL:
+				return 'goal';
+			case WorkItemType.GROUP:
+				return 'group';
 			default:
 				throw new UnreachableError(type);
 		}
@@ -74,7 +68,7 @@ export class WorkItemEntityConverter {
 
 	private workItemStatusToEntity(
 		status: WorkItemStatus
-	): WorkItemEntityOld['status'] {
+	): WorkItemEntity['status'] {
 		switch (status) {
 			case WorkItemStatus.TO_DO:
 				return 'todo';
@@ -127,97 +121,81 @@ export class WorkItemEntityConverter {
 		throw new Error('Unknown time frame type');
 	}
 
-	private workItemProgressToEntity(
-		progress: WorkItemProgress
-	): WorkItemProgressEntity {
-		if (progress instanceof ManualWorkItemProgress) {
-			return {
-				type: 'manual',
-				manualProgress: progress.getManualPercentage()?.value
-			};
-		}
+	async entityToWorkItem(entity: WorkItemEntity): Promise<WorkItem> {
+		let workItem: WorkItem | null = null;
 
-		if (progress instanceof ChildrenProgressBasedWorkItemProgress) {
-			return {
-				type: 'childrenProgressBased'
-			};
-		}
-
-		if (progress instanceof ChildrenStatusBasedWorkItemProgress) {
-			return {
-				type: 'ChildrenStatusBased'
-			};
-		}
-
-		throw new Error('Unknown progress type');
-	}
-
-	async entityToWorkItem(entity: WorkItemEntityOld): Promise<WorkItem> {
-		let factory = WorkItemFactory.ofRoot(
-			this.entityToWorkItemType(entity.type),
-			new WorkItemId(entity.id),
-			new ContextYear(entity.contextYear),
-			new WorkItemTitle(entity.title),
-			new WorkItemDescription(entity.description),
-			await this.entityToWorkItemTimeFrame(
-				entity.timeFrame,
-				new ContextYear(entity.contextYear)
-			),
-			this.entityToWorkItemStatus(entity.status),
-			this.entityToWorkItemProgress(entity.progress)
-		);
-
-		factory = await this.addChildrenRecursively(factory, entity.children);
-
-		return factory.buildRoot();
-	}
-
-	private async addChildrenRecursively(
-		factory: WorkItemFactory,
-		children: WorkItemEntityOld[]
-	): Promise<WorkItemFactory> {
-		if (!children || children.length === 0) {
-			return factory;
-		}
-
-		for (const child of children) {
-			const childFactory = factory.addChild(
-				this.entityToWorkItemType(child.type),
-				new WorkItemId(child.id),
-				new ContextYear(child.contextYear),
-				new WorkItemTitle(child.title),
-				new WorkItemDescription(child.description),
-				await this.entityToWorkItemTimeFrame(
-					child.timeFrame,
-					new ContextYear(child.contextYear)
-				),
-				this.entityToWorkItemStatus(child.status),
-				this.entityToWorkItemProgress(child.progress)
-			);
-
-			await this.addChildrenRecursively(childFactory, child.children);
-		}
-
-		return factory;
-	}
-
-	private entityToWorkItemType(
-		type: WorkItemEntityOld['type']
-	): WorkItemType {
-		switch (type) {
+		switch (entity.type) {
 			case 'task':
-				return WorkItemType.TASK;
-			case 'keyResult':
-				return WorkItemType.KEY_RESULT;
-			case 'objective':
-				return WorkItemType.OBJECTIVE;
+				workItem = new Task(
+					new WorkItemId(entity.id),
+					new ContextYear(entity.contextYear),
+					new WorkItemTitle(entity.title),
+					new WorkItemDescription(entity.description),
+					this.entityToWorkItemStatus(entity.status),
+					await this.entityToWorkItemTimeFrame(
+						entity.timeFrame,
+						new ContextYear(entity.contextYear)
+					),
+					entity.hierarchyOrder
+						? LexicalRank.fromString(entity.hierarchyOrder)
+						: null,
+					entity.sprintOverviewOrder
+						? LexicalRank.fromString(entity.sprintOverviewOrder)
+						: null
+				);
+				break;
+			case 'goal':
+				workItem = new Goal(
+					new WorkItemId(entity.id),
+					new ContextYear(entity.contextYear),
+					new WorkItemTitle(entity.title),
+					new WorkItemDescription(entity.description),
+					this.entityToWorkItemStatus(entity.status),
+					await this.entityToWorkItemTimeFrame(
+						entity.timeFrame,
+						new ContextYear(entity.contextYear)
+					),
+					entity.hierarchyOrder
+						? LexicalRank.fromString(entity.hierarchyOrder)
+						: null,
+					entity.sprintOverviewOrder
+						? LexicalRank.fromString(entity.sprintOverviewOrder)
+						: null
+				);
+				break;
+			case 'group':
+				workItem = new Group(
+					new WorkItemId(entity.id),
+					new ContextYear(entity.contextYear),
+					new WorkItemTitle(entity.title),
+					new WorkItemDescription(entity.description),
+					this.entityToWorkItemStatus(entity.status),
+					await this.entityToWorkItemTimeFrame(
+						entity.timeFrame,
+						new ContextYear(entity.contextYear)
+					),
+					entity.hierarchyOrder
+						? LexicalRank.fromString(entity.hierarchyOrder)
+						: null,
+					entity.sprintOverviewOrder
+						? LexicalRank.fromString(entity.sprintOverviewOrder)
+						: null
+				);
+				break;
 			default:
-				throw new UnreachableError(type);
+				throw new UnreachableError(entity.type);
 		}
+
+		for (const childEntity of entity.children) {
+			const child = await this.entityToWorkItem(childEntity);
+			child.parent = workItem;
+		}
+
+		return workItem;
 	}
 
 	private entityToWorkItemStatus(
-		status: WorkItemEntityOld['status']
+		status: WorkItemEntity['status']
 	): WorkItemStatus {
 		switch (status) {
 			case 'todo':
@@ -282,25 +260,5 @@ export class WorkItemEntityConverter {
 			default:
 				throw new UnreachableError(quarter);
 		}
-	}
-
-	private entityToWorkItemProgress(
-		progressEntity: WorkItemProgressEntity
-	): WorkItemProgress {
-		if (progressEntity.type === 'manual') {
-			return new ManualWorkItemProgress(
-				Percentage.from(progressEntity.manualProgress ?? 0)
-			);
-		}
-
-		if (progressEntity.type === 'childrenProgressBased') {
-			return new ChildrenProgressBasedWorkItemProgress();
-		}
-
-		if (progressEntity.type === 'ChildrenStatusBased') {
-			return new ChildrenStatusBasedWorkItemProgress();
-		}
-
-		throw new Error('Unknown progress type');
 	}
 }

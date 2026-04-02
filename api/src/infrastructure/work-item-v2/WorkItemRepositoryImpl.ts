@@ -7,37 +7,142 @@ import { TaskSprintOverviewAggregate } from '../../domain/work-item-v2/aggregate
 import { WorkHierarchyForContextAggregate } from '../../domain/work-item-v2/aggregate/WorkHierarchyForContextAggregate';
 import { WorkItemDetailsAggregate } from '../../domain/work-item-v2/aggregate/WorkItemDetailsAggregate';
 import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
+import { InjectRepository } from '@nestjs/typeorm';
+import { WorkItemEntity } from './entity/WorkItemEntity';
+import { In, TreeRepository } from 'typeorm';
+import { WorkItemEntityConverter } from './WorkItemEntityConverter';
+import { WorkItem } from '../../domain/work-item-v2/model/WorkItem';
+import { WorkItemType } from '../../domain/work-item-v2/model/WorkItemType';
+import { Task } from '../../domain/work-item-v2/model/Task';
+import { WorkItemNotFoundError } from '../../domain/work-item-v2/error/WorkItemNotFoundError';
 
 @Injectable()
 export class WorkItemRepositoryImpl extends WorkItemRepository {
-	getHierarchyForContext(
+	constructor(
+		@InjectRepository(WorkItemEntity)
+		private readonly workItemRepository: TreeRepository<WorkItemEntity>,
+		private readonly workItemEntityConverter: WorkItemEntityConverter
+	) {
+		super();
+	}
+
+	async getHierarchyForContext(
 		context: ContextYear,
 		user: User
 	): Promise<WorkHierarchyForContextAggregate> {
-		throw new Error('Method not implemented.');
+		const roots = await this.workItemRepository
+			.createQueryBuilder('workItem')
+			.leftJoinAndSelect('workItem.parent', 'parent')
+			.leftJoinAndSelect('workItem.timeFrame.sprint', 'sprint')
+			.where('workItem.contextYear = :year', { year: context.year })
+			.andWhere('workItem.user.id = :userId', { userId: user.id.id })
+			.andWhere('workItem.parent IS NULL')
+			.getMany();
+
+		const rootsWithChildren = await Promise.all(
+			roots.map(async (root) => {
+				return await this.workItemRepository.findDescendantsTree(root, {
+					relations: ['timeFrame.sprint']
+				});
+			})
+		);
+
+		return new WorkHierarchyForContextAggregate(
+			context,
+			await Promise.all(
+				rootsWithChildren.map((entity) =>
+					this.workItemEntityConverter.entityToWorkItem(entity)
+				)
+			)
+		);
 	}
-	saveHierarchy(
+
+	async saveHierarchy(
 		hierarchy: WorkHierarchyForContextAggregate,
 		user: User
 	): Promise<void> {
-		throw new Error('Method not implemented.');
+		const oldHierarchy = await this.getHierarchyForContext(
+			hierarchy.context,
+			user
+		);
+
+		const flatWorkItems = this.flatWorkItems(hierarchy.roots);
+		const oldFlatWorkItems = this.flatWorkItems(oldHierarchy.roots);
+
+		const entitiesToSave = flatWorkItems.map((entity) =>
+			this.workItemEntityConverter.flatWorkItemToEntity(entity, user)
+		);
+
+		const idsToDelete = oldFlatWorkItems
+			.filter(
+				(old) => !flatWorkItems.some((newWI) => old.id.equals(newWI.id))
+			)
+			.map((old) => old.id.id);
+
+		await this.workItemRepository.delete({
+			id: In(idsToDelete)
+		});
+		await this.workItemRepository.save(entitiesToSave);
 	}
-	getSprintOverviewForSprint(
+
+	async getSprintOverviewForSprint(
 		sprint: Sprint,
 		user: User
 	): Promise<TaskSprintOverviewAggregate> {
-		throw new Error('Method not implemented.');
+		const hierarchy = await this.getHierarchyForContext(
+			sprint.context,
+			user
+		);
+		const workItems = this.flatWorkItems(hierarchy.roots).filter(
+			(workItem): workItem is Task =>
+				workItem.type === WorkItemType.TASK &&
+				!!workItem.timeFrame &&
+				sprint.overlapWithRange(
+					workItem.timeFrame.getStart(),
+					workItem.timeFrame.getEnd()
+				)
+		);
+
+		return new TaskSprintOverviewAggregate(sprint, workItems);
 	}
-	saveSprintOverview(
+
+	async saveSprintOverview(
 		sprintOverview: TaskSprintOverviewAggregate,
 		user: User
 	): Promise<void> {
-		throw new Error('Method not implemented.');
+		const entities = sprintOverview.tasks.map((task) =>
+			this.workItemEntityConverter.flatWorkItemToEntity(task, user)
+		);
+
+		await this.workItemRepository.save(entities);
 	}
-	getWorkItemDetails(
+
+	async getWorkItemDetails(
 		workItemId: WorkItemId,
 		user: User
 	): Promise<WorkItemDetailsAggregate> {
-		throw new Error('Method not implemented.');
+		const entity = await this.workItemRepository.findOneBy({
+			id: workItemId.id,
+			user: { id: user.id.id }
+		});
+
+		if (!entity) {
+			throw new WorkItemNotFoundError('Cannot find work item');
+		}
+
+		return new WorkItemDetailsAggregate(
+			await this.workItemEntityConverter.entityToWorkItem(entity)
+		);
+	}
+
+	private flatWorkItems(roots: WorkItem[]): WorkItem[] {
+		const queue = [...roots];
+		const result: WorkItem[] = [];
+		while (queue.length > 0) {
+			const item = queue.shift()!;
+			result.push(item);
+			queue.push(...item.children);
+		}
+		return result;
 	}
 }
