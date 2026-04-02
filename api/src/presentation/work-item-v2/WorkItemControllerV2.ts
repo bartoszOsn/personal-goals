@@ -8,7 +8,8 @@ import {
 	ParseArrayPipe,
 	ParseIntPipe,
 	Post,
-	Put
+	Put,
+	UseFilters
 } from '@nestjs/common';
 import {
 	WorkItemDTO,
@@ -26,8 +27,10 @@ import { WorkItemDTOConverter } from './WorkItemDTOConverter';
 import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
 import { SprintId } from '../../domain/sprint/model/SprintId';
 import { SprintService } from '../../app/sprint/SprintService';
+import { WorkItemDomainErrorExceptionFilter } from './WorkItemDomainErrorExceptionFilter';
 
 @Controller('v2/work-item')
+@UseFilters(WorkItemDomainErrorExceptionFilter)
 export class WorkItemControllerV2 {
 	constructor(
 		private readonly workItemService: WorkItemService,
