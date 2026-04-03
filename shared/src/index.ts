@@ -1,14 +1,6 @@
 export * from './dto/common/QuarterDTO.js';
 export * from './dto/common/BasicErrorDTO.js';
 
-export * from './dto/work-item/WorkItemDTOOld.js';
-export * from './dto/work-item/WorkItemProgressDTOOld.js';
-export * from './dto/work-item/WorkItemStatusDTOOld.js';
-export * from './dto/work-item/WorkItemTimeFrameDTOOld.js';
-export * from './dto/work-item/WorkItemTypeDTOOld.js';
-export * from './dto/work-item/WorkItemCreationRequestDTOOld.js';
-export * from './dto/work-item/WorkItemUpdateRequestDTOOld.js';
-
 export * from './dto/work-item-v2/WorkItemDTO.js';
 export * from './dto/work-item-v2/WorkItemHierarchyDTO.js';
 export * from './dto/work-item-v2/WorkItemIdDTO.js';

@@ -11,7 +11,6 @@ import {
 	WorkItemStatusDTO,
 	WorkItemsUpdateRequestDTO,
 	WorkItemTimeFrameDTO,
-	WorkItemTimeFrameDTOOld,
 	WorkItemTypeDTO
 } from '@personal-okr/shared';
 import { WorkHierarchyForContextAggregate } from '../../domain/work-item-v2/aggregate/WorkHierarchyForContextAggregate';
@@ -198,7 +197,7 @@ export class WorkItemDTOConverter {
 
 	private toWorkItemTimeFrameDTO(
 		timeFrame: WorkItemTimeFrame | null
-	): WorkItemTimeFrameDTOOld | undefined {
+	): WorkItemTimeFrameDTO | undefined {
 		if (!timeFrame) {
 			return undefined;
 		}

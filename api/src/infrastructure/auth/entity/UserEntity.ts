@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { WorkItemEntity as WorkItemEntityV2 } from '../../work-item-v2/entity/WorkItemEntity';
+import { WorkItemEntity } from '../../work-item-v2/entity/WorkItemEntity';
 import { SprintEntity } from '../../sprint/entity/SprintEntity';
 import { DocumentEntity } from '../../document/entity/DocumentEntity';
 
@@ -17,8 +17,8 @@ export class UserEntity {
 	@OneToMany(() => SprintEntity, (sprint) => sprint.user)
 	sprints!: SprintEntity[];
 
-	@OneToMany(() => WorkItemEntityV2, (workItem) => workItem.user)
-	workItemsV2!: WorkItemEntityV2[];
+	@OneToMany(() => WorkItemEntity, (workItem) => workItem.user)
+	workItems!: WorkItemEntity[];
 
 	@OneToMany(() => DocumentEntity, (document) => document.user)
 	documents!: DocumentEntity[];
