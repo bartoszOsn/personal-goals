@@ -33,7 +33,7 @@ import {
 	WorkItemUpdateRequest
 } from '../../domain/work-item-v2/model/WorkItemsUpdateRequest';
 import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
-import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
+import { WorkItemTitle } from '../../domain/work-item-v2/model/WorkItemTitle';
 import { WorkItemDescription } from '../../domain/work-item-v2/model/WorkItemDescription';
 import { ContextYear } from '../../domain/common/model/ContextYear';
 import { Temporal } from 'temporal-polyfill';

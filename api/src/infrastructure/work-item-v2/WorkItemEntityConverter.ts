@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UnreachableError } from '../../util/UnreachableError';
 import { User } from '../../domain/auth/model/User';
-import { WorkItemStatus } from '../../domain/work-item/model/WorkItemStatus';
+import { WorkItemStatus } from '../../domain/work-item-v2/model/WorkItemStatus';
 import {
 	CustomDateWorkItemTimeFrame,
 	QuarterWorkItemTimeFrame,
@@ -16,10 +16,10 @@ import {
 import { WorkItemTimeFrameEntity } from './entity/WorkItemTimeFrameEntity';
 import { Quarter, quarterToNumber } from '../../domain/common/model/Quarter';
 import { DeepPartial } from 'typeorm/common/DeepPartial';
-import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
+import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
 import { ContextYear } from '../../domain/common/model/ContextYear';
-import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
-import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescription';
+import { WorkItemTitle } from '../../domain/work-item-v2/model/WorkItemTitle';
+import { WorkItemDescription } from '../../domain/work-item-v2/model/WorkItemDescription';
 import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '../../domain/sprint/model/SprintId';
 import { SprintService } from '../../app/sprint/SprintService';
