@@ -13,12 +13,12 @@ import {
 	WorkItemTimeFrameDTO,
 	WorkItemTypeDTO
 } from '@personal-okr/shared';
-import { WorkHierarchyForContextAggregate } from '../../domain/work-item-v2/aggregate/WorkHierarchyForContextAggregate';
-import { WorkItem } from '../../domain/work-item-v2/model/WorkItem';
+import { WorkHierarchyForContextAggregate } from '../../domain/work-item/aggregate/WorkHierarchyForContextAggregate';
+import { WorkItem } from '../../domain/work-item/model/WorkItem';
 import { UnreachableError } from '../../util/UnreachableError';
-import { WorkItemType } from '../../domain/work-item-v2/model/WorkItemType';
-import { WorkItemStatus } from '../../domain/work-item-v2/model/WorkItemStatus';
-import { WorkItemProgress } from '../../domain/work-item-v2/model/WorkItemProgress';
+import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
+import { WorkItemStatus } from '../../domain/work-item/model/WorkItemStatus';
+import { WorkItemProgress } from '../../domain/work-item/model/WorkItemProgress';
 import { Quarter } from '../../domain/common/model/Quarter';
 import {
 	CustomDateWorkItemTimeFrame,
@@ -26,24 +26,24 @@ import {
 	SprintWorkItemTimeFrame,
 	WholeYearWorkItemTimeFrame,
 	WorkItemTimeFrame
-} from '../../domain/work-item-v2/model/WorkItemTimeFrame';
+} from '../../domain/work-item/model/WorkItemTimeFrame';
 import {
 	WorkItemsUpdateRequest,
 	WorkItemUpdateRequest
-} from '../../domain/work-item-v2/model/WorkItemsUpdateRequest';
-import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
-import { WorkItemTitle } from '../../domain/work-item-v2/model/WorkItemTitle';
-import { WorkItemDescription } from '../../domain/work-item-v2/model/WorkItemDescription';
+} from '../../domain/work-item/model/WorkItemsUpdateRequest';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
+import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
+import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescription';
 import { ContextYear } from '../../domain/common/model/ContextYear';
 import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '../../domain/sprint/model/SprintId';
-import { WorkItemHierarchyMoveRequest } from '../../domain/work-item-v2/model/WorkItemHierarchyMoveRequest';
+import { WorkItemHierarchyMoveRequest } from '../../domain/work-item/model/WorkItemHierarchyMoveRequest';
 import {
 	MoveRequestOrder,
 	WorkItemHierarchyMoveRequestOrderType
-} from '../../domain/work-item-v2/model/MoveRequestOrder';
-import { TaskSprintOverviewAggregate } from '../../domain/work-item-v2/aggregate/TaskSprintOverviewAggregate';
-import { SprintOverviewMoveRequest } from '../../domain/work-item-v2/model/SprintOverviewMoveRequest';
+} from '../../domain/work-item/model/MoveRequestOrder';
+import { TaskSprintOverviewAggregate } from '../../domain/work-item/aggregate/TaskSprintOverviewAggregate';
+import { SprintOverviewMoveRequest } from '../../domain/work-item/model/SprintOverviewMoveRequest';
 
 @Injectable()
 export class WorkItemDTOConverter {

@@ -1,33 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { WorkItem } from '../../domain/work-item-v2/model/WorkItem';
+import { WorkItem } from '../../domain/work-item/model/WorkItem';
 import { WorkItemEntity } from './entity/WorkItemEntity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UnreachableError } from '../../util/UnreachableError';
 import { User } from '../../domain/auth/model/User';
-import { WorkItemStatus } from '../../domain/work-item-v2/model/WorkItemStatus';
+import { WorkItemStatus } from '../../domain/work-item/model/WorkItemStatus';
 import {
 	CustomDateWorkItemTimeFrame,
 	QuarterWorkItemTimeFrame,
 	SprintWorkItemTimeFrame,
 	WholeYearWorkItemTimeFrame,
 	WorkItemTimeFrame
-} from '../../domain/work-item-v2/model/WorkItemTimeFrame';
+} from '../../domain/work-item/model/WorkItemTimeFrame';
 import { WorkItemTimeFrameEntity } from './entity/WorkItemTimeFrameEntity';
 import { Quarter, quarterToNumber } from '../../domain/common/model/Quarter';
 import { DeepPartial } from 'typeorm/common/DeepPartial';
-import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
 import { ContextYear } from '../../domain/common/model/ContextYear';
-import { WorkItemTitle } from '../../domain/work-item-v2/model/WorkItemTitle';
-import { WorkItemDescription } from '../../domain/work-item-v2/model/WorkItemDescription';
+import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
+import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescription';
 import { Temporal } from 'temporal-polyfill';
 import { SprintId } from '../../domain/sprint/model/SprintId';
 import { SprintService } from '../../app/sprint/SprintService';
-import { WorkItemType } from '../../domain/work-item-v2/model/WorkItemType';
-import { Task } from '../../domain/work-item-v2/model/Task';
+import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
+import { Task } from '../../domain/work-item/model/Task';
 import { LexicalRank } from '../../domain/common/model/LexicalRank';
-import { Goal } from '../../domain/work-item-v2/model/Goal';
-import { Group } from '../../domain/work-item-v2/model/Group';
+import { Goal } from '../../domain/work-item/model/Goal';
+import { Group } from '../../domain/work-item/model/Group';
 
 @Injectable()
 export class WorkItemEntityConverter {

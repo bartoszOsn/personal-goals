@@ -1,9 +1,9 @@
 import { ContextYear } from '../../domain/common/model/ContextYear';
-import { WorkHierarchyForContextAggregate } from '../../domain/work-item-v2/aggregate/WorkHierarchyForContextAggregate';
+import { WorkHierarchyForContextAggregate } from '../../domain/work-item/aggregate/WorkHierarchyForContextAggregate';
 import { Sprint } from '../../domain/sprint/model/Sprint';
-import { TaskSprintOverviewAggregate } from '../../domain/work-item-v2/aggregate/TaskSprintOverviewAggregate';
-import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
-import { WorkItemDetailsAggregate } from '../../domain/work-item-v2/aggregate/WorkItemDetailsAggregate';
+import { TaskSprintOverviewAggregate } from '../../domain/work-item/aggregate/TaskSprintOverviewAggregate';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
+import { WorkItemDetailsAggregate } from '../../domain/work-item/aggregate/WorkItemDetailsAggregate';
 import { User } from '../../domain/auth/model/User';
 
 export abstract class WorkItemRepository {

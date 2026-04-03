@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { WorkItemRepository } from '../../app/work-item-v2/WorkItemRepository';
+import { WorkItemRepository } from '../../app/work-item/WorkItemRepository';
 import { User } from '../../domain/auth/model/User';
 import { ContextYear } from '../../domain/common/model/ContextYear';
 import { Sprint } from '../../domain/sprint/model/Sprint';
-import { TaskSprintOverviewAggregate } from '../../domain/work-item-v2/aggregate/TaskSprintOverviewAggregate';
-import { WorkHierarchyForContextAggregate } from '../../domain/work-item-v2/aggregate/WorkHierarchyForContextAggregate';
-import { WorkItemDetailsAggregate } from '../../domain/work-item-v2/aggregate/WorkItemDetailsAggregate';
-import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
+import { TaskSprintOverviewAggregate } from '../../domain/work-item/aggregate/TaskSprintOverviewAggregate';
+import { WorkHierarchyForContextAggregate } from '../../domain/work-item/aggregate/WorkHierarchyForContextAggregate';
+import { WorkItemDetailsAggregate } from '../../domain/work-item/aggregate/WorkItemDetailsAggregate';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WorkItemEntity } from './entity/WorkItemEntity';
 import { In, TreeRepository } from 'typeorm';
 import { WorkItemEntityConverter } from './WorkItemEntityConverter';
-import { WorkItem } from '../../domain/work-item-v2/model/WorkItem';
-import { WorkItemType } from '../../domain/work-item-v2/model/WorkItemType';
-import { Task } from '../../domain/work-item-v2/model/Task';
-import { WorkItemNotFoundError } from '../../domain/work-item-v2/error/WorkItemNotFoundError';
+import { WorkItem } from '../../domain/work-item/model/WorkItem';
+import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
+import { Task } from '../../domain/work-item/model/Task';
+import { WorkItemNotFoundError } from '../../domain/work-item/error/WorkItemNotFoundError';
 
 @Injectable()
 export class WorkItemRepositoryImpl extends WorkItemRepository {

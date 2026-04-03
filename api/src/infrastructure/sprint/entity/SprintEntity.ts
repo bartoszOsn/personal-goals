@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserEntity } from '../../auth/entity/UserEntity';
-import { WorkItemEntity } from '../../work-item-v2/entity/WorkItemEntity';
+import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
 
 @Entity()
 export class SprintEntity {

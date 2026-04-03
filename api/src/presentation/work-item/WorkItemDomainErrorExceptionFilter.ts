@@ -2,10 +2,10 @@ import { BasicErrorDTOSchema } from '@personal-okr/shared';
 import { DomainErrorExceptionFilter } from '../common/DomainErrorExceptionFilter';
 import { Catch, HttpStatus } from '@nestjs/common';
 import { HttpError } from '../common/HttpError';
-import { InvalidWorkItemHierarchyException } from '../../domain/work-item-v2/error/InvalidWorkItemHierarchyException';
-import { InvalidWorkItemNameError } from '../../domain/work-item-v2/error/InvalidWorkItemNameError';
-import { TimeFrameOutOfContextException } from '../../domain/work-item-v2/error/TimeFrameOutOfContextException';
-import { WorkItemNotFoundError } from '../../domain/work-item-v2/error/WorkItemNotFoundError';
+import { InvalidWorkItemHierarchyException } from '../../domain/work-item/error/InvalidWorkItemHierarchyException';
+import { InvalidWorkItemNameError } from '../../domain/work-item/error/InvalidWorkItemNameError';
+import { TimeFrameOutOfContextException } from '../../domain/work-item/error/TimeFrameOutOfContextException';
+import { WorkItemNotFoundError } from '../../domain/work-item/error/WorkItemNotFoundError';
 
 @Catch()
 export class WorkItemDomainErrorExceptionFilter extends DomainErrorExceptionFilter {

@@ -21,10 +21,10 @@ import {
 	WorkItemStatusDTO,
 	WorkItemsUpdateRequestDTO
 } from '@personal-okr/shared';
-import { WorkItemService } from '../../app/work-item-v2/WorkItemService';
+import { WorkItemService } from '../../app/work-item/WorkItemService';
 import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemDTOConverter } from './WorkItemDTOConverter';
-import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
 import { SprintId } from '../../domain/sprint/model/SprintId';
 import { SprintService } from '../../app/sprint/SprintService';
 import { WorkItemDomainErrorExceptionFilter } from './WorkItemDomainErrorExceptionFilter';

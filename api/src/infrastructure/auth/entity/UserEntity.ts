@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { WorkItemEntity } from '../../work-item-v2/entity/WorkItemEntity';
+import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
 import { SprintEntity } from '../../sprint/entity/SprintEntity';
 import { DocumentEntity } from '../../document/entity/DocumentEntity';
 

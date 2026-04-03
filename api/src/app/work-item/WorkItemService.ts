@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { WorkItemRepository } from './WorkItemRepository';
 import { ContextYear } from '../../domain/common/model/ContextYear';
-import { WorkHierarchyForContextAggregate } from '../../domain/work-item-v2/aggregate/WorkHierarchyForContextAggregate';
+import { WorkHierarchyForContextAggregate } from '../../domain/work-item/aggregate/WorkHierarchyForContextAggregate';
 import { UserStorage } from '../auth/UserStorage';
-import { WorkItemType } from '../../domain/work-item-v2/model/WorkItemType';
-import { WorkItemsUpdateRequest } from '../../domain/work-item-v2/model/WorkItemsUpdateRequest';
-import { WorkItemHierarchyMoveRequest } from '../../domain/work-item-v2/model/WorkItemHierarchyMoveRequest';
-import { WorkItemId } from '../../domain/work-item-v2/model/WorkItemId';
+import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
+import { WorkItemsUpdateRequest } from '../../domain/work-item/model/WorkItemsUpdateRequest';
+import { WorkItemHierarchyMoveRequest } from '../../domain/work-item/model/WorkItemHierarchyMoveRequest';
+import { WorkItemId } from '../../domain/work-item/model/WorkItemId';
 import { Sprint } from '../../domain/sprint/model/Sprint';
-import { TaskSprintOverviewAggregate } from '../../domain/work-item-v2/aggregate/TaskSprintOverviewAggregate';
-import { WorkItemStatus } from '../../domain/work-item-v2/model/WorkItemStatus';
-import { SprintOverviewMoveRequest } from '../../domain/work-item-v2/model/SprintOverviewMoveRequest';
-import { WorkItemDetailsAggregate } from '../../domain/work-item-v2/aggregate/WorkItemDetailsAggregate';
+import { TaskSprintOverviewAggregate } from '../../domain/work-item/aggregate/TaskSprintOverviewAggregate';
+import { WorkItemStatus } from '../../domain/work-item/model/WorkItemStatus';
+import { SprintOverviewMoveRequest } from '../../domain/work-item/model/SprintOverviewMoveRequest';
+import { WorkItemDetailsAggregate } from '../../domain/work-item/aggregate/WorkItemDetailsAggregate';
 
 @Injectable()
 export class WorkItemService {
