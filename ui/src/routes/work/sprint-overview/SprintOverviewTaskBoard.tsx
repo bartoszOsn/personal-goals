@@ -2,19 +2,23 @@ import { Board } from '@/base/board/api/Board.tsx';
 import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { SprintId } from '@/models/Sprint';
-import { useCreateWorkItemMutation, useUpdateWorkItemMutation, useWorkItemsByContextQuery } from '@/api/work-item-old/work-item-hooks';
-import { WorkItemOld, WorkItemStatus, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItemOld';
 import { isPlainDate } from '@personal-okr/shared';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
 import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
 import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
+import {
+	useCreateWorkItemInSprintOverviewMutation,
+	useUpdateWorkItemsInHierarchyMutation,
+	useWorkItemSprintOverviewQuery
+} from '@/api/work-item/work-item-hooks';
+import { WorkItem, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
-	const workItems = useWorkItemsByContextQuery(context);
+	const workItems = useWorkItemSprintOverviewQuery(sprintId);
 	const sprints = useSprintQuery(context);
-	const updateWorkItem = useUpdateWorkItemMutation();
-	const createWorkItemMutation = useCreateWorkItemMutation();
+	const updateWorkItem = useUpdateWorkItemsInHierarchyMutation();
+	const createWorkItemMutation = useCreateWorkItemInSprintOverviewMutation();
 	const columns: BoardColumn<WorkItemStatus>[] = [
 		{
 			columnId: WorkItemStatus.TODO,
@@ -55,11 +59,11 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 		</Group>;
 	}
 
-	const tasksBySprint = flatWorkItems(workItems.data)
+	const tasksBySprint = flatWorkItems(workItems.data.tasks)
 		.filter(workItem => workItem.type === WorkItemType.TASK)
 		.filter(task => task.timeFrame && isPlainDate(task.timeFrame.startDate).afterOrEqual(sprint.startDate) && isPlainDate(task.timeFrame.endDate).beforeOrEqual(sprint.endDate));
 
-	const renderCard = (task: WorkItemOld) => {
+	const renderCard = (task: WorkItem) => {
 		return <Stack gap={0}>
 			<Space h='md' />
 			<WorkItemTitleInplace workItem={task} textProps={{ fw: 'bold' }} />
@@ -72,27 +76,23 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 		</Stack>;
 	};
 
-	const onColumnChange = async (item: WorkItemOld, newStatus: WorkItemStatus) => {
+	const onColumnChange = async (item: WorkItem, newStatus: WorkItemStatus) => {
 		await updateWorkItem.mutateAsync({
-			id: item.id,
-			request: { status: newStatus }
+			context: context,
+			request: {
+				updates: {
+					[item.id]: {
+						status: newStatus
+					}
+				}
+			}
 		});
 	};
 
 	const onCreateTask = async (status: WorkItemStatus) => {
 		await createWorkItemMutation.mutateAsync({
-			context: context,
-			type: WorkItemType.TASK,
-			fields: {
-				timeFrame: {
-					type: WorkItemTimeFrameType.SPRINT,
-					sprintId: sprint.id,
-					startDate: sprint.startDate,
-					endDate: sprint.endDate,
-					context
-				},
-				status
-			}
+			sprintId: sprintId,
+			status: status
 		});
 	};
 
@@ -112,8 +112,8 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 	);
 }
 
-function flatWorkItems(workItems: WorkItemOld[]): WorkItemOld[] {
-	const result: WorkItemOld[] = [];
+function flatWorkItems(workItems: WorkItem[]): WorkItem[] {
+	const result: WorkItem[] = [];
 	for (const workItem of workItems) {
 		result.push(workItem);
 		result.push(...flatWorkItems(workItem.children));

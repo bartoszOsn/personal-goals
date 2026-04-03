@@ -1,5 +1,5 @@
 import { useModals } from '@mantine/modals';
-import { WorkItemId } from '@/models/WorkItemOld.ts';
+import { WorkItemId } from '@/models/WorkItem.ts';
 import { WorkItemDetailsModal } from '@/core/work-item/details/WorkItemDetailsModal.tsx';
 
 export function useWorkItemDetailsModal() {

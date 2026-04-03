@@ -1,4 +1,3 @@
-import { WorkItemOld, WorkItemTimeFrame, WorkItemTimeFrameType, WorkItemUpdateRequest } from '@/models/WorkItemOld.ts';
 import { Accordion, Button, Checkbox, Group, Loader, Radio, Select, Stack, Text, UnstyledButton } from '@mantine/core';
 import { ComponentProps, useMemo, useState } from 'react';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
@@ -8,10 +7,11 @@ import { Temporal } from 'temporal-polyfill';
 import { DatePickerInput } from '@mantine/dates';
 import { Sprint } from '@/models/Sprint';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
-import { useUpdateWorkItemMutation } from '@/api/work-item-old/work-item-hooks';
+import { WorkItem, WorkItemTimeFrame, WorkItemTimeFrameType, WorkItemUpdateRequest } from '@/models/WorkItem';
+import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 
 export interface WorkItemTimeFrameInplaceProps {
-	workItem: WorkItemOld;
+	workItem: WorkItem;
 	displayButtonProps?: ComponentProps<typeof UnstyledButton>;
 }
 
@@ -85,7 +85,7 @@ function TimeFrameModal(props: WorkItemTimeFrameInplaceProps) {
 }
 
 function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints: Sprint[] }) {
-	const updateWorkItemMutation = useUpdateWorkItemMutation();
+	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
 	const modalContext = useModals();
 	const [type, setType] = useState<WorkItemTimeFrameType | 'no-date'>(props.workItem.timeFrame?.type ?? 'no-date');
 	const [quarter, setQuarter] = useState<Quarter>(
@@ -145,8 +145,12 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 
 	const onSave = () => {
 		updateWorkItemMutation.mutateAsync({
-			id: props.workItem.id,
-			request: request
+			context: props.workItem.contextYear,
+			request: {
+				updates: {
+					[props.workItem.id]: request
+				}
+			}
 		}).then(() => {
 			const modalToClose = modalContext.modals.find(modal => modal.props.id === modalId);
 			if (modalToClose) {

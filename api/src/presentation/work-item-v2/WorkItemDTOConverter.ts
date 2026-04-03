@@ -105,6 +105,9 @@ export class WorkItemDTOConverter {
 						: undefined,
 					update.timeFrame !== undefined
 						? await this.fromTimeFrameRequestDTO(update.timeFrame)
+						: undefined,
+					update.status !== undefined
+						? this.fromWorkItemStatusDTO(update.status)
 						: undefined
 				)
 			);
@@ -309,6 +312,21 @@ export class WorkItemDTOConverter {
 					new WorkItemId(order.after),
 					new WorkItemId(order.before)
 				);
+		}
+	}
+
+	private fromWorkItemStatusDTO(status: WorkItemStatusDTO): WorkItemStatus {
+		switch (status) {
+			case 'todo':
+				return WorkItemStatus.TO_DO;
+			case 'inProgress':
+				return WorkItemStatus.IN_PROGRESS;
+			case 'done':
+				return WorkItemStatus.DONE;
+			case 'failed':
+				return WorkItemStatus.FAILED;
+			default:
+				throw new UnreachableError(status);
 		}
 	}
 }

@@ -1,20 +1,24 @@
-import { WorkItemOld } from '@/models/WorkItemOld';
 import { Group, Stack, Text } from '@mantine/core';
 import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace.tsx';
 import { WorkItemStatusInplace } from '@/core/work-item/inplace/WorkItemStatusInplace.tsx';
 import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace.tsx';
 import { RichTextEditor } from '@/base/rich-text/RichTextEditor.tsx';
-import { useUpdateWorkItemMutation } from '@/api/work-item-old/work-item-hooks.ts';
+import { WorkItem } from '@/models/WorkItem';
+import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 
-export function WorkItemDetails({ workItem }: { workItem: WorkItemOld}) {
-	const updateWorkItemMutation = useUpdateWorkItemMutation();
+export function WorkItemDetails({ workItem }: { workItem: WorkItem}) {
+	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
 	const onChangeWorkItemDescription = (newDescription: string) => {
 		updateWorkItemMutation.mutate({
-			id: workItem.id,
+			context: workItem.contextYear,
 			request: {
-				description: newDescription,
+				updates: {
+					[workItem.id]: {
+						description: newDescription
+					}
+				}
 			}
-		})
+		});
 	}
 
 	return (

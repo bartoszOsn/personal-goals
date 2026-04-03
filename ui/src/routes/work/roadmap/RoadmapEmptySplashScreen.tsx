@@ -1,17 +1,24 @@
 import { Button, Group, Stack, Text } from '@mantine/core';
 import { IconFilePlus, IconFileX } from '@tabler/icons-react';
 import { ReactNode } from 'react';
-import { useCreateWorkItemMutation } from '@/api/work-item-old/work-item-hooks';
-import { WorkItemType } from '@/models/WorkItemOld';
+import { useCreateWorkItemInHierarchyMutation } from '@/api/work-item/work-item-hooks';
+import { WorkItemType } from '@/models/WorkItem';
 
 export function RoadmapEmptySplashScreen({ context }: { context: number }) {
-	const workItemMutation = useCreateWorkItemMutation();
+	const workItemMutation = useCreateWorkItemInHierarchyMutation();
 
-	const addObjective = () => {
+	const addGoal = () => {
 		workItemMutation.mutate({
 			context,
-			type: WorkItemType.OBJECTIVE
+			type: WorkItemType.GOAL
 		});
+	}
+
+	const addGroup = () => {
+		workItemMutation.mutate({
+			context,
+			type: WorkItemType.GROUP
+		})
 	}
 
 	const addTask = () => {
@@ -26,9 +33,13 @@ export function RoadmapEmptySplashScreen({ context }: { context: number }) {
 			<IconFileX color="var(--mantine-color-blue-5)" size={100} />
 			<Text size="xl">No work items</Text>
 			<Group>
-				<SplashButton onClick={addObjective} loading={workItemMutation.isPending}>
+				<SplashButton onClick={addGoal} loading={workItemMutation.isPending}>
 					<IconFilePlus color="var(--mantine-color-grape-5)" size={64} />
-					<Text>Add Objective</Text>
+					<Text>Add Goal</Text>
+				</SplashButton>
+				<SplashButton onClick={addGroup} loading={workItemMutation.isPending}>
+					<IconFilePlus color="var(--mantine-color-gray-5)" size={64} />
+					<Text>Add Group</Text>
 				</SplashButton>
 				<SplashButton onClick={addTask} loading={workItemMutation.isPending}>
 					<IconFilePlus color="var(--mantine-color-gray-5)" size={64} />

@@ -7,23 +7,28 @@ import { InplaceEditorEdit } from '@/base/inplace-editor/api/InplaceEditorEdit.t
 import { InplaceEditor } from '@/base/inplace-editor/api/InplaceEditor.tsx';
 import { ComboboxItem, ComboboxLikeRenderOptionInput, Group, MantineColor, Text } from '@mantine/core';
 import { IconCheck, IconProgress, IconProgressCheck, IconProgressHelp, IconProgressX, IconProps } from '@tabler/icons-react';
-import { useUpdateWorkItemMutation } from '@/api/work-item-old/work-item-hooks.ts';
-import { WorkItemOld, WorkItemStatus } from '@/models/WorkItemOld.ts';
+import { WorkItemStatus } from '@/models/WorkItem.ts';
+import { WorkItem } from '@/models/WorkItem';
+import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 
 export interface WorkItemStatusInplaceProps {
-	workItem: WorkItemOld;
+	workItem: WorkItem;
 	badgeProps?: ComponentProps<typeof InplaceBadgeDisplay>
 	selectProps?: ComponentProps<typeof InplaceSelectEdit>;
 }
 
 export function WorkItemStatusInplace({ workItem, badgeProps, selectProps}: WorkItemStatusInplaceProps) {
-	const updateWorkItemMutation = useUpdateWorkItemMutation();
+	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
 
 	const onValueSubmit = (value: WorkItemStatus) => {
 		updateWorkItemMutation.mutate({
-			id: workItem.id,
+			context: workItem.contextYear,
 			request: {
-				status: value,
+				updates: {
+					[workItem.id]: {
+						status: value
+					}
+				}
 			}
 		});
 	}

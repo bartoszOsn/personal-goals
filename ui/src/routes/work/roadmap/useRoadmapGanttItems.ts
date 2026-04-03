@@ -1,13 +1,13 @@
-import { WorkItemOld, WorkItemStatus, WorkItemType } from '@/models/WorkItemOld.ts';
 import { GanttItem } from '@/base/gantt';
 import { MantineColor } from '@mantine/core';
 import { useMemo } from 'react';
+import { WorkItem, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
 
-export function useRoadmapGanttItems(items: WorkItemOld[]): GanttItem<WorkItemOld>[] {
+export function useRoadmapGanttItems(items: WorkItem[]): GanttItem<WorkItem>[] {
 	return useMemo(() => items.map(workItemToGanttItem), [items]);
 }
 
-function workItemToGanttItem(wi: WorkItemOld): GanttItem<WorkItemOld> {
+function workItemToGanttItem(wi: WorkItem): GanttItem<WorkItem> {
 	return {
 		id: wi.id,
 		data: wi,
@@ -25,10 +25,10 @@ function typeToColor(type: WorkItemType): MantineColor {
 	switch (type) {
 		case WorkItemType.TASK:
 			return 'gray';
-		case WorkItemType.OBJECTIVE:
+		case WorkItemType.GOAL:
 			return 'grape';
-		case WorkItemType.KEY_RESULT:
-			return 'orange';
+		case WorkItemType.GROUP:
+			return 'gray';
 		default:
 			throw new Error(`Unknown type: ${type}`);
 	}

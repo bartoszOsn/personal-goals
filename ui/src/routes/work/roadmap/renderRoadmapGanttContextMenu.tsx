@@ -1,26 +1,33 @@
 import { GanttItem } from '@/base/gantt';
-import { WorkItemOld, WorkItemId, WorkItemType } from '@/models/WorkItemOld.ts';
-import { ReactNode } from 'react';
 import { Menu } from '@mantine/core';
 import { IconFile, IconPlus, IconTrash } from '@tabler/icons-react';
-import { useCreateWorkItemMutation, useDeleteWorkItemsMutation } from '@/api/work-item-old/work-item-hooks';
 import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
+import { WorkItem, WorkItemType } from '@/models/WorkItem';
+import { useCreateWorkItemInHierarchyMutation, useDeleteWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 
-export function renderRoadmapGanttContextMenu(clickedOn: GanttItem<WorkItemOld>, selected: GanttItem<WorkItemOld>[], context: number) {
+export function renderRoadmapGanttContextMenu(clickedOn: GanttItem<WorkItem>, selected: GanttItem<WorkItem>[], context: number) {
 	return <RoadmapGanttContextMenu clickedOn={clickedOn} selected={selected} context={context} />;
 }
 
-function RoadmapGanttContextMenu({ clickedOn, selected, context }: { clickedOn: GanttItem<WorkItemOld>, selected: GanttItem<WorkItemOld>[], context: number }) {
+function RoadmapGanttContextMenu({ clickedOn, selected, context }: { clickedOn: GanttItem<WorkItem>, selected: GanttItem<WorkItem>[], context: number }) {
 
-	const createWorkItemMutation = useCreateWorkItemMutation();
-	const deleteWorkItemsMutation = useDeleteWorkItemsMutation();
+	const createWorkItemMutation = useCreateWorkItemInHierarchyMutation();
+	const deleteWorkItemsMutation = useDeleteWorkItemsInHierarchyMutation();
 	const openWorkItemModal = useWorkItemDetailsModal();
 
 
-	const createChildKeyResult = () => {
+	const createChildGoal = () => {
 		createWorkItemMutation.mutate({
 			context,
-			type: WorkItemType.KEY_RESULT,
+			type: WorkItemType.GOAL,
+			parentId: clickedOn.data.id
+		})
+	}
+
+	const createChildGroup = () => {
+		createWorkItemMutation.mutate({
+			context,
+			type: WorkItemType.GROUP,
 			parentId: clickedOn.data.id
 		})
 	}
@@ -34,48 +41,45 @@ function RoadmapGanttContextMenu({ clickedOn, selected, context }: { clickedOn: 
 	}
 
 	const deleteSelected = () => {
-		deleteWorkItemsMutation.mutate(selected.map(s => s.id) as WorkItemId[])
+		deleteWorkItemsMutation.mutate({context , ids: selected.map(s => s.data.id) })
 	}
 
 	const deleteClicked = () => {
-		deleteWorkItemsMutation.mutate([clickedOn.data.id])
+		deleteWorkItemsMutation.mutate({context , ids: [clickedOn.data.id] })
 	}
 
-	const options: ReactNode[] = [
-		<Menu.Item leftSection={<IconFile size={14} />} onClick={() => openWorkItemModal(clickedOn.data.id)}>
-			Details
-		</Menu.Item>,
-	];
-
-	if (clickedOn.data.type === WorkItemType.OBJECTIVE) {
-		options.push(
-			<Menu.Item leftSection={<IconPlus size={14} />} onClick={createChildKeyResult}>
-				Create child key result
+	return (
+		<>
+			<Menu.Item leftSection={<IconFile size={14} />} onClick={() => openWorkItemModal(clickedOn.data.id)}>
+				Details
 			</Menu.Item>
-		)
-	}
-
-	if (clickedOn.data.type === WorkItemType.KEY_RESULT) {
-		options.push(
-			<Menu.Item leftSection={<IconPlus size={14} />} onClick={createChildTask}>
-				Create child task
-			</Menu.Item>
-		)
-	}
-
-	if (selected.some(s => s.id === clickedOn.id) && selected.length > 1) {
-		options.push(
-			<Menu.Item color='red' leftSection={<IconTrash size={14} />} onClick={deleteSelected}>
-				Delete {selected.length} selected
-			</Menu.Item>
-		)
-	} else {
-		options.push(
-			<Menu.Item color='red' leftSection={<IconTrash size={14} />} onClick={deleteClicked}>
-				Delete "{clickedOn.data.title}"
-			</Menu.Item>
-		)
-	}
-
-	return options;
+			{
+				clickedOn.data.type !== WorkItemType.TASK && (
+					<>
+						<Menu.Item leftSection={<IconPlus size={14} />} onClick={createChildGoal}>
+							Create child goal
+						</Menu.Item>
+						<Menu.Item leftSection={<IconPlus size={14} />} onClick={createChildGroup}>
+							Create child group
+						</Menu.Item>
+						<Menu.Item leftSection={<IconPlus size={14} />} onClick={createChildTask}>
+							Create child task
+						</Menu.Item>
+					</>
+				)
+			}
+			{
+				selected.some(s => s.id === clickedOn.id) && selected.length > 1
+					? (
+						<Menu.Item color='red' leftSection={<IconTrash size={14} />} onClick={deleteSelected}>
+							Delete {selected.length} selected
+						</Menu.Item>
+					) : (
+						<Menu.Item color='red' leftSection={<IconTrash size={14} />} onClick={deleteClicked}>
+							Delete "{clickedOn.data.title}"
+						</Menu.Item>
+					)
+			}
+		</>
+	);
 }

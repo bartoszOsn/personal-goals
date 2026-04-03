@@ -1,12 +1,12 @@
-import { WorkItemId } from '@/models/WorkItemOld.ts';
-import { useWorkItemQuery } from '@/api/work-item-old/work-item-hooks.ts';
+import { WorkItemId } from '@/models/WorkItem.ts';
 import { WorkItemModalSkeleton } from '@/core/WorkItemModalSkeleton.tsx';
 import { WorkItemDetails } from '@/core/work-item/details/WorkItemDetails.tsx';
 import { Modal } from '@mantine/core';
 import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
+import { useWorkItemDetailsQuery } from '@/api/work-item/work-item-hooks';
 
 export function WorkItemDetailsModal({ workItemId }: { workItemId: WorkItemId }) {
-	const workItemQuery = useWorkItemQuery(workItemId);
+	const workItemQuery = useWorkItemDetailsQuery(workItemId);
 
 	if (workItemQuery.isLoading || !workItemQuery.data) {
 		return <WorkItemModalSkeleton />

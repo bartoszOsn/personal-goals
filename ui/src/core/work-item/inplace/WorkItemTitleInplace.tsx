@@ -6,27 +6,31 @@ import { InplaceTextInputEdit } from '@/base/inplace-editor/api/primitive/edit/I
 import { ComponentProps } from 'react';
 import { ActionIcon, Group, MantineColor, Tooltip } from '@mantine/core';
 import { IconFileInvoice } from '@tabler/icons-react';
-import { WorkItemOld, WorkItemType } from '@/models/WorkItemOld.ts';
-import { useUpdateWorkItemMutation } from '@/api/work-item-old/work-item-hooks.ts';
 import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
 import { Link } from '@tanstack/react-router';
+import { WorkItem, WorkItemType } from '@/models/WorkItem';
+import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 
 export interface WorkItemTitleInplaceProps {
-	workItem: WorkItemOld;
+	workItem: WorkItem;
 	textProps?: ComponentProps<typeof InplaceTextDisplay>
 	inputProps?: ComponentProps<typeof InplaceTextInputEdit>;
 	showDialogButton?: boolean;
 }
 
 export function WorkItemTitleInplace({ workItem, textProps, inputProps, showDialogButton = true }: WorkItemTitleInplaceProps) {
-	const updateWorkItemMutation = useUpdateWorkItemMutation();
+	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
 	const openWorkItemModal = useWorkItemDetailsModal();
 
 	const onValueSubmit = (value: string) => {
 		updateWorkItemMutation.mutate({
-			id: workItem.id,
+			context: workItem.contextYear,
 			request: {
-				title: value,
+				updates: {
+					[workItem.id]: {
+						title: value,
+					}
+				}
 			}
 		});
 	}
@@ -62,6 +66,6 @@ export function WorkItemTitleInplace({ workItem, textProps, inputProps, showDial
 
 const typeToAccentMap: Record<WorkItemType, MantineColor> = {
 	[WorkItemType.TASK]: 'gray',
-	[WorkItemType.OBJECTIVE]: 'grape',
-	[WorkItemType.KEY_RESULT]: 'orange'
+	[WorkItemType.GOAL]: 'grape',
+	[WorkItemType.GROUP]: 'gray'
 }

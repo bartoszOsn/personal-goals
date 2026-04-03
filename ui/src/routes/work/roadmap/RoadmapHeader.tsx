@@ -1,11 +1,11 @@
-import { WorkItemId, WorkItemType } from '@/models/WorkItemOld.ts';
 import { Button, Group } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
-import { useCreateWorkItemMutation, useDeleteWorkItemsMutation } from '@/api/work-item-old/work-item-hooks';
+import { useCreateWorkItemInHierarchyMutation, useDeleteWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
+import { WorkItemId, WorkItemType } from '@/models/WorkItem';
 
 export function RoadmapHeader({ context, selectedWorkItemIds }: { context: number, selectedWorkItemIds: WorkItemId[] }) {
-	const createWorkItemMutation = useCreateWorkItemMutation();
-	const deleteWorkItemMutation = useDeleteWorkItemsMutation();
+	const createWorkItemMutation = useCreateWorkItemInHierarchyMutation();
+	const deleteWorkItemMutation = useDeleteWorkItemsInHierarchyMutation();
 
 	return (
 		<Group gap='xs'>
@@ -14,7 +14,12 @@ export function RoadmapHeader({ context, selectedWorkItemIds }: { context: numbe
 					color='grape'
 					leftSection={<IconPlus size={14} />}
 					loading={createWorkItemMutation.isPending}
-					onClick={() => createWorkItemMutation.mutate({ context: context, type: WorkItemType.OBJECTIVE })}>Create Objective</Button>
+					onClick={() => createWorkItemMutation.mutate({ context: context, type: WorkItemType.GOAL })}>Create Goal</Button>
+			<Button size="xs"
+					variant="outline"
+					leftSection={<IconPlus size={14} />}
+					loading={createWorkItemMutation.isPending}
+					onClick={() => createWorkItemMutation.mutate({ context: context, type: WorkItemType.GROUP })}>Create Group</Button>
 			<Button size="xs"
 					variant="outline"
 					leftSection={<IconPlus size={14} />}
@@ -26,7 +31,7 @@ export function RoadmapHeader({ context, selectedWorkItemIds }: { context: numbe
 					leftSection={<IconTrash size={14} />}
 					disabled={selectedWorkItemIds.length === 0}
 					loading={deleteWorkItemMutation.isPending}
-					onClick={() => deleteWorkItemMutation.mutate(selectedWorkItemIds)}>Delete</Button>
+					onClick={() => deleteWorkItemMutation.mutate({ context: context, ids: selectedWorkItemIds})}>Delete</Button>
 		</Group>
 	)
 }

@@ -5,6 +5,7 @@ import { WorkItemStatus } from '../model/WorkItemStatus';
 import { WorkItemId } from '../model/WorkItemId';
 import { SprintOverviewMoveRequest } from '../model/SprintOverviewMoveRequest';
 import { WorkItemNotFoundError } from '../error/WorkItemNotFoundError';
+import { SprintWorkItemTimeFrame } from '../model/WorkItemTimeFrame';
 
 export class TaskSprintOverviewAggregate {
 	constructor(
@@ -19,6 +20,10 @@ export class TaskSprintOverviewAggregate {
 	create(status: WorkItemStatus): void {
 		const task = Task.default(this.sprint.context);
 		task.status = status;
+		task.timeFrame = new SprintWorkItemTimeFrame(
+			this.sprint.context,
+			this.sprint
+		);
 		this.tasks.push(task);
 	}
 
