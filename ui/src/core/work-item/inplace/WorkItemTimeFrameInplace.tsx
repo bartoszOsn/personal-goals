@@ -13,6 +13,7 @@ import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item
 export interface WorkItemTimeFrameInplaceProps {
 	workItem: WorkItem;
 	displayButtonProps?: ComponentProps<typeof UnstyledButton>;
+	multiline?: boolean;
 }
 
 const modalId = 'work-item-time-frame-inplace';
@@ -54,6 +55,10 @@ function TimeFrameDisplay(props: WorkItemTimeFrameInplaceProps) {
 		{props.workItem.timeFrame.startDate.toLocaleString()}
 		{' '}<IconArrowNarrowRight size={12} />{' '}
 		{props.workItem.timeFrame.endDate.toLocaleString()}
+
+		{
+			props.multiline && <br />
+		}
 
 		{
 			props.workItem.timeFrame.type === WorkItemTimeFrameType.WHOLE_YEAR &&

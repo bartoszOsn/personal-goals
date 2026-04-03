@@ -121,9 +121,16 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 		workItemId: WorkItemId,
 		user: User
 	): Promise<WorkItemDetailsAggregate> {
-		const entity = await this.workItemRepository.findOneBy({
-			id: workItemId.id,
-			user: { id: user.id.id }
+		const entity = await this.workItemRepository.findOne({
+			where: {
+				id: workItemId.id,
+				user: { id: user.id.id }
+			},
+			relations: {
+				timeFrame: {
+					sprint: true
+				}
+			}
 		});
 
 		if (!entity) {

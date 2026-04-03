@@ -69,7 +69,7 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 			<WorkItemTitleInplace workItem={task} textProps={{ fw: 'bold' }} />
 			<Space h="sm" />
 			<Text size="xs" c="dimmed">Time frame</Text>
-			<WorkItemTimeFrameInplace workItem={task} />
+			<WorkItemTimeFrameInplace workItem={task} multiline />
 			<Space h="sm" />
 			<Text size="xs" c="dimmed">Progress</Text>
 			<WorkItemProgressInplace workItem={task} />

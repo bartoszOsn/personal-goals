@@ -38,7 +38,7 @@ export class WorkItemEntity {
 	user!: UserEntity;
 
 	@TreeChildren()
-	children!: WorkItemEntity[];
+	children?: WorkItemEntity[];
 
 	@TreeParent({ onDelete: 'CASCADE' })
 	parent?: WorkItemEntity;

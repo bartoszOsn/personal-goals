@@ -186,7 +186,7 @@ export class WorkItemEntityConverter {
 				throw new UnreachableError(entity.type);
 		}
 
-		for (const childEntity of entity.children) {
+		for (const childEntity of entity.children ?? []) {
 			const child = await this.entityToWorkItem(childEntity);
 			child.parent = workItem;
 		}
