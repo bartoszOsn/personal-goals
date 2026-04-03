@@ -24,6 +24,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 			};
 
 			response.status(exception.getStatus()).json(data);
+			console.error(exception);
+			return;
 		}
 
 		const ctx = host.switchToHttp();
@@ -38,5 +40,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 		};
 
 		response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(data);
+		console.error(exception);
+		return;
 	}
 }

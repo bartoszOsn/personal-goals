@@ -86,7 +86,7 @@ export abstract class WorkItem {
 		let completedSum = 0;
 		let failedSum = 0;
 
-		for (let child of this._children) {
+		for (const child of this._children) {
 			completedSum += child.progress.completed.value;
 			failedSum += child.progress.failed.value;
 		}

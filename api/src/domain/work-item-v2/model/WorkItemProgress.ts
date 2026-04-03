@@ -40,7 +40,7 @@ export class Percentage {
 	}
 
 	static fraction(value: number, outOf: number): Percentage {
-		return Percentage.from((value / outOf) * 100);
+		return Percentage.from(value / outOf);
 	}
 
 	static zero(): Percentage {

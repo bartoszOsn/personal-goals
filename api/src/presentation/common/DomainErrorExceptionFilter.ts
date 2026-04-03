@@ -12,6 +12,7 @@ export abstract class DomainErrorExceptionFilter implements ExceptionFilter {
 
 		const response: Response = host.switchToHttp().getResponse();
 		response.status(httpError.data.code).json(httpError.data);
+		console.error(exception);
 	}
 
 	protected abstract errorToHttp(
