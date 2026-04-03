@@ -139,6 +139,7 @@ export class WorkItemDTOConverter {
 	): SprintOverviewMoveRequest {
 		return new SprintOverviewMoveRequest(
 			new WorkItemId(dto.id),
+			this.toWorkItemStatus(dto.status),
 			this.toMoveRequestOrder(dto.order)
 		);
 	}

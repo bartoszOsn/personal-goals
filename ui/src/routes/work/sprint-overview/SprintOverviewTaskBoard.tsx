@@ -9,7 +9,7 @@ import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeF
 import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
 import {
 	useCreateWorkItemInSprintOverviewMutation,
-	useUpdateWorkItemsInHierarchyMutation,
+	useMoveWorkItemInSprintOverviewMutation,
 	useWorkItemSprintOverviewQuery
 } from '@/api/work-item/work-item-hooks';
 import { WorkItem, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
@@ -17,8 +17,8 @@ import { WorkItem, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);
 	const sprints = useSprintQuery(context);
-	const updateWorkItem = useUpdateWorkItemsInHierarchyMutation();
 	const createWorkItemMutation = useCreateWorkItemInSprintOverviewMutation();
+	const moveWorkItemMutation = useMoveWorkItemInSprintOverviewMutation()
 	const columns: BoardColumn<WorkItemStatus>[] = [
 		{
 			columnId: WorkItemStatus.TODO,
@@ -77,13 +77,13 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 	};
 
 	const onColumnChange = async (item: WorkItem, newStatus: WorkItemStatus) => {
-		await updateWorkItem.mutateAsync({
-			context: context,
+		await moveWorkItemMutation.mutateAsync({
+			sprintId: sprintId,
 			request: {
-				updates: {
-					[item.id]: {
-						status: newStatus
-					}
+				id: item.id,
+				status: newStatus,
+				order: {
+					type: 'LAST'
 				}
 			}
 		});

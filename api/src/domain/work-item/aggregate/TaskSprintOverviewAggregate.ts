@@ -30,6 +30,7 @@ export class TaskSprintOverviewAggregate {
 	move(request: SprintOverviewMoveRequest): void {
 		const task = this.findById(request.id);
 		this.fillOrders();
+		task.status = request.status;
 		if (request.order.isFirst()) {
 			task.sprintOverviewOrder = LexicalRank.beforeAll(
 				this.tasks.map((task) => task.sprintOverviewOrder!)

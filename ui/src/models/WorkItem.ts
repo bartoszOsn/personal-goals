@@ -62,6 +62,7 @@ export interface WorkItemHierarchyMoveRequest {
 
 export interface WorkItemSprintOverviewMoveRequest {
 	readonly id: WorkItemId;
+	readonly status: WorkItemStatus;
 	readonly order: WorkItemMoveOrder;
 }
 

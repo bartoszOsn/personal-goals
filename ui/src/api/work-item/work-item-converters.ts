@@ -196,6 +196,7 @@ export function workItemSprintOverviewMoveRequestToDTO(
 ): WorkItemSprintOverviewMoveRequestDTO {
 	return {
 		id: request.id,
+		status: workItemStatusToDTO(request.status),
 		order: workItemMoveOrderToDTO(request.order)
 	};
 }
