@@ -31,7 +31,7 @@ import { WorkItemDomainErrorExceptionFilter } from './WorkItemDomainErrorExcepti
 
 @Controller('work-item')
 @UseFilters(WorkItemDomainErrorExceptionFilter)
-export class WorkItemControllerV2 {
+export class WorkItemController {
 	constructor(
 		private readonly workItemService: WorkItemService,
 		private readonly workItemDTOConverter: WorkItemDTOConverter,

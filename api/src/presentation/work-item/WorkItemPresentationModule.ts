@@ -3,7 +3,7 @@ import { WorkItemInfrastructureModule } from '../../infrastructure/work-item-v2/
 import { WorkItemDTOConverter } from './WorkItemDTOConverter';
 import { SprintAppModule } from '../../app/sprint/SprintAppModule';
 import { SprintInfrastructureModule } from '../../infrastructure/sprint/SprintInfrastructureModule';
-import { WorkItemControllerV2 } from './WorkItemControllerV2';
+import { WorkItemController } from './WorkItemController';
 import { WorkItemAppModule } from '../../app/work-item-v2/WorkItemAppModule';
 
 @Module({
@@ -11,7 +11,7 @@ import { WorkItemAppModule } from '../../app/work-item-v2/WorkItemAppModule';
 		WorkItemAppModule.withRepositories(WorkItemInfrastructureModule),
 		SprintAppModule.withRepositories(SprintInfrastructureModule)
 	],
-	controllers: [WorkItemControllerV2],
+	controllers: [WorkItemController],
 	providers: [WorkItemDTOConverter]
 })
-export class WorkItemPresentationModuleV2 {}
+export class WorkItemPresentationModule {}
