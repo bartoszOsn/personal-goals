@@ -11,7 +11,7 @@ import {
 } from '@personal-okr/shared';
 
 export function getWorkItemHierarchy(context: number) {
-	return http.get<WorkItemHierarchyDTO>(`/api/v2/work-item/hierarchy/${context}`);
+	return http.get<WorkItemHierarchyDTO>(`/api/work-item/hierarchy/${context}`);
 }
 
 export function createWorkItemInHierarchy(
@@ -19,7 +19,7 @@ export function createWorkItemInHierarchy(
 	request: WorkItemHierarchyCreateRequestDTO
 ) {
 	return http.post<WorkItemHierarchyDTO, WorkItemHierarchyCreateRequestDTO>(
-		`/api/v2/work-item/hierarchy/${context}`,
+		`/api/work-item/hierarchy/${context}`,
 		request
 	);
 }
@@ -29,7 +29,7 @@ export function updateWorkItemsInHierarchy(
 	request: WorkItemsUpdateRequestDTO
 ) {
 	return http.put<WorkItemHierarchyDTO, WorkItemsUpdateRequestDTO>(
-		`/api/v2/work-item/hierarchy/${context}`,
+		`/api/work-item/hierarchy/${context}`,
 		request
 	);
 }
@@ -39,24 +39,24 @@ export function moveWorkItemInHierarchy(
 	request: WorkItemHierarchyMoveRequestDTO
 ) {
 	return http.put<WorkItemHierarchyDTO, WorkItemHierarchyMoveRequestDTO>(
-		`/api/v2/work-item/hierarchy/${context}/move`,
+		`/api/work-item/hierarchy/${context}/move`,
 		request
 	);
 }
 
 export function deleteWorkItemsInHierarchy(context: number, ids: string[]) {
 	return http.delete<WorkItemHierarchyDTO>(
-		`/api/v2/work-item/hierarchy/${context}/${ids.join(',')}`
+		`/api/work-item/hierarchy/${context}/${ids.join(',')}`
 	);
 }
 
 export function getWorkItemSprintOverview(sprintId: string) {
-	return http.get<WorkItemSprintOverviewDTO>(`/api/v2/work-item/sprint-overview/${sprintId}`);
+	return http.get<WorkItemSprintOverviewDTO>(`/api/work-item/sprint-overview/${sprintId}`);
 }
 
 export function createWorkItemInSprintOverview(sprintId: string, status: WorkItemStatusDTO) {
 	return http.post<WorkItemSprintOverviewDTO, void>(
-		`/api/v2/work-item/sprint-overview/${sprintId}/${status}`,
+		`/api/work-item/sprint-overview/${sprintId}/${status}`,
 		undefined
 	);
 }
@@ -66,11 +66,11 @@ export function moveWorkItemInSprintOverview(
 	request: WorkItemSprintOverviewMoveRequestDTO
 ) {
 	return http.put<WorkItemSprintOverviewDTO, WorkItemSprintOverviewMoveRequestDTO>(
-		`/api/v2/work-item/sprint-overview/${sprintId}/move`,
+		`/api/work-item/sprint-overview/${sprintId}/move`,
 		request
 	);
 }
 
 export function getWorkItemDetails(id: string) {
-	return http.get<WorkItemDTO>(`/api/v2/work-item/details/${id}`);
+	return http.get<WorkItemDTO>(`/api/work-item/details/${id}`);
 }

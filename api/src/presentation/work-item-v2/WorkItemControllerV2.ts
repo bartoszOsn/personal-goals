@@ -29,7 +29,7 @@ import { SprintId } from '../../domain/sprint/model/SprintId';
 import { SprintService } from '../../app/sprint/SprintService';
 import { WorkItemDomainErrorExceptionFilter } from './WorkItemDomainErrorExceptionFilter';
 
-@Controller('v2/work-item')
+@Controller('work-item')
 @UseFilters(WorkItemDomainErrorExceptionFilter)
 export class WorkItemControllerV2 {
 	constructor(
