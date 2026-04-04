@@ -59,6 +59,12 @@ describe('LexicalRank', () => {
 			const after = LexicalRank.afterAll([existing]);
 			expect(after.asString().localeCompare('y')).toBe(1);
 		});
+
+		it('should create rank after multi-character rank', () => {
+			const existing = LexicalRank.fromString('nt');
+			const after = LexicalRank.afterAll([existing]);
+			expect(after.asString().localeCompare('nt')).toBe(1);
+		});
 	});
 
 	describe('beforeAll()', () => {
@@ -108,8 +114,8 @@ describe('LexicalRank', () => {
 		});
 
 		it('should create rank between adjacent single-character ranks', () => {
-			const a = LexicalRank.fromString('a');
-			const b = LexicalRank.fromString('b');
+			const a = LexicalRank.fromString('d');
+			const b = LexicalRank.fromString('e');
 			const between = LexicalRank.between(a, b);
 
 			expect(between.asString().localeCompare(a.asString())).toBe(1);

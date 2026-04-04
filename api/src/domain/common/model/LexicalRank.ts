@@ -24,33 +24,7 @@ const CHAR_SET_UNORDERED = [
 	'w',
 	'x',
 	'y',
-	'z',
-	'A',
-	'B',
-	'C',
-	'D',
-	'E',
-	'F',
-	'G',
-	'H',
-	'I',
-	'J',
-	'K',
-	'L',
-	'M',
-	'N',
-	'O',
-	'P',
-	'Q',
-	'R',
-	'S',
-	'T',
-	'U',
-	'V',
-	'W',
-	'X',
-	'Y',
-	'Z'
+	'z'
 ] as const;
 const CHAR_SET = [...CHAR_SET_UNORDERED].sort((a, b) => a.localeCompare(b));
 
@@ -132,59 +106,51 @@ export class LexicalRank {
 	}
 
 	private static betweenRankRaw(a: Character[], b: Character[]): Character[] {
-		const resultRank: Character[] = [];
+		// Ensure a < b for easier processing
+		if (a.join('').localeCompare(b.join('')) > 0) {
+			[a, b] = [b, a];
+		}
 
-		const commonLength = Math.min(a.length, b.length);
+		// Find the first position where they differ
+		const maxLength = Math.max(a.length, b.length);
+		let result: Character[] = [];
 
-		for (let i = 0; i < commonLength; i++) {
-			if (a[i] === b[i]) {
-				resultRank.push(a[i]!);
+		for (let i = 0; i < maxLength; i++) {
+			const charA = a[i] ?? FIRST_CHAR;
+			const charB = b[i] ?? LAST_CHAR;
+
+			const indexA = CHAR_SET.indexOf(charA);
+			const indexB = CHAR_SET.indexOf(charB);
+
+			if (indexA === indexB) {
+				// Same character, keep it and continue
+				result.push(charA);
+			} else if (indexB - indexA > 1) {
+				// There's a gap, we can insert a character between them
+				const middleIndex = Math.floor((indexA + indexB) / 2);
+				result.push(CHAR_SET[middleIndex]!);
+				break;
 			} else {
-				const aIndex = CHAR_SET.indexOf(a[i]!);
-				const bIndex = CHAR_SET.indexOf(b[i]!);
-				const availableCharsToEnd = CHAR_SET.slice(
-					Math.min(aIndex, bIndex) + 1,
-					Math.max(aIndex, bIndex) - 1
-				);
+				// Adjacent characters (indexB - indexA === 1)
+				// Keep the lower character and append something after
+				result.push(charA);
 
-				if (availableCharsToEnd.length === 0) {
-					return [...resultRank, a[i]!, MIDDLE_CHAR];
+				// If 'a' has more characters, find midpoint after this position
+				if (i + 1 < a.length) {
+					const restA = a.slice(i + 1);
+					const restB: Character[] = b[i + 1]
+						? b.slice(i + 1)
+						: [LAST_CHAR];
+					result = result.concat(this.betweenRankRaw(restA, restB));
+				} else {
+					// Append a middle character to make it between a and b
+					result.push(MIDDLE_CHAR);
 				}
-
-				return [
-					...resultRank,
-					availableCharsToEnd.at(
-						Math.floor(availableCharsToEnd.length / 2)
-					)!
-				];
+				break;
 			}
 		}
 
-		const aLastImportant: Character | undefined = a.at(commonLength);
-		const bLastImportant: Character | undefined = b.at(commonLength);
-
-		if (aLastImportant === undefined) {
-			const availableCharsToEnd = CHAR_SET.slice(
-				0,
-				CHAR_SET.indexOf(bLastImportant!) - 1
-			);
-			return [
-				...resultRank,
-				availableCharsToEnd.at(
-					Math.floor(availableCharsToEnd.length / 2)
-				) ?? MIDDLE_CHAR
-			];
-		}
-
-		const availableCharsToEnd = CHAR_SET.slice(
-			CHAR_SET.indexOf(bLastImportant!) + 1
-		);
-		return [
-			...resultRank,
-			availableCharsToEnd.at(
-				Math.floor(availableCharsToEnd.length / 2)
-			) ?? MIDDLE_CHAR
-		];
+		return result;
 	}
 
 	private static assertIsLexicalRank(
