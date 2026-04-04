@@ -1,37 +1,9 @@
-import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, Card, Center, Group, LoadingOverlay, ScrollArea, Stack, Text } from '@mantine/core';
-import { IconGripHorizontal, IconPlus } from '@tabler/icons-react';
+import { IconPlus } from '@tabler/icons-react';
 import { useBoardItemDrag } from '@/base/board/internal/useBoardItemDrag';
-
-export interface BoardProps<TData, TColumnId> {
-	columnWidth: number;
-	columns: BoardColumn<TColumnId>[];
-	items: TData[];
-	itemColumnSelector: (item: TData) => TColumnId;
-	renderCard: (data: TData) => ReactNode;
-	onColumnChange: (item: TData, newColumnId: TColumnId) => void | Promise<void>;
-	noItemsInColumnText: string;
-	onCreateItem: (columnId: TColumnId) => void | Promise<void>;
-	createButtonText: string;
-}
-
-function ItemCard<TColumnId, TData>(column: BoardColumn<TColumnId>, onMouseDownOnHandle: (item: TData, initialColumn: TColumnId, e: React.MouseEvent) => void, item: TData, props: BoardProps<TData, TColumnId>) {
-	return <Card w="100%" withBorder>
-		<Card.Section>
-			<Center w="100%"
-					h={12}
-					bg={column.color ? column.color : 'gray'}
-					style={{ cursor: 'grab' }}
-					onMouseDown={e => onMouseDownOnHandle(item, column.columnId, e)}>
-				<IconGripHorizontal size={8} />
-			</Center>
-		</Card.Section>
-		<Box>
-			{props.renderCard(item)}
-		</Box>
-	</Card>;
-}
+import { BoardProps } from '@/base/board/api/BoardProps';
+import { ItemCard } from '@/base/board/internal/ItemCard';
 
 export function Board<TData, TColumnId>(props: BoardProps<TData, TColumnId>) {
 	const {

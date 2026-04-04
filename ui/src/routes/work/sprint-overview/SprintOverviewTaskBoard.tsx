@@ -1,5 +1,5 @@
 import { Board } from '@/base/board/api/Board.tsx';
-import { BoardColumn } from '@/base/board/api/BoardColumn.ts';
+import { BoardColumnDefinition } from '@/base/board/api/BoardColumnDefinition.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { SprintId } from '@/models/Sprint';
 import { isPlainDate } from '@personal-okr/shared';
@@ -19,7 +19,7 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 	const sprints = useSprintQuery(context);
 	const createWorkItemMutation = useCreateWorkItemInSprintOverviewMutation();
 	const moveWorkItemMutation = useMoveWorkItemInSprintOverviewMutation()
-	const columns: BoardColumn<WorkItemStatus>[] = [
+	const columns: BoardColumnDefinition<WorkItemStatus>[] = [
 		{
 			columnId: WorkItemStatus.TODO,
 			name: 'To do',
