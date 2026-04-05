@@ -38,7 +38,8 @@
     - Can send emails via https://documentation.mailgun.com
 3. ✅ Work on performance
     - ✅ It turns out it's not a problem in a production build
-4. Better UI 
+4. Better UI
+    - Better inplace - Editor and display share similar styles - same font weight, size etc.
 5. Make sure it works on mobile.
 6. ✅ Drag and drop on board - Changing order
 7. Drag and drop on roadmap - changing order, and moving tasks between KRs
