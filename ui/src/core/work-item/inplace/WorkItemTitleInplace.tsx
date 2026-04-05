@@ -7,7 +7,7 @@ import { ComponentProps } from 'react';
 import { ActionIcon, Group, MantineColor, Tooltip } from '@mantine/core';
 import { IconFileInvoice } from '@tabler/icons-react';
 import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
-import { Link } from '@tanstack/react-router';
+import { createLink } from '@tanstack/react-router';
 import { WorkItem, WorkItemType } from '@/models/WorkItem';
 import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 
@@ -42,15 +42,15 @@ export function WorkItemTitleInplace({ workItem, textProps, inputProps, showDial
 					{
 						showDialogButton && (
 							<Tooltip label='Open task'>
-								<ActionIcon size="xs"
-											component={Link}
+								<ActionIconLink size="xs"
+											component={'a'}
 											to='/work/$context/details/$workItemId'
 											params={{ context: workItem.contextYear.toString(), workItemId: workItem.id }}
 											color={typeToAccentMap[workItem.type]}
 											variant="subtle"
 											onClick={(e) => { e.preventDefault(); openWorkItemModal(workItem.id)}}>
 									<IconFileInvoice />
-								</ActionIcon>
+								</ActionIconLink>
 							</Tooltip>
 						)
 					}
@@ -63,6 +63,8 @@ export function WorkItemTitleInplace({ workItem, textProps, inputProps, showDial
 		</InplaceEditor>
 	)
 }
+
+const ActionIconLink = createLink(ActionIcon<'a'>);
 
 const typeToAccentMap: Record<WorkItemType, MantineColor> = {
 	[WorkItemType.TASK]: 'gray',

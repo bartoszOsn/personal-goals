@@ -19,7 +19,7 @@ import {
 	workItemHierarchyMoveRequestToDTO,
 	workItemSprintOverviewMoveRequestToDTO,
 	workItemsUpdateRequestToDTO,
-	workItemStatusToDTO
+	workItemStatusToDTO, WorkItemHierarchy, WorkItemSprintOverview
 } from '@/api/work-item/work-item-converters';
 import {
 	WorkItemHierarchyCreateRequest,
@@ -44,7 +44,7 @@ export const useCreateWorkItemInHierarchyMutation = createMutation((queryClient)
 		const result = await createWorkItemInHierarchy(request.context, dtoRequest);
 		return dtoToWorkItemHierarchy(result);
 	},
-	onSuccess: async (data) => {
+	onSuccess: async (data: WorkItemHierarchy) => {
 		await queryClient.invalidateQueries({ queryKey: ['work-items', 'hierarchy', data.context] });
 	}
 }));
@@ -56,7 +56,7 @@ export const useUpdateWorkItemsInHierarchyMutation = createMutation((queryClient
 		const result = await updateWorkItemsInHierarchy(context, dtoRequest);
 		return dtoToWorkItemHierarchy(result);
 	},
-	onSuccess: async (data) => {
+	onSuccess: async (data: WorkItemHierarchy) => {
 		await Promise.all([
 			queryClient.invalidateQueries({ queryKey: ['work-items', 'details'] }),
 			queryClient.invalidateQueries({ queryKey: ['work-items', 'sprint-overview'] }),
@@ -72,7 +72,7 @@ export const useMoveWorkItemInHierarchyMutation = createMutation((queryClient) =
 		const result = await moveWorkItemInHierarchy(context, dtoRequest);
 		return dtoToWorkItemHierarchy(result);
 	},
-	onSuccess: async (data) => {
+	onSuccess: async (data: WorkItemHierarchy) => {
 		await queryClient.invalidateQueries({ queryKey: ['work-items', 'hierarchy', data.context] });
 	}
 }));
@@ -83,7 +83,7 @@ export const useDeleteWorkItemsInHierarchyMutation = createMutation((queryClient
 		const result = await deleteWorkItemsInHierarchy(context, ids);
 		return dtoToWorkItemHierarchy(result);
 	},
-	onSuccess: async (data) => {
+	onSuccess: async (data: WorkItemHierarchy) => {
 		await Promise.all([
 			queryClient.invalidateQueries({ queryKey: ['work-items', 'hierarchy', data.context] }),
 			queryClient.invalidateQueries({ queryKey: ['work-items', 'sprint-overview'] })
@@ -104,7 +104,7 @@ export const useCreateWorkItemInSprintOverviewMutation = createMutation((queryCl
 		const result = await createWorkItemInSprintOverview(sprintId, statusDTO);
 		return dtoToWorkItemSprintOverview(result);
 	},
-	onSuccess: async (data) => {
+	onSuccess: async (data: WorkItemSprintOverview) => {
 		await queryClient.invalidateQueries({ queryKey: ['work-items', 'sprint-overview', data.sprintId] });
 	}
 }));
@@ -116,7 +116,7 @@ export const useMoveWorkItemInSprintOverviewMutation = createMutation((queryClie
 		const result = await moveWorkItemInSprintOverview(sprintId, dtoRequest);
 		return dtoToWorkItemSprintOverview(result);
 	},
-	onSuccess: async (data) => {
+	onSuccess: async (data: WorkItemSprintOverview) => {
 		await queryClient.invalidateQueries({ queryKey: ['work-items', 'sprint-overview', data.sprintId] });
 	}
 }));
