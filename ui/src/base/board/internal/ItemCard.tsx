@@ -1,15 +1,26 @@
 import { BoardColumnDefinition, BoardProps } from '@/base/board';
 import { Box, Card, Center } from '@mantine/core';
-import { IconGripHorizontal } from '@tabler/icons-react';
+import { useSortable } from '@dnd-kit/react/sortable';
 
-export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinition<TColumnId>, item: TData, boardProps: BoardProps<TData, TColumnId> }) {
-	return <Card w="100%" withBorder>
+export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinition<TColumnId>, item: TData, index: number, boardProps: BoardProps<TData, TColumnId> }) {
+	const { ref } = useSortable({
+		id: props.boardProps.itemIdSelector(props.item),
+		index: props.index,
+		type: 'item',
+		accept: 'item',
+		group: `${props.column.columnId}`,
+		data: {
+			item: props.item,
+			column: props.column
+		}
+	})
+
+	return <Card w="100%" withBorder ref={ref}>
 		<Card.Section>
 			<Center w="100%"
-					h={12}
+					h={2}
 					bg={props.column.color ? props.column.color : 'gray'}
 					style={{ cursor: 'grab' }}>
-				<IconGripHorizontal size={8} />
 			</Center>
 		</Card.Section>
 		<Box>

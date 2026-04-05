@@ -558,6 +558,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dnd-kit/helpers@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@dnd-kit/helpers@npm:0.3.2"
+  dependencies:
+    "@dnd-kit/abstract": "npm:^0.3.2"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/da09e79224b8b595b8d1da9c3bd3959690c6fe0826ea96e38ae5e0d2ef3454c3246b863e0ddf3f8eb3722358cdd971b20d2aa36468724206c8255df1fa35da55
+  languageName: node
+  linkType: hard
+
 "@dnd-kit/react@npm:^0.3.2":
   version: 0.3.2
   resolution: "@dnd-kit/react@npm:0.3.2"
@@ -2049,6 +2059,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@personal-okr/root@workspace:."
   dependencies:
+    "@dnd-kit/helpers": "npm:^0.3.2"
     "@dnd-kit/react": "npm:^0.3.2"
   languageName: unknown
   linkType: soft

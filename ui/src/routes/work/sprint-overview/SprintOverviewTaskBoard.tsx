@@ -12,7 +12,8 @@ import {
 	useMoveWorkItemInSprintOverviewMutation,
 	useWorkItemSprintOverviewQuery
 } from '@/api/work-item/work-item-hooks';
-import { WorkItem, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
+import { WorkItem, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
+import { BoardItemMoveEvent } from '@/base/board';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);
@@ -76,18 +77,35 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 		</Stack>;
 	};
 
-	const onColumnChange = async (item: WorkItem, newStatus: WorkItemStatus) => {
+	const onItemMove = async (event: BoardItemMoveEvent<WorkItem, WorkItemStatus>) => {
+		let order: WorkItemMoveOrder;
+
+		if (event.newIndexInColumn === 0) {
+			order = {
+				type: 'FIRST'
+			};
+		} else if (event.newIndexInColumn === event.newColumnItems.length - 1) {
+			order = {
+				type: 'LAST'
+			}
+		} else {
+			order = {
+				type: 'BETWEEN',
+				after: event.newColumnItems[event.newIndexInColumn - 1].id,
+				before: event.newColumnItems[event.newIndexInColumn + 1].id
+			}
+		}
+
+
 		await moveWorkItemMutation.mutateAsync({
 			sprintId: sprintId,
 			request: {
-				id: item.id,
-				status: newStatus,
-				order: {
-					type: 'LAST'
-				}
+				id: event.item.id,
+				status: event.newColumn.columnId,
+				order
 			}
 		});
-	};
+	}
 
 	const onCreateTask = async (status: WorkItemStatus) => {
 		await createWorkItemMutation.mutateAsync({
@@ -103,9 +121,10 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 				   columns={columns}
 				   items={tasksBySprint}
 				   itemColumnSelector={(task => task.status)}
+				   itemIdSelector={(task) => task.id}
 				   renderCard={renderCard}
 				   noItemsInColumnText={'No tasks with this status'}
-				   onColumnChange={onColumnChange}
+				   onItemMove={onItemMove}
 				   onCreateItem={onCreateTask}
 				   createButtonText={'Create task'} />
 		</>

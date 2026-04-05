@@ -6,9 +6,17 @@ export interface BoardProps<TData, TColumnId> {
 	columns: BoardColumnDefinition<TColumnId>[];
 	items: TData[];
 	itemColumnSelector: (item: TData) => TColumnId;
+	itemIdSelector: (item: TData) => string;
 	renderCard: (data: TData) => ReactNode;
-	onColumnChange: (item: TData, newColumnId: TColumnId) => void | Promise<void>;
+	onItemMove: (event: BoardItemMoveEvent<TData, TColumnId>) => void | Promise<void>;
 	noItemsInColumnText: string;
 	onCreateItem: (columnId: TColumnId) => void | Promise<void>;
 	createButtonText: string;
+}
+
+export interface BoardItemMoveEvent<TData, TColumnId> {
+	item: TData;
+	newColumn: BoardColumnDefinition<TColumnId>;
+	newColumnItems: TData[];
+	newIndexInColumn: number;
 }
