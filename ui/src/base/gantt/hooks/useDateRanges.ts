@@ -54,7 +54,7 @@ export function useDateRanges() {
 
 			return maxPlainDate(lastItemEndDate, screensEndDate);
 		},
-		[context.chartViewportWidth, latestItem?.end, pixelPerMillis, startDate]
+		[context.chartViewportWidth, context.props.bounds, latestItem?.end, pixelPerMillis, startDate]
 	);
 
 	const dateToPixelPos = useCallback((date: Temporal.PlainDate) => {

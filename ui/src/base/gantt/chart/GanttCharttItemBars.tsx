@@ -115,7 +115,7 @@ function Bar({ item, row }: { item: GanttItem<unknown>, row: RowPositionInfo }) 
 						  fill: `url(#${id})`,
 						  rx: 4,
 						  cursor: context.props.changeDates ? 'grab' : 'pointer',
-					  } as any} />
+					  }} />
 			</Tooltip.Floating>
 			{
 				context.props.changeDates && actualStart && actualEnd && (

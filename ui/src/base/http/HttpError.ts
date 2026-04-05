@@ -17,7 +17,7 @@ export class HttpError<TData = unknown> extends Error {
 		return z.safeParse(schema, this.data).success;
 	}
 
-	static is<TSchema extends z.ZodType>(error: any, schema: TSchema): error is HttpError<z.infer<TSchema>> {
+	static is<TSchema extends z.ZodType>(error: unknown, schema: TSchema): error is HttpError<z.infer<TSchema>> {
 		return error instanceof HttpError && error.is(schema);
 	}
 }

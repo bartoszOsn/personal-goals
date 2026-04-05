@@ -41,8 +41,7 @@ export class http {
 			headers = Object.fromEntries(headers);
 		}
 		if (this.token) {
-			// @ts-expect-error
-			headers['Authorization'] = `Bearer ${this.token}`;
+			this.appendHeader(headers, 'Authorization', `Bearer ${this.token}`);
 		}
 
 		const response = await fetch(input, {
@@ -64,5 +63,20 @@ export class http {
 		const result = new URL(location.protocol + location.host + url);
 		result.search = new URLSearchParams(queryParams).toString();
 		return result;
+	}
+
+	private static appendHeader(headers: HeadersInit, headerName: string, headerValue: string): void {
+		if ('set' in headers && typeof headers['set'] === 'function') {
+			headers.set(headerName, headerValue);
+		} else if (Array.isArray(headers)) {
+			const index = headers.findIndex(([name]) => name === headerName);
+			if (index !== -1) {
+				headers[index] = [headerName, headerValue];
+			} else {
+				headers.push([headerName, headerValue]);
+			}
+		} else {
+			(headers as Record<string, string>)[headerName] = headerValue;
+		}
 	}
 }
