@@ -30,10 +30,10 @@ export function Board<TData, TColumnId>(props: BoardProps<TData, TColumnId>) {
 	return (
 		<DragDropProvider
 			onDragOver={(event) => {
-				setOptimisticGroupedItemIds(move(groupedItemIds, event));
+				setOptimisticGroupedItemIds(move(actualGroupedItemIds, event));
 			}}
 			onDragEnd={(event) => {
-				const newGroupedItemIds = move(groupedItemIds, event);
+				const newGroupedItemIds = move(actualGroupedItemIds, event);
 				setOptimisticGroupedItemIds(newGroupedItemIds);
 
 				if (event.canceled) {
