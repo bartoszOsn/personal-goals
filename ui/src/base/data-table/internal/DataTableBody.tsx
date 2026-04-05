@@ -4,7 +4,7 @@ import { useRowSelection } from '@/base/data-table/internal/useRowSelection';
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useClickOutside, usePrevious } from '@mantine/hooks';
 import { FlattenRow, FlattenRowsInfo } from '@/base/data-table/internal/useFlattenRows';
-import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronRight, IconGripVertical } from '@tabler/icons-react';
 import { PER_LEVEL_OFFSET } from '@/base/data-table/internal/PER_LEVEL_OFFSET';
 import { deepEqual } from '@tanstack/react-router';
 import { ContextMenu } from '@/base/context-menu/api/ContextMenu';
@@ -89,6 +89,11 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 									  bg={bgColor}
 									  data-row-id={`${row.id}`}
 									  onClick={(e) => onTrClick(row, e)}>
+								<Table.Td>
+									<ActionIcon variant='subtle' size='xs' color='gray'>
+										<IconGripVertical size={12} />
+									</ActionIcon>
+								</Table.Td>
 								{
 									columns.map((column, i) => (
 										<Table.Td key={column.columnId}

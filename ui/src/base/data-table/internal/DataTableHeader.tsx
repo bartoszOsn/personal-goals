@@ -20,6 +20,7 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 	return (
 		<Table.Thead {...props.tableHeaderProps}>
 			<Table.Tr>
+				<Table.Th />
 				{props.columns.map((column, index) => {
 					return (
 						<Table.Th key={column.columnId} data-column-id={column.columnId}>

@@ -76,7 +76,7 @@ function HeaderRow(props: { cells: HeaderCell[], offsetY: number, scrollY: numbe
 							  size="xs"
 							  c="dimmed"
 							  ta="center"
-							  style={{ alignContent: 'center', textWrap: 'nowrap' }}>{cell.label}</Text>
+							  style={{ alignContent: 'center', textWrap: 'nowrap', userSelect: 'none' }}>{cell.label}</Text>
 					</Tooltip.Floating>
 				</HtmlInSvg>
 			</g>

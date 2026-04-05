@@ -7,16 +7,18 @@ export interface DataTableColgroupProps<TData> {
 }
 
 const ACTION_COLUMN_WIDTH = 38;
+const DRAG_COLUMN_WIDTH = 38;
 
 export function DataTableColgroup<TData>(props: DataTableColgroupProps<TData>) {
 	return (
 		<colgroup>
+			<col style={{ width: `${DRAG_COLUMN_WIDTH}px` }} />
 			{
 				props.columns.map((column, i) => {
 					const isLast = i === props.columns.length - 1;
 
 					const widthPx = props.widths.get(column.columnId) ?? 300;
-					const widthFr = props.tableWidth / props.columns.length;
+					const widthFr = (props.tableWidth - DRAG_COLUMN_WIDTH) / props.columns.length;
 					let actualWidth = Math.max(widthPx, widthFr);
 
 					if (isLast) {
