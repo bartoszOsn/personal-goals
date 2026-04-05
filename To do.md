@@ -31,13 +31,15 @@
 
 ## First release
 
-1. Fix Data table – Better UX
+1. Fix Gantt and Data table – Better UX
+    - changing order of columns
+    - resizable width of table and chart
 2. Fix Auth – Better security, ability to change password, recover account etc.
     - Can send emails via https://documentation.mailgun.com
 3. ✅ Work on performance
-    - It turns out it's not a problem in a production build
+    - ✅ It turns out it's not a problem in a production build
 4. Better UI 
 5. Make sure it works on mobile.
-6. Drag and drop on board - Changing order
+6. ✅ Drag and drop on board - Changing order
 7. Drag and drop on roadmap - changing order, and moving tasks between KRs
 8. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
