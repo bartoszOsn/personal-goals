@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PropertyStorage } from '@/base/property-storage/propertyStorage.ts';
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
 
@@ -25,11 +25,11 @@ export function useCurrentColumns<TData>(props: UseCurrentColumnsProps<TData>) {
 			});
 	}, [initialColumnIds, possibleColumns, storage, storageKey]);
 
-	const setColumnsAndPersist = useCallback((columns: ColumnDescriptor<TData>[]) => {
+	const setColumnsAndPersist = (columns: ColumnDescriptor<TData>[]) => {
 		const ids = columns.map((column) => column.columnId);
 		storage.setItem(storageKey, ids).then();
 		setColumns(columns);
-	}, [storage, storageKey]);
+	};
 
 	return { columns, loading, setColumns: setColumnsAndPersist };
 }

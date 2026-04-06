@@ -4,7 +4,6 @@ import { GanttItem } from '@/base/gantt';
 import { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 import { useDrag } from '@/base/gantt/hooks/useDrag';
 import { flatItems } from '@/base/gantt/FlatItems';
-import { useMemo } from 'react';
 import { Tooltip } from '@mantine/core';
 
 const yMargin = 4;
@@ -13,7 +12,7 @@ const ONE_DATE_BAR_WIDTH = 100;
 
 export function GanttCharttItemBars() {
 	const context = useGanttContext();
-	const flattenedItems = useMemo(() => flatItems(context.props.items), [context.props.items]);
+	const flattenedItems = flatItems(context.props.items);
 
 	return (
 		<>

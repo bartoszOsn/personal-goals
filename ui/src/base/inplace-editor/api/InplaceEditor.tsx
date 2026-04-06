@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { InplaceEditorContext, InplaceEditorContextPayload } from '@/base/inplace-editor/internal/InplaceEditorContext.ts';
 import { Skeleton } from '@mantine/core';
 
@@ -15,19 +15,19 @@ export function InplaceEditor(props: InplaceEditorProps) {
 
 	const [state, setState] = useState<InplaceEditorContextPayload['state']>('display');
 	
-	const onEdit = useCallback(() => {
+	const onEdit = () => {
 		setState('edit');
-	}, []);
+	}
 	
-	const onDisplay = useCallback(() => {
+	const onDisplay = () => {
 		setState('display');
-	}, []);
+	}
 	
-	const contextPayload: InplaceEditorContextPayload = useMemo(() => ({
+	const contextPayload: InplaceEditorContextPayload = {
 		state,
 		onEdit,
 		onDisplay
-	}), [onDisplay, onEdit, state]);
+	};
 
 	return (
 		<InplaceEditorContext.Provider value={contextPayload}>

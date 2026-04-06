@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { DataTableRow } from '@/base/data-table/api/DataTableRow';
 import { MantineColor } from '@mantine/core';
 
@@ -20,15 +20,13 @@ export interface FlattenRow<TData, TId> {
 export function useFlattenRows<TData, TId>(rows: DataTableRow<TData, TId>[], onExpansionChange?: (rows: TId[]) => void) {
 	const [expanded, setExpanded] = useState<TId[]>([]);
 
-	const flattenedRows: FlattenRowsInfo<TData, TId> = useMemo(() => {
-		const flatRows: FlattenRow<TData, TId>[] = flattenRows(rows, expanded);
-		const maxLevel = Math.max(...flatRows.map(r => r.level));
+	const flatRows: FlattenRow<TData, TId>[] = flattenRows(rows, expanded);
+	const maxLevel = Math.max(...flatRows.map(r => r.level));
 
-		return {
-			maxLevels: maxLevel,
-			rows: flatRows
-		};
-	}, [rows, expanded]);
+	const flattenedRows: FlattenRowsInfo<TData, TId> = {
+		maxLevels: maxLevel,
+		rows: flatRows
+	};
 
 	return {
 		rowInfo: flattenedRows,

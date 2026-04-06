@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function mergeProps<T extends Record<string, any>>(a: T, b: T): T {
 	const result: T = { ...a };
 	for (const key in b) {

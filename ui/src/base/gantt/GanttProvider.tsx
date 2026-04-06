@@ -1,5 +1,5 @@
 import { GanttProps } from '@/base/gantt/GanttProps.ts';
-import { createContext, ReactNode, RefObject, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { createContext, ReactNode, RefObject, useContext, useRef, useState } from 'react';
 import { RowPositionInfo } from '@/base/gantt/model/RowPositionInfo';
 import { zoomLevels } from '@/base/gantt/zoomLevels';
 import { ZoomLevel } from '@/base/gantt/model/ZoomLevel';
@@ -42,33 +42,22 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 	const [dragData, setDragData] = useState<DragData>({ status: 'idle' });
 	const svg = useRef<SVGSVGElement>(null);
 	const [chartHeaderSize, setChartHeaderSize] = useState(0);
-	const flattenedItems: GanttItem<TData>[] = useMemo(() => {
-		const result: GanttItem<TData>[] = [];
-		const stack = [...props.props.items];
-
-		while(stack.length > 0) {
-			const item = stack.shift()!;
-			result.push(item);
-			stack.unshift(...item.children)
-		}
-
-		return result;
-	}, [props.props.items])
+	const flattenedItems: GanttItem<TData>[] = getFlattenedItems(props.props.items);
 
 	const scrollYSubscribers = useRef<Set<(y: number) => void>>(new Set());
-	const subscribeToScrollY = useCallback((callback: (scrollY: number) => void) => {
+	const subscribeToScrollY = (callback: (scrollY: number) => void) => {
 		scrollYSubscribers.current?.add(callback);
 		return () => {
 			scrollYSubscribers.current?.delete(callback);
 		}
-	}, []);
-	const setScrollY = useCallback((y: number) => {
+	}
+	const setScrollY = (y: number) => {
 		scrollYSubscribers.current?.forEach(callback => callback(y));
-	}, []);
+	}
 
 	const selectedItemIdsRef = useRef<string[]>([]);
 
-	const context: GanttContext<unknown> = useMemo(() => ({
+	const context: GanttContext<unknown> = {
 		props: props.props as GanttProps<unknown>,
 		rows, setRows,
 		scrollAreaHeight, setScrollAreaHeight,
@@ -80,7 +69,7 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 		chartHeaderSize, setChartHeaderSize,
 		selectedItemIdsRef,
 		flattenedItems
-	}), [props.props, rows, scrollAreaHeight, setScrollY, subscribeToScrollY, zoomLevel, chartViewportWidth, dragData, chartHeaderSize, flattenedItems])
+	};
 
 	return (
 		<GanttContext.Provider value={context}>
@@ -97,4 +86,17 @@ export function useGanttContext<TData>(): GanttContext<TData> {
 	}
 
 	return context;
+}
+
+function getFlattenedItems<TData>(items: GanttItem<TData>[]) {
+	const result: GanttItem<TData>[] = [];
+	const stack = [...items];
+
+	while(stack.length > 0) {
+		const item = stack.shift()!;
+		result.push(item);
+		stack.unshift(...item.children)
+	}
+
+	return result;
 }

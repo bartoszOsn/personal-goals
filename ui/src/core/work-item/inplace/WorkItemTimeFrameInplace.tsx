@@ -1,5 +1,5 @@
 import { Accordion, Button, Checkbox, Group, Loader, Radio, Select, Stack, Text, UnstyledButton } from '@mantine/core';
-import { ComponentProps, useMemo, useState } from 'react';
+import { ComponentProps, useState } from 'react';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
 import { useModals } from '@mantine/modals';
 import { Quarter } from '@/models/Quarter';
@@ -104,49 +104,47 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 		props.sprints.find(s => props.workItem.timeFrame?.type === WorkItemTimeFrameType.SPRINT && s.id === props.workItem.timeFrame?.sprintId) ?? props.sprints[0]
 	);
 
-	const request: WorkItemUpdateRequest = useMemo(() => {
-		let timeFrame: WorkItemTimeFrame | null = null;
+	let timeFrame: WorkItemTimeFrame | null = null;
 
-		if (type === 'no-date') {
-			timeFrame = null;
-		} else if (type === WorkItemTimeFrameType.WHOLE_YEAR) {
-			timeFrame = {
-				type: WorkItemTimeFrameType.WHOLE_YEAR,
-				context: props.workItem.contextYear,
-				startDate: startDate,
-				endDate: endDate
-			};
-		} else if (type === WorkItemTimeFrameType.QUARTER) {
-			timeFrame = {
-				type: WorkItemTimeFrameType.QUARTER,
-				context: props.workItem.contextYear,
-				startDate: startDate,
-				endDate: endDate,
-				quarter: quarter
-			};
-		} else if (type === WorkItemTimeFrameType.CUSTOM_DATE) {
-			timeFrame = {
-				type: WorkItemTimeFrameType.CUSTOM_DATE,
-				context: props.workItem.contextYear,
-				startDate: startDate,
-				endDate: endDate
-			}
-		} else if (type === WorkItemTimeFrameType.SPRINT) {
-			timeFrame = {
-				type: WorkItemTimeFrameType.SPRINT,
-				context: props.workItem.contextYear,
-				startDate: startDate,
-				endDate: endDate,
-				sprintId: sprint.id
-			}
-		} else {
-			throw new Error('Invalid time frame type')
+	if (type === 'no-date') {
+		timeFrame = null;
+	} else if (type === WorkItemTimeFrameType.WHOLE_YEAR) {
+		timeFrame = {
+			type: WorkItemTimeFrameType.WHOLE_YEAR,
+			context: props.workItem.contextYear,
+			startDate: startDate,
+			endDate: endDate
+		};
+	} else if (type === WorkItemTimeFrameType.QUARTER) {
+		timeFrame = {
+			type: WorkItemTimeFrameType.QUARTER,
+			context: props.workItem.contextYear,
+			startDate: startDate,
+			endDate: endDate,
+			quarter: quarter
+		};
+	} else if (type === WorkItemTimeFrameType.CUSTOM_DATE) {
+		timeFrame = {
+			type: WorkItemTimeFrameType.CUSTOM_DATE,
+			context: props.workItem.contextYear,
+			startDate: startDate,
+			endDate: endDate
 		}
+	} else if (type === WorkItemTimeFrameType.SPRINT) {
+		timeFrame = {
+			type: WorkItemTimeFrameType.SPRINT,
+			context: props.workItem.contextYear,
+			startDate: startDate,
+			endDate: endDate,
+			sprintId: sprint.id
+		}
+	} else {
+		throw new Error('Invalid time frame type')
+	}
 
-		return {
-			timeFrame: timeFrame
-		}
-	}, [endDate, props.workItem.contextYear, quarter, sprint.id, startDate, type])
+	const request: WorkItemUpdateRequest = {
+		timeFrame: timeFrame
+	}
 
 	const onSave = () => {
 		updateWorkItemMutation.mutateAsync({

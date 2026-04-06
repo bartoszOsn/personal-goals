@@ -1,5 +1,4 @@
 import { DataTableRow } from '@/base/data-table/api/DataTableRow.ts';
-import { useMemo } from 'react';
 import { MantineColor } from '@mantine/core';
 
 export interface UseDataTableRowsProps<TData, TId> {
@@ -19,16 +18,14 @@ export interface UseDataTableRowsProps<TData, TId> {
 }
 
 export function useDataTableRows<TData, TId>({ rawData, getId, getChildren, getColor }: UseDataTableRowsProps<TData, TId>): DataTableRow<TData, TId>[] {
-	return useMemo(() => {
-		function toDataTableRow(data: TData): DataTableRow<TData, TId> {
-			return {
-				id: getId(data),
-				data: data,
-				children: getChildren(data).map(toDataTableRow),
-				backgroundColor: getColor?.(data),
-			};
-		}
+	function toDataTableRow(data: TData): DataTableRow<TData, TId> {
+		return {
+			id: getId(data),
+			data: data,
+			children: getChildren(data).map(toDataTableRow),
+			backgroundColor: getColor?.(data),
+		};
+	}
 
-		return rawData.map(toDataTableRow);
-	}, [getChildren, getColor, getId, rawData])
+	return rawData.map(toDataTableRow);
 }

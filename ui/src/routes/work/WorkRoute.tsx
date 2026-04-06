@@ -1,7 +1,6 @@
 import { getRouteApi, Outlet, useNavigate } from '@tanstack/react-router';
 import { AppSidebar } from '@/routes/work/AppSidebar.tsx';
 import { AppShell } from '@mantine/core';
-import { useCallback } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { AppHeader } from '@/routes/work/AppHeader';
 import { notifications } from '@mantine/notifications';
@@ -16,10 +15,10 @@ export function WorkRoute() {
 			select: (params) => isNaN(+params.context) ? Temporal.Now.plainDateISO().year : +params.context
 		});
 
-	const setContext = useCallback((context: number) => {
+	const setContext = (context: number) => {
 		navigate({ to: '.', params: (prev) => ({ ...prev, context: context.toString() }) })
 			.then();
-	}, [navigate]);
+	}
 
 	useQueryOrMutationError(err => {
 		if (HttpError.is(err, BasicErrorDTOSchema)) {

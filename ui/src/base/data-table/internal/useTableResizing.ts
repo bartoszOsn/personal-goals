@@ -1,7 +1,7 @@
-import { RefObject, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
 import { PropertyStorage } from '@/base/property-storage/propertyStorage';
-import * as React from 'react';
 
 export interface UseTableResizingProps {
 	tableRef: RefObject<HTMLTableElement | null>;
@@ -12,7 +12,7 @@ export interface UseTableResizingProps {
 export function useTableResizing<TData>(props: UseTableResizingProps) {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [columnWidths, setColumnWidths] = useState<{ [columnId: string]: number }>({});
-	const columnWidthsMap = useMemo(() => new Map(Object.entries(columnWidths)), [columnWidths]);
+	const columnWidthsMap = new Map(Object.entries(columnWidths));
 
 	const storageKey = `${props.tableKey}-column-widths`;
 

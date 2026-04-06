@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useReducer } from 'react';
+import { useReducer } from 'react';
 
 export interface RowSelectionState<TId> {
 	lastSingleSelect: TId | null;
@@ -10,10 +10,7 @@ export type RowSelectionAction<TId> =
 	| { type: 'clickOutside' };
 
 export function useRowSelection<TId>(allRowIds: TId[]) {
-	const rowSelectionReducer = useMemo(
-		() => createRowSelectionReducer(allRowIds),
-		[allRowIds]
-	);
+	const rowSelectionReducer = createRowSelectionReducer(allRowIds);
 
 	const [state, dispatch] = useReducer(
 		rowSelectionReducer,
@@ -22,18 +19,12 @@ export function useRowSelection<TId>(allRowIds: TId[]) {
 
 	return {
 		selectedRows: state.selectedRows,
-		clickedOn: useCallback(
-			(rowId: TId, withShift: boolean) => {
-				dispatch({ type: 'clickedOn', rowId, withShift });
-			},
-			[dispatch]
-		),
-		clickOutside: useCallback(
-			() => {
-				dispatch({ type: 'clickOutside' });
-			},
-			[dispatch]
-		)
+		clickedOn: (rowId: TId, withShift: boolean) => {
+			dispatch({ type: 'clickedOn', rowId, withShift });
+		},
+		clickOutside: () => {
+			dispatch({ type: 'clickOutside' });
+		}
 	};
 }
 

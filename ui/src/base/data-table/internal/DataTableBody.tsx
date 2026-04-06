@@ -1,7 +1,7 @@
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
 import { ActionIcon, Group, Space, Table } from '@mantine/core';
 import { useRowSelection } from '@/base/data-table/internal/useRowSelection';
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useClickOutside, usePrevious } from '@mantine/hooks';
 import { FlattenRow, FlattenRowsInfo } from '@/base/data-table/internal/useFlattenRows';
 import { IconChevronDown, IconChevronRight, IconGripVertical } from '@tabler/icons-react';
@@ -95,7 +95,7 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 		rowInfo,
 	} = props;
 
-	const allRowIds = useMemo(() => rowInfo.rows.map(row => row.id), [rowInfo]);
+	const allRowIds = rowInfo.rows.map(row => row.id);
 
 	const {
 		selectedRows,
