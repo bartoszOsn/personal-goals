@@ -16,22 +16,19 @@ export function useTableResizing<TData>(props: UseTableResizingProps) {
 
 	const storageKey = `${props.tableKey}-column-widths`;
 
-	const loadFromStorage = async () => {
-		setLoading(true);
-		const storedWidths = await props.storage.getItem<{ [columnId: string]: number }>(storageKey);
-		if (storedWidths) {
-			setColumnWidths(storedWidths);
-		}
-		setLoading(false);
-	}
-
 	const saveToStorage = async (newValue: { [columnId: string]: number }) => {
 		await props.storage.setItem(storageKey, newValue);
 	}
 
 	useEffect(() => {
-		loadFromStorage();
-	}, []);
+		props.storage.getItem<{ [columnId: string]: number }>(storageKey)
+			.then(storedWidths => {
+				if (storedWidths) {
+					setColumnWidths(storedWidths);
+				}
+				setLoading(false);
+			});
+	}, [props.storage, storageKey]);
 
 	return {
 		loading,

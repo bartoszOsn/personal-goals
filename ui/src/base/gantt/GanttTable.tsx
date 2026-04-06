@@ -70,6 +70,7 @@ export function GanttTable<TData>() {
 	const onSelectionChange = (rows: GanttItem<TData>[]) => {
 		const itemIds = rows.map(row => row.id);
 		context.props.setSelectedItemIds?.(itemIds);
+		// eslint-disable-next-line react-hooks/immutability
 		context.selectedItemIdsRef.current = itemIds;
 	};
 

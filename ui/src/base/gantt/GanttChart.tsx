@@ -37,6 +37,7 @@ export function GanttChart<TData>() {
 							 viewportRef={viewportRef}
 							 viewportProps={{ style: { height: '100%' } }}
 							 onScrollPositionChange={({ y }) => context.setScrollY(y)}>
+			{/* eslint-disable-next-line react-hooks/refs */}
 			<svg ref={context.svg} height={context.scrollAreaHeight} width={dateToPixelPos(endDate)}>
 				<GanttChartWeekends />
 				<GanttChartBackgroundColor />
