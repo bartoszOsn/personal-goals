@@ -11,10 +11,10 @@ export default defineConfig({
 		  typescript: {
 			  tsconfigPath: 'tsconfig.app.json',
 		  },
-		  // eslint: {
-			//   lintCommand: 'eslint .',
-			//   useFlatConfig: true,
-		  // }
+		  eslint: {
+			  lintCommand: 'eslint .',
+			  useFlatConfig: true,
+		  }
 	  })
   ],
   resolve: {
