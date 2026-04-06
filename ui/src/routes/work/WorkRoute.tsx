@@ -7,6 +7,7 @@ import { notifications } from '@mantine/notifications';
 import { useQueryOrMutationError } from '@/base/query-x/api/useQueryOrMutationError';
 import { BasicErrorDTOSchema } from '@personal-okr/shared';
 import { HttpError } from '@/base/http';
+import { useState } from 'react';
 
 export function WorkRoute() {
 	const navigate = useNavigate();
@@ -34,14 +35,17 @@ export function WorkRoute() {
 		}
 	});
 
+	const [navbarCollapsed, setNavbarCollapsed] = useState<boolean>(false);
+
 	return (
 		<AppShell navbar={{
 			width: 250,
-			breakpoint: 'sm'
+			breakpoint: 'sm',
+			collapsed: { mobile: navbarCollapsed, desktop: navbarCollapsed },
 		}} header={{
 			height: 50
 		}}>
-			<AppHeader context={context} setContext={setContext} />
+			<AppHeader context={context} setContext={setContext} navbarCollapsed={navbarCollapsed} setNavbarCollapsed={setNavbarCollapsed} />
 			<AppSidebar context={context} />
 			<AppShell.Main>
 				<Outlet />
