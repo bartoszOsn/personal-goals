@@ -17,12 +17,82 @@ export interface DataTableBodyProps<TData, TId> {
 	renderContextMenu?: (openedOn: TData, selected: TData[]) => ReactNode;
 }
 
+export function DataTableRow<TData, TId>(props: {
+	bodyProps: DataTableBodyProps<TData, TId>;
+	row: FlattenRow<TData, TId>;
+	selectedRows: TId[];
+	onClick: (row: FlattenRow<TData, TId>, e: React.MouseEvent) => void;
+	contextMenuInfo: {opened: TId, selected: TId[]} | null;
+	setContextMenuInfo: (value: {opened: TId, selected: TId[]} | null) => void;
+	onTrContextMenu: (row: FlattenRow<TData, TId>) => void;
+}) {
+	if (!props.row.visible) {
+		return null;
+	}
+
+	const bgColor = props.selectedRows.includes(props.row.id)
+		? 'blue.0'
+		: props.row.backgroundColor
+			? `${props.row.backgroundColor}.0`
+			: 'white';
+
+	return (
+		<ContextMenu key={`${props.row.id}`} disabled={!props.bodyProps.renderContextMenu} onChange={(o) => o ? props.onTrContextMenu(props.row) : props.setContextMenuInfo(null)} dropdown={
+			props.bodyProps.renderContextMenu
+			&& props.contextMenuInfo
+			&& props.bodyProps.renderContextMenu(
+				props.bodyProps.rowInfo.rows.find((r) => props.contextMenuInfo && r.id === props.contextMenuInfo.opened)!.data,
+				props.bodyProps.rowInfo.rows.filter((r) => props.contextMenuInfo && props.contextMenuInfo.selected.includes(r.id))!.map((r) => r.data)
+			)
+		}>
+			<Table.Tr
+				bg={bgColor}
+				data-row-id={`${props.row.id}`}
+				onClick={(e) => props.onClick(props.row, e)}>
+				<Table.Td>
+					<ActionIcon variant='subtle' size='xs' color='gray'>
+						<IconGripVertical size={12} />
+					</ActionIcon>
+				</Table.Td>
+				{
+					props.bodyProps.columns.map((column, i) => (
+						<Table.Td key={column.columnId}
+								  style={{ overflow: 'hidden' }} colSpan={i === props.bodyProps.columns.length - 1 ? 2 : 1}>
+							<Group wrap="nowrap"
+								   gap="sm"
+								   h={20}
+								   pl={column.hierarchyColumn && props.bodyProps.rowInfo.maxLevels > 0 ? (props.row.level * PER_LEVEL_OFFSET + (props.row.hasChildren ? 0 : PER_LEVEL_OFFSET)) : 0}>
+								{
+									column.hierarchyColumn && (
+										<>
+											{
+												props.row.hasChildren ? (
+													<ActionIcon variant="transparent" color="gray" size="xs" onClick={() => props.bodyProps.toggleRow(props.row.id)}>
+														{
+															props.row.expanded ? <IconChevronDown /> : <IconChevronRight />
+														}
+													</ActionIcon>
+												) : <Space />
+											}
+										</>
+									)
+								}
+								{
+									column.render(props.row.data)
+								}
+							</Group>
+						</Table.Td>
+					))
+				}
+			</Table.Tr>
+		</ContextMenu>
+	);
+}
+
 export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>) {
 	const {
-		columns,
 		onSelectionChange,
 		rowInfo,
-		toggleRow
 	} = props;
 
 	const allRowIds = useMemo(() => rowInfo.rows.map(row => row.id), [rowInfo]);
@@ -66,67 +136,14 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 		<Table.Tbody ref={tBodyRef} style={{ userSelect: 'none' }}>
 			{
 				rowInfo.rows.map((row) => {
-					if (!row.visible) {
-						return null;
-					}
-
-					const bgColor = selectedRows.includes(row.id)
-						? 'blue.0'
-						: row.backgroundColor
-							? `${row.backgroundColor}.0`
-							: 'white';
-
-					return (
-						<ContextMenu key={`${row.id}`} disabled={!props.renderContextMenu} onChange={(o) => o ? onTrContextMenu(row) : setContextMenuInfo(null)} dropdown={
-							props.renderContextMenu
-							&& contextMenuInfo
-							&& props.renderContextMenu(
-								rowInfo.rows.find((r) => contextMenuInfo && r.id === contextMenuInfo.opened)!.data,
-								rowInfo.rows.filter((r) => contextMenuInfo && contextMenuInfo.selected.includes(r.id))!.map((r) => r.data)
-							)
-						}>
-							<Table.Tr
-									  bg={bgColor}
-									  data-row-id={`${row.id}`}
-									  onClick={(e) => onTrClick(row, e)}>
-								<Table.Td>
-									<ActionIcon variant='subtle' size='xs' color='gray'>
-										<IconGripVertical size={12} />
-									</ActionIcon>
-								</Table.Td>
-								{
-									columns.map((column, i) => (
-										<Table.Td key={column.columnId}
-												  style={{ overflow: 'hidden' }} colSpan={i === columns.length - 1 ? 2 : 1}>
-											<Group wrap="nowrap"
-												   gap="sm"
-												   h={20}
-												   pl={column.hierarchyColumn && rowInfo.maxLevels > 0 ? (row.level * PER_LEVEL_OFFSET + (row.hasChildren ? 0 : PER_LEVEL_OFFSET)) : 0}>
-												{
-													column.hierarchyColumn && (
-														<>
-															{
-																row.hasChildren ? (
-																	<ActionIcon variant="transparent" color="gray" size="xs" onClick={() => toggleRow(row.id)}>
-																		{
-																			row.expanded ? <IconChevronDown /> : <IconChevronRight />
-																		}
-																	</ActionIcon>
-																) : <Space />
-															}
-														</>
-													)
-												}
-												{
-													column.render(row.data)
-												}
-											</Group>
-										</Table.Td>
-									))
-								}
-							</Table.Tr>
-						</ContextMenu>
-					);
+					return <DataTableRow key={`${row.id}`}
+										 bodyProps={props}
+										 row={row}
+										 selectedRows={selectedRows}
+										 onClick={onTrClick}
+										 contextMenuInfo={contextMenuInfo}
+										 setContextMenuInfo={setContextMenuInfo}
+										 onTrContextMenu={onTrContextMenu} />
 				})
 			}
 		</Table.Tbody>
