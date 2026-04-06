@@ -37,6 +37,7 @@ export function Board<TData, TColumnId>(props: BoardProps<TData, TColumnId>) {
 				setOptimisticGroupedItemIds(newGroupedItemIds);
 
 				if (event.canceled) {
+					setOptimisticGroupedItemIds(null);
 					return;
 				}
 
