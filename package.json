@@ -9,9 +9,5 @@
 		"./api",
 		"./shared"
 	],
-	"packageManager": "yarn@4.9.2",
-	"dependencies": {
-		"@dnd-kit/helpers": "^0.3.2",
-		"@dnd-kit/react": "^0.3.2"
-	}
+	"packageManager": "yarn@4.9.2"
 }
