@@ -1,10 +1,13 @@
-import { BoardColumnDefinition, BoardProps } from '@/base/board';
+import { BoardColumnDefinition } from '@/base/board';
 import { Box, Card, Center } from '@mantine/core';
 import { useSortable } from '@dnd-kit/react/sortable';
+import { useAtomValue } from 'jotai';
+import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
 
-export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinition<TColumnId>, item: TData, index: number, boardProps: BoardProps<TData, TColumnId> }) {
+export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinition<TColumnId>, item: TData, index: number }) {
+	const boardProps = useAtomValue(getBoardAtoms<TData, TColumnId>().propsAtom);
 	const { ref } = useSortable({
-		id: props.boardProps.itemIdSelector(props.item),
+		id: boardProps.itemIdSelector(props.item),
 		index: props.index,
 		type: 'item',
 		accept: 'item',
@@ -24,7 +27,7 @@ export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinitio
 			</Center>
 		</Card.Section>
 		<Box>
-			{props.boardProps.renderCard(props.item)}
+			{boardProps.renderCard(props.item)}
 		</Box>
 	</Card>;
 }
