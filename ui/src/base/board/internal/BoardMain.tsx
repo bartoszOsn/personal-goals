@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
@@ -9,19 +8,12 @@ import { BoardColumn } from '@/base/board/internal/BoardColumn.tsx';
 
 export function BoardMain<TData, TColumnId>() {
 	const props = useAtomValue(getBoardAtoms<TData, TColumnId>().propsAtom);
-	const [isMoving, setIsMoving] = useState(false);
+	const showLoadingOverlay = useAtomValue(getBoardAtoms<TData, TColumnId>().showLoadingOverlayAtom);
 
-	const groupedItemIds: Record<string, string[]> = Object.fromEntries(
-		props.columns.map(column => [
-			`${column.columnId}`,
-			props.items.filter(item => props.itemColumnSelector(item) === column.columnId)
-				.map(item => props.itemIdSelector(item))
-		])
-	);
+	const setOptimisticGroupedItemIds = useSetAtom(getBoardAtoms<TData, TColumnId>().optimisticGroupedItemIdsAtom);
 
-	const [optimisticGroupedItemIds, setOptimisticGroupedItemIds] = useState<Record<string, string[]> | null>(null);
-
-	const actualGroupedItemIds = optimisticGroupedItemIds ?? groupedItemIds;
+	const actualGroupedItemIds = useAtomValue(getBoardAtoms<TData, TColumnId>().actualGroupedItemIdsAtom);
+	const itemMoveAction = useSetAtom(getBoardAtoms<TData, TColumnId>().itemMoveActionAtom);
 
 	return (
 		<DragDropProvider
@@ -46,23 +38,17 @@ export function BoardMain<TData, TColumnId>() {
 				const changeEvent: BoardItemMoveEvent<TData, TColumnId> = {
 					item, newColumn, newIndexInColumn, newColumnItems
 				}
-				setIsMoving(true);
-				Promise.resolve(props.onItemMove(changeEvent))
-					.finally(() => {
-						setOptimisticGroupedItemIds(null);
-						setIsMoving(false);
-					});
+				itemMoveAction(changeEvent);
 			}}
 		>
 			<ScrollArea.Autosize scrollbars="x" offsetScrollbars>
-				<LoadingOverlay visible={isMoving} />
+				<LoadingOverlay visible={showLoadingOverlay} />
 				<Group wrap="nowrap" align="stretch" pos="relative">
 					{
 						props.columns.map((column) => {
 							return (
 								<BoardColumn key={`${column.columnId}`}
-											 column={column}
-											 groupedItemIds={actualGroupedItemIds} />
+											 column={column} />
 							);
 						})
 					}

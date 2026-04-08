@@ -1,13 +1,19 @@
 import { BoardProps } from '@/base/board/api/BoardProps';
 import { BoardMain } from '@/base/board/internal/BoardMain';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createStore, Provider } from 'jotai';
 import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
 
 export function Board<TData, TColumnId>(props: BoardProps<TData, TColumnId>) {
-	const [store] = useState(() => createStore());
+	const [store] = useState(() => {
+		const store = createStore();
+		store.set(getBoardAtoms<TData, TColumnId>().propsAtom, props);
+		return store;
+	});
 
-	store.set(getBoardAtoms<TData, TColumnId>().propsAtom, props);
+	useEffect(() => {
+		store.set(getBoardAtoms<TData, TColumnId>().propsAtom, props);
+	}, [props, store]);
 
 	return (
 		<Provider store={store}>

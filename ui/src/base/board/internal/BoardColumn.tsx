@@ -8,12 +8,12 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
 
 export function BoardColumn<TData, TColumnId>(props: {
-	column: BoardColumnDefinition<TColumnId>,
-	groupedItemIds: Record<string, string[]>
+	column: BoardColumnDefinition<TColumnId>
 }) {
 	const boardProps = useAtomValue(getBoardAtoms<TData, TColumnId>().propsAtom);
+	const actualGroupedItemIds = useAtomValue(getBoardAtoms<TData, TColumnId>().actualGroupedItemIdsAtom);
 	const itemsInColumn = boardProps.items
-		.filter(item => props.groupedItemIds[`${props.column.columnId}`]?.includes(boardProps.itemIdSelector(item)));
+		.filter(item => actualGroupedItemIds[`${props.column.columnId}`]?.includes(boardProps.itemIdSelector(item)));
 	const createItem = useSetAtom(getBoardAtoms<TData, TColumnId>().createItemActionAtom);
 	const isCreateButtonPending = useAtomValue(getBoardAtoms<TData, TColumnId>().createButtonPendingAtom);
 
