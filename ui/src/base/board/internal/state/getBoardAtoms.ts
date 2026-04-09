@@ -52,12 +52,25 @@ export const getBoardAtoms = atomFactory(<TData, TColumnId>() => {
 				return;
 			}
 
+			const isBeforeSelf = dropTargetItem && 'beforeItem' in dropTargetItem && dropTargetItem.beforeItem === item;
+			const isAfterSelf = dropTargetItem && 'afterItem' in dropTargetItem && dropTargetItem.afterItem === item;
+
+			if (
+				isBeforeSelf || isAfterSelf
+			) {
+				set(draggedItem, null);
+				set(dropTargetColumnAtom, null);
+				set(dropTargetItemAtom, null);
+				return;
+			}
+
 			const newColumnId = dropTargetColumn?.column || boardProps.itemColumnSelector(item);
 			const newColumn = boardProps.columns.find(c => c.columnId === newColumnId);
 			if (!newColumn) {
 				throw new Error(`Unable to find column ${newColumnId}`);
 			}
 			const newColumnItems = boardProps.items
+				.filter(i => i !== item)
 				.filter(item => boardProps.itemColumnSelector(item) === newColumnId)
 				.flatMap((i, index, arr): TData[] => {
 					if (dropTargetItem === null) {
