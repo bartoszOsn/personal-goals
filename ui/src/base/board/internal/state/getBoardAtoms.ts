@@ -18,25 +18,6 @@ export const getBoardAtoms = atomFactory(<TData, TColumnId>() => {
 
 	const showLoadingOverlayAtom = atom(false);
 
-	const groupedItemIdsAtom = atom(
-		get => {
-			const props = get(propsAtom);
-			return Object.fromEntries(
-				props.columns.map(column => [
-					`${column.columnId}`,
-					props.items.filter(item => props.itemColumnSelector(item) === column.columnId)
-						.map(item => props.itemIdSelector(item))
-				])
-			);
-		}
-	);
-
-	const optimisticGroupedItemIdsAtom = atom<Record<string, string[]> | null>(null);
-
-	const actualGroupedItemIdsAtom = atom<Record<string, string[]>>(
-		get => get(optimisticGroupedItemIdsAtom) ?? get(groupedItemIdsAtom)
-	);
-
 	const itemMoveActionAtom = atom(
 		null,
 		(get, set, changeEvent: BoardItemMoveEvent<TData, TColumnId>) => {
@@ -44,15 +25,75 @@ export const getBoardAtoms = atomFactory(<TData, TColumnId>() => {
 			set(showLoadingOverlayAtom, true);
 			Promise.resolve(props.onItemMove(changeEvent))
 				.finally(() => {
-					set(optimisticGroupedItemIdsAtom, null);
 					set(showLoadingOverlayAtom, false);
 				});
 		}
 	)
 
+	const draggedItem = atom<TData | null>(null);
+
+	const dropTargetItemAtom = atom<
+		| { afterItem: TData }
+		| { beforeItem: TData }
+		| null
+	>(null);
+
+	const dropTargetColumnAtom = atom<{ column: TColumnId } | null>(null);
+
+	const dropActionAtom = atom(
+		null,
+		(get, set) => {
+			const boardProps = get(propsAtom);
+			const item = get(draggedItem);
+			const dropTargetItem = get(dropTargetItemAtom);
+			const dropTargetColumn = get(dropTargetColumnAtom);
+
+			if (!item) {
+				return;
+			}
+
+			const newColumnId = dropTargetColumn?.column || boardProps.itemColumnSelector(item);
+			const newColumn = boardProps.columns.find(c => c.columnId === newColumnId);
+			if (!newColumn) {
+				throw new Error(`Unable to find column ${newColumnId}`);
+			}
+			const newColumnItems = boardProps.items
+				.filter(item => boardProps.itemColumnSelector(item) === newColumnId)
+				.flatMap((i, index, arr): TData[] => {
+					if (dropTargetItem === null) {
+						return index === arr.length - 1 ? [i, item] : [i];
+					} else if ('beforeItem' in dropTargetItem) {
+						return i === dropTargetItem.beforeItem ? [item, i] : [i];
+					} else if ('afterItem' in dropTargetItem) {
+						return i === dropTargetItem.afterItem ? [i, item] : [i];
+					}
+					return [i];
+				});
+			const newIndexInColumn = newColumnItems.indexOf(item);
+
+			const moveEvent: BoardItemMoveEvent<TData, TColumnId> = {
+				item,
+				newColumn,
+				newColumnItems,
+				newIndexInColumn
+			}
+
+			set(showLoadingOverlayAtom, true);
+			Promise.resolve(boardProps.onItemMove(moveEvent))
+				.finally(
+					() => {
+						set(showLoadingOverlayAtom, false);
+						set(draggedItem, null);
+						set(dropTargetColumnAtom, null);
+						set(dropTargetItemAtom, null);
+					}
+				)
+		}
+	)
+
 	return {
 		propsAtom, createButtonPendingAtom, createItemActionAtom,
-		optimisticGroupedItemIdsAtom, actualGroupedItemIdsAtom,
-		showLoadingOverlayAtom, itemMoveActionAtom
+		showLoadingOverlayAtom, itemMoveActionAtom,
+		draggedItem, dropTargetItemAtom, dropTargetColumnAtom, dropActionAtom
 	};
 });
