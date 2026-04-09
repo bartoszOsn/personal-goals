@@ -85,7 +85,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@atlaskit/pragmatic-drag-and-drop@npm:^1.7.10":
+"@atlaskit/pragmatic-drag-and-drop-auto-scroll@npm:^2.1.5":
+  version: 2.1.5
+  resolution: "@atlaskit/pragmatic-drag-and-drop-auto-scroll@npm:2.1.5"
+  dependencies:
+    "@atlaskit/pragmatic-drag-and-drop": "npm:^1.7.0"
+    "@babel/runtime": "npm:^7.0.0"
+  checksum: 10c0/c6b6f609054476e75b13b57074ede136e432a8b05fb8e269686bb2f0c7b8c9999b8b906e06d3d2e61014b294042a300e75c955af9151c7fb3fa58d1cb14549cd
+  languageName: node
+  linkType: hard
+
+"@atlaskit/pragmatic-drag-and-drop@npm:^1.7.0, @atlaskit/pragmatic-drag-and-drop@npm:^1.7.10":
   version: 1.7.10
   resolution: "@atlaskit/pragmatic-drag-and-drop@npm:1.7.10"
   dependencies:
@@ -2015,6 +2025,7 @@ __metadata:
   resolution: "@personal-okr/ui@workspace:ui"
   dependencies:
     "@atlaskit/pragmatic-drag-and-drop": "npm:^1.7.10"
+    "@atlaskit/pragmatic-drag-and-drop-auto-scroll": "npm:^2.1.5"
     "@eslint/js": "npm:^9.39.1"
     "@mantine/charts": "npm:^8.3.14"
     "@mantine/core": "npm:^8.3.15"

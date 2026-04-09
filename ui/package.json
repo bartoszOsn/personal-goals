@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@atlaskit/pragmatic-drag-and-drop": "^1.7.10",
+		"@atlaskit/pragmatic-drag-and-drop-auto-scroll": "^2.1.5",
 		"@mantine/charts": "^8.3.14",
 		"@mantine/core": "^8.3.15",
 		"@mantine/dates": "^8.3.14",
