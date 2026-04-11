@@ -1,36 +1,44 @@
 import { atom } from 'jotai';
 import { BoardItemMoveEvent, BoardProps } from '@/base/board';
 import { atomFactory } from '@/base/jotai-x/atomFactory';
+import { atomWithCompare } from '@/base/jotai-x/atomWithCompare';
+import { shallowEqual } from '@mantine/hooks';
 
 export const getBoardAtoms = atomFactory(<TData, TColumnId>() => {
-	const propsAtom = atom<BoardProps<TData, TColumnId>>(void 0 as unknown as BoardProps<TData, TColumnId>);
+	const _propsAtom = atomWithCompare<BoardProps<TData, TColumnId>>(
+		void 0 as unknown as BoardProps<TData, TColumnId>,
+		(a, b) => shallowEqual(a, b)
+	);
+	const _isItemCreationPendingAtom = atom(false);
+	const _isItemMovePendingAtom = atom(false);
+	const _draggedItemAtom = atom<TData | null>(null);
 
-	const createButtonPendingAtom = atom(false);
+	const propsAtom = atom<BoardProps<TData, TColumnId>>((get) => get(_propsAtom));
+	const setPropsActionAtom = atom(
+		null,
+		(_get, set, props: BoardProps<TData, TColumnId>) => {
+			set(_propsAtom, props);
+		}
+	)
+
+	const createButtonPendingAtom = atom(get => get(_isItemCreationPendingAtom));
 	const createItemActionAtom = atom(
 		null,
 		async (get, set, column: TColumnId) => {
 			const boardProps = get(propsAtom);
-			set(createButtonPendingAtom, true);
+			set(_isItemCreationPendingAtom, true);
 			await boardProps.onCreateItem(column);
-			set(createButtonPendingAtom, false);
+			set(_isItemCreationPendingAtom, false);
 		}
 	);
 
-	const showLoadingOverlayAtom = atom(false);
+	const showLoadingOverlayAtom = atom(get => get(_isItemMovePendingAtom));
 
-	const itemMoveActionAtom = atom(
+	const draggedItemAtom = atom(get => get(_draggedItemAtom));
+	const dragStartActionAtom = atom(
 		null,
-		(get, set, changeEvent: BoardItemMoveEvent<TData, TColumnId>) => {
-			const props = get(propsAtom);
-			set(showLoadingOverlayAtom, true);
-			Promise.resolve(props.onItemMove(changeEvent))
-				.finally(() => {
-					set(showLoadingOverlayAtom, false);
-				});
-		}
-	)
-
-	const draggedItem = atom<TData | null>(null);
+		(_get, set, item: TData) => set(_draggedItemAtom, item),
+	);
 
 	const dropTargetItemAtom = atom<
 		| { afterItem: TData }
@@ -44,7 +52,7 @@ export const getBoardAtoms = atomFactory(<TData, TColumnId>() => {
 		null,
 		(get, set) => {
 			const boardProps = get(propsAtom);
-			const item = get(draggedItem);
+			const item = get(_draggedItemAtom);
 			const dropTargetItem = get(dropTargetItemAtom);
 			const dropTargetColumn = get(dropTargetColumnAtom);
 
@@ -58,7 +66,7 @@ export const getBoardAtoms = atomFactory(<TData, TColumnId>() => {
 			if (
 				isBeforeSelf || isAfterSelf
 			) {
-				set(draggedItem, null);
+				set(_draggedItemAtom, null);
 				set(dropTargetColumnAtom, null);
 				set(dropTargetItemAtom, null);
 				return;
@@ -91,12 +99,12 @@ export const getBoardAtoms = atomFactory(<TData, TColumnId>() => {
 				newIndexInColumn
 			}
 
-			set(showLoadingOverlayAtom, true);
+			set(_isItemMovePendingAtom, true);
 			Promise.resolve(boardProps.onItemMove(moveEvent))
 				.finally(
 					() => {
-						set(showLoadingOverlayAtom, false);
-						set(draggedItem, null);
+						set(_isItemMovePendingAtom, false);
+						set(_draggedItemAtom, null);
 						set(dropTargetColumnAtom, null);
 						set(dropTargetItemAtom, null);
 					}
@@ -105,8 +113,9 @@ export const getBoardAtoms = atomFactory(<TData, TColumnId>() => {
 	)
 
 	return {
-		propsAtom, createButtonPendingAtom, createItemActionAtom,
-		showLoadingOverlayAtom, itemMoveActionAtom,
-		draggedItem, dropTargetItemAtom, dropTargetColumnAtom, dropActionAtom
+		propsAtom, setPropsActionAtom,
+		createButtonPendingAtom, createItemActionAtom,
+		showLoadingOverlayAtom,
+		draggedItemAtom, dragStartActionAtom, dropTargetItemAtom, dropTargetColumnAtom, dropActionAtom
 	};
 });

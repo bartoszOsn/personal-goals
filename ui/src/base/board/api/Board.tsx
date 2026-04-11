@@ -7,12 +7,12 @@ import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
 export function Board<TData, TColumnId>(props: BoardProps<TData, TColumnId>) {
 	const [store] = useState(() => {
 		const store = createStore();
-		store.set(getBoardAtoms<TData, TColumnId>().propsAtom, props);
+		store.set(getBoardAtoms<TData, TColumnId>().setPropsActionAtom, props);
 		return store;
 	});
 
 	useEffect(() => {
-		store.set(getBoardAtoms<TData, TColumnId>().propsAtom, props);
+		store.set(getBoardAtoms<TData, TColumnId>().setPropsActionAtom, props);
 	}, [props, store]);
 
 	return (

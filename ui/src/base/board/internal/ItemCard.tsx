@@ -5,7 +5,6 @@ import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
 import { useEffect, useRef } from 'react';
 import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
-import { useAtom } from 'jotai';
 
 export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinition<TColumnId>, item: TData, index: number }) {
 	const boardProps = useAtomValue(getBoardAtoms<TData, TColumnId>().propsAtom);
@@ -14,7 +13,8 @@ export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinitio
 	const upperDropTargetRef = useRef<HTMLDivElement>(null);
 	const lowerDropTargetRef = useRef<HTMLDivElement>(null);
 
-	const [draggedItem, setDraggedItem] = useAtom(getBoardAtoms<TData, TColumnId>().draggedItem);
+	const draggedItem = useAtomValue(getBoardAtoms<TData, TColumnId>().draggedItemAtom);
+	const dragStart = useSetAtom(getBoardAtoms<TData, TColumnId>().dragStartActionAtom);
 	const setDraggedItemDropTarget = useSetAtom(getBoardAtoms<TData, TColumnId>().dropTargetItemAtom);
 	const dropAction = useSetAtom(getBoardAtoms<TData, TColumnId>().dropActionAtom);
 
@@ -29,7 +29,7 @@ export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinitio
 					column: props.column.columnId,
 				}),
 				onDragStart: () => {
-					setDraggedItem(props.item);
+					dragStart(props.item);
 				},
 				onDrop: () => {
 					dropAction();
@@ -56,7 +56,7 @@ export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinitio
 				getIsSticky: () => true
 			})
 		);
-	}, [dropAction, props.column.columnId, props.item, setDraggedItem, setDraggedItemDropTarget]);
+	}, [dropAction, props.column.columnId, props.item, dragStart, setDraggedItemDropTarget]);
 
 	return <Card w="100%" withBorder opacity={draggedItem === props.item ? 0.5 : 1} ref={ref}>
 		<Card.Section>
