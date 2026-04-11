@@ -45,5 +45,8 @@
 7. Drag and drop on roadmap - changing order and parent
     - Data table uses Jotai
     - Drag and drop on Datatable
+      - Rendering drop indicator
+      - greying out dragged rows and it's children
+      - emitting drop result
     - Drag and drop on Gantt
 8. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
