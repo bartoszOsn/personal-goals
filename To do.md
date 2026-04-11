@@ -42,5 +42,8 @@
     - Better inplace - Editor and display share similar styles - same font weight, size etc.
 5. Make sure it works on mobile.
 6. ✅ Drag and drop on board - Changing order
-7. Drag and drop on roadmap - changing order, and moving tasks between KRs
+7. Drag and drop on roadmap - changing order and parent
+    - Data table uses Jotai
+    - Drag and drop on Datatable
+    - Drag and drop on Gantt
 8. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
