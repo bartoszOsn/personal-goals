@@ -5,13 +5,12 @@ import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
 import { useEffect, useRef } from 'react';
 import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
+import { createHitboxMatcher } from '@/base/pragmatic-dnd-x/crateHitboxMatcher';
 
 export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinition<TColumnId>, item: TData, index: number }) {
 	const boardProps = useAtomValue(getBoardAtoms<TData, TColumnId>().propsAtom);
 
 	const ref = useRef<HTMLDivElement>(null);
-	const upperDropTargetRef = useRef<HTMLDivElement>(null);
-	const lowerDropTargetRef = useRef<HTMLDivElement>(null);
 
 	const draggedItem = useAtomValue(getBoardAtoms<TData, TColumnId>().draggedItemAtom);
 	const dragStart = useSetAtom(getBoardAtoms<TData, TColumnId>().dragStartActionAtom);
@@ -19,7 +18,22 @@ export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinitio
 	const dropAction = useSetAtom(getBoardAtoms<TData, TColumnId>().dropActionAtom);
 
 	useEffect(() => {
-		if (!ref.current || !upperDropTargetRef.current || !lowerDropTargetRef.current) return;
+		if (!ref.current) return;
+
+		const matchHitbox = createHitboxMatcher({
+			top: {
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: { percent: 50 }
+			},
+			bottom: {
+				top: { percent: 50 },
+				left: 0,
+				right: 0,
+				bottom: 0
+			}
+		});
 
 		return combine(
 			draggable({
@@ -36,19 +50,15 @@ export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinitio
 				}
 			}),
 			dropTargetForElements({
-				element: upperDropTargetRef.current,
-				onDragEnter: () => {
-					setDraggedItemDropTarget({ beforeItem: props.item })
-				},
-				onDragLeave: () => {
-					setDraggedItemDropTarget(null);
-				},
-				getIsSticky: () => true
-			}),
-			dropTargetForElements({
-				element: lowerDropTargetRef.current,
-				onDragEnter: () => {
-					setDraggedItemDropTarget({ afterItem: props.item })
+				element: ref.current,
+				onDrag: (e) => {
+					const hitbox = matchHitbox(e.self.element, e.location.current.input);
+
+					if (hitbox === 'top') {
+						setDraggedItemDropTarget({ beforeItem: props.item });
+					} else if (hitbox === 'bottom') {
+						setDraggedItemDropTarget({ afterItem: props.item });
+					}
 				},
 				onDragLeave: () => {
 					setDraggedItemDropTarget(null);
@@ -69,7 +79,5 @@ export function ItemCard<TColumnId, TData>(props: { column: BoardColumnDefinitio
 		<Box>
 			{boardProps.renderCard(props.item)}
 		</Box>
-		<Box ref={upperDropTargetRef} pos='absolute' inset="0 0 50% 0" hidden={!draggedItem} />
-		<Box ref={lowerDropTargetRef} pos='absolute' inset="50% 0 0 0" hidden={!draggedItem} />
 	</Card>;
 }

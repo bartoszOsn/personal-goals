@@ -31,12 +31,15 @@ export function createHitboxMatcher<THitboxName extends string>(
 
 function isInsideHitbox(hitboxDefinition: HitboxDefinition, elementRect: DOMRect, input: Input) {
 	const top = resolveOffsetToPx(hitboxDefinition.top, elementRect.height);
-	const bottom = resolveOffsetToPx(hitboxDefinition.bottom, elementRect.height);
+	const bottom = elementRect.height - resolveOffsetToPx(hitboxDefinition.bottom, elementRect.height);
 	const left = resolveOffsetToPx(hitboxDefinition.left, elementRect.width);
-	const right = resolveOffsetToPx(hitboxDefinition.right, elementRect.width);
+	const right = elementRect.width - resolveOffsetToPx(hitboxDefinition.right, elementRect.width);
 
-	const insideOnXAxis = input.clientX >= left && input.clientX <= right;
-	const insideOnYAxis = input.clientY >= top && input.clientY <= bottom;
+	const x = input.clientX - elementRect.left;
+	const y = input.clientY - elementRect.top;
+
+	const insideOnXAxis = x >= left && x <= right;
+	const insideOnYAxis = y >= top && y <= bottom;
 
 	return insideOnXAxis && insideOnYAxis;
 }
