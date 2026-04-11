@@ -45,8 +45,27 @@
 7. Drag and drop on roadmap - changing order and parent
     - Data table uses Jotai
     - Drag and drop on Datatable
-      - Rendering drop indicator
+      - Rendering drop indicator - indicating both new position and parent
       - greying out dragged rows and it's children
       - emitting drop result
     - Drag and drop on Gantt
 8. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
+
+# Ideas for future releases
+
+1. Dark mode
+    - CSS colors needs to be ported to using semantic tokens instead of color palettes
+2. Demo mode – allow users to try out the app without creating an account
+    - Login and register page has a link to demo mode
+    - When in demo, frontend should always display a banner at the top showing that this is a demo and changes won't be persisted
+    - Ideally, logged in user should also be able to enter demo mode for exploring without worrying of changing production data
+      - 🤔 How routing should be handled? All links will be prefixed with `/demo` to avoid accidental redirrect to main account.
+    - In demo mode, backend uses mock data
+    - All changes in demo mode are lost when the app is refreshed
+      - 🤔 how it should be done on backend side?
+        - Should all repositories have different implementation for demo mode?
+        - Or maybe it should be handled at app layer level?
+        - Or maybe naive solution - on enter create new account with "demo" flag, and periodically delete all accounts with "demo" flag after some inactivity?
+    - Should avoid code duplication as much as possible
+3. Technical - Better integration of DataTable and gantt, so that it willl be possiblle to, for example:
+    - When dragging, highlight row on both dataTable and gantt
