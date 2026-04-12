@@ -67,6 +67,7 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 							   rowInfo={rowInfo}
 							   toggleRow={toggleRow}
 							   renderContextMenu={renderContextMenu}
+							   rowMove={props.rowMove}
 				/>
 			</Table>
 		</ScrollArea.Autosize>

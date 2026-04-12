@@ -13,12 +13,13 @@ import { Temporal } from 'temporal-polyfill';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
 import { quarterToColor } from '@/core/quarterToColor';
-import { useUpdateWorkItemsInHierarchyMutation, useWorkItemHierarchyQuery } from '@/api/work-item/work-item-hooks';
-import { WorkItem, WorkItemId, WorkItemTimeFrameType } from '@/models/WorkItem';
+import { useMoveWorkItemInHierarchyMutation, useUpdateWorkItemsInHierarchyMutation, useWorkItemHierarchyQuery } from '@/api/work-item/work-item-hooks';
+import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
 
 export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: number, onSelectedWorkItemsChange: (workItemIds: WorkItemId[]) => void }) {
 	const workItemsQuery = useWorkItemHierarchyQuery(context);
 	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
+	const moveWorkItemMutation = useMoveWorkItemInHierarchyMutation()
 
 	const sprints = useSprintQuery(context);
 
@@ -99,6 +100,31 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 			   timeboxes={timeboxes}
 			   setSelectedItemIds={(ids) => onSelectedWorkItemsChange(ids as WorkItemId[])}
 			   renderContextMenu={(o, s) => renderRoadmapGanttContextMenu(o, s, context)}
+			   rowMove={{
+				   canBeParent: (_child, parent) => parent.data.data.type !== WorkItemType.TASK,
+				   onMove: async (payload) => {
+					   let order: WorkItemMoveOrder;
+
+					   if (payload.newOrderInParent[0] === payload.movedRow.id) {
+						   order = { type: 'FIRST' }
+					   } else if (payload.newOrderInParent.at(-1) === payload.movedRow.id) {
+						   order = { type: 'LAST' }
+					   } else {
+						   const index = payload.newOrderInParent.findIndex(id => id === payload.movedRow.id);
+						   order = { type: 'BETWEEN', before: payload.newOrderInParent[index - 1] as WorkItemId, after: payload.newOrderInParent[index + 1] as WorkItemId };
+					   }
+
+
+						await moveWorkItemMutation.mutateAsync({
+							context: context,
+							request: {
+								id: payload.movedRow.data.data.id,
+								parentId: payload.newParent?.data.data.id ?? null,
+								order: order
+							}
+						});
+				   }
+			   }}
 		/>
 	)
 }

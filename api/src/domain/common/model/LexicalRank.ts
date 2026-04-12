@@ -67,14 +67,22 @@ export class LexicalRank {
 
 	static afterAll(ranks: LexicalRank[]): LexicalRank {
 		const sorted = this.sortRanks(ranks);
-		const last = sorted.at(-1)!;
+		const last = sorted.at(-1);
+
+		if (!last) {
+			return this.single();
+		}
 
 		return new LexicalRank(this.betweenRankRaw(last.rank, LAST_RANK));
 	}
 
 	static beforeAll(ranks: LexicalRank[]): LexicalRank {
 		const sorted = this.sortRanks(ranks);
-		const first = sorted.at(0)!;
+		const first = sorted.at(0);
+
+		if (!first) {
+			return this.single();
+		}
 
 		return new LexicalRank(this.betweenRankRaw(FIRST_RANK, first.rank));
 	}

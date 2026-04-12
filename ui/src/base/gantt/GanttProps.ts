@@ -1,7 +1,7 @@
 import { GanttItem } from '@/base/gantt/GanttItem.ts';
 import { GroupProps } from '@mantine/core';
 import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
-import { ColumnDescriptor } from '@/base/data-table';
+import { ColumnDescriptor, DataTableRowMoveProps } from '@/base/data-table';
 import { ReactNode } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
@@ -17,4 +17,5 @@ export interface GanttProps<TData> {
 	bounds?: [start: Temporal.PlainDate, end: Temporal.PlainDate];
 	timeboxes?: GanttTimebox[];
 	renderContextMenu?: (openedOn: GanttItem<TData>, selected: GanttItem<TData>[]) => ReactNode;
+	rowMove?: DataTableRowMoveProps<GanttItem<TData>, string>;
 }

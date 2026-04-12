@@ -1,12 +1,10 @@
 import { FlattenRow, FlattenRowsInfo } from '@/base/data-table/internal/useFlattenRows.ts';
-import { DataTableRow } from '@/base/data-table/api/DataTableRow.ts';
 import { DataTableRowMoveEventPayload, DataTableRowMoveProps } from '@/base/data-table';
 import { useEffect, useReducer } from 'react';
 
 export type RowDragAndDropHitboxName = 'top' | 'middle' | 'bottom';
 
 export interface RowDragAndDropProps<TData, TId> {
-	allRows: DataTableRow<TData, TId>[],
 	flattenedRowInfo: FlattenRowsInfo<TData, TId>;
 	rowMoveProps?: DataTableRowMoveProps<TData, TId>;
 }
@@ -51,7 +49,9 @@ export function useRowDragAndDrop<TData, TId>(props: RowDragAndDropProps<TData, 
 
 	useEffect(() => {
 		if (state.movePayload) {
-			Promise.resolve(props.rowMoveProps?.onMove(state.movePayload))
+			const movePayload = state.movePayload;
+			state.movePayload = null;
+			Promise.resolve(props.rowMoveProps?.onMove(movePayload))
 				.finally(() => dispatch({ type: 'moveResolved' }))
 		}
 	}, [props.rowMoveProps, state.movePayload])

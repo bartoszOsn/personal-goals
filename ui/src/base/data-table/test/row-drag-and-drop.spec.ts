@@ -8,8 +8,6 @@ describe('row drag and drop', () => {
 	const rowA: DataTableRow<string, string> = { id: 'A', data: 'A', children: [rowA1] };
 	const rowB: DataTableRow<string, string> = { id: 'B', data: 'B', children: [] };
 
-	const allRows: DataTableRow<string, string>[] = [rowA, rowB];
-
 	const flattenedRows: FlattenRow<string, string>[] = [
 		{ id: 'A', data: 'A', level: 0, hasChildren: true, expanded: true, visible: true, simpleRow: rowA },
 		{ id: 'A.1', data: 'A.1', level: 1, hasChildren: false, expanded: false, visible: true, simpleRow: rowA1 },
@@ -31,7 +29,6 @@ describe('row drag and drop', () => {
 	};
 
 	const props: RowDragAndDropProps<string, string> = {
-		allRows,
 		flattenedRowInfo,
 		rowMoveProps
 	};

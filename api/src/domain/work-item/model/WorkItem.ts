@@ -50,8 +50,12 @@ export abstract class WorkItem {
 	}
 
 	set parent(parent: WorkItem | null) {
+		if (parent === this._parent) {
+			return;
+		}
+
 		if (this._parent !== null) {
-			this._parent.removeChild(this._parent);
+			this._parent.removeChild(this);
 		}
 
 		this._parent = parent;
@@ -75,7 +79,7 @@ export abstract class WorkItem {
 	}
 
 	protected removeChild(child: WorkItem) {
-		this._children = this._children.filter((c) => c !== child);
+		this._children = this._children.filter((c) => !c.id.equals(child.id));
 	}
 
 	protected getChildrenProgressAverage(): WorkItemProgress {

@@ -10,10 +10,10 @@ export interface HitboxDefinition {
 }
 
 export function createHitboxMatcher<THitboxName extends string>(
-	hitboxes: Record<THitboxName, HitboxDefinition>
+	hitboxes: Record<THitboxName, HitboxDefinition | undefined>
 ): (element: Element, input: Input) => THitboxName | null {
 	const hitboxMap = new Map<THitboxName, HitboxDefinition>(
-		Object.entries(hitboxes) as [THitboxName, HitboxDefinition][]
+		Object.entries(hitboxes).filter(([, def]) => def !== undefined) as [THitboxName, HitboxDefinition][]
 	);
 
 	return (element, input) => {

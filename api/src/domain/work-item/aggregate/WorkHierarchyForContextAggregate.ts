@@ -20,6 +20,7 @@ export class WorkHierarchyForContextAggregate {
 		if (roots.some((root) => root.parent !== null)) {
 			throw new Error('Root work items cannot have parents');
 		}
+		this.sortAll();
 	}
 
 	create(type: WorkItemType, parentId?: WorkItemId): void {
@@ -177,6 +178,17 @@ export class WorkHierarchyForContextAggregate {
 					prevWorkItem.hierarchyOrder!
 				]);
 			}
+		}
+	}
+
+	private sortAll(): void {
+		const queue = [...this.roots];
+		while (queue.length > 0) {
+			const item = queue.shift()!;
+			item.children.sort((a: WorkItem, b: WorkItem) =>
+				LexicalRank.compare(a.hierarchyOrder, b.hierarchyOrder)
+			);
+			queue.push(...item.children);
 		}
 	}
 }
