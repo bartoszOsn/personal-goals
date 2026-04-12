@@ -17,4 +17,16 @@ export interface DataTableProps<TData, TId> {
 	onExpansionChange?: (rows: TId[]) => void;
 	tableRef?: RefObject<HTMLTableElement | null>;
 	renderContextMenu?: (openedOn: TData, selected: TData[]) => ReactNode;
+	rowMove?: DataTableRowMoveProps<TData, TId>;
+}
+
+export interface DataTableRowMoveProps<TData, TId> {
+	onMove: (payload: DataTableRowMoveEventPayload<TData, TId>) => void | Promise<void>;
+	canBeParent: (childCandidate: DataTableRow<TData, TId>, parentCandidate: DataTableRow<TData, TId>) => boolean;
+}
+
+export interface DataTableRowMoveEventPayload<TData, TId> {
+	movedRow: DataTableRow<TData, TId>,
+	newParent: DataTableRow<TData, TId> | null,
+	newOrderInParent: TId[]
 }

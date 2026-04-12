@@ -15,6 +15,7 @@ export interface FlattenRow<TData, TId> {
 	expanded: boolean;
 	visible: boolean;
 	backgroundColor?: MantineColor;
+	simpleRow: DataTableRow<TData, TId>;
 }
 
 export function useFlattenRows<TData, TId>(rows: DataTableRow<TData, TId>[], onExpansionChange?: (rows: TId[]) => void) {
@@ -65,7 +66,8 @@ function flattenRows<TData, TId>(
 			hasChildren: children.length > 0,
 			expanded: expanded.includes(datum.id),
 			visible: visible,
-			backgroundColor: datum.backgroundColor
+			backgroundColor: datum.backgroundColor,
+			simpleRow: datum
 		};
 
 		result.push(row);
