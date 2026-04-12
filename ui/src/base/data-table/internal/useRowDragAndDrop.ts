@@ -193,7 +193,7 @@ function calculateRowToAvailableHitboxesMap<TData, TId>(props: RowDragAndDropPro
 
 		result.set(
 			row,
-			[canInsertAbove ? 'above' : undefined, canInsertInto ? 'into' : undefined, canInsertBelow ? 'below' : undefined]
+			[canInsertAbove ? 'top' : undefined, canInsertInto ? 'middle' : undefined, canInsertBelow ? 'bottom' : undefined]
 				.filter((hb): hb is RowDragAndDropHitboxName => hb !== undefined)
 		);
 	}
@@ -254,31 +254,33 @@ function calculateMovePayload<TData, TId>(props: RowDragAndDropProps<TData, TId>
 		? newParent.simpleRow.children.map(c => c.id)
 		: visibleRows.filter(r => r.level === 0).map(r => r.id);
 
+	const result = allChildrenIdsInNewParent.filter(id => id !== state.draggedRow!.id);
+
 	if (state.aboveDropIndicator) {
-		const aboveIndex = allChildrenIdsInNewParent.findIndex(id => id === state.aboveDropIndicator!.id);
-		if (aboveIndex !== -1) {
-			return null;
+		const targetIndex = result.findIndex(id => id === state.aboveDropIndicator!.id);
+		if (targetIndex !== -1) {
+			result.splice(targetIndex, 0, state.draggedRow!.id);
+		} else {
+			result.unshift(state.draggedRow!.id);
 		}
-
-		return {
-			movedRow: state.draggedRow.simpleRow,
-			newParent: newParent ? newParent.simpleRow : null,
-			newOrderInParent: allChildrenIdsInNewParent.splice(aboveIndex, 0, state.aboveDropIndicator!.id),
+	} else if (state.belowDropIndicator) {
+		const targetIndex = result.findIndex(id => id === state.belowDropIndicator!.id);
+		if (targetIndex !== -1) {
+			result.splice(targetIndex + 1, 0, state.draggedRow!.id);
+		} else {
+			result.unshift(state.draggedRow!.id);
 		}
-	} if (state.belowDropIndicator) {
-		const belowIndex = allChildrenIdsInNewParent.findIndex(id => id === state.belowDropIndicator!.id);
-		if (belowIndex !== -1) {
-			return null;
-		}
-
-		return {
-			movedRow: state.draggedRow.simpleRow,
-			newParent: newParent ? newParent.simpleRow : null,
-			newOrderInParent: allChildrenIdsInNewParent.splice(belowIndex + 1, 0, state.aboveDropIndicator!.id),
-		}
+	} else if (newParent) {
+		result.push(state.draggedRow!.id);
 	} else {
 		return null;
 	}
+
+	return {
+		movedRow: state.draggedRow.simpleRow,
+		newParent: newParent ? newParent.simpleRow : null,
+		newOrderInParent: result,
+	};
 
 }
 
