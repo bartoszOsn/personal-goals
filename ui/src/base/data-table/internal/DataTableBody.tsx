@@ -127,7 +127,7 @@ export function DataTableRow<TData, TId>(props: {
 				{
 					props.rowDndEnabled && (
 						<Table.Td>
-							<ActionIcon ref={handleRef} variant="subtle" size="xs" color="gray">
+							<ActionIcon ref={handleRef} style={{ cursor: 'grab' }} variant="subtle" size="xs" color="gray">
 								<IconGripVertical size={12} />
 							</ActionIcon>
 						</Table.Td>
