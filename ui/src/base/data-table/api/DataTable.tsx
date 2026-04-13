@@ -56,12 +56,14 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 			<Table ref={tableRef} style={{ tableLayout: 'fixed' }} {...tableProps}>
 				<DataTableColgroup tableWidth={scrollAreaWidth}
 								   columns={columns}
-								   widths={columnWidths} />
+								   widths={columnWidths}
+								   rowDndEnabled={!!props.rowMove} />
 				<DataTableHeader columns={columns}
 								 allPossibleColumns={possibleColumns}
 								 setColumns={setColumns}
 								 onStartDrag={startDrag}
-								 tableHeaderProps={props.tableHeaderProps} />
+								 tableHeaderProps={props.tableHeaderProps}
+								 rowDndEnabled={!!props.rowMove} />
 				<DataTableBody columns={columns}
 							   onSelectionChange={(rows) => onSelectionChange?.(rows)}
 							   rowInfo={rowInfo}

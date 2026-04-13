@@ -31,6 +31,7 @@ export function DataTableRow<TData, TId>(props: {
 	contextMenuInfo: { opened: TId, selected: TId[] } | null;
 	setContextMenuInfo: (value: { opened: TId, selected: TId[] } | null) => void;
 	onTrContextMenu: (row: FlattenRow<TData, TId>) => void;
+	rowDndEnabled: boolean;
 	rowDragAndDropApi: ReturnType<typeof useRowDragAndDrop<TData, TId>>
 }) {
 	const handleRef = useRef<HTMLButtonElement>(null);
@@ -123,11 +124,15 @@ export function DataTableRow<TData, TId>(props: {
 				}}
 				data-row-id={`${props.row.id}`}
 				onClick={(e) => props.onClick(props.row, e)}>
-				<Table.Td>
-					<ActionIcon ref={handleRef} variant="subtle" size="xs" color="gray">
-						<IconGripVertical size={12} />
-					</ActionIcon>
-				</Table.Td>
+				{
+					props.rowDndEnabled && (
+						<Table.Td>
+							<ActionIcon ref={handleRef} variant="subtle" size="xs" color="gray">
+								<IconGripVertical size={12} />
+							</ActionIcon>
+						</Table.Td>
+					)
+				}
 				{
 					props.bodyProps.columns.map((column, i) => (
 						<Table.Td key={column.columnId}
@@ -244,6 +249,7 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 										 contextMenuInfo={contextMenuInfo}
 										 setContextMenuInfo={setContextMenuInfo}
 										 onTrContextMenu={onTrContextMenu}
+										 rowDndEnabled={!!props.rowMove}
 										 rowDragAndDropApi={rowDragAndDropApi} />;
 				})
 			}

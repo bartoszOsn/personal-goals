@@ -4,6 +4,7 @@ export interface DataTableColgroupProps<TData> {
 	columns: ColumnDescriptor<TData>[];
 	widths: Map<string, number>;
 	tableWidth: number;
+	rowDndEnabled: boolean;
 }
 
 const ACTION_COLUMN_WIDTH = 38;
@@ -12,7 +13,11 @@ const DRAG_COLUMN_WIDTH = 38;
 export function DataTableColgroup<TData>(props: DataTableColgroupProps<TData>) {
 	return (
 		<colgroup>
-			<col style={{ width: `${DRAG_COLUMN_WIDTH}px` }} />
+			{
+				props.rowDndEnabled && (
+					<col style={{ width: `${DRAG_COLUMN_WIDTH}px` }} />
+				)
+			}
 			{
 				props.columns.map((column, i) => {
 					const isLast = i === props.columns.length - 1;

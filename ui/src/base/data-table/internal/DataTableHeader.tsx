@@ -11,6 +11,7 @@ interface DataTableHeaderProps<TData> {
 	allPossibleColumns: ColumnDescriptor<TData>[];
 	setColumns: (columns: ColumnDescriptor<TData>[]) => void;
 	onStartDrag: (column: ColumnDescriptor<TData>, e: React.MouseEvent) => void;
+	rowDndEnabled: boolean;
 }
 
 export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
@@ -20,7 +21,11 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 	return (
 		<Table.Thead {...props.tableHeaderProps}>
 			<Table.Tr>
-				<Table.Th />
+				{
+					props.rowDndEnabled && (
+						<Table.Th />
+					)
+				}
 				{props.columns.map((column, index) => {
 					return (
 						<Table.Th key={column.columnId} data-column-id={column.columnId}>
