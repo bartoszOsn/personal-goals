@@ -1,5 +1,5 @@
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
-import { ActionIcon, Group, Space, Table } from '@mantine/core';
+import { ActionIcon, Group, Table } from '@mantine/core';
 import { useRowSelection } from '@/base/data-table/internal/useRowSelection';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { useClickOutside, usePrevious } from '@mantine/hooks';
@@ -96,13 +96,13 @@ export function DataTableRow<TData, TId>(props: {
 	}
 
 	const bgColor =
-		props.rowDragAndDropApi.parentDropIndicator?.id === props.row.id
-		? 'blue.3'
-		: props.selectedRows.includes(props.row.id)
+		props.selectedRows.includes(props.row.id)
 			? 'blue.0'
 			: props.row.backgroundColor
 				? `${props.row.backgroundColor}.0`
 				: 'white';
+
+	const isParentDropIndicator = props.rowDragAndDropApi.parentDropIndicator?.id === props.row.id;
 
 	return (
 		<ContextMenu key={`${props.row.id}`} disabled={!props.bodyProps.renderContextMenu}
@@ -140,21 +140,18 @@ export function DataTableRow<TData, TId>(props: {
 							<Group wrap="nowrap"
 								   gap="sm"
 								   h={20}
-								   pl={column.hierarchyColumn && props.bodyProps.rowInfo.maxLevels > 0 ? (props.row.level * PER_LEVEL_OFFSET + (props.row.hasChildren ? 0 : PER_LEVEL_OFFSET)) : 0}>
+								   pl={column.hierarchyColumn && props.bodyProps.rowInfo.maxLevels > 0 ? (props.row.level * PER_LEVEL_OFFSET) : 0}>
 								{
 									column.hierarchyColumn && (
-										<>
+										<ActionIcon variant={isParentDropIndicator ? 'light' : 'transparent' }
+													style={{ visibility: props.row.hasChildren || isParentDropIndicator ? 'visible' : 'hidden' }}
+													color={ isParentDropIndicator ? 'blue' : 'gray' }
+													size="xs"
+													onClick={() => props.bodyProps.toggleRow(props.row.id)}>
 											{
-												props.row.hasChildren ? (
-													<ActionIcon variant="transparent" color="gray" size="xs"
-																onClick={() => props.bodyProps.toggleRow(props.row.id)}>
-														{
-															props.row.expanded ? <IconChevronDown /> : <IconChevronRight />
-														}
-													</ActionIcon>
-												) : <Space />
+												props.row.expanded ? <IconChevronDown /> : <IconChevronRight />
 											}
-										</>
+										</ActionIcon>
 									)
 								}
 								{
