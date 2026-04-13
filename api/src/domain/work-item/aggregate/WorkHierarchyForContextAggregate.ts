@@ -89,7 +89,7 @@ export class WorkHierarchyForContextAggregate {
 	}
 
 	delete(itemIds: WorkItemId[]) {
-		const toDelete = [...itemIds];
+		let toDelete = [...itemIds];
 		const queue = [...this.roots];
 
 		while (queue.length > 0) {
@@ -100,6 +100,7 @@ export class WorkHierarchyForContextAggregate {
 				} else {
 					this.roots = this.roots.filter((root) => root !== item);
 				}
+				toDelete = toDelete.filter((id) => !id.equals(item.id));
 			} else {
 				queue.push(...item.children);
 			}
