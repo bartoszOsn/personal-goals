@@ -1,6 +1,6 @@
 import { FlattenRow, FlattenRowsInfo } from '@/base/data-table/internal/useFlattenRows.ts';
 import { DataTableRowMoveEventPayload, DataTableRowMoveProps } from '@/base/data-table';
-import { useEffect, useReducer } from 'react';
+import { useOpaqueReducer } from '@/base/util/useOpaqueReducer';
 
 export type RowDragAndDropHitboxName = 'top' | 'middle' | 'bottom';
 
@@ -45,16 +45,7 @@ export const rowDragAndDropInitialState: RowDragAndDropState<never, never> = {
 export function useRowDragAndDrop<TData, TId>(props: RowDragAndDropProps<TData, TId>) {
 	const rowDragAndDropReducer = createRowDragAndDropReducer(props);
 
-	const [state, dispatch] = useReducer(rowDragAndDropReducer, rowDragAndDropInitialState);
-
-	useEffect(() => {
-		if (state.movePayload) {
-			const movePayload = state.movePayload;
-			state.movePayload = null;
-			Promise.resolve(props.rowMoveProps?.onMove(movePayload))
-				.finally(() => dispatch({ type: 'moveResolved' }))
-		}
-	}, [props.rowMoveProps, state.movePayload])
+	const [state, dispatch] = useOpaqueReducer(rowDragAndDropReducer, rowDragAndDropInitialState);
 
 	return {
 		dragStart: (row: FlattenRow<TData, TId>) => {
@@ -80,7 +71,12 @@ export function useRowDragAndDrop<TData, TId>(props: RowDragAndDropProps<TData, 
 		dimmedRows: state.dimmedRows,
 
 		drop: () => {
-			dispatch({ type: 'drop' });
+			const newState = dispatch({ type: 'drop' });
+			if (newState.movePayload) {
+				const movePayload = newState.movePayload;
+				Promise.resolve(props.rowMoveProps?.onMove(movePayload))
+					.finally(() => dispatch({ type: 'moveResolved' }))
+			}
 		},
 		isMoveInProgress: state.isMoveInProgress
 	};
