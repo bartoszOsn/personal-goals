@@ -1,5 +1,5 @@
 import React, { cloneElement, ReactNode, useState } from 'react';
-import { Box, Menu } from '@mantine/core';
+import { Box, Menu, Portal } from '@mantine/core';
 import { useEventListener, useMergedRef, useWindowEvent } from '@mantine/hooks';
 
 export interface ContextMenuProps {
@@ -51,15 +51,17 @@ export function ContextMenu({ children, dropdown, onChange, disabled = false }: 
 	return (
 		<>
 			{cloneElement(child, { ref: mergedRef })}
-			<Menu offset={0} position='bottom-start' opened={open} onClose={() => change(false)} clickOutsideEvents={['mousedown', 'touchstart', 'keydown', 'scroll']}
-				  floatingStrategy="fixed">
-				<Menu.Target>
-					<Box w={1} h={1} style={{position: 'fixed', left: pos.x, top: pos.y, pointerEvents: 'none' }} />
-				</Menu.Target>
-				<Menu.Dropdown>
-					{dropdown}
-				</Menu.Dropdown>
-			</Menu>
+			<Portal>
+				<Menu offset={0} position='bottom-start' opened={open} onClose={() => change(false)} clickOutsideEvents={['mousedown', 'touchstart', 'keydown', 'scroll']}
+					  floatingStrategy="fixed">
+					<Menu.Target>
+						<Box w={1} h={1} style={{position: 'fixed', left: pos.x, top: pos.y, pointerEvents: 'none' }} />
+					</Menu.Target>
+					<Menu.Dropdown>
+						{dropdown}
+					</Menu.Dropdown>
+				</Menu>
+			</Portal>
 		</>
 	);
 }
