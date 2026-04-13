@@ -181,7 +181,7 @@ function calculateRowToAvailableHitboxesMap<TData, TId>(props: RowDragAndDropPro
 		}
 
 		const canBeParent = props.rowMoveProps?.canBeParent(draggedRow.simpleRow, row.simpleRow) ?? false;
-		const canBeSibling = ancestors.length === 0 || (props.rowMoveProps?.canBeParent(ancestors.at(-1)!.simpleRow, row.simpleRow) ?? false);
+		const canBeSibling = ancestors.length === 0 || (props.rowMoveProps?.canBeParent(draggedRow.simpleRow, ancestors.at(-1)!.simpleRow) ?? false);
 
 		const canInsertAbove = canBeSibling;
 		const canInsertInto = canBeParent;
