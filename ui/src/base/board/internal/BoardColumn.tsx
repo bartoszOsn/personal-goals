@@ -4,7 +4,7 @@ import { ItemCard } from '@/base/board/internal/ItemCard.tsx';
 import { IconPlus } from '@tabler/icons-react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 
 export function BoardColumn<TData, TColumnId>(props: {
@@ -51,7 +51,7 @@ export function BoardColumn<TData, TColumnId>(props: {
 					<>
 						<Divider color={dropTargetItem && 'beforeItem' in dropTargetItem && boardProps.itemIdSelector(dropTargetItem.beforeItem) === boardProps.itemIdSelector(itemsInColumn[0]) ? 'blue.5' : 'transparent' } />
 						{
-							itemsInColumn.map((item, index) => <>
+							itemsInColumn.map((item, index) => <Fragment key={boardProps.itemIdSelector(item)}>
 									<ItemCard key={boardProps.itemIdSelector(item)} item={item} index={index} column={props.column} />
 									<Divider color={
 										dropTargetItem && (
@@ -59,7 +59,7 @@ export function BoardColumn<TData, TColumnId>(props: {
 											|| 'beforeItem' in dropTargetItem && itemsInColumn[index + 1] && boardProps.itemIdSelector(dropTargetItem.beforeItem) === boardProps.itemIdSelector(itemsInColumn[index + 1])
 										) ? 'blue.5' : 'transparent'
 									} />
-								</>
+								</Fragment>
 								)
 						}
 					</>
