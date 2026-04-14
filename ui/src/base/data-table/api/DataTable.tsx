@@ -1,5 +1,5 @@
 import { localStoragePropertyStorage } from '@/base/property-storage/localStoragePropertyStorage.ts';
-import { ScrollArea, Table } from '@mantine/core';
+import { LoadingOverlay, ScrollArea, Table } from '@mantine/core';
 import { DataTableBody } from '@/base/data-table/internal/DataTableBody.tsx';
 import { DataTableHeader } from '@/base/data-table/internal/DataTableHeader.tsx';
 import { useCurrentColumns } from '@/base/data-table/internal/useCurrentColumns';
@@ -10,6 +10,7 @@ import { useRef } from 'react';
 import { useTableResizing } from '@/base/data-table/internal/useTableResizing';
 import { DataTableProps } from '@/base/data-table/api/DataTableProps';
 import { useFlattenRows } from '@/base/data-table/internal/useFlattenRows';
+import { useRowDragAndDropForRoot } from '@/base/data-table/internal/row-drag-and-drop/useRowDragAndDropForRoot';
 
 export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 	const {
@@ -47,12 +48,15 @@ export function DataTable<TData, TId>(props: DataTableProps<TData, TId>) {
 		toggle: toggleRow
 	} = useFlattenRows(rows, onExpansionChange);
 
+	const { isMovePending } = useRowDragAndDropForRoot(rowInfo, props.rowMove);
+
 	if (columnsLoading || widthsLoading) {
 		return <DataTableSkeleton tableProps={tableProps} scrollAreaProps={scrollAreaProps} />;
 	}
 
 	return (
 		<ScrollArea.Autosize ref={scrollAreaRef} scrollbars={'xy'} {...scrollAreaProps}>
+			<LoadingOverlay visible={isMovePending} />
 			<Table ref={tableRef} style={{ tableLayout: 'fixed' }} {...tableProps}>
 				<DataTableColgroup tableWidth={scrollAreaWidth}
 								   columns={columns}

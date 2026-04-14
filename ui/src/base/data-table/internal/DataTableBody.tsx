@@ -1,5 +1,5 @@
 import { ColumnDescriptor } from '@/base/data-table/api/ColumnDescriptor.tsx';
-import { ActionIcon, Group, Table } from '@mantine/core';
+import { ActionIcon, Divider, Group, Table } from '@mantine/core';
 import { useRowSelection } from '@/base/data-table/internal/useRowSelection';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { useClickOutside, usePrevious } from '@mantine/hooks';
@@ -8,11 +8,8 @@ import { IconChevronDown, IconChevronRight, IconGripVertical } from '@tabler/ico
 import { PER_LEVEL_OFFSET } from '@/base/data-table/internal/PER_LEVEL_OFFSET';
 import { deepEqual } from '@tanstack/react-router';
 import { ContextMenu } from '@/base/context-menu/api/ContextMenu';
-import { useRowDragAndDrop } from '@/base/data-table/internal/useRowDragAndDrop';
 import { DataTableRowMoveProps } from '@/base/data-table';
-import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
-import { createHitboxMatcher } from '@/base/pragmatic-dnd-x/crateHitboxMatcher';
+import { useRowDragAndDropForRow } from '@/base/data-table/internal/row-drag-and-drop/useRowDragAndDropForRow';
 
 export interface DataTableBodyProps<TData, TId> {
 	columns: ColumnDescriptor<TData>[];
@@ -26,70 +23,24 @@ export interface DataTableBodyProps<TData, TId> {
 export function DataTableRow<TData, TId>(props: {
 	bodyProps: DataTableBodyProps<TData, TId>;
 	row: FlattenRow<TData, TId>;
+	rowInfo: FlattenRowsInfo<TData, TId>;
 	selectedRows: TId[];
 	onClick: (row: FlattenRow<TData, TId>, e: React.MouseEvent) => void;
 	contextMenuInfo: { opened: TId, selected: TId[] } | null;
 	setContextMenuInfo: (value: { opened: TId, selected: TId[] } | null) => void;
 	onTrContextMenu: (row: FlattenRow<TData, TId>) => void;
 	rowDndEnabled: boolean;
-	rowDragAndDropApi: ReturnType<typeof useRowDragAndDrop<TData, TId>>
+	rowMove?: DataTableRowMoveProps<TData, TId>;
 }) {
 	const handleRef = useRef<HTMLButtonElement>(null);
 	const ref = useRef<HTMLTableRowElement>(null);
-
-	useEffect(() => {
-		if (!ref.current || !handleRef.current) return;
-
-		const hitboxes = props.rowDragAndDropApi.rowToAvailableHitboxesMap.get(props.row) ?? [];
-		const matchHitbox = createHitboxMatcher({
-			top: hitboxes.includes('top') ? {
-				top: 0,
-				bottom: { percent: hitboxes.includes('middle') ? 75 : 50 },
-				left: 0,
-				right: 0,
-			} : undefined,
-			middle: hitboxes.includes('middle') ? {
-				top: { percent: hitboxes.includes('top') ? 25 : 0 },
-				bottom: { percent: hitboxes.includes('bottom') ? 25 : 100 },
-				left: 0,
-				right: 0,
-			} : undefined,
-			bottom: hitboxes.includes('bottom') ? {
-				top: { percent: hitboxes.includes('middle') ? 75 : 50 },
-				bottom: { percent: 0 },
-				left: 0,
-				right: 0,
-			} : undefined,
-		});
-
-		return combine(
-			draggable({
-				element: ref.current,
-				dragHandle: handleRef.current,
-				onDragStart: () => {
-					props.rowDragAndDropApi.dragStart(props.row);
-				},
-				onDrop: () => {
-					props.rowDragAndDropApi.drop();
-				}
-			}),
-			dropTargetForElements({
-				element: ref.current,
-				canDrop: () => hitboxes.length > 0,
-				onDrag: (e) => {
-					const hitbox = matchHitbox(e.self.element, e.location.current.input);
-					if (!hitbox) {
-						props.rowDragAndDropApi.exitDropTarget();
-					} else {
-						props.rowDragAndDropApi.enterDropTarget(props.row, hitbox);
-					}
-				},
-				onDragLeave: () => {
-					props.rowDragAndDropApi.exitDropTarget();
-				}
-			})
-		);
-	}, [props.row, props.rowDragAndDropApi]);
+	const { isDimmed, isParentDropTarget, isBelowDropTarget, isAboveDropTarget } = useRowDragAndDropForRow({
+		elementRef: ref,
+		handleRef: handleRef,
+		flattenedRowInfo: props.rowInfo,
+		rowMoveProps: props.rowMove,
+		currentRow: props.row
+	});
 
 	if (!props.row.visible) {
 		return null;
@@ -101,8 +52,6 @@ export function DataTableRow<TData, TId>(props: {
 			: props.row.backgroundColor
 				? `${props.row.backgroundColor}.0`
 				: 'white';
-
-	const isParentDropIndicator = props.rowDragAndDropApi.parentDropIndicator?.id === props.row.id;
 
 	return (
 		<ContextMenu key={`${props.row.id}`} disabled={!props.bodyProps.renderContextMenu}
@@ -118,15 +67,20 @@ export function DataTableRow<TData, TId>(props: {
 				ref={ref}
 				bg={bgColor}
 				style={{
-					borderTop: props.rowDragAndDropApi.aboveDropIndicator?.id === props.row.id ? '1px solid blue' : '1px solid transparent',
-					borderBottom: props.rowDragAndDropApi.belowDropIndicator?.id === props.row.id ? '1px solid blue' : undefined,
-					opacity: props.rowDragAndDropApi.dimmedRows.some(r => r.id === props.row.id) ? 0.5 : 1,
+					position: 'relative',
+					opacity: isDimmed ? 0.5 : 1,
 				}}
 				data-row-id={`${props.row.id}`}
 				onClick={(e) => props.onClick(props.row, e)}>
 				{
 					props.rowDndEnabled && (
 						<Table.Td>
+							{
+								isAboveDropTarget && <Divider color='blue' pos='absolute' style={{ top: -1, right: 0, width: '100%' }} />
+							}
+							{
+								isBelowDropTarget && <Divider color='blue' pos='absolute' style={{ bottom: -2, right: 0, width: '100%' }} />
+							}
 							<ActionIcon ref={handleRef} style={{ cursor: 'grab' }} variant="subtle" size="xs" color="gray">
 								<IconGripVertical size={12} />
 							</ActionIcon>
@@ -143,9 +97,9 @@ export function DataTableRow<TData, TId>(props: {
 								   pl={column.hierarchyColumn && props.bodyProps.rowInfo.maxLevels > 0 ? (props.row.level * PER_LEVEL_OFFSET) : 0}>
 								{
 									column.hierarchyColumn && (
-										<ActionIcon variant={isParentDropIndicator ? 'light' : 'transparent' }
-													style={{ visibility: props.row.hasChildren || isParentDropIndicator ? 'visible' : 'hidden' }}
-													color={ isParentDropIndicator ? 'blue' : 'gray' }
+										<ActionIcon variant={isParentDropTarget ? 'light' : 'transparent' }
+													style={{ visibility: props.row.hasChildren || isParentDropTarget ? 'visible' : 'hidden' }}
+													color={ isParentDropTarget ? 'blue' : 'gray' }
 													size="xs"
 													onClick={() => props.bodyProps.toggleRow(props.row.id)}>
 											{
@@ -209,31 +163,6 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 		}
 	});
 
-	const rowDragAndDropApi = useRowDragAndDrop({
-		flattenedRowInfo: props.rowInfo,
-		rowMoveProps: props.rowMove
-	});
-
-	// useEffect(() => {
-	// 	if (!props.rowMove) {
-	// 		return;
-	// 	}
-	//
-	// 	if (!tBodyRef.current) {
-	// 		return;
-	// 	}
-	//
-	// 	return dropTargetForElements({
-	// 		element: tBodyRef.current,
-	// 		onDragEnter: () => {
-	// 			rowDragAndDropApi.enterGlobalTableDropTarget();
-	// 		},
-	// 		onDragLeave: () => {
-	// 			rowDragAndDropApi.exitGlobalTableDropTarget();
-	// 		},
-	// 	})
-	// }, [props.rowMove, rowDragAndDropApi, tBodyRef]);
-
 	return(
 		<Table.Tbody ref={tBodyRef} style={{ userSelect: 'none' }}>
 			{
@@ -247,7 +176,9 @@ export function DataTableBody<TData, TId>(props: DataTableBodyProps<TData, TId>)
 										 setContextMenuInfo={setContextMenuInfo}
 										 onTrContextMenu={onTrContextMenu}
 										 rowDndEnabled={!!props.rowMove}
-										 rowDragAndDropApi={rowDragAndDropApi} />;
+										 rowInfo={rowInfo}
+										 rowMove={props.rowMove}
+										  />;
 				})
 			}
 		</Table.Tbody>
