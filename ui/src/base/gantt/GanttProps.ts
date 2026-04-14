@@ -5,6 +5,7 @@ import { ColumnDescriptor, DataTableRowMoveProps } from '@/base/data-table';
 import { ReactNode } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
+import { PropertyStorage } from '@/base/property-storage/propertyStorage';
 
 export interface GanttProps<TData> {
 	items: GanttItem<TData>[];
@@ -18,4 +19,5 @@ export interface GanttProps<TData> {
 	timeboxes?: GanttTimebox[];
 	renderContextMenu?: (openedOn: GanttItem<TData>, selected: GanttItem<TData>[]) => ReactNode;
 	rowMove?: DataTableRowMoveProps<GanttItem<TData>, string>;
+	storage?: PropertyStorage;
 }

@@ -1,4 +1,4 @@
-import { Box, px, rem } from '@mantine/core';
+import { Box, px } from '@mantine/core';
 import { useGanttContext } from '@/base/gantt/GanttProvider';
 import { useElementSize } from '@mantine/hooks';
 import { useEffect, useRef, useState } from 'react';
@@ -74,8 +74,16 @@ export function GanttTable<TData>() {
 		context.selectedItemIdsRef.current = itemIds;
 	};
 
+	useEffect(() => {
+		return context.subscribeToTableToChartRatio(ratio => {
+			if (!boxRef.current) return;
+			
+			boxRef.current.style.flex = `${ratio * 100} 0 0px`;
+		})
+	}, [boxRef, context]);
+
 	return (
-		<Box w={rem(300)} h="100%" ref={boxRef}>
+		<Box h="100%" ref={boxRef} style={{ overflow: 'hidden' }}>
 			<DataTable rows={dataTableRows}
 					   possibleColumns={context.props.possibleColumns as ColumnDescriptor<GanttItem<TData>>[]}
 					   initialColumnIds={context.props.initialColumnIds}
@@ -98,6 +106,7 @@ export function GanttTable<TData>() {
 					   onExpansionChange={setExpandedItems}
 					   renderContextMenu={context.props.renderContextMenu}
 					   tableRef={tableRef}
+					   storage={context.props.storage}
 					   rowMove={context.props.rowMove}/>
 		</Box>
 	);

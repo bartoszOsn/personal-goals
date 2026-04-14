@@ -25,12 +25,16 @@ export interface GanttContext<TData> {
 	chartHeaderSize: number;
 	setChartHeaderSize(headerSize: number): void;
 	selectedItemIdsRef: RefObject<string[]>;
+	subscribeToTableToChartRatio: (callback: (ratio: number) => void) => () => void;
+	setTableToChartRatio: (ratio: number) => void;
+	rootContainerRef: RefObject<HTMLDivElement | null>;
 }
 
 const GanttContext = createContext<GanttContext<unknown> | null>(null);
 
 export interface GanttProviderProps<TData> {
 	props: GanttProps<TData>;
+	rootContainerRef: RefObject<HTMLDivElement | null>;
 	children: ReactNode;
 }
 
@@ -55,6 +59,20 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 		scrollYSubscribers.current?.forEach(callback => callback(y));
 	}
 
+	const tableToChartRatioSubscribers = useRef<Set<(ratio: number) => void>>(new Set());
+	const tableToChartRatioRef = useRef(0.5);
+	const subscribeToTableToChartRatio = (callback: (ratio: number) => void) => {
+		tableToChartRatioSubscribers.current?.add(callback);
+		callback(tableToChartRatioRef.current);
+		return () => {
+			tableToChartRatioSubscribers.current?.delete(callback);
+		}
+	}
+	const setTableToChartRatio = (ratio: number) => {
+		tableToChartRatioRef.current = ratio;
+		tableToChartRatioSubscribers.current?.forEach(callback => callback(ratio));
+	}
+
 	const selectedItemIdsRef = useRef<string[]>([]);
 
 	const context: GanttContext<unknown> = {
@@ -68,7 +86,9 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 		svg,
 		chartHeaderSize, setChartHeaderSize,
 		selectedItemIdsRef,
-		flattenedItems
+		flattenedItems,
+		subscribeToTableToChartRatio, setTableToChartRatio,
+		rootContainerRef: props.rootContainerRef
 	};
 
 	return (
