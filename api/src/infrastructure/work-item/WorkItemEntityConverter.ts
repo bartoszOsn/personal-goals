@@ -47,7 +47,7 @@ export class WorkItemEntityConverter {
 			status: this.workItemStatusToEntity(workItem.status),
 			timeFrame: this.workItemTimeFrameToEntity(workItem.timeFrame),
 			user: { id: user.id.id },
-			parent: workItem.parent ? { id: workItem.parent.id.id } : undefined,
+			parent: workItem.parent ? { id: workItem.parent.id.id } : null,
 			hierarchyOrder: workItem.hierarchyOrder?.asString(),
 			sprintOverviewOrder: workItem.sprintOverviewOrder?.asString()
 		});

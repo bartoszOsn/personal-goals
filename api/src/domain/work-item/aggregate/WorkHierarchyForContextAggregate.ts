@@ -71,6 +71,9 @@ export class WorkHierarchyForContextAggregate {
 				.filter((rank) => rank !== null);
 			item.hierarchyOrder = this.getNewRank(request.order, allRanks);
 			item.parent = null;
+			if (!this.roots.some((root) => root.id.equals(item.id))) {
+				this.roots.push(item);
+			}
 			this.roots.sort((a, b) =>
 				LexicalRank.compare(a.hierarchyOrder, b.hierarchyOrder)
 			);
@@ -82,6 +85,11 @@ export class WorkHierarchyForContextAggregate {
 				.filter((rank) => rank !== null);
 			item.hierarchyOrder = this.getNewRank(request.order, allRanks);
 			item.parent = parent;
+			if (this.roots.some((root) => root.id.equals(item.id))) {
+				this.roots = this.roots.filter(
+					(root) => !root.id.equals(item.id)
+				);
+			}
 			parent.children.sort((a, b) =>
 				LexicalRank.compare(a.hierarchyOrder, b.hierarchyOrder)
 			);
@@ -183,6 +191,9 @@ export class WorkHierarchyForContextAggregate {
 	}
 
 	private sortAll(): void {
+		this.roots.sort((a: WorkItem, b: WorkItem) =>
+			LexicalRank.compare(a.hierarchyOrder, b.hierarchyOrder)
+		);
 		const queue = [...this.roots];
 		while (queue.length > 0) {
 			const item = queue.shift()!;

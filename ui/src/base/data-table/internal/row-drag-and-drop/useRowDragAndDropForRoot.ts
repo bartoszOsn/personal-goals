@@ -68,7 +68,7 @@ export function useRowDragAndDropForRoot<TData, TId>(
 				
 				setIsMovePending(true);
 				Promise.resolve(rowMoveProps?.onMove(movePayload))
-					.then(() => setIsMovePending(false));
+					.finally(() => setIsMovePending(false));
 			}
 		})
 	}, [flattenedRowInfo, rowMoveProps]);

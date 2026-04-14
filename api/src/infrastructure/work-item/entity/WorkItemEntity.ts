@@ -41,7 +41,7 @@ export class WorkItemEntity {
 	children?: WorkItemEntity[];
 
 	@TreeParent({ onDelete: 'CASCADE' })
-	parent?: WorkItemEntity;
+	parent?: WorkItemEntity | null;
 
 	@Column({ nullable: true })
 	hierarchyOrder?: string;
