@@ -33,7 +33,7 @@
 
 1. Fix Gantt and Data table – Better UX
     - changing order of columns
-    - resizable width of table and chart
+    - ✅ resizable width of table and chart
 2. Fix Auth – Better security, ability to change password, recover account etc.
     - Can send emails via https://documentation.mailgun.com
 3. ✅ Work on performance
@@ -42,13 +42,13 @@
     - Better inplace - Editor and display share similar styles - same font weight, size etc.
 5. Make sure it works on mobile.
 6. ✅ Drag and drop on board - Changing order
-7. Drag and drop on roadmap - changing order and parent
-    - Data table uses Jotai
-    - Drag and drop on Datatable
-      - Rendering drop indicator - indicating both new position and parent
-      - greying out dragged rows and it's children
-      - emitting drop result
-    - Drag and drop on Gantt
+7. ✅ Drag and drop on roadmap - changing order and parent
+    - ✅ Data table uses Jotai (In perspective, it was a bad choice)
+    - ✅Drag and drop on Datatable
+      - ✅ Rendering drop indicator - indicating both new position and parent
+      - ✅ greying out dragged rows and its children
+      - ✅ emitting drop result
+    - ✅ Drag and drop on Gantt
 8. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
 
 # Ideas for future releases
