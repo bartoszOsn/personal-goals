@@ -40,10 +40,11 @@
     - ✅ It turns out it's not a problem in a production build
 4. Better UI
     - Better inplace - Editor and display share similar styles - same font weight, size etc.
-5. Navigating to the index actually shows something.
+5. ✅ Navigating to the index actually shows something.
 6. Make sure it works on mobile.
     - ✅ Hide gantt chart on mobile, leaving only the table
     - ✅ Sidebar hides on navigation on mobile
+    - Column resize works on mobile
 7. ✅ Drag and drop on board - Changing order
 8. ✅ Drag and drop on roadmap - changing order and parent
     - ✅ Data table uses Jotai (In perspective, it was a bad choice)
