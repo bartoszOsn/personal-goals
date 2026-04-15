@@ -125,6 +125,7 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 						});
 				   }
 			   }}
+			   hideChartWithScreenSmallerThan='sm'
 		/>
 	)
 }

@@ -22,7 +22,7 @@ export function AppHeader({ context, setContext, navbarCollapsed, setNavbarColla
 				<Group gap='xs' wrap='nowrap' style={{ cursor: 'default', userSelect: 'none' }}>
 					<Burger size='sm' opened={!navbarCollapsed} onClick={() => setNavbarCollapsed(!navbarCollapsed)} />
 					<Image src='/logo.svg' w={24} h={24} />
-					<Text fw='bold' c='grape' style={{ textWrap: 'nowrap' }}>Personal Goals</Text>
+					<Text fw='bold' visibleFrom='sm' c='grape' style={{ textWrap: 'nowrap' }}>Personal Goals</Text>
 				</Group>
 
 				<YearPickerInput value={contextSwitcherValue}

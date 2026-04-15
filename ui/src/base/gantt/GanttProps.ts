@@ -1,5 +1,5 @@
 import { GanttItem } from '@/base/gantt/GanttItem.ts';
-import { GroupProps } from '@mantine/core';
+import { GroupProps, MantineBreakpoint } from '@mantine/core';
 import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { ColumnDescriptor, DataTableRowMoveProps } from '@/base/data-table';
 import { ReactNode } from 'react';
@@ -20,4 +20,5 @@ export interface GanttProps<TData> {
 	renderContextMenu?: (openedOn: GanttItem<TData>, selected: GanttItem<TData>[]) => ReactNode;
 	rowMove?: DataTableRowMoveProps<GanttItem<TData>, string>;
 	storage?: PropertyStorage;
+	hideChartWithScreenSmallerThan?: MantineBreakpoint;
 }

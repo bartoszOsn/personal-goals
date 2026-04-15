@@ -79,6 +79,7 @@ export function SprintSettingsRoute() {
 												ganttKey={'sprint-settings'}
 												possibleColumns={possibleColumns}
 												initialColumnIds={['name', 'startDate', 'endDate']}
+												hideChartWithScreenSmallerThan='sm'
 				/>
 			}
 		</Stack>

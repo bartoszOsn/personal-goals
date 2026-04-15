@@ -1,13 +1,14 @@
-import { getRouteApi, Outlet, useNavigate } from '@tanstack/react-router';
+import { getRouteApi, Outlet, useNavigate, useRouter } from '@tanstack/react-router';
 import { AppSidebar } from '@/routes/work/AppSidebar.tsx';
-import { AppShell } from '@mantine/core';
+import { AppShell, useMantineTheme } from '@mantine/core';
 import { Temporal } from 'temporal-polyfill';
 import { AppHeader } from '@/routes/work/AppHeader';
 import { notifications } from '@mantine/notifications';
 import { useQueryOrMutationError } from '@/base/query-x/api/useQueryOrMutationError';
 import { BasicErrorDTOSchema } from '@personal-okr/shared';
 import { HttpError } from '@/base/http';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useMediaQuery } from '@mantine/hooks';
 
 export function WorkRoute() {
 	const navigate = useNavigate();
@@ -35,7 +36,19 @@ export function WorkRoute() {
 		}
 	});
 
-	const [navbarCollapsed, setNavbarCollapsed] = useState<boolean>(false);
+	const theme = useMantineTheme();
+	const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
+	const [navbarCollapsed, setNavbarCollapsed] = useState<boolean>(true);
+
+	const router = useRouter();
+
+	useEffect(() => {
+		return router.subscribe('onBeforeNavigate', () => {
+			if (isMobile) {
+				setNavbarCollapsed(true);
+			}
+		})
+	}, [isMobile, router]);
 
 	return (
 		<AppShell navbar={{
