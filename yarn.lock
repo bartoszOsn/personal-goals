@@ -846,6 +846,58 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@firebase-oss/ui-core@npm:7.0.2-beta":
+  version: 7.0.2-beta
+  resolution: "@firebase-oss/ui-core@npm:7.0.2-beta"
+  dependencies:
+    "@firebase-oss/ui-translations": "npm:7.0.2-beta"
+    "@nanostores/deepmap": "npm:^0.0.1"
+    libphonenumber-js: "npm:^1.12.23"
+    nanostores: "npm:^1.1.0"
+    qrcode-generator: "npm:^2.0.4"
+    zod: "npm:4.1.12"
+  peerDependencies:
+    firebase: ^11 || ^12
+  checksum: 10c0/02861f4667446bd9743277c20d94304a8f7d41be2e2893398189d5191d172d182750c08f29b28ecff7e456216eff3c96e4fd0fe8a94175754bc394ad70bcbb5b
+  languageName: node
+  linkType: hard
+
+"@firebase-oss/ui-react@npm:^7.0.2-beta":
+  version: 7.0.2-beta
+  resolution: "@firebase-oss/ui-react@npm:7.0.2-beta"
+  dependencies:
+    "@firebase-oss/ui-core": "npm:7.0.2-beta"
+    "@firebase-oss/ui-styles": "npm:7.0.2-beta"
+    "@nanostores/react": "npm:^1.0.0"
+    "@radix-ui/react-slot": "npm:^1.2.3"
+    "@tanstack/react-form": "npm:1.20.0"
+    clsx: "npm:^2.1.1"
+    tailwind-merge: "npm:^3.0.1"
+    zod: "npm:4.1.12"
+  peerDependencies:
+    firebase: ^11 || ^12
+    react: ^19
+    react-dom: ^19
+  checksum: 10c0/1334abf4c69fae759921df2f1c819927d12d4aa8d89db3b4af2290d15d8b6ad123ea288322c038e3e607b5bc185de89eb1c171de09c0a49ab7516a21f9c005ba
+  languageName: node
+  linkType: hard
+
+"@firebase-oss/ui-styles@npm:7.0.2-beta":
+  version: 7.0.2-beta
+  resolution: "@firebase-oss/ui-styles@npm:7.0.2-beta"
+  dependencies:
+    cva: "npm:1.0.0-beta.4"
+  checksum: 10c0/405e2c3327d31d57fe022cca7950f2d492e86260e73289b8ca781845982955ff7f31826a44a517d1c6830db149bc0d05df7a12d5a9b63089730df6d95b46f956
+  languageName: node
+  linkType: hard
+
+"@firebase-oss/ui-translations@npm:7.0.2-beta":
+  version: 7.0.2-beta
+  resolution: "@firebase-oss/ui-translations@npm:7.0.2-beta"
+  checksum: 10c0/9eaed52ff0be2d0f3b145909a6053cf2b4ef7c47371c4688f03d90a99d65f0466677ed646c94f72ae8924d1b3157a7b8819557ccc9fe6667435c37a101c9c156
+  languageName: node
+  linkType: hard
+
 "@firebase/ai@npm:2.11.0":
   version: 2.11.0
   resolution: "@firebase/ai@npm:2.11.0"
@@ -2363,6 +2415,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nanostores/deepmap@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@nanostores/deepmap@npm:0.0.1"
+  peerDependencies:
+    nanostores: ^1.0.0
+  checksum: 10c0/c4d2076538d4cafb8e1636fd583b21503cfacaa8fbbd7e328216c5e33ff5fc7e8efdfde50c55d2a65870d547bca670f20c5af7ba3e30f72dc53b956963b0438f
+  languageName: node
+  linkType: hard
+
+"@nanostores/react@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "@nanostores/react@npm:1.1.0"
+  peerDependencies:
+    nanostores: ^1.2.0
+    react: ">=18.0.0"
+  checksum: 10c0/512220967bb0f2d2c29680782676c8d14bafa61de05df695e3bfc54ad246ffb8a63fd1c5165c588da116edda47c94eaa9b085211e920a49e4bda118f3702cb7e
+  languageName: node
+  linkType: hard
+
 "@napi-rs/wasm-runtime@npm:^0.2.11":
   version: 0.2.12
   resolution: "@napi-rs/wasm-runtime@npm:0.2.12"
@@ -2705,6 +2776,7 @@ __metadata:
     "@atlaskit/pragmatic-drag-and-drop": "npm:^1.7.10"
     "@atlaskit/pragmatic-drag-and-drop-auto-scroll": "npm:^2.1.5"
     "@eslint/js": "npm:^9.39.1"
+    "@firebase-oss/ui-react": "npm:^7.0.2-beta"
     "@mantine/charts": "npm:^8.3.14"
     "@mantine/core": "npm:^8.3.15"
     "@mantine/dates": "npm:^8.3.14"
@@ -2741,6 +2813,7 @@ __metadata:
     postcss-simple-vars: "npm:^7.0.1"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
+    react-firebaseui: "npm:^6.0.0"
     recharts: "npm:^3.7.0"
     temporal-polyfill: "npm:^0.3.0"
     tw-animate-css: "npm:^1.4.0"
@@ -2837,6 +2910,34 @@ __metadata:
   version: 1.1.0
   resolution: "@protobufjs/utf8@npm:1.1.0"
   checksum: 10c0/a3fe31fe3fa29aa3349e2e04ee13dc170cc6af7c23d92ad49e3eeaf79b9766264544d3da824dba93b7855bd6a2982fb40032ef40693da98a136d835752beb487
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-compose-refs@npm:1.1.2":
+  version: 1.1.2
+  resolution: "@radix-ui/react-compose-refs@npm:1.1.2"
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/d36a9c589eb75d634b9b139c80f916aadaf8a68a7c1c4b8c6c6b88755af1a92f2e343457042089f04cc3f23073619d08bb65419ced1402e9d4e299576d970771
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-slot@npm:^1.2.3":
+  version: 1.2.4
+  resolution: "@radix-ui/react-slot@npm:1.2.4"
+  dependencies:
+    "@radix-ui/react-compose-refs": "npm:1.1.2"
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/8b719bb934f1ae5ac0e37214783085c17c2f1080217caf514c1c6cc3d9ca56c7e19d25470b26da79aa6e605ab36589edaade149b76f5fc0666f1063e2fc0a0dc
   languageName: node
   linkType: hard
 
@@ -3115,6 +3216,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/form-core@npm:1.20.0":
+  version: 1.20.0
+  resolution: "@tanstack/form-core@npm:1.20.0"
+  dependencies:
+    "@tanstack/store": "npm:^0.7.4"
+  checksum: 10c0/2cdd25098852faa20ec9ccdcac946bf777738318e3b9e7fe43ee08b30397b2d65bb02a203ecac307de7023762d84b31ab96f13bb6ce1bcb0999bc48a6f65c7c4
+  languageName: node
+  linkType: hard
+
 "@tanstack/history@npm:1.154.14":
   version: 1.154.14
   resolution: "@tanstack/history@npm:1.154.14"
@@ -3126,6 +3236,24 @@ __metadata:
   version: 5.90.20
   resolution: "@tanstack/query-core@npm:5.90.20"
   checksum: 10c0/70637dfcecd5ed9d810629aa27f1632af8a4bcd083e75cf29408d058c32f8234704a3231ec280e2c4016ea0485b16124fdf70ab97793b5a7b670f43f7659e9fe
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-form@npm:1.20.0":
+  version: 1.20.0
+  resolution: "@tanstack/react-form@npm:1.20.0"
+  dependencies:
+    "@tanstack/form-core": "npm:1.20.0"
+    "@tanstack/react-store": "npm:^0.7.4"
+    decode-formdata: "npm:^0.9.0"
+    devalue: "npm:^5.3.2"
+  peerDependencies:
+    "@tanstack/react-start": ^1.130.10
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@tanstack/react-start":
+      optional: true
+  checksum: 10c0/0b802eba5e96d88fba9f4de51c062926f33e4513a3f18a78252f99edd40f01132fb2d7c15b8960abb06c7a4bc1cb64a89243115847222222f69eb3434d4b3128
   languageName: node
   linkType: hard
 
@@ -3171,6 +3299,19 @@ __metadata:
     react: ">=18.0.0 || >=19.0.0"
     react-dom: ">=18.0.0 || >=19.0.0"
   checksum: 10c0/df0000c524743791a52e1f002f5e8db0be783423b0d5cf7089ab4d668710ec5d058652a186235802b1fd4d8570855fe13ed0c7fcc3096a83ddb0b3f23414c6fa
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-store@npm:^0.7.4":
+  version: 0.7.7
+  resolution: "@tanstack/react-store@npm:0.7.7"
+  dependencies:
+    "@tanstack/store": "npm:0.7.7"
+    use-sync-external-store: "npm:^1.5.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/12f5119492503aeac0bb45fc41bda140630ccbb6b5b92ebc5dbc1bf0e32728820dbb9455821850aa87bdc15793d4efbf98fa0ff04bb85363fe4d77c03547f13e
   languageName: node
   linkType: hard
 
@@ -3235,6 +3376,13 @@ __metadata:
     csstype:
       optional: true
   checksum: 10c0/16f2eebcfff8f884945ece08879b9b420b8834794a1d10232098d827310bc260666dc3a3f23543107600cfbbad7afd8767950f4cfd77bef84ee509fb0115d598
+  languageName: node
+  linkType: hard
+
+"@tanstack/store@npm:0.7.7, @tanstack/store@npm:^0.7.4":
+  version: 0.7.7
+  resolution: "@tanstack/store@npm:0.7.7"
+  checksum: 10c0/bf90fa957bd97336d7dbc0d7b87379b5fe4baea030efef8a93fe4e49ac1c8bc929247d1a9f84b16a1642e386b67fe53be14df8d5415efdf85f83733ccdf8877a
   languageName: node
   linkType: hard
 
@@ -5871,6 +6019,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cva@npm:1.0.0-beta.4":
+  version: 1.0.0-beta.4
+  resolution: "cva@npm:1.0.0-beta.4"
+  dependencies:
+    clsx: "npm:^2.1.1"
+  peerDependencies:
+    typescript: ">= 4.5.5"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/2db439e4228e7d8ec4d1c6568c0e6093fcc8080d877a98a235908a6373c19cfaa4e3c84270719215d199f9238c52f2cfbf584c212d683296888fb878c2898c78
+  languageName: node
+  linkType: hard
+
 "d3-array@npm:2 - 3, d3-array@npm:2.10.0 - 3, d3-array@npm:^3.1.6":
   version: 3.2.4
   resolution: "d3-array@npm:3.2.4"
@@ -5997,6 +6159,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"decode-formdata@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "decode-formdata@npm:0.9.0"
+  checksum: 10c0/8db0a57a14d4d98d4951fbdb7def91c5a5342f75b5274523e7ac56f6d9b39bb4e8f5ec616eb4fc0b501ef717084a86e63e450722a3a865313558977716c074a0
+  languageName: node
+  linkType: hard
+
 "decompress-response@npm:^6.0.0":
   version: 6.0.0
   resolution: "decompress-response@npm:6.0.0"
@@ -6101,6 +6270,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"devalue@npm:^5.3.2":
+  version: 5.7.1
+  resolution: "devalue@npm:5.7.1"
+  checksum: 10c0/55870801e7bf4b7e8cf7feca1feae4f20bc8c361cf715a1fc5d8f595f099afa65094ce718a3cf3b149b79c78d24a0c92cf9d72125c8a10e563ebb18b23869b8a
+  languageName: node
+  linkType: hard
+
 "dezalgo@npm:^1.0.4":
   version: 1.0.4
   resolution: "dezalgo@npm:1.0.4"
@@ -6108,6 +6284,13 @@ __metadata:
     asap: "npm:^2.0.0"
     wrappy: "npm:1"
   checksum: 10c0/8a870ed42eade9a397e6141fe5c025148a59ed52f1f28b1db5de216b4d57f0af7a257070c3af7ce3d5508c1ce9dd5009028a76f4b2cc9370dc56551d2355fad8
+  languageName: node
+  linkType: hard
+
+"dialog-polyfill@npm:^0.4.7":
+  version: 0.4.10
+  resolution: "dialog-polyfill@npm:0.4.10"
+  checksum: 10c0/6c91bd23086303e5ee45b59ab0736436b7486a1985a3f1a560ae5495f41cc44f6b4e19333f0c3c18a6f0bffb7712d82b9107e313de5e7140ef4645b81f6fd088
   languageName: node
   linkType: hard
 
@@ -7037,6 +7220,18 @@ __metadata:
     "@firebase/storage-compat": "npm:0.4.2"
     "@firebase/util": "npm:1.15.0"
   checksum: 10c0/a34d84ac813d9ff50ded22249abf8c723af7ceb161fc926ee4b41ecc7ce7e70d272c8a5315d2789b545e2bfc39d6a57d2b30b109084d2414947c2d973dde10d0
+  languageName: node
+  linkType: hard
+
+"firebaseui@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "firebaseui@npm:6.1.0"
+  dependencies:
+    dialog-polyfill: "npm:^0.4.7"
+    material-design-lite: "npm:^1.2.0"
+  peerDependencies:
+    firebase: ^9.1.3 || ^10.0.0
+  checksum: 10c0/9ca3eb0c6b3378bbb0ffc53228cb25772e8248b31ca96f4f9ca9e40c94689fcd4bbd7c9dce7154f1e8812e7109cdd44aaa5349eded43694eb12b481cf06cd49b
   languageName: node
   linkType: hard
 
@@ -8770,6 +8965,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"libphonenumber-js@npm:^1.12.23":
+  version: 1.12.41
+  resolution: "libphonenumber-js@npm:1.12.41"
+  checksum: 10c0/dda2a3ada1d4271a93f6eb9cc9b061e294ab05e7efb71c5e2e2bea02f8f478d7b4359fcd3a67b8a377e53ca671d0303ffa78e3df4857901d5aa03ecfb19becf0
+  languageName: node
+  linkType: hard
+
 "limiter@npm:^1.1.5":
   version: 1.1.5
   resolution: "limiter@npm:1.1.5"
@@ -9085,6 +9287,13 @@ __metadata:
   bin:
     markdown-it: bin/markdown-it.mjs
   checksum: 10c0/c67f2a4c8069a307c78d8c15104bbcb15a2c6b17f4c904364ca218ec2eccf76a397eba1ea05f5ac5de72c4b67fcf115d422d22df0bfb86a09b663f55b9478d4f
+  languageName: node
+  linkType: hard
+
+"material-design-lite@npm:^1.2.0":
+  version: 1.3.0
+  resolution: "material-design-lite@npm:1.3.0"
+  checksum: 10c0/cbe7c9c540a23f3913fddfa292ae5df607441cc47353bafe90bce8d279ba47e3e881548db30a44f1fddbabba9b2c51a8bd6a06c866a99725e8cdd5dd10978b5d
   languageName: node
   linkType: hard
 
@@ -9442,6 +9651,13 @@ __metadata:
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 10c0/40e7f70b3d15f725ca072dfc4f74e81fcf1fbb02e491cf58ac0c79093adc9b0a73b152bcde57df4b79cd097e13023d7504acb38404a4da7bc1cd8e887b82fe0b
+  languageName: node
+  linkType: hard
+
+"nanostores@npm:^1.1.0":
+  version: 1.3.0
+  resolution: "nanostores@npm:1.3.0"
+  checksum: 10c0/fab57ec59758457f34e32e6af6982bf0f69ec8c732999347170982e39b5beb0391c91d970177608ff613a733024a39f3a767de7a8e25e4bf7aeadbcb76f8a7f6
   languageName: node
   linkType: hard
 
@@ -10487,6 +10703,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"qrcode-generator@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "qrcode-generator@npm:2.0.4"
+  checksum: 10c0/52dc3894bda6afecf09cb36aba9c181f3c4641fcbeac40c2af05d68da1383e3a1c7354bd3dc8c5e2a199d2e62314bbdec8cb4fbbd00bcfda40de56bb36bfdb17
+  languageName: node
+  linkType: hard
+
 "qs@npm:^6.14.0, qs@npm:^6.14.1":
   version: 6.14.1
   resolution: "qs@npm:6.14.1"
@@ -10553,6 +10776,18 @@ __metadata:
   peerDependencies:
     react: ^19.2.4
   checksum: 10c0/f0c63f1794dedb154136d4d0f59af00b41907f4859571c155940296808f4b94bf9c0c20633db75b5b2112ec13d8d7dd4f9bf57362ed48782f317b11d05a44f35
+  languageName: node
+  linkType: hard
+
+"react-firebaseui@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "react-firebaseui@npm:6.0.0"
+  dependencies:
+    firebaseui: "npm:^6.0.0"
+  peerDependencies:
+    firebase: ^9.1.3
+    react: ">=15 <=17"
+  checksum: 10c0/f6c691f2f0aaf471ec50f77b56889dd0970161e889ae2f0277776cdfb28cadb05dbc6c42044ac4391586a0ba6ebe9f906269dd521589cbc8a5661afe758a84cf
   languageName: node
   linkType: hard
 
@@ -11631,6 +11866,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tailwind-merge@npm:^3.0.1":
+  version: 3.5.0
+  resolution: "tailwind-merge@npm:3.5.0"
+  checksum: 10c0/4dc588f5b5296ba3f38e1ebb41f02b6d24a8c5bb45e44b33748c118fb4b5767dd0efc464431ca3e75404056b618b5f67bec3708158baa65fed8a2fc9201e0c53
+  languageName: node
+  linkType: hard
+
 "tapable@npm:^2.2.1, tapable@npm:^2.3.0":
   version: 2.3.0
   resolution: "tapable@npm:2.3.0"
@@ -12462,7 +12704,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:^1.2.2, use-sync-external-store@npm:^1.4.0, use-sync-external-store@npm:^1.6.0":
+"use-sync-external-store@npm:^1.2.2, use-sync-external-store@npm:^1.4.0, use-sync-external-store@npm:^1.5.0, use-sync-external-store@npm:^1.6.0":
   version: 1.6.0
   resolution: "use-sync-external-store@npm:1.6.0"
   peerDependencies:
@@ -13078,6 +13320,13 @@ __metadata:
   peerDependencies:
     zod: ^3.25.0 || ^4.0.0
   checksum: 10c0/0ccfec48c46de1be440b719cd02044d4abb89ed0e14c13e637cd55bf29102f67ccdba373f25def0fc7130e5f15025be4d557a7edcc95d5a3811599aade689e1b
+  languageName: node
+  linkType: hard
+
+"zod@npm:4.1.12":
+  version: 4.1.12
+  resolution: "zod@npm:4.1.12"
+  checksum: 10c0/b64c1feb19e99d77075261eaf613e0b2be4dfcd3551eff65ad8b4f2a079b61e379854d066f7d447491fcf193f45babd8095551a9d47973d30b46b6d8e2c46774
   languageName: node
   linkType: hard
 

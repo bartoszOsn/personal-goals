@@ -1,4 +1,4 @@
-import { getRouteApi, Outlet, useNavigate, useRouter } from '@tanstack/react-router';
+import { getRouteApi, Navigate, Outlet, useNavigate, useRouter } from '@tanstack/react-router';
 import { AppSidebar } from '@/routes/work/AppSidebar.tsx';
 import { AppShell, useMantineTheme } from '@mantine/core';
 import { Temporal } from 'temporal-polyfill';
@@ -9,6 +9,7 @@ import { BasicErrorDTOSchema } from '@personal-okr/shared';
 import { HttpError } from '@/base/http';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
+import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
 
 export function WorkRoute() {
 	const navigate = useNavigate();
@@ -49,6 +50,12 @@ export function WorkRoute() {
 			}
 		})
 	}, [isMobile, router]);
+
+	const user = useFirebaseUser();
+
+	if (!user) {
+		return <Navigate to='/auth/login' />
+	}
 
 	return (
 		<AppShell navbar={{
