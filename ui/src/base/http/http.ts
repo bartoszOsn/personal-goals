@@ -41,7 +41,7 @@ export class http {
 			headers = Object.fromEntries(headers);
 		}
 		if (this.token) {
-			this.appendHeader(headers, 'Authorization', `Bearer ${this.token}`);
+			this.appendHeader(headers, 'Authorization', this.token);
 		}
 
 		const response = await fetch(input, {

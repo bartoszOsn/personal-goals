@@ -4,45 +4,35 @@ import { Repository } from 'typeorm';
 import { AuthRepository } from '../../app/auth/AuthRepository';
 import { User, UserId } from '../../domain/auth/model/User';
 import { UserEntity } from './entity/UserEntity';
+import { FirebaseAuthRepository } from './FirebaseAuthRepository';
 
 @Injectable()
 export class AuthRepositoryImpl extends AuthRepository {
 	constructor(
 		@InjectRepository(UserEntity)
-		private readonly userRepository: Repository<UserEntity>
+		private readonly userRepository: Repository<UserEntity>,
+		private readonly firebaseAuthRepository: FirebaseAuthRepository
 	) {
 		super();
 	}
 
-	async findUserByEmail(email: string): Promise<User | null> {
-		const entity = await this.userRepository.findOne({ where: { email } });
-		if (!entity) {
+	override async getUserByJwt(token: string): Promise<User | null> {
+		const id = await this.firebaseAuthRepository.getUserIdByToken(token);
+
+		if (id === null) {
 			return null;
 		}
-		return this.toUser(entity);
-	}
 
-	async findUserById(id: UserId): Promise<User | null> {
-		const entity = await this.userRepository.findOne({
-			where: { id: id.id }
-		});
+		let entity = await this.userRepository.findOneBy({ id });
 		if (!entity) {
-			return null;
+			entity = this.userRepository.create({ id });
+			await this.userRepository.save(entity);
 		}
-		return this.toUser(entity);
-	}
 
-	async createUser(email: string, passwordHash: string): Promise<User> {
-		const entity = this.userRepository.create({ email, passwordHash });
-		const savedEntity = await this.userRepository.save(entity);
-		return this.toUser(savedEntity);
+		return this.toUser(entity);
 	}
 
 	private toUser(entity: UserEntity): User {
-		return new User(
-			new UserId(entity.id),
-			entity.email,
-			entity.passwordHash
-		);
+		return new User(new UserId(entity.id));
 	}
 }

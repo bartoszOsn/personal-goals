@@ -1,9 +1,5 @@
 export class User {
-	constructor(
-		public readonly id: UserId,
-		public readonly email: string,
-		public readonly passwordHash: string
-	) {}
+	constructor(public readonly id: UserId) {}
 }
 
 export class UserId {

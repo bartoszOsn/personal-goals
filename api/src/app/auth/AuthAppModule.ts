@@ -1,30 +1,22 @@
 import { DynamicModule, Global, Module, Type } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
 import { UserStorage } from './UserStorage';
 import { AuthService } from './AuthService';
+import { UserStorageImpl } from './UserStorageImpl';
 
 @Global()
 @Module({
-	imports: [
-		JwtModule.register({
-			secret: process.env['JWT_SECRET'] || 'your-secret-key', // TODO: Move to config
-			signOptions: { expiresIn: '7d' }
-		})
+	providers: [
+		UserStorageImpl,
+		{ provide: UserStorage, useExisting: UserStorageImpl },
+		AuthService
 	],
-	providers: [UserStorage, AuthService],
-	exports: [UserStorage, AuthService, JwtModule]
+	exports: [UserStorage, AuthService]
 })
 export class AuthAppModule {
 	static withRepositories(repositoryModule: Type): DynamicModule {
 		return {
 			module: AuthAppModule,
-			imports: [
-				JwtModule.register({
-					secret: process.env['JWT_SECRET'] || 'your-secret-key',
-					signOptions: { expiresIn: '7d' }
-				}),
-				repositoryModule
-			]
+			imports: [repositoryModule]
 		};
 	}
 }
