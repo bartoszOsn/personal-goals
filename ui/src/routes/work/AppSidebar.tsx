@@ -3,6 +3,7 @@ import { AppShell, Box, Button, Loader, Menu, NavLink, ScrollAreaAutosize } from
 import { IconExternalLink, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useCreateDocumentMutation, useDeleteDocumentMutation, useDocumentsQuery } from '@/api/document/document-hooks';
 import { ContextMenu } from '@/base/context-menu/api/ContextMenu';
+import { UserButton } from '@/core/UserButton';
 
 export function AppSidebar({ context }: { context: number }) {
 	const documentsQuery = useDocumentsQuery(context);
@@ -53,6 +54,11 @@ export function AppSidebar({ context }: { context: number }) {
 						}
 					</NavLink>
 					<CustomNavLink to="/work/$context/sprint-settings" params={{ context: context.toString() }} label="Sprint settings" />
+				</Box>
+			</AppShell.Section>
+			<AppShell.Section mt='auto'>
+				<Box p="md">
+					<UserButton />
 				</Box>
 			</AppShell.Section>
 		</AppShell.Navbar>

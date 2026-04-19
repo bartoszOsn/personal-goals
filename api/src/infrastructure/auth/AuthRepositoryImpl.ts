@@ -5,6 +5,7 @@ import { AuthRepository } from '../../app/auth/AuthRepository';
 import { User, UserId } from '../../domain/auth/model/User';
 import { UserEntity } from './entity/UserEntity';
 import { FirebaseAuthRepository } from './FirebaseAuthRepository';
+import { DecodedIdToken } from 'firebase-admin/auth';
 
 @Injectable()
 export class AuthRepositoryImpl extends AuthRepository {
@@ -17,23 +18,31 @@ export class AuthRepositoryImpl extends AuthRepository {
 	}
 
 	override async getUserByJwt(token: string): Promise<User | null> {
-		const id = await this.firebaseAuthRepository.getUserIdByToken(token);
+		const decodedToken =
+			await this.firebaseAuthRepository.getUserIdByToken(token);
 
-		if (id === null) {
+		if (decodedToken === null) {
 			return null;
 		}
 
 		// TODO: Prevent race condition
-		let entity = await this.userRepository.findOneBy({ id });
+		let entity = await this.userRepository.findOneBy({
+			id: decodedToken.uid
+		});
 		if (!entity) {
-			entity = this.userRepository.create({ id });
+			entity = this.userRepository.create({ id: decodedToken.uid });
 			await this.userRepository.save(entity);
 		}
 
-		return this.toUser(entity);
+		return this.toUser(entity, decodedToken);
 	}
 
-	private toUser(entity: UserEntity): User {
-		return new User(new UserId(entity.id));
+	private toUser(entity: UserEntity, decodedToken: DecodedIdToken): User {
+		return new User(
+			new UserId(entity.id),
+			decodedToken['name'] ?? null,
+			decodedToken.email ?? null,
+			decodedToken.picture ?? null
+		);
 	}
 }

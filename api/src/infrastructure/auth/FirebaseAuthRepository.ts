@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { cert, initializeApp } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
+import { DecodedIdToken, getAuth } from 'firebase-admin/auth';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
 
@@ -20,10 +20,9 @@ export class FirebaseAuthRepository {
 		}
 	}
 
-	async getUserIdByToken(token: string): Promise<string | null> {
+	async getUserIdByToken(token: string): Promise<DecodedIdToken | null> {
 		try {
-			const decodedIdToken = await this.auth.verifyIdToken(token);
-			return decodedIdToken.uid;
+			return this.auth.verifyIdToken(token);
 		} catch {
 			return null;
 		}

@@ -13,7 +13,7 @@ export function RootRoute() {
 	return (
 		<>
 			<Outlet />
-			<TanStackRouterDevtools />
+			<TanStackRouterDevtools position="bottom-right" />
 		</>
 	)
 }

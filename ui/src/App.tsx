@@ -11,7 +11,7 @@ import { Notifications } from '@mantine/notifications';
 import { queryClient } from '@/api/queryClient';
 import { ModalsProvider } from '@mantine/modals';
 import { FirebaseUIProvider } from '@firebase-oss/ui-react';
-import { initializeUI } from '@firebase-oss/ui-core';
+import { initializeUI, requireDisplayName } from '@firebase-oss/ui-core';
 import { firebase, firebaseAuth } from '@/api/auth/firebase';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
 import { useEffect } from 'react';
@@ -19,7 +19,10 @@ import { http } from '@/base/http';
 
 const firebaseUI = initializeUI({
 	app: firebase,
-	auth: firebaseAuth
+	auth: firebaseAuth,
+	behaviors: [
+		requireDisplayName()
+	]
 })
 
 

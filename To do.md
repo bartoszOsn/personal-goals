@@ -39,6 +39,7 @@
     - ✅ Forgot password
     - Change password
     - Change email
+    - ✅ Log out
     - Notification about confirming password (Do we need it?)
 3. ✅ Work on performance
     - ✅ It turns out it's not a problem in a production build
@@ -48,6 +49,7 @@
 6. Make sure it works on mobile.
     - ✅ Hide gantt chart on mobile, leaving only the table
     - ✅ Sidebar hides on navigation on mobile
+    - User dropdown works on mobile
     - Column resize works on mobile
 7. ✅ Drag and drop on board - Changing order
 8. ✅ Drag and drop on roadmap - changing order and parent
@@ -61,9 +63,11 @@
 
 # Ideas for future releases
 
-1. Dark mode
+1. Immediately after first release I need to work on migrations
+    - Migration tests on CI
+2. Dark mode
     - CSS colors needs to be ported to using semantic tokens instead of color palettes
-2. Demo mode – allow users to try out the app without creating an account
+3. Demo mode – allow users to try out the app without creating an account
     - Login and register page has a link to demo mode
     - When in demo, frontend should always display a banner at the top showing that this is a demo and changes won't be persisted
     - Ideally, logged in user should also be able to enter demo mode for exploring without worrying of changing production data
@@ -75,5 +79,5 @@
         - Or maybe it should be handled at app layer level?
         - Or maybe naive solution - on enter create new account with "demo" flag, and periodically delete all accounts with "demo" flag after some inactivity?
     - Should avoid code duplication as much as possible
-3. Technical - Better integration of DataTable and gantt, so that it willl be possiblle to, for example:
+4. Technical - Better integration of DataTable and gantt, so that it willl be possiblle to, for example:
     - When dragging, highlight row on both dataTable and gantt

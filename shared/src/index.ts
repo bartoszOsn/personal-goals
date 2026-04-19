@@ -22,9 +22,7 @@ export * from './dto/document/DocumentDTO.js';
 export * from './dto/document/DocumentDetailsDTO.js';
 export * from './dto/document/DocumentsRequestDTO.js';
 
-export * from './dto/auth/LoginRequestDTO.js';
-export * from './dto/auth/RegisterRequestDTO.js';
-export * from './dto/auth/AuthResponseDTO.js';
+export * from './dto/auth/UserDTO.js';
 
 export * from './temporal/isPlainDate.js';
 export * from './temporal/maxPlainDate.js';
