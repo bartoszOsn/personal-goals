@@ -1,21 +1,24 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserStorage } from './UserStorage';
 import { User } from '../../domain/auth/model/User';
+import { ClsService } from 'nestjs-cls';
 
-// TODO: Make this class use async storage.
 @Injectable()
 export class UserStorageImpl extends UserStorage {
-	private user: User | null = null;
+	constructor(private readonly clsService: ClsService<{ user: User }>) {
+		super();
+	}
 
 	setUser(user: User) {
-		this.user = user;
+		this.clsService.set('user', user);
 	}
 
 	override getUser(): Promise<User> {
-		if (!this.user) {
+		const user = this.clsService.get('user');
+		if (!user) {
 			throw new UnauthorizedException('No user found');
 		}
 
-		return Promise.resolve(this.user);
+		return Promise.resolve(user);
 	}
 }

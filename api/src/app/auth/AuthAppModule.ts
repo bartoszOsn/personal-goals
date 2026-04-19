@@ -2,6 +2,7 @@ import { DynamicModule, Global, Module, Type } from '@nestjs/common';
 import { UserStorage } from './UserStorage';
 import { AuthService } from './AuthService';
 import { UserStorageImpl } from './UserStorageImpl';
+import { ClsModule } from 'nestjs-cls';
 
 @Global()
 @Module({
@@ -16,7 +17,13 @@ export class AuthAppModule {
 	static withRepositories(repositoryModule: Type): DynamicModule {
 		return {
 			module: AuthAppModule,
-			imports: [repositoryModule]
+			imports: [
+				repositoryModule,
+				ClsModule.forRoot({
+					global: true,
+					middleware: { mount: true }
+				})
+			]
 		};
 	}
 }

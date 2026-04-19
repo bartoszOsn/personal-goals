@@ -23,6 +23,7 @@ export class AuthRepositoryImpl extends AuthRepository {
 			return null;
 		}
 
+		// TODO: Prevent race condition
 		let entity = await this.userRepository.findOneBy({ id });
 		if (!entity) {
 			entity = this.userRepository.create({ id });
