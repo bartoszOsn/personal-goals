@@ -6,7 +6,7 @@ export function LoginRoute() {
 
 	return (
 		<SignInAuthScreen onSignUpClick={() => navigate({ to: '/auth/register'})}
-						  onForgotPasswordClick={() => {}}>
+						  onForgotPasswordClick={() => navigate({ to: '/auth/forgot-password'})}>
 			<GoogleSignInButton />
 		</SignInAuthScreen>
 	);

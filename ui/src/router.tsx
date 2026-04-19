@@ -10,6 +10,7 @@ import { RoadmapRoute } from '@/routes/work/roadmap/RoadmapRoute';
 import { DetailsRoute } from '@/routes/work/details/DetailsRoute';
 import { DocumentRoute } from '@/routes/work/document/DocumentRoute';
 import { RootRoute } from '@/routes/RootRoute';
+import { ForgotPasswordRoute } from '@/routes/auth/forgot-password/ForgotPasswordRoute';
 
 const rootRoute = createRootRoute({
 	component: RootRoute
@@ -75,6 +76,12 @@ const registerRoute = createRoute({
 	component: RegisterRoute
 });
 
+const forgotPasswordRoute = createRoute({
+	getParentRoute: () => authRoute,
+	path: "/forgot-password",
+	component: ForgotPasswordRoute
+})
+
 const routeTree = rootRoute.addChildren([
 	indexRoute,
 	workRoute.addChildren([
@@ -86,7 +93,8 @@ const routeTree = rootRoute.addChildren([
 	]),
 	authRoute.addChildren([
 		loginRoute,
-		registerRoute
+		registerRoute,
+		forgotPasswordRoute
 	])
 ]);
 
