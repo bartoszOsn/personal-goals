@@ -40,6 +40,8 @@
     - Change password
     - Change email
     - ✅ Log out
+    - Delete account
+      - Deleting account must delete both firebase account and data associated with it in a local database.
     - Notification about confirming password (Do we need it?)
 3. ✅ Work on performance
     - ✅ It turns out it's not a problem in a production build
