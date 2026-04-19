@@ -34,8 +34,12 @@
 1. Fix Gantt and Data table – Better UX
     - changing order of columns
     - ✅ resizable width of table and chart
-2. Fix Auth – Better security, ability to change password, recover account etc.
-    - Can send emails via https://documentation.mailgun.com
+2. Fix Auth – Use firebase
+    - ✅ Login and register
+    - ✅ Forgot password
+    - Change password
+    - Change email
+    - Notification about confirming password (Do we need it?)
 3. ✅ Work on performance
     - ✅ It turns out it's not a problem in a production build
 4. Better UI
