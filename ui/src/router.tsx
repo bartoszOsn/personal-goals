@@ -4,7 +4,7 @@ import { WorkRoute } from '@/routes/work/WorkRoute.tsx';
 import { SprintSettingsRoute } from '@/routes/work/sprint-settings/SprintSettingsRoute.tsx';
 import { AuthRoute } from '@/routes/auth/AuthRoute';
 import { LoginRoute } from '@/routes/auth/login/LoginRoute';
-import { RegisterRoute } from '@/routes/auth/RegisterRoute';
+import { RegisterRoute } from '@/routes/auth/register/RegisterRoute';
 import { SprintOverviewRoute } from '@/routes/work/sprint-overview/SprintOverviewRoute';
 import { RoadmapRoute } from '@/routes/work/roadmap/RoadmapRoute';
 import { DetailsRoute } from '@/routes/work/details/DetailsRoute';
