@@ -1,5 +1,4 @@
-import { createRootRoute, createRoute, createRouter, Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { createRootRoute, createRoute, createRouter } from '@tanstack/react-router';
 import { IndexRoute } from '@/routes/IndexRoute.tsx';
 import { WorkRoute } from '@/routes/work/WorkRoute.tsx';
 import { SprintSettingsRoute } from '@/routes/work/sprint-settings/SprintSettingsRoute.tsx';
@@ -10,14 +9,10 @@ import { SprintOverviewRoute } from '@/routes/work/sprint-overview/SprintOvervie
 import { RoadmapRoute } from '@/routes/work/roadmap/RoadmapRoute';
 import { DetailsRoute } from '@/routes/work/details/DetailsRoute';
 import { DocumentRoute } from '@/routes/work/document/DocumentRoute';
+import { RootRoute } from '@/routes/RootRoute';
 
 const rootRoute = createRootRoute({
-	component: () => (
-		<>
-			<Outlet />
-			<TanStackRouterDevtools />
-		</>
-	),
+	component: RootRoute
 })
 
 const indexRoute = createRoute({
