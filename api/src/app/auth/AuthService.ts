@@ -19,4 +19,9 @@ export class AuthService {
 		this.userStorageImpl.setUser(user);
 		return true;
 	}
+
+	async deleteUser(): Promise<void> {
+		const user = await this.userStorageImpl.getUser();
+		await this.authRepository.removeUser(user);
+	}
 }

@@ -39,6 +39,7 @@
     - ✅ Forgot password
     - Change password
     - Change email
+    - Change profile picture
     - ✅ Log out
     - Delete account
       - Deleting account must delete both firebase account and data associated with it in a local database.

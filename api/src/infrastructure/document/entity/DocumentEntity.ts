@@ -18,6 +18,8 @@ export class DocumentEntity {
 	@Column()
 	updatedAt!: string;
 
-	@ManyToOne(() => UserEntity, (user) => user.documents)
+	@ManyToOne(() => UserEntity, (user) => user.documents, {
+		onDelete: 'CASCADE'
+	})
 	user!: UserEntity;
 }

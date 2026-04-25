@@ -37,6 +37,13 @@ export class AuthRepositoryImpl extends AuthRepository {
 		return this.toUser(entity, decodedToken);
 	}
 
+	override async removeUser(user: User): Promise<void> {
+		await this.firebaseAuthRepository.removeUser(user.id.id);
+		await this.userRepository.delete({
+			id: user.id.id
+		});
+	}
+
 	private toUser(entity: UserEntity, decodedToken: DecodedIdToken): User {
 		return new User(
 			new UserId(entity.id),

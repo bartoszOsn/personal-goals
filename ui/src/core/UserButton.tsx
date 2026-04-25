@@ -2,8 +2,9 @@ import { Avatar, Button, Menu, Skeleton, Stack, Text } from '@mantine/core';
 import { IconChevronRight, IconLogout, IconSettings } from '@tabler/icons-react';
 import { useUserQuery } from '@/api/auth/useUserQuery';
 import { firebaseAuth } from '@/api/auth/firebase';
+import { createLink } from '@tanstack/react-router';
 
-export function UserButton() {
+export function UserButton({ context }: { context: number }) {
 	const userQuery = useUserQuery();
 
 	if (userQuery.isLoading || !userQuery.data) {
@@ -36,9 +37,9 @@ export function UserButton() {
 				</Button>
 			</Menu.Target>
 			<Menu.Dropdown>
-				<Menu.Item leftSection={<IconSettings size={14} stroke={1.5} />}>
+				<MenuItemLink component='a' to='/work/$context/profile' params={{ context: context.toString() }} leftSection={<IconSettings size={14} stroke={1.5} />}>
 					Settings
-				</Menu.Item>
+				</MenuItemLink>
 				<Menu.Item color='red' leftSection={<IconLogout size={14} stroke={1.5} />} onClick={() => firebaseAuth.signOut()}>
 					Logout
 				</Menu.Item>
@@ -46,3 +47,5 @@ export function UserButton() {
 		</Menu>
 	);
 }
+
+const MenuItemLink = createLink(Menu.Item<'a'>);

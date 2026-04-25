@@ -27,4 +27,8 @@ export class FirebaseAuthRepository {
 			return null;
 		}
 	}
+
+	async removeUser(id: string): Promise<void> {
+		await this.auth.deleteUser(id);
+	}
 }

@@ -34,7 +34,9 @@ export class WorkItemEntity {
 	@Column(() => WorkItemTimeFrameEntity)
 	timeFrame!: WorkItemTimeFrameEntity;
 
-	@ManyToOne(() => UserEntity, (user) => user.workItems)
+	@ManyToOne(() => UserEntity, (user) => user.workItems, {
+		onDelete: 'CASCADE'
+	})
 	user!: UserEntity;
 
 	@TreeChildren()

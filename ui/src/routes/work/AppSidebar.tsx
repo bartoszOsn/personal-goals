@@ -58,7 +58,7 @@ export function AppSidebar({ context }: { context: number }) {
 			</AppShell.Section>
 			<AppShell.Section mt='auto'>
 				<Box p="md">
-					<UserButton />
+					<UserButton context={context} />
 				</Box>
 			</AppShell.Section>
 		</AppShell.Navbar>

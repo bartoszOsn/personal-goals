@@ -11,6 +11,7 @@ import { DetailsRoute } from '@/routes/work/details/DetailsRoute';
 import { DocumentRoute } from '@/routes/work/document/DocumentRoute';
 import { RootRoute } from '@/routes/RootRoute';
 import { ForgotPasswordRoute } from '@/routes/auth/forgot-password/ForgotPasswordRoute';
+import { ProfileRoute } from '@/routes/work/profile/ProfileRoute';
 
 const rootRoute = createRootRoute({
 	component: RootRoute
@@ -58,6 +59,12 @@ const documentRoute = createRoute({
 	component: DocumentRoute
 });
 
+const profileRoute = createRoute({
+	getParentRoute: () => workRoute,
+	path: '/profile',
+	component: ProfileRoute
+});
+
 const authRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: "/auth",
@@ -89,7 +96,8 @@ const routeTree = rootRoute.addChildren([
 		roadmapV2Route,
 		detailsRoute,
 		sprintSettings,
-		documentRoute
+		documentRoute,
+		profileRoute
 	]),
 	authRoute.addChildren([
 		loginRoute,

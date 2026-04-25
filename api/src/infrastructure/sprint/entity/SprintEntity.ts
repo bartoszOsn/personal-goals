@@ -16,7 +16,9 @@ export class SprintEntity {
 	@Column()
 	endDate!: string;
 
-	@ManyToOne(() => UserEntity, (user) => user.sprints)
+	@ManyToOne(() => UserEntity, (user) => user.sprints, {
+		onDelete: 'CASCADE'
+	})
 	user!: UserEntity;
 
 	@OneToMany(() => WorkItemEntity, (workItem) => workItem.timeFrame.sprint)
