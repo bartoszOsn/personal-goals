@@ -3,6 +3,8 @@ import { IconAt, IconLock, IconTrash } from '@tabler/icons-react';
 import { useDeleteUserMutation } from '@/api/auth/useDeleteUserMutation';
 import { firebaseAuth } from '@/api/auth/firebase';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
+import { sendPasswordResetEmail/*, verifyBeforeUpdateEmail*/ } from 'firebase/auth';
+import { notifications } from '@mantine/notifications';
 
 export function ProfileRoute() {
 	const user = useFirebaseUser();
@@ -17,6 +19,27 @@ export function ProfileRoute() {
 		return <LoadingOverlay visible={true} />
 	}
 
+	const onPasswordReset = async () => {
+		if (!user.email) {
+			return;
+		}
+
+		try {
+			await sendPasswordResetEmail(firebaseAuth, user.email, { url: location.href });
+			notifications.show({
+				title: 'Password reset email sent',
+				message: 'Check your inbox for further instructions',
+				color: 'blue'
+			});
+		} catch {
+			notifications.show({
+				title: 'Failed to send password reset email',
+				message: 'Please try again later',
+				color: 'red'
+			});
+		}
+	}
+
 	return (
 		<Stack gap='xs' p="lg" align={'center'}>
 			<Avatar src={user.photoURL} radius='xl' size='xl' alt={ user.displayName ?? user.email ?? '' } />
@@ -29,7 +52,7 @@ export function ProfileRoute() {
 			</Text>
 
 			<Button variant='light' leftSection={<IconAt size={16} />}>Change e-mail</Button>
-			<Button variant='light' leftSection={<IconLock size={16} />}>Change password</Button>
+			<Button variant='light' leftSection={<IconLock size={16} />} onClick={onPasswordReset}>Change password</Button>
 			<Popover width={400} withArrow shadow='md'>
 				<Popover.Target>
 					<Button variant='light' color='red' leftSection={<IconTrash size={16} />} loading={deleteUserMutation.isPending}>Delete account</Button>
