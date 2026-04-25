@@ -1,11 +1,11 @@
 import { Avatar, Button, LoadingOverlay, Popover, Stack, Text } from '@mantine/core';
-import { useUserQuery } from '@/api/auth/useUserQuery';
 import { IconAt, IconLock, IconTrash } from '@tabler/icons-react';
 import { useDeleteUserMutation } from '@/api/auth/useDeleteUserMutation';
 import { firebaseAuth } from '@/api/auth/firebase';
+import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
 
 export function ProfileRoute() {
-	const userQuery = useUserQuery();
+	const user = useFirebaseUser();
 	const deleteUserMutation = useDeleteUserMutation();
 
 	const deleteUser = () => {
@@ -13,19 +13,19 @@ export function ProfileRoute() {
 			.then(() => firebaseAuth.signOut());
 	}
 
-	if (userQuery.isLoading || !userQuery.data) {
+	if (!user) {
 		return <LoadingOverlay visible={true} />
 	}
 
 	return (
 		<Stack gap='xs' p="lg" align={'center'}>
-			<Avatar src={userQuery.data.picture} radius='xl' size='xl' alt={ userQuery.data.displayName ?? userQuery.data.email } />
+			<Avatar src={user.photoURL} radius='xl' size='xl' alt={ user.displayName ?? user.email ?? '' } />
 			<Text c="dark" fw={500}>
-				{ userQuery.data?.displayName ?? userQuery.data.email }
+				{ user.displayName ?? user.email }
 			</Text>
 
 			<Text c="dimmed">
-				{ userQuery.data.email }
+				{ user.email }
 			</Text>
 
 			<Button variant='light' leftSection={<IconAt size={16} />}>Change e-mail</Button>

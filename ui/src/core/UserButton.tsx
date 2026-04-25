@@ -1,13 +1,13 @@
 import { Avatar, Button, Menu, Skeleton, Stack, Text } from '@mantine/core';
 import { IconChevronRight, IconLogout, IconSettings } from '@tabler/icons-react';
-import { useUserQuery } from '@/api/auth/useUserQuery';
 import { firebaseAuth } from '@/api/auth/firebase';
 import { createLink } from '@tanstack/react-router';
+import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
 
 export function UserButton({ context }: { context: number }) {
-	const userQuery = useUserQuery();
+	const user = useFirebaseUser();
 
-	if (userQuery.isLoading || !userQuery.data) {
+	if (!user) {
 		return <Skeleton w='100%' h={40} />
 	}
 
@@ -17,9 +17,9 @@ export function UserButton({ context }: { context: number }) {
 				<Button variant="subtle"
 						rightSection={<IconChevronRight size={14} stroke={1.5} />}
 						leftSection={<Avatar
-							src={userQuery.data?.picture ?? null}
+							src={user?.photoURL ?? null}
 							radius="xl"
-							alt={ userQuery.data.displayName ?? userQuery.data.email }
+							alt={ user.displayName ?? user.email ?? '' }
 						/>}
 						fullWidth
 						style={{ '--button-height': 'var(--button-height-lg)'}}
@@ -27,11 +27,11 @@ export function UserButton({ context }: { context: number }) {
 				>
 					<Stack gap={0} align='start' maw='100%'>
 						<Text c="dark" size="sm" fw={500} maw='100%' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-							{ userQuery.data?.displayName ?? userQuery.data.email }
+							{ user.displayName }
 						</Text>
 
 						<Text c="dimmed" size="xs" maw='100%' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-							{ userQuery.data.email }
+							{ user.email }
 						</Text>
 					</Stack>
 				</Button>
