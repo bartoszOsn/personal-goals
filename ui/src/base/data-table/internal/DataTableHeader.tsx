@@ -29,9 +29,9 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 				{props.columns.map((column, index) => {
 					return (
 						<Table.Th key={column.columnId} data-column-id={column.columnId}>
-							<Group gap={2} justify='space-between'>
-								<Group gap={2}>
-									<Text inline inherit>
+							<Group gap={2} justify='space-between' wrap='nowrap'>
+								<Group gap={2} wrap='nowrap' style={{ overflow: 'hidden' }}>
+									<Text inline inherit style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', minWidth: 0 }}>
 										{column.columnName}
 									</Text>
 									<CloseButton disabled={!isMoreThanOneColumn} size="xs" onClick={() => props.setColumns(props.columns.filter((_, i) => i !== index))} />
