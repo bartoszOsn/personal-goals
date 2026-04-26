@@ -34,7 +34,7 @@
 1. Fix Gantt and Data table – Better UX
     - changing order of columns
     - ✅ resizable width of table and chart
-    - Gantt timeboxes show periods on tooltip
+    - ✅ Gantt timeboxes show periods on tooltip
 2. ✅ Fix Auth – Use firebase
     - ✅ Login and register
     - ✅ Forgot password
@@ -64,6 +64,7 @@
     - ✅ Drag and drop on Gantt
 9. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
 10. ✅ Removing sprints that are used by some work item - right now it fails. It should show a message that it cannot be done.
+11. Fix all empty splash screens
 
 # Ideas for future releases
 

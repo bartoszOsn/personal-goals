@@ -2,7 +2,7 @@ import { useGanttContext } from '@/base/gantt/GanttProvider.tsx';
 import { HeaderType } from '@/base/gantt/model/ZoomLevel.ts';
 import { useDateRanges } from '@/base/gantt/hooks/useDateRanges.ts';
 import { HtmlInSvg } from '@/base/gantt/chart/HtmlInSvg';
-import { MantineColor, Text, Tooltip } from '@mantine/core';
+import { MantineColor, Stack, Text, Tooltip } from '@mantine/core';
 import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
 import { useEffect, useRef } from 'react';
@@ -71,7 +71,14 @@ function HeaderRow(props: { cells: HeaderCell[], offsetY: number, scrollY: numbe
 						   y={y}
 						   width={width}
 						   height={height}>
-					<Tooltip.Floating label={cell.label}>
+					<Tooltip.Floating label={
+						!cell.showDatesOnHover
+							? cell.label
+							: <Stack gap={0}>
+								<Text inherit>{cell.label}</Text>
+								<Text inherit c='dimmed'>{cell.start.toLocaleString()} → {cell.end.toLocaleString()}</Text>
+						</Stack>
+					}>
 						<Text h="100%"
 							  size="xs"
 							  c="dimmed"
@@ -89,6 +96,7 @@ interface HeaderCell {
 	color?: MantineColor;
 	start: Temporal.PlainDate;
 	end: Temporal.PlainDate;
+	showDatesOnHover?: boolean;
 }
 
 function getHeaderCells(zoomLevel: HeaderType, startDate: Temporal.PlainDate, endDate: Temporal.PlainDate): HeaderCell[] {
@@ -108,7 +116,8 @@ function getTimeboxCells(timeboxes: GanttTimebox[]): HeaderCell[] {
 			label: timebox.label,
 			color: timebox.color,
 			start: timebox.startDate,
-			end: timebox.endDate
+			end: timebox.endDate,
+			showDatesOnHover: true
 		}));
 }
 
