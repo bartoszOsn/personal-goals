@@ -28,7 +28,7 @@ export function DataTableHeader<TData>(props: DataTableHeaderProps<TData>) {
 				}
 				{props.columns.map((column, index) => {
 					return (
-						<Table.Th key={column.columnId} data-column-id={column.columnId}>
+						<Table.Th key={column.columnId} data-column-id={column.columnId} style={{ userSelect: 'none' }}>
 							<Group gap={2} justify='space-between' wrap='nowrap'>
 								<Group gap={2} wrap='nowrap' style={{ overflow: 'hidden' }}>
 									<Text inline inherit style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', minWidth: 0 }}>
