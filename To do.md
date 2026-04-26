@@ -34,6 +34,7 @@
 1. Fix Gantt and Data table – Better UX
     - changing order of columns
     - ✅ resizable width of table and chart
+    - Gantt timeboxes show periods on tooltip
 2. ✅ Fix Auth – Use firebase
     - ✅ Login and register
     - ✅ Forgot password
@@ -52,6 +53,7 @@
     - ✅ Sidebar hides on navigation on mobile
     - User dropdown works on mobile
     - Column resize works on mobile
+      - Maybe it shouldn't work on mobile - maybe on mobile columns should be fixed width
 7. ✅ Drag and drop on board - Changing order
 8. ✅ Drag and drop on roadmap - changing order and parent
     - ✅ Data table uses Jotai (In perspective, it was a bad choice)
@@ -61,6 +63,7 @@
       - ✅ emitting drop result
     - ✅ Drag and drop on Gantt
 9. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
+10. Removing sprints that are used by some work item - right now it fails. It should show a message that it cannot be done.
 
 # Ideas for future releases
 
@@ -80,5 +83,14 @@
         - Or maybe it should be handled at app layer level?
         - Or maybe naive solution - on enter create new account with "demo" flag, and periodically delete all accounts with "demo" flag after some inactivity?
     - Should avoid code duplication as much as possible
-4. Technical - Better integration of DataTable and gantt, so that it willl be possiblle to, for example:
+4. Technical - Better integration of DataTable and gantt, so that it willl be possible to, for example:
     - When dragging, highlight row on both dataTable and gantt
+5. Technical - Refactor data-table completely
+    - Use divs with flex or grid instead of tables - avoid table's layout quirks
+    - Try some approach with some global state management for shared data between components
+      - I still don't know what
+        - Jotai on board didn't pass the exam. Ideal solution that I have in mind would be something like angular services, but it's not "react way".
+        - React context api also is not ideal, as shown in gantt.
+        - The problem lies in passing props to the store introduces not-ideal `useEffect` usages.
+        - Maybe stick to hooks executed at the root level and passed props, just like it is now, but structure it better, with a more "data-first" approach, and don't rely too much on UI when it's unnecessary
+    - Also, ties to the previous point, with better integration of DataTable and gantt, so that it will be possible to, for example:
