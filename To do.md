@@ -63,7 +63,7 @@
       - ✅ emitting drop result
     - ✅ Drag and drop on Gantt
 9. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
-10. Removing sprints that are used by some work item - right now it fails. It should show a message that it cannot be done.
+10. ✅ Removing sprints that are used by some work item - right now it fails. It should show a message that it cannot be done.
 
 # Ideas for future releases
 

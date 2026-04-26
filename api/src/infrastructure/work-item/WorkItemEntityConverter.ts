@@ -235,8 +235,12 @@ export class WorkItemEntityConverter {
 		}
 
 		if (timeFrameEntity.type === 'sprint') {
+			if (!timeFrameEntity.sprint) {
+				return null;
+			}
+
 			const sprint = await this.sprintService.getSprintById(
-				new SprintId(timeFrameEntity.sprint!.id)
+				new SprintId(timeFrameEntity.sprint.id)
 			);
 			if (!sprint) {
 				throw new Error('Unable to find sprint');

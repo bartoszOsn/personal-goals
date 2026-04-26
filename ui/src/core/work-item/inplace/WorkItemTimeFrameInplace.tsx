@@ -100,7 +100,7 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 	);
 	const [startDate, setStartDate] = useState<Temporal.PlainDate>(props.workItem.timeFrame?.startDate ?? Temporal.Now.plainDateISO());
 	const [endDate, setEndDate] = useState<Temporal.PlainDate>(props.workItem.timeFrame?.endDate ?? Temporal.Now.plainDateISO());
-	const [sprint, setSprint] = useState<Sprint>(
+	const [sprint, setSprint] = useState<Sprint | undefined>(
 		props.sprints.find(s => props.workItem.timeFrame?.type === WorkItemTimeFrameType.SPRINT && s.id === props.workItem.timeFrame?.sprintId) ?? props.sprints[0]
 	);
 
@@ -130,7 +130,7 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 			startDate: startDate,
 			endDate: endDate
 		}
-	} else if (type === WorkItemTimeFrameType.SPRINT) {
+	} else if (type === WorkItemTimeFrameType.SPRINT && sprint) {
 		timeFrame = {
 			type: WorkItemTimeFrameType.SPRINT,
 			context: props.workItem.contextYear,
@@ -201,11 +201,13 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 					</Accordion.Panel>
 				</Accordion.Item>
 				<Accordion.Item value={WorkItemTimeFrameType.SPRINT}>
-					<Accordion.Control icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.SPRINT} />}>Sprint</Accordion.Control>
+					<Accordion.Control disabled={!sprint} icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.SPRINT} />}>Sprint</Accordion.Control>
 					<Accordion.Panel>
-						<Select value={sprint.id}
-								data={props.sprints.map(sprint => ({ label: sprint.name, value: sprint.id }))}
-								onChange={id => setSprint(props.sprints.find(s => s.id === id)!)} />
+						{
+							sprint && <Select value={sprint.id}
+											  data={props.sprints.map(sprint => ({ label: sprint.name, value: sprint.id }))}
+											  onChange={id => setSprint(props.sprints.find(s => s.id === id)!)} />
+						}
 					</Accordion.Panel>
 				</Accordion.Item>
 			</Accordion>

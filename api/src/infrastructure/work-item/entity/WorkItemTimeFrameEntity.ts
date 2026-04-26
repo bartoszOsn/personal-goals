@@ -19,7 +19,7 @@ export class WorkItemTimeFrameEntity {
 	// For sprint
 	@ManyToOne(() => SprintEntity, (sprint) => sprint.timeFrames, {
 		nullable: true,
-		onDelete: 'RESTRICT'
+		onDelete: 'SET NULL'
 	})
 	sprint?: SprintEntity | null;
 }
