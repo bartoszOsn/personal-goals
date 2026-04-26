@@ -51,7 +51,7 @@
 6. Make sure it works on mobile.
     - ✅ Hide gantt chart on mobile, leaving only the table
     - ✅ Sidebar hides on navigation on mobile
-    - User dropdown works on mobile
+    - ✅ User dropdown works on mobile
     - Column resize works on mobile
       - Maybe it shouldn't work on mobile - maybe on mobile columns should be fixed width
 7. ✅ Drag and drop on board - Changing order

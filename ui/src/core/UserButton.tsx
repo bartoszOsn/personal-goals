@@ -1,18 +1,21 @@
-import { Avatar, Button, Menu, Skeleton, Stack, Text } from '@mantine/core';
+import { Avatar, Button, Menu, Skeleton, Stack, Text, useMantineTheme } from '@mantine/core';
 import { IconChevronRight, IconLogout, IconSettings } from '@tabler/icons-react';
 import { firebaseAuth } from '@/api/auth/firebase';
 import { createLink } from '@tanstack/react-router';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
+import { useMediaQuery } from '@mantine/hooks';
 
 export function UserButton({ context }: { context: number }) {
 	const user = useFirebaseUser();
+	const theme = useMantineTheme();
+	const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
 
 	if (!user) {
 		return <Skeleton w='100%' h={40} />
 	}
 
 	return (
-		<Menu position='right'>
+		<Menu position={ isMobile ? 'top' : 'right' }>
 			<Menu.Target>
 				<Button variant="subtle"
 						rightSection={<IconChevronRight size={14} stroke={1.5} />}
