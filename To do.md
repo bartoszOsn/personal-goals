@@ -34,16 +34,14 @@
 1. Fix Gantt and Data table – Better UX
     - changing order of columns
     - ✅ resizable width of table and chart
-2. Fix Auth – Use firebase
+2. ✅ Fix Auth – Use firebase
     - ✅ Login and register
     - ✅ Forgot password
-    - Change password
-    - Change email
-    - Change profile picture
+    - ✅ Change password
+    - ✅ Change email
     - ✅ Log out
-    - Delete account
-      - Deleting account must delete both firebase account and data associated with it in a local database.
-    - Notification about confirming password (Do we need it?)
+    - ✅ Delete account
+      - ✅ Deleting account must delete both firebase account and data associated with it in a local database.
 3. ✅ Work on performance
     - ✅ It turns out it's not a problem in a production build
 4. Better UI
