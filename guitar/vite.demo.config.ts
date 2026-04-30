@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@guitar': resolve(__dirname, 'src'),
+      '@guitar-': resolve(__dirname, 'src'),
     },
   },
 })

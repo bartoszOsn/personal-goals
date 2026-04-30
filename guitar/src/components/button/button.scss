@@ -1,0 +1,20 @@
+.gui-button {
+  cursor: pointer;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color .2s;
+
+  @each $variant in (primary, neutral) {
+    &--#{$variant} {
+      background-color: var(--gui-semantic-color-background-#{$variant});
+      color: var(--gui-semantic-color-text-on-#{$variant});
+      &:hover, &:focus {
+        background-color: var(--gui-semantic-color-background-#{$variant}-hover);
+      }
+      &:active {
+        background-color: var(--gui-semantic-color-background-#{$variant}-active);
+      }
+    }
+  }
+}
