@@ -3,7 +3,7 @@
     cursor: pointer;
     border: none;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 2px;
     transition: background-color .2s;
 
     @each $variant in (primary, neutral) {
