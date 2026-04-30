@@ -1,16 +1,18 @@
-:root {
-  --gui-semantic-color-background-primary: var(--gui-primitive-color-blue-5);
-  --gui-semantic-color-background-primary-hover: var(--gui-primitive-color-blue-6);
-  --gui-semantic-color-background-primary-focus: var(--gui-primitive-color-blue-6);
-  --gui-semantic-color-background-primary-active: var(--gui-primitive-color-blue-7);
+@layer theme {
+  :root {
+    --gui-semantic-color-background-primary: var(--gui-primitive-color-blue-5);
+    --gui-semantic-color-background-primary-hover: var(--gui-primitive-color-blue-6);
+    --gui-semantic-color-background-primary-focus: var(--gui-primitive-color-blue-6);
+    --gui-semantic-color-background-primary-active: var(--gui-primitive-color-blue-7);
 
-  --gui-semantic-color-background-neutral: var(--gui-primitive-color-gray-4);
-  --gui-semantic-color-background-neutral-hover: var(--gui-primitive-color-gray-5);
-  --gui-semantic-color-background-neutral-focus: var(--gui-primitive-color-gray-5);
-  --gui-semantic-color-background-neutral-active: var(--gui-primitive-color-gray-6);
+    --gui-semantic-color-background-neutral: var(--gui-primitive-color-gray-4);
+    --gui-semantic-color-background-neutral-hover: var(--gui-primitive-color-gray-5);
+    --gui-semantic-color-background-neutral-focus: var(--gui-primitive-color-gray-5);
+    --gui-semantic-color-background-neutral-active: var(--gui-primitive-color-gray-6);
 
-  --gui-semantic-color-text-primary: var(--gui-primitive-color-blue-7);
-  --gui-semantic-color-text-on-primary: var(--gui-primitive-color-white);
-  --gui-semantic-color-text-neutral: var(--gui-primitive-color-gray-7);
-  --gui-semantic-color-text-on-neutral: var(--gui-primitive-color-black);
+    --gui-semantic-color-text-primary: var(--gui-primitive-color-blue-7);
+    --gui-semantic-color-text-on-primary: var(--gui-primitive-color-white);
+    --gui-semantic-color-text-neutral: var(--gui-primitive-color-gray-7);
+    --gui-semantic-color-text-on-neutral: var(--gui-primitive-color-black);
+  }
 }

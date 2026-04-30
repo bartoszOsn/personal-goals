@@ -7,7 +7,8 @@
 			"types": "./dist/components/button/index.d.ts",
 			"import": "./dist/button.js"
 		},
-		"./style.css": "./dist/style.css"
+		"./button.css": "./dist/button.css",
+		"./theme.css": "./dist/theme.css"
 	},
 	"scripts": {
 		"build": "vite build",

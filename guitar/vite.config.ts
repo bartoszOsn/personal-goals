@@ -14,18 +14,15 @@ export default defineConfig({
 	build: {
 		lib: {
 			entry: {
-				button: resolve(__dirname, 'src/components/button/index.ts'),
-				theme: resolve(__dirname, 'src/theme/index.scss')
+				theme: resolve(__dirname, 'src/theme/index.scss'),
+				button: resolve(__dirname, 'src/components/button/index.ts')
 			},
 			formats: ['es']
 		},
 		rollupOptions: {
 			external: ['react', 'react/jsx-runtime', 'react-dom'],
-			output: {
-				assetFileNames: 'style[extname]'
-			}
 		},
-		cssCodeSplit: false,
+		cssCodeSplit: true,
 		copyPublicDir: false
 	}
 });

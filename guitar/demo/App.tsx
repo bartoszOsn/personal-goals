@@ -1,5 +1,6 @@
-import '@personal-okr/guitar/style.css';
-import { Button } from '@personal-okr/guitar/button'
+import '@personal-okr/guitar/theme.css';
+import '@personal-okr/guitar/button.css';
+import { Button } from '@personal-okr/guitar/button';
 
 export default function App() {
   return (
@@ -7,5 +8,5 @@ export default function App() {
       <Button variant="neutral" />
       <Button variant="primary" />
     </div>
-  )
+  );
 }
