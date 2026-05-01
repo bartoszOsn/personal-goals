@@ -3,6 +3,8 @@ import { ButtonHTMLAttributes } from 'react';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	variant?: 'neutral' | 'primary';
+	weight?: 'default' | 'subtle' | 'transparent';
+	size?: 'compact' | 'default' | 'large';
 }
 
 export function Button({ variant = 'neutral', ...baseProps }: ButtonProps) {
