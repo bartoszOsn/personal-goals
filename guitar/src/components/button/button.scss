@@ -18,5 +18,11 @@
         }
       }
     }
+
+    @each $size in (compact, default, large) {
+      &--#{$size} {
+        padding: var(--gui-semantic-space-element-y-#{$size}) var(--gui-semantic-space-element-x-#{$size});
+      }
+    }
   }
 }

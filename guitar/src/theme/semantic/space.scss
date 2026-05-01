@@ -1,0 +1,12 @@
+@layer theme {
+  :root {
+    --gui-semantic-space-element-x-default: var(--gui-primitive-space-md);
+    --gui-semantic-space-element-y-default: var(--gui-primitive-space-sm);
+
+    --gui-semantic-space-element-x-compact: var(--gui-primitive-space-sm);
+    --gui-semantic-space-element-y-compact: var(--gui-primitive-space-xs);
+
+    --gui-semantic-space-element-x-large: var(--gui-primitive-space-xl);
+    --gui-semantic-space-element-y-large: var(--gui-primitive-space-md);
+  }
+}

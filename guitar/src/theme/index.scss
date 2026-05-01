@@ -1,5 +1,8 @@
 @use 'layers';
 @use './primitive/colors' as primitiveColors;
+@use './primitive/space' as primitiveSpace;
+
 @use './semantic/colors' as semanticColors;
+@use "./semantic/space" as semanticSpace;
 
 @import 'modern-normalize/modern-normalize.css' layer(normalize);
