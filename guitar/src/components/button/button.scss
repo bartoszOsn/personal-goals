@@ -7,7 +7,7 @@
     transition: background-color .2s;
 
     @each $variant in (primary, neutral) {
-      &--#{$variant} {
+      &--#{$variant}:is(&--weight-default) {
         background-color: var(--gui-semantic-color-background-#{$variant});
         color: var(--gui-semantic-color-text-on-#{$variant});
         &:hover, &:focus {
@@ -17,10 +17,27 @@
           background-color: var(--gui-semantic-color-background-#{$variant}-active);
         }
       }
+
+      &--#{$variant}:is(&--weight-subtle) {
+        background-color: var(--gui-semantic-color-background-#{$variant}-subtle);
+        color: var(--gui-semantic-color-text-on-#{$variant}-subtle);
+
+        &:hover, &:focus {
+          background-color: var(--gui-semantic-color-background-#{$variant}-subtle-hover);
+        }
+        &:active {
+          background-color: var(--gui-semantic-color-background-#{$variant}-subtle-active);
+        }
+      }
+
+      &--#{$variant}:is(&--weight-transparent) {
+        background-color: transparent;
+        color: var(--gui-semantic-color-text-#{$variant});
+      }
     }
 
     @each $size in (compact, default, large) {
-      &--#{$size} {
+      &--size-#{$size} {
         padding: var(--gui-semantic-space-element-y-#{$size}) var(--gui-semantic-space-element-x-#{$size});
       }
     }
