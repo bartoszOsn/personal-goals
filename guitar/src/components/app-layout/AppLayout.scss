@@ -1,0 +1,40 @@
+@layer components {
+  .gui-app-layout {
+    width: 100%;
+    height: 100%;
+    background-color: var(--gui-semantic-color-background-surface-sunken);
+
+    display: grid;
+    grid-template-rows: [header] auto [content] 1fr;
+    grid-template-columns: [sidebar] auto [main] 1fr;
+
+    &--full-height {
+      height: 100vh;
+    }
+
+    &__header {
+      width: 100%;
+      background-color: var(--gui-semantic-color-background-surface);
+      padding: var(--gui-semantic-space-section-y-compact) var(--gui-semantic-space-section-x-compact);
+      grid-row: header;
+      grid-column: span 2;
+      border-bottom: var(--gui-semantic-space-border) solid var(--gui-semantic-color-border-neutral);
+    }
+
+    &__sidebar {
+      width: 200px;
+      padding: var(--gui-semantic-space-section-y-compact) var(--gui-semantic-space-section-x-compact);
+      background-color: var(--gui-semantic-color-background-surface);
+      grid-row: content;
+      grid-column: sidebar;
+      border-right: var(--gui-semantic-space-border) solid var(--gui-semantic-color-border-neutral);
+    }
+
+    &__main {
+      background-color: var(--gui-semantic-color-background-surface);
+      padding: var(--gui-semantic-space-section-y-large) var(--gui-semantic-space-section-x-large);
+      grid-row: content;
+      grid-column: main;
+    }
+  }
+}

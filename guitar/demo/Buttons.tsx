@@ -6,9 +6,9 @@ export function Buttons() {
 	const sizes: ButtonProps['size'][] = ['compact', 'default', 'large'];
 
 	return (
-		sizes.map(size => (
+		sizes.map((size, i) => (
 			<div>
-				<h2>Size: {size}</h2>
+				<h2 style={{ marginTop: i == 0 ? 0 : undefined}}>Size: {size}</h2>
 				<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
 					{
 						variants.map(variant => (

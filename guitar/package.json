@@ -8,6 +8,11 @@
 			"import": "./dist/button.js"
 		},
 		"./button.css": "./dist/button.css",
+		"./appLayout": {
+			"types": "./dist/components/app-layout/index.d.ts",
+			"import": "./dist/appLayout.js"
+		},
+		"./appLayout.css": "./dist/appLayout.css",
 		"./theme.css": "./dist/theme.css"
 	},
 	"scripts": {

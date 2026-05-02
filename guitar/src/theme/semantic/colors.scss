@@ -20,16 +20,21 @@
     --gui-semantic-color-background-neutral-subtle-focus: var(--gui-primitive-color-gray-3);
     --gui-semantic-color-background-neutral-subtle-active: var(--gui-primitive-color-gray-4);
 
+    --gui-semantic-color-background-surface: var(--gui-primitive-color-white);
+    --gui-semantic-color-background-surface-sunken: var(--gui-primitive-color-gray-2);
+
     --gui-semantic-color-text-primary: var(--gui-primitive-color-blue-7);
     --gui-semantic-color-text-on-primary: var(--gui-primitive-color-white);
 
     --gui-semantic-color-text-primary-subtle: var(--gui-primitive-color-blue-4);
     --gui-semantic-color-text-on-primary-subtle: var(--gui-primitive-color-black);
 
-    --gui-semantic-color-text-neutral: var(--gui-primitive-color-gray-7);
+    --gui-semantic-color-text-neutral: var(--gui-primitive-color-gray-9);
     --gui-semantic-color-text-on-neutral: var(--gui-primitive-color-black);
 
     --gui-semantic-color-text-neutral-subtle: var(--gui-primitive-color-gray-5);
     --gui-semantic-color-text-on-neutral-subtle: var(--gui-primitive-color-black);
+
+    --gui-semantic-color-border-neutral: var(--gui-primitive-color-gray-3);
   }
 }
