@@ -17,7 +17,12 @@
 			"types": "./dist/components/typography/index.d.ts",
 			"import": "./dist/typography.js"
 		},
-		"./typography.css": "./dist/typography/Heading.css",
+		"./typography.css": "./dist/typography/typography.css",
+		"./misc": {
+			"types": "./dist/components/misc/index.d.ts",
+			"import": "./dist/misc.js"
+		},
+		"./misc.css": "./dist/misc.css",
 		"./theme.css": "./dist/theme.css"
 	},
 	"scripts": {

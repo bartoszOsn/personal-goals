@@ -8,6 +8,10 @@
         text-transform: var(--gui-semantic-font-heading-#{$level}-transform);
         margin-top: var(--gui-semantic-font-heading-#{$level}-space);
         margin-bottom: var(--gui-semantic-font-heading-#{$level}-space);
+
+        &:first-child {
+          margin-top: var(--gui-primitive-space-0);
+        }
       }
     }
   }

@@ -1,0 +1,7 @@
+@layer components {
+  .gui-paper {
+    padding: var(--gui-semantic-space-section-y-default) var(--gui-semantic-space-section-x-default);
+    border: var(--gui-semantic-space-border) solid var(--gui-semantic-color-border-neutral);
+    border-radius: var(--gui-semantic-radius-section);
+  }
+}

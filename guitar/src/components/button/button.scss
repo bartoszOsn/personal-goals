@@ -2,8 +2,7 @@
   .gui-button {
     cursor: pointer;
     border: none;
-    padding: 8px 16px;
-    border-radius: 2px;
+    border-radius: var(--gui-semantic-radius-element);
     transition: background-color .2s;
 
     @each $variant in (primary, neutral) {
