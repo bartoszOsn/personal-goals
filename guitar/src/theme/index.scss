@@ -1,8 +1,11 @@
 @use 'layers';
+@use 'globals';
 @use './primitive/colors' as primitiveColors;
 @use './primitive/space' as primitiveSpace;
+@use './primitive/font' as primitiveFont;
 
 @use './semantic/colors' as semanticColors;
 @use "./semantic/space" as semanticSpace;
+@use "./semantic/font" as semanticFont;
 
 @import 'modern-normalize/modern-normalize.css' layer(normalize);

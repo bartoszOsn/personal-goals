@@ -17,6 +17,7 @@ export default defineConfig({
 				theme: resolve(__dirname, 'src/theme/index.scss'),
 				button: resolve(__dirname, 'src/components/button/index.ts'),
 				appLayout: resolve(__dirname, 'src/components/app-layout/index.ts'),
+				typography: resolve(__dirname, 'src/components/typography/index.ts'),
 			},
 			formats: ['es']
 		},

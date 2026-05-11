@@ -13,6 +13,11 @@
 			"import": "./dist/appLayout.js"
 		},
 		"./appLayout.css": "./dist/appLayout.css",
+		"./typography": {
+			"types": "./dist/components/typography/index.d.ts",
+			"import": "./dist/typography.js"
+		},
+		"./typography.css": "./dist/typography/Heading.css",
 		"./theme.css": "./dist/theme.css"
 	},
 	"scripts": {

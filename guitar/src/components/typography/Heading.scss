@@ -1,0 +1,14 @@
+@layer components {
+  .gui-heading {
+    @for $level from 1 through 6 {
+      &:is(h#{$level}) {
+        font-family: var(--gui-semantic-font-heading-#{$level}-font-family);
+        font-size: var(--gui-semantic-font-heading-#{$level}-font-size);
+        font-weight: var(--gui-semantic-font-heading-#{$level}-font-weight);
+        text-transform: var(--gui-semantic-font-heading-#{$level}-transform);
+        margin-top: var(--gui-semantic-font-heading-#{$level}-space);
+        margin-bottom: var(--gui-semantic-font-heading-#{$level}-space);
+      }
+    }
+  }
+}

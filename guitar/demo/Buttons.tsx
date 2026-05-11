@@ -1,4 +1,5 @@
 import { Button, ButtonProps } from '../src/components/button';
+import { Heading } from '../src/components/typography';
 
 export function Buttons() {
 	const variants: ButtonProps['variant'][] = ['primary', 'neutral'];
@@ -8,7 +9,7 @@ export function Buttons() {
 	return (
 		sizes.map((size, i) => (
 			<div>
-				<h2 style={{ marginTop: i == 0 ? 0 : undefined}}>Size: {size}</h2>
+				<Heading level={2}>Size: {size}</Heading>
 				<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
 					{
 						variants.map(variant => (
