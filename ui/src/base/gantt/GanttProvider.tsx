@@ -98,7 +98,6 @@ export function GanttProvider<TData>(props: GanttProviderProps<TData>) {
 	);
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useGanttContext<TData>(): GanttContext<TData> {
 	const context = useContext(GanttContext) as GanttContext<TData> | null;
 

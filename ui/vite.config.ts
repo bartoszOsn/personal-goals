@@ -2,12 +2,14 @@ import path from 'path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
+import tailwindcss from "@tailwindcss/vite";
 import 'dotenv/config';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
 	  react(),
+	  tailwindcss(),
 	  checker({
 		  typescript: {
 			  tsconfigPath: 'tsconfig.app.json',
