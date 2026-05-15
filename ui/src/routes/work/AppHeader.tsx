@@ -1,4 +1,4 @@
-import { AppShell, Burger, Group, Image, Text } from '@mantine/core';
+import { Burger, Group, Image, Text } from '@mantine/core';
 import { IconCalendar } from '@tabler/icons-react';
 import { YearPickerInput } from '@mantine/dates';
 import { Temporal } from 'temporal-polyfill';
@@ -17,7 +17,7 @@ export function AppHeader({ context, setContext, navbarCollapsed, setNavbarColla
 	};
 
 	return (
-		<AppShell.Header>
+		<header className='sticky top-0'>
 			<Group px='md' py='xs' gap='md' justify='space-between' wrap='nowrap'>
 				<Group gap='xs' wrap='nowrap' style={{ cursor: 'default', userSelect: 'none' }}>
 					<Burger size='sm' opened={!navbarCollapsed} onClick={() => setNavbarCollapsed(!navbarCollapsed)} />
@@ -32,6 +32,6 @@ export function AppHeader({ context, setContext, navbarCollapsed, setNavbarColla
 								 leftSectionPointerEvents="none"
 								 onChange={onContextChange} />
 			</Group>
-		</AppShell.Header>
+		</header>
 	);
 }

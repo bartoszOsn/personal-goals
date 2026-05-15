@@ -1,15 +1,12 @@
-import { getRouteApi, Navigate, Outlet, useNavigate, useRouter } from '@tanstack/react-router';
+import { getRouteApi, Navigate, Outlet, useNavigate } from '@tanstack/react-router';
 import { AppSidebar } from '@/routes/work/AppSidebar.tsx';
-import { AppShell, useMantineTheme } from '@mantine/core';
 import { Temporal } from 'temporal-polyfill';
-import { AppHeader } from '@/routes/work/AppHeader';
 import { notifications } from '@mantine/notifications';
 import { useQueryOrMutationError } from '@/base/query-x/api/useQueryOrMutationError';
 import { BasicErrorDTOSchema } from '@personal-okr/shared';
 import { HttpError } from '@/base/http';
-import { useEffect, useState } from 'react';
-import { useMediaQuery } from '@mantine/hooks';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
+import { SidebarProvider, SidebarTrigger } from '@/primitive/components/ui/sidebar';
 
 export function WorkRoute() {
 	const navigate = useNavigate();
@@ -37,20 +34,6 @@ export function WorkRoute() {
 		}
 	});
 
-	const theme = useMantineTheme();
-	const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
-	const [navbarCollapsed, setNavbarCollapsed] = useState<boolean>(true);
-
-	const router = useRouter();
-
-	useEffect(() => {
-		return router.subscribe('onBeforeNavigate', () => {
-			if (isMobile) {
-				setNavbarCollapsed(true);
-			}
-		})
-	}, [isMobile, router]);
-
 	const user = useFirebaseUser();
 
 	if (!user) {
@@ -58,18 +41,12 @@ export function WorkRoute() {
 	}
 
 	return (
-		<AppShell navbar={{
-			width: 250,
-			breakpoint: 'sm',
-			collapsed: { mobile: navbarCollapsed, desktop: navbarCollapsed },
-		}} header={{
-			height: 50
-		}}>
-			<AppHeader context={context} setContext={setContext} navbarCollapsed={navbarCollapsed} setNavbarCollapsed={setNavbarCollapsed} />
-			<AppSidebar context={context} />
-			<AppShell.Main>
+		<SidebarProvider className='overflow-y-hidden'>
+			<AppSidebar context={context} setContext={setContext} />
+			<main className='overflow-y-hidden'>
+				<SidebarTrigger className='absolute' />
 				<Outlet />
-			</AppShell.Main>
-		</AppShell>
+			</main>
+		</SidebarProvider>
 	);
 }

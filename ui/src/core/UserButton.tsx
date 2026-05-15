@@ -1,54 +1,52 @@
-import { Avatar, Button, Menu, Skeleton, Stack, Text, useMantineTheme } from '@mantine/core';
-import { IconChevronRight, IconLogout, IconSettings } from '@tabler/icons-react';
+import { IconChevronRight } from '@tabler/icons-react';
 import { firebaseAuth } from '@/api/auth/firebase';
-import { createLink } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
-import { useMediaQuery } from '@mantine/hooks';
+import { Skeleton } from '@/primitive/components/ui/skeleton';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/primitive/components/ui/dropdown-menu';
+import { LogOut, Settings } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/primitive/components/ui/avatar';
+import { useIsMobile } from '@/primitive/hooks/use-mobile';
 
 export function UserButton({ context }: { context: number }) {
 	const user = useFirebaseUser();
-	const theme = useMantineTheme();
-	const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
+	const isMobile = useIsMobile();
 
 	if (!user) {
-		return <Skeleton w='100%' h={40} />
+		return <Skeleton className='w-full h-10' />
 	}
 
 	return (
-		<Menu position={ isMobile ? 'top' : 'right' }>
-			<Menu.Target>
-				<Button variant="subtle"
-						rightSection={<IconChevronRight size={14} stroke={1.5} />}
-						leftSection={<Avatar
-							src={user?.photoURL ?? null}
-							radius="xl"
-							alt={ user.displayName ?? user.email ?? '' }
-						/>}
-						fullWidth
-						style={{ '--button-height': 'var(--button-height-lg)'}}
-						styles={{ label: { maxWidth: '100%' } }}
-				>
-					<Stack gap={0} align='start' maw='100%'>
-						<Text c="dark" size="sm" fw={500} maw='100%' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-							{ user.displayName }
-						</Text>
-
-						<Text c="dimmed" size="xs" maw='100%' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-							{ user.email }
-						</Text>
-					</Stack>
-				</Button>
-			</Menu.Target>
-			<Menu.Dropdown>
-				<MenuItemLink component='a' to='/work/$context/profile' params={{ context: context.toString() }} leftSection={<IconSettings size={14} stroke={1.5} />}>
-					Settings
-				</MenuItemLink>
-				<Menu.Item color='red' leftSection={<IconLogout size={14} stroke={1.5} />} onClick={() => firebaseAuth.signOut()}>
-					Logout
-				</Menu.Item>
-			</Menu.Dropdown>
-		</Menu>
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<div className='flex items-center cursor-pointer p-2.5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50'>
+					<div className='flex-1 items-center flex gap-2'>
+						<Avatar>
+							<AvatarImage src={user?.photoURL ?? undefined} />
+							<AvatarFallback>{(user.displayName ?? user.email ?? '')[0]}</AvatarFallback>
+						</Avatar>
+						<div className='flex flex-col items-start max-w-full'>
+							<p className='text-sm font-medium max-w-full overflow-hidden text-ellipsis'>
+								{ user.displayName }
+							</p>
+							<p className='text-xs text-muted-foreground max-w-full overflow-hidden text-ellipsis'>
+								{ user.email }
+							</p>
+						</div>
+					</div>
+					<IconChevronRight size={14} stroke={1.5} />
+				</div>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent side={ isMobile ? 'top' : 'right' }>
+				<DropdownMenuItem asChild>
+					<Link to='/work/$context/profile' params={{ context: context.toString() }}>
+						<Settings /> Settings
+					</Link>
+				</DropdownMenuItem>
+				<DropdownMenuItem variant='destructive' onClick={() => firebaseAuth.signOut()}>
+					<LogOut /> Logout
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 }
-
-const MenuItemLink = createLink(Menu.Item<'a'>);

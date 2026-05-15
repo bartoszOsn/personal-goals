@@ -16,6 +16,7 @@ import { firebase, firebaseAuth } from '@/api/auth/firebase';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
 import { useEffect } from 'react';
 import { http } from '@/base/http';
+import { TooltipProvider } from '@/primitive/components/ui/tooltip';
 
 const firebaseUI = initializeUI({
 	app: firebase,
@@ -40,12 +41,14 @@ export function App() {
 	return (
 		<FirebaseUIProvider ui={firebaseUI}>
 			<QueryClientProvider client={queryClient}>
-				<MantineProvider>
-					<ModalsProvider>
-						<Notifications />
-						<RouterProvider router={router} />
-					</ModalsProvider>
-				</MantineProvider>
+				<TooltipProvider>
+						<MantineProvider>
+							<ModalsProvider>
+								<Notifications />
+								<RouterProvider router={router} />
+							</ModalsProvider>
+						</MantineProvider>
+				</TooltipProvider>
 			</QueryClientProvider>
 		</FirebaseUIProvider>
 	);
