@@ -6,7 +6,7 @@ import { useQueryOrMutationError } from '@/base/query-x/api/useQueryOrMutationEr
 import { BasicErrorDTOSchema } from '@personal-okr/shared';
 import { HttpError } from '@/base/http';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
-import { SidebarProvider, SidebarTrigger } from '@/primitive/components/ui/sidebar';
+import { SidebarProvider } from '@/primitive/components/ui/sidebar';
 
 export function WorkRoute() {
 	const navigate = useNavigate();
@@ -41,12 +41,9 @@ export function WorkRoute() {
 	}
 
 	return (
-		<SidebarProvider className='overflow-y-hidden'>
+		<SidebarProvider>
 			<AppSidebar context={context} setContext={setContext} />
-			<main className='overflow-y-hidden'>
-				<SidebarTrigger className='absolute' />
-				<Outlet />
-			</main>
+			<Outlet />
 		</SidebarProvider>
 	);
 }
