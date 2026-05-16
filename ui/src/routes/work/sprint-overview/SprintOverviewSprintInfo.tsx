@@ -1,85 +1,68 @@
-import { Badge, Group, Paper, Progress, Skeleton, Text, ThemeIcon } from '@mantine/core';
-import { IconArrowForwardUp } from '@tabler/icons-react';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { Temporal } from 'temporal-polyfill';
-import { isPlainDate } from '@personal-okr/shared';
-import { SprintId } from '@/models/Sprint';
+import { SprintId, SprintStatus } from '@/models/Sprint';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card';
+import { Field, FieldLabel } from '@/primitive/components/ui/field';
+import { Progress } from '@/primitive/components/ui/progress';
+import { Badge } from '@/primitive/components/ui/badge';
+import { ArrowBigRight, CheckIcon, CircleDotDashed } from 'lucide-react';
+import { Skeleton } from '@/primitive/components/ui/skeleton';
 
 export function SprintOverviewSprintInfo({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const sprintQuery = useSprintQuery(context);
 	const currentSprint = sprintQuery.data?.find(s => s.id === sprintId);
 
 	if (sprintQuery.isPending || !currentSprint) {
-		return <Skeleton w='100%' h={70} />
+		return <Skeleton className='w-full h-30' />
 	}
 
 	const start = currentSprint.startDate;
 	const end = currentSprint.endDate;
 
-	const timeStatus = getTimeStatus(start, end);
-	const color = colorMap[timeStatus];
+	const timeStatus = currentSprint.status;
 	const sinceStart = Temporal.Now.plainDateISO().since(start).total('days') + 1;
 	const untilEnd = Temporal.Now.plainDateISO().until(end).total('days');
 	const daysInSprint = start.until(end).total('days') + 1;
 	const progress = Math.round(Math.max(Math.min((sinceStart - 1) / daysInSprint * 100, 100), 0));
 
-	const badgeText = timeStatus === 'past'
+	const badgeText = timeStatus === SprintStatus.COMPLETED
 		? 'Completed'
-		: timeStatus === 'future'
+		: timeStatus === SprintStatus.FUTURE
 			? 'Future'
-			: `${untilEnd} days left`
+			: `${untilEnd} days left`;
+
+	const badgeIcon = timeStatus === SprintStatus.COMPLETED
+		? <CheckIcon className="text-green-500" data-icon="inline-start" />
+		: timeStatus === SprintStatus.FUTURE
+			? <ArrowBigRight className='text-muted-foreground' data-icon="inline-start" />
+			: <CircleDotDashed className='text-blue-500' data-icon="inline-start" />
 
 	return (
-		<Paper radius="md" withBorder pos='relative' style={{ overflow: 'visible', paddingTop: 'calc(var(--mantine-spacing-md) + 10px)' }} px='md' pb='md' mt={10}>
-			<ThemeIcon color={color} pos='absolute' style={{ top: -10, left: 'calc(50% - 15px)' }} size={30} radius={30}>
-				<IconArrowForwardUp size={16} stroke={1.5} />
-			</ThemeIcon>
-
-			<Text ta="center" fw={700}>
-				{ currentSprint.name }
-			</Text>
-			<Text c="dimmed" ta="center" fz="sm">
-				{start.toLocaleString()} → {end.toLocaleString()}
-			</Text>
-
-			<Group justify="space-between" mt="xs">
-				<Text fz="sm" c="dimmed">
-					Progress
-				</Text>
-				<Text fz="sm" c="dimmed">
-					{progress}%
-				</Text>
-			</Group>
-
-			<Progress value={progress} color={color} mt={5} aria-label="Progress" />
-
-			<Group justify="space-between" mt="md">
-				<Text fz="sm">
-					{
-						timeStatus === 'current' && <>Day {sinceStart} of {daysInSprint}</>
-					}
-				</Text>
-				<Badge color={color} size="sm">{badgeText}</Badge>
-			</Group>
-		</Paper>
+		<Card>
+			<CardHeader>
+				<CardTitle className='text-center'>{ currentSprint.name }</CardTitle>
+				<CardDescription className='text-center'>{start.toLocaleString()} → {end.toLocaleString()}</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<Field className="w-full mb-4">
+					<FieldLabel htmlFor="progress">
+						<span>Progress</span>
+						<span className="ml-auto">{progress}%</span>
+					</FieldLabel>
+					<Progress value={progress} id="progress" />
+				</Field>
+				<div className='flex flex-row justify-between'>
+					<p className='text-sm text-muted-foreground'>
+						{
+							timeStatus === SprintStatus.ACTIVE && <>Day {sinceStart} of {daysInSprint}</>
+						}
+					</p>
+					<Badge variant='secondary'>
+						{badgeIcon}
+						{badgeText}
+					</Badge>
+				</div>
+			</CardContent>
+		</Card>
 	);
 }
-
-function getTimeStatus(start: Temporal.PlainDate, end: Temporal.PlainDate) {
-	const now = Temporal.Now.plainDateISO();
-	if (isPlainDate(now).afterOrEqual(start) && isPlainDate(now).beforeOrEqual(end)) {
-		return 'current';
-	}
-
-	if (isPlainDate(now).afterOrEqual(end)) {
-		return 'past';
-	}
-
-	return 'future';
-}
-
-const colorMap = {
-	'current': 'blue',
-	'past': 'green',
-	'future': 'gray'
-} as const;
