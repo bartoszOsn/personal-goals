@@ -1,9 +1,10 @@
-import { Group, Skeleton, Stack } from '@mantine/core';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { useEffect } from 'react';
 import { Temporal } from 'temporal-polyfill';
 import { isPlainDate } from '@personal-okr/shared';
 import { useNavigate } from '@tanstack/react-router';
+import { PageContent, PageContentContent, PageContentHeader } from '@/base/PageContent';
+import { Skeleton } from '@/primitive/components/ui/skeleton';
 
 export function SprintOverviewCurrentSprintLoader() {
 	const sprints = useSprintQuery(Temporal.Now.plainDateISO().year);
@@ -40,14 +41,20 @@ export function SprintOverviewCurrentSprintLoader() {
 	}
 
 	return (
-		<Stack w="100%" h="100vh" p="lg">
-			<Skeleton w="100%" h={36} />
-			<Skeleton w="100%" h={70} />
-			<Group flex={1}>
-				<Skeleton w="100%" h='100%' flex={1} />
-				<Skeleton w="100%" h='100%' flex={1} />
-				<Skeleton w="100%" h='100%' flex={1} />
-			</Group>
-		</Stack>
+		<PageContent>
+			<PageContentHeader>
+				<div className="flex-1 flex flex-col items-center">
+					<Skeleton className='h-5 w-full' />
+				</div>
+			</PageContentHeader>
+			<PageContentContent>
+				<Skeleton className='w-full h-30 mb-4' />
+				<div className='w-full h-70 flex flex-row gap-4'>
+					<Skeleton className='h-70 flex-1' />
+					<Skeleton className='h-70 flex-1' />
+					<Skeleton className='h-70 flex-1' />
+				</div>
+			</PageContentContent>
+		</PageContent>
 	);
 }
