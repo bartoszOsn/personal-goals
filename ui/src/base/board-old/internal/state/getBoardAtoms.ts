@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { BoardItemMoveEvent, BoardProps } from '@/base/board';
+import { BoardItemMoveEvent, BoardProps } from '@/base/board-old';
 import { atomFactory } from '@/base/jotai-x/atomFactory';
 import { atomWithCompare } from '@/base/jotai-x/atomWithCompare';
 import { shallowEqual } from '@mantine/hooks';

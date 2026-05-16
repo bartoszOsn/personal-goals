@@ -1,4 +1,4 @@
-import { BoardColumnDefinition } from '@/base/board';
+import { BoardColumnDefinition } from '@/base/board-old';
 import { ReactNode } from 'react';
 
 export interface BoardProps<TData, TColumnId> {

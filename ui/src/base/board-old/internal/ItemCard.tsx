@@ -1,7 +1,7 @@
-import { BoardColumnDefinition } from '@/base/board';
+import { BoardColumnDefinition } from '@/base/board-old';
 import { Box, Card, Center } from '@mantine/core';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
+import { getBoardAtoms } from '@/base/board-old/internal/state/getBoardAtoms';
 import { useEffect, useRef } from 'react';
 import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';

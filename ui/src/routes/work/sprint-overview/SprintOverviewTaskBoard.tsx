@@ -1,5 +1,5 @@
-import { Board } from '@/base/board/api/Board.tsx';
-import { BoardColumnDefinition } from '@/base/board/api/BoardColumnDefinition.ts';
+import { Board } from '@/base/board-old/api/Board.tsx';
+import { BoardColumnDefinition } from '@/base/board-old/api/BoardColumnDefinition.ts';
 import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { SprintId } from '@/models/Sprint';
 import { isPlainDate } from '@personal-okr/shared';
@@ -13,7 +13,7 @@ import {
 	useWorkItemSprintOverviewQuery
 } from '@/api/work-item/work-item-hooks';
 import { WorkItem, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
-import { BoardItemMoveEvent } from '@/base/board';
+import { BoardItemMoveEvent } from '@/base/board-old';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);

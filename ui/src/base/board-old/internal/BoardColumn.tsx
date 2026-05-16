@@ -1,9 +1,9 @@
-import { BoardColumnDefinition } from '@/base/board';
+import { BoardColumnDefinition } from '@/base/board-old';
 import { Button, Card, Divider, Stack, Text } from '@mantine/core';
-import { ItemCard } from '@/base/board/internal/ItemCard.tsx';
+import { ItemCard } from '@/base/board-old/internal/ItemCard.tsx';
 import { IconPlus } from '@tabler/icons-react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
+import { getBoardAtoms } from '@/base/board-old/internal/state/getBoardAtoms';
 import { Fragment, useEffect, useRef } from 'react';
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 

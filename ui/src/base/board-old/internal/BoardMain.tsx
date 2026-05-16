@@ -1,8 +1,8 @@
 import { useAtomValue } from 'jotai';
 import { autoScrollForElements, autoScrollWindowForElements } from '@atlaskit/pragmatic-drag-and-drop-auto-scroll/element';
-import { getBoardAtoms } from '@/base/board/internal/state/getBoardAtoms';
+import { getBoardAtoms } from '@/base/board-old/internal/state/getBoardAtoms';
 import { Group, LoadingOverlay, ScrollArea } from '@mantine/core';
-import { BoardColumn } from '@/base/board/internal/BoardColumn.tsx';
+import { BoardColumn } from '@/base/board-old/internal/BoardColumn.tsx';
 import { useEffect, useRef } from 'react';
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 

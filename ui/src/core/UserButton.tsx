@@ -8,6 +8,7 @@ import { LogOut, Settings } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/primitive/components/ui/avatar';
 import { useIsMobile } from '@/primitive/hooks/use-mobile';
 
+// @TODO: change to Item: https://ui.shadcn.com/docs/components/radix/item
 export function UserButton({ context }: { context: number }) {
 	const user = useFirebaseUser();
 	const isMobile = useIsMobile();
