@@ -1,35 +1,48 @@
 import { useSprintQuery } from '@/api/sprint/sprint-hooks.ts';
-import { ComboboxData, Group, Pagination, Select, Skeleton } from '@mantine/core';
 import { SprintId } from '@/models/Sprint';
+import { Pagination, PaginationContent, PaginationNext, PaginationPrevious } from '@/primitive/components/ui/pagination';
+import { Skeleton } from '@/primitive/components/ui/skeleton';
+import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from '@/primitive/components/ui/combobox';
 
 export function SprintOverviewSprintSwitcher
 ({ context, sprintId, onChange }: { context: number, sprintId: SprintId, onChange: (value: SprintId) => void }) {
 	const sprintQuery = useSprintQuery(context);
 
 	if (sprintQuery.isPending || !sprintQuery.data) {
-		return <Skeleton w="100%" h={36} />
+		return <Skeleton className='h-5 w-full' />
 	}
 
 	const value = sprintQuery.data.findIndex(s => s.id === sprintId) + 1;
 	const total = sprintQuery.data.length;
 
+	const sprint = sprintQuery.data.find(s => s.id === sprintId);
 	const onSprintSelect = (index: number) => {
 		onChange(sprintQuery.data[index - 1].id);
 	}
 
-	const data: ComboboxData = sprintQuery.data.map(s => ({ value: s.id, label: s.name }));
-
 	return (
-		<Pagination.Root value={value} total={total} size={36} onChange={onSprintSelect}>
-			<Group gap={5} justify='center'>
-				<Pagination.Previous />
-				<Select value={sprintId}
-						data={data}
-						searchable
-						size='sm'
-						onChange={(v) => v && onChange(v as SprintId)} />
-				<Pagination.Next />
-			</Group>
-		</Pagination.Root>
+		<Pagination>
+			<PaginationContent>
+				<PaginationPrevious onClick={() => value > 0 && onSprintSelect(value - 1)} />
+				<Combobox items={sprintQuery.data}
+						  value={sprint}
+						  itemToStringValue={sprint => sprint.id}
+						  itemToStringLabel={sprint => sprint.name}
+						  onValueChange={sprint => sprint && onChange(sprint.id)}>
+					<ComboboxInput />
+					<ComboboxContent>
+						<ComboboxEmpty>No sprints available</ComboboxEmpty>
+						<ComboboxList>
+							{(item) => (
+								<ComboboxItem key={item.id} value={item}>
+									{item.name}
+								</ComboboxItem>
+							)}
+						</ComboboxList>
+					</ComboboxContent>
+				</Combobox>
+				<PaginationNext onClick={() => value < total && onSprintSelect(value + 1)} />
+			</PaginationContent>
+		</Pagination>
 	)
 }
