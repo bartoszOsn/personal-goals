@@ -38,7 +38,7 @@ export function SprintOverviewSprintInfo({ context, sprintId }: { context: numbe
 			: <CircleDotDashed className='text-blue-500' data-icon="inline-start" />
 
 	return (
-		<Card>
+		<Card className='mb-4'>
 			<CardHeader>
 				<CardTitle className='text-center'>{ currentSprint.name }</CardTitle>
 				<CardDescription className='text-center'>{start.toLocaleString()} → {end.toLocaleString()}</CardDescription>

@@ -129,13 +129,10 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 	];
 
 	return (
-		<>
-			<Text fw={500}>Tasks</Text>
-			<Board columns={columns}
-				   items={tasksBySprint}
-				   renderItemCard={renderCard}
-				   onReorder={onItemMove} />
-		</>
+		<Board columns={columns}
+			   items={tasksBySprint}
+			   renderItemCard={renderCard}
+			   onReorder={onItemMove} />
 	);
 }
 

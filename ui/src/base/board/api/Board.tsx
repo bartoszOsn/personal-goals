@@ -91,7 +91,7 @@ export function Board<TItemData, TItemId extends Key, TColumnId extends Key>({
 
 	return (
 		<DragAutoScroll>
-			<div className="flex flex-row overflow-x-auto gap-4 bg-sidebar p-4">
+			<div className="flex flex-row overflow-x-auto gap-4 bg-sidebar rounded-xl p-4">
 				{
 					itemsPerColumn.map(column => (
 						<BoardColumnBlock
