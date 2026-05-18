@@ -1,11 +1,9 @@
 import { Board } from '@/base/board/api/Board.tsx';
-import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
+import { Group, Skeleton } from '@mantine/core';
 import { SprintId } from '@/models/Sprint';
 import { isPlainDate } from '@personal-okr/shared';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
-import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
 import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
-import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
 import {
 	useCreateWorkItemInSprintOverviewMutation,
 	useMoveWorkItemInSprintOverviewMutation,
@@ -13,9 +11,12 @@ import {
 } from '@/api/work-item/work-item-hooks';
 import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
 import { BoardColumn, BoardItem, BoardReorderResult } from '@/base/board/api/BoardProps';
-import { CircleCheck, CircleDashed, CircleDot, CircleX } from 'lucide-react';
-import { CardContent } from '@/primitive/components/ui/card';
+import { CalendarDays, CircleCheck, CircleDashed, CircleDot, CircleX, SquareCheckIcon } from 'lucide-react';
+import { CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card';
 import { Button } from '@/primitive/components/ui/button';
+import { Field, FieldLabel } from '@/primitive/components/ui/field';
+import { Item, ItemContent, ItemDescription, ItemTitle } from '@/primitive/components/ui/item';
+import { Input } from '@/primitive/components/ui/input';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);
@@ -50,18 +51,28 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 		}));
 
 	const renderCard = (task: WorkItem) => {
-		return <CardContent>
-			<Stack gap={0}>
-				<Space h="md" />
-				<WorkItemTitleInplace workItem={task} textProps={{ fw: 'bold' }} />
-				<Space h="sm" />
-				<Text size="xs" c="dimmed">Time frame</Text>
-				<WorkItemTimeFrameInplace workItem={task} multiline />
-				<Space h="sm" />
-				<Text size="xs" c="dimmed">Progress</Text>
-				<WorkItemProgressInplace workItem={task} />
-			</Stack>
-		</CardContent>;
+		return (
+			<>
+				<CardHeader>
+					<CardTitle>{task.title}</CardTitle>
+					<CardDescription className='flex items-center gap-2'><CalendarDays className='w-3 h-3 inline' /> <span>2026-Q2-06</span></CardDescription>
+					<CardAction>
+						<Button variant="ghost">
+							<SquareCheckIcon />
+						</Button>
+					</CardAction>
+				</CardHeader>
+				<CardContent className="px-2 flex justify-end">
+					<Button variant="ghost">
+						<CalendarDays />
+						{task.timeFrame?.startDate.toLocaleString(undefined, {
+							day: 'numeric',
+							month: 'short'
+						})} – {task.timeFrame?.endDate.toLocaleString(undefined, { day: 'numeric', month: 'short' })}
+					</Button>
+				</CardContent>
+			</>
+		);
 	};
 
 	const onItemMove = async (event: BoardReorderResult<WorkItem, WorkItemId, WorkItemStatus>) => {
@@ -79,7 +90,7 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 			order = {
 				type: 'BETWEEN',
 				after: event.nextItemId,
-				before: event.previousItemId,
+				before: event.previousItemId
 			};
 		}
 
@@ -105,25 +116,25 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 		{
 			columnId: WorkItemStatus.TODO,
 			columnHeader: 'To do',
-			columnAction: <Button variant='secondary' onClick={() => onCreateTask(WorkItemStatus.TODO)}>Create</Button>,
+			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.TODO)}>Create</Button>,
 			columnIcon: <CircleDashed className="text-gray-500" />
 		},
 		{
 			columnId: WorkItemStatus.IN_PROGRESS,
 			columnHeader: 'In progress',
-			columnAction: <Button variant='secondary' onClick={() => onCreateTask(WorkItemStatus.IN_PROGRESS)}>Create</Button>,
+			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.IN_PROGRESS)}>Create</Button>,
 			columnIcon: <CircleDot className="text-blue-500" />
 		},
 		{
 			columnId: WorkItemStatus.FAILED,
 			columnHeader: 'Failed',
-			columnAction: <Button variant='secondary' onClick={() => onCreateTask(WorkItemStatus.FAILED)}>Create</Button>,
+			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.FAILED)}>Create</Button>,
 			columnIcon: <CircleX className="text-red-500" />
 		},
 		{
 			columnId: WorkItemStatus.DONE,
 			columnHeader: 'Done',
-			columnAction: <Button variant='secondary' onClick={() => onCreateTask(WorkItemStatus.DONE)}>Create</Button>,
+			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.DONE)}>Create</Button>,
 			columnIcon: <CircleCheck className="text-green-500" />
 		}
 	];
