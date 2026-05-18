@@ -1,9 +1,7 @@
 import { Board } from '@/base/board/api/Board.tsx';
-import { Group, Skeleton } from '@mantine/core';
 import { SprintId } from '@/models/Sprint';
 import { isPlainDate } from '@personal-okr/shared';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
-import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
 import {
 	useCreateWorkItemInSprintOverviewMutation,
 	useMoveWorkItemInSprintOverviewMutation,
@@ -14,9 +12,7 @@ import { BoardColumn, BoardItem, BoardReorderResult } from '@/base/board/api/Boa
 import { CalendarDays, CircleCheck, CircleDashed, CircleDot, CircleX, SquareCheckIcon } from 'lucide-react';
 import { CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card';
 import { Button } from '@/primitive/components/ui/button';
-import { Field, FieldLabel } from '@/primitive/components/ui/field';
-import { Item, ItemContent, ItemDescription, ItemTitle } from '@/primitive/components/ui/item';
-import { Input } from '@/primitive/components/ui/input';
+import { Skeleton } from '@/primitive/components/ui/skeleton';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);
@@ -25,20 +21,20 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 	const moveWorkItemMutation = useMoveWorkItemInSprintOverviewMutation();
 
 	if (workItems.isPending || !workItems.data || sprints.isPending || !sprints.data) {
-		return <Group>
-			<Skeleton h={300} />
-			<Skeleton h={300} />
-			<Skeleton h={300} />
-		</Group>;
+		return <div className='flex flex-row gap-2'>
+			<Skeleton className='h-72' />
+			<Skeleton className='h-72' />
+			<Skeleton className='h-72' />
+		</div>;
 	}
 
 	const sprint = sprints.data.find(sprint => sprint.id === sprintId);
 	if (!sprint) {
-		return <Group>
-			<Skeleton h={300} />
-			<Skeleton h={300} />
-			<Skeleton h={300} />
-		</Group>;
+		return <div className='flex flex-row gap-2'>
+			<Skeleton className='h-72' />
+			<Skeleton className='h-72' />
+			<Skeleton className='h-72' />
+		</div>;
 	}
 
 	const tasksBySprint: BoardItem<WorkItem, WorkItemId, WorkItemStatus>[] = flatWorkItems(workItems.data.tasks)
