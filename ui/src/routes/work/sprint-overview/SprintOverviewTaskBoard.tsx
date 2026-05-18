@@ -9,10 +9,11 @@ import {
 } from '@/api/work-item/work-item-hooks';
 import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
 import { BoardColumn, BoardItem, BoardReorderResult } from '@/base/board/api/BoardProps';
-import { CalendarDays, CircleCheck, CircleDashed, CircleDot, CircleX, SquareCheckIcon } from 'lucide-react';
+import { CalendarDays, CircleCheck, CircleDashed, CircleDot, CircleX } from 'lucide-react';
 import { CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card';
 import { Button } from '@/primitive/components/ui/button';
 import { Skeleton } from '@/primitive/components/ui/skeleton';
+import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrigger';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);
@@ -53,9 +54,7 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 					<CardTitle>{task.title}</CardTitle>
 					<CardDescription className='flex items-center gap-2'><CalendarDays className='w-3 h-3 inline' /> <span>2026-Q2-06</span></CardDescription>
 					<CardAction>
-						<Button variant="ghost">
-							<SquareCheckIcon />
-						</Button>
+						<WorkItemModalTrigger context={context} workItem={task} variant='ghost' />
 					</CardAction>
 				</CardHeader>
 				<CardContent className="px-2 flex justify-end">
