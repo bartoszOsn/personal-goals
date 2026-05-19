@@ -4,7 +4,7 @@ import { isPlainDate } from '@personal-okr/shared';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import {
 	useCreateWorkItemInSprintOverviewMutation,
-	useMoveWorkItemInSprintOverviewMutation,
+	useMoveWorkItemInSprintOverviewMutation, useUpdateWorkItemsInHierarchyMutation,
 	useWorkItemSprintOverviewQuery
 } from '@/api/work-item/work-item-hooks';
 import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
@@ -17,6 +17,7 @@ import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrig
 import { WorkItemTimeFramePicker } from '@/core/work-item/WorkItemTimeFramePicker';
 import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange';
 import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName';
+import { InplaceInput } from '@/base/inplace/InplaceInput';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);
@@ -50,29 +51,7 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 			columnId: task.status
 		}));
 
-	const renderCard = (task: WorkItem) => {
-		return (
-			<>
-				<CardHeader>
-					<CardTitle>{task.title}</CardTitle>
-					<CardDescription className='flex items-center gap-2'><CalendarDays className='w-3 h-3 inline' />
-						<WorkItemTimeFrameDisplayName workItem={task} />
-					</CardDescription>
-					<CardAction>
-						<WorkItemModalTrigger context={context} workItem={task} variant='ghost' />
-					</CardAction>
-				</CardHeader>
-				<CardContent className="px-2 flex justify-end">
-					<WorkItemTimeFramePicker workItem={task}>
-						<Button variant="ghost">
-							<CalendarDays />
-							<WorkItemTimeFrameDisplayRange workItem={task} />
-						</Button>
-					</WorkItemTimeFramePicker>
-				</CardContent>
-			</>
-		);
-	};
+	const renderCard = (task: WorkItem) => <SprintOverviewTaskBoardCard task={task} />;
 
 	const onItemMove = async (event: BoardReorderResult<WorkItem, WorkItemId, WorkItemStatus>) => {
 		let order: WorkItemMoveOrder;
@@ -154,4 +133,43 @@ function flatWorkItems(workItems: WorkItem[]): WorkItem[] {
 	}
 
 	return result;
+}
+
+function SprintOverviewTaskBoardCard({ task }: { task: WorkItem }) {
+	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
+
+	return (
+		<>
+			<CardHeader>
+				<CardTitle>
+					<InplaceInput value={task.title} onSubmit={(newTitle) => {
+						return updateWorkItemMutation.mutateAsync({
+							context: task.contextYear,
+							request: {
+								updates: {
+									[task.id]: {
+										title: newTitle
+									}
+								}
+							}
+						}).then();
+					}} />
+				</CardTitle>
+				<CardDescription className='flex items-center gap-2'><CalendarDays className='w-3 h-3 inline' />
+					<WorkItemTimeFrameDisplayName workItem={task} />
+				</CardDescription>
+				<CardAction>
+					<WorkItemModalTrigger context={task.contextYear} workItem={task} variant='ghost' />
+				</CardAction>
+			</CardHeader>
+			<CardContent className="px-2 flex justify-end">
+				<WorkItemTimeFramePicker workItem={task}>
+					<Button variant="ghost">
+						<CalendarDays />
+						<WorkItemTimeFrameDisplayRange workItem={task} />
+					</Button>
+				</WorkItemTimeFramePicker>
+			</CardContent>
+		</>
+	);
 }
