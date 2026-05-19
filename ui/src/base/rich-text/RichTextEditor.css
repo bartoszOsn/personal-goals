@@ -8,39 +8,39 @@
     }
 
     & h2 {
-        @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0;
+        @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight  [&:not(:first-child)]:mt-6 first:mt-0;
     }
 
     & h3 {
-        @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+        @apply scroll-m-20 text-2xl font-semibold tracking-tight [&:not(:first-child)]:mt-6;
     }
 
     & h4 {
-        @apply scroll-m-20 text-xl font-semibold tracking-tight;
+        @apply scroll-m-20 text-xl font-semibold tracking-tight [&:not(:first-child)]:mt-6;
     }
 
     & h5 {
-        @apply scroll-m-20 text-lg font-semibold tracking-tight;
+        @apply scroll-m-20 text-lg font-semibold tracking-tight [&:not(:first-child)]:mt-6;
     }
 
     & h6 {
-        @apply scroll-m-20 text-base font-semibold tracking-tight;
+        @apply scroll-m-20 text-base font-semibold tracking-tight [&:not(:first-child)]:mt-6;
     }
 
     & p {
-        @apply text-sm leading-7 [&:not(:first-child)]:mt-6;
+        @apply text-sm leading-7 [&:not(:first-child)]:mt-3;
     }
 
     & blockquote {
-        @apply mt-6 border-l-2 pl-6 italic;
+        @apply mt-3 border-l-2 pl-6 italic;
     }
 
     & ul {
-        @apply my-6 ml-6 list-disc [&>li]:mt-0.5;
+        @apply my-3 ml-6 list-disc [&>li]:mt-0.5;
     }
 
     & ol {
-        @apply my-6 ml-6 list-decimal [&>li]:mt-0.5;
+        @apply my-3 ml-6 list-decimal [&>li]:mt-0.5;
     }
 
     & code {
