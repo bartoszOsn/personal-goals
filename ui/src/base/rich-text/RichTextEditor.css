@@ -1,61 +1,79 @@
 @reference "../../index.css";
 
-.rich-text-editor .tiptap {
-    @apply min-h-48 outline-offset-8;
-
-    & h1 {
-        @apply scroll-m-20 border-b text-4xl font-extrabold tracking-tight text-balance;
+.rich-text-editor {
+    @apply pt-0.5;
+    &:focus-within {
+        @apply outline-2 rounded-sm;
     }
 
-    & h2 {
-        @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight  [&:not(:first-child)]:mt-6 first:mt-0;
+    .rich-text-editor__menubar {
+        max-height: 0;
+        overflow: hidden;
+        @apply transition-all duration-300;
     }
 
-    & h3 {
-        @apply scroll-m-20 text-2xl font-semibold tracking-tight [&:not(:first-child)]:mt-6;
+    &:focus-within .rich-text-editor__menubar {
+        max-height: 128px;
+        transform: scaleY(1);
     }
 
-    & h4 {
-        @apply scroll-m-20 text-xl font-semibold tracking-tight [&:not(:first-child)]:mt-6;
-    }
+    &__content .tiptap {
+        @apply min-h-48 px-2 py-4 outline-none;
 
-    & h5 {
-        @apply scroll-m-20 text-lg font-semibold tracking-tight [&:not(:first-child)]:mt-6;
-    }
+        & h1 {
+            @apply scroll-m-20 border-b text-4xl font-extrabold tracking-tight text-balance;
+        }
 
-    & h6 {
-        @apply scroll-m-20 text-base font-semibold tracking-tight [&:not(:first-child)]:mt-6;
-    }
+        & h2 {
+            @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight  [&:not(:first-child)]:mt-6 first:mt-0;
+        }
 
-    & p {
-        @apply text-sm leading-7 [&:not(:first-child)]:mt-3;
-    }
+        & h3 {
+            @apply scroll-m-20 text-2xl font-semibold tracking-tight [&:not(:first-child)]:mt-6;
+        }
 
-    & blockquote {
-        @apply mt-3 border-l-2 pl-6 italic;
-    }
+        & h4 {
+            @apply scroll-m-20 text-xl font-semibold tracking-tight [&:not(:first-child)]:mt-6;
+        }
 
-    & ul {
-        @apply my-3 ml-6 list-disc [&>li]:mt-0.5;
-    }
+        & h5 {
+            @apply scroll-m-20 text-lg font-semibold tracking-tight [&:not(:first-child)]:mt-6;
+        }
 
-    & ol {
-        @apply my-3 ml-6 list-decimal [&>li]:mt-0.5;
-    }
+        & h6 {
+            @apply scroll-m-20 text-base font-semibold tracking-tight [&:not(:first-child)]:mt-6;
+        }
 
-    & code {
-        @apply rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
-    }
+        & p {
+            @apply text-sm leading-7 [&:not(:first-child)]:mt-3;
+        }
 
-    & pre {
-        @apply rounded-md bg-muted border-border px-4 py-2;
-    }
+        & blockquote {
+            @apply mt-3 border-l-2 pl-6 italic;
+        }
 
-    & a[href] {
-        @apply font-medium underline underline-offset-4 cursor-pointer;
-    }
+        & ul {
+            @apply my-3 ml-6 list-disc [&>li]:mt-0.5;
+        }
 
-    & hr {
-        @apply bg-border h-px w-full my-4;
+        & ol {
+            @apply my-3 ml-6 list-decimal [&>li]:mt-0.5;
+        }
+
+        & code {
+            @apply rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
+        }
+
+        & pre {
+            @apply rounded-md bg-muted border-border px-4 py-2;
+        }
+
+        & a[href] {
+            @apply font-medium underline underline-offset-4 cursor-pointer;
+        }
+
+        & hr {
+            @apply bg-border h-px w-full my-4;
+        }
     }
 }

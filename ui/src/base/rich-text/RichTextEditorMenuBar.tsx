@@ -40,26 +40,28 @@ export const RichTextEditorMenuBar = ({ editor }: { editor: Editor }) => {
 	}
 
 	return (
-		<ButtonGroup className='flex-wrap sticky top-0 bg-background p-2 z-1'>
-			{
-				groups.map((group, index) => (
-					<ButtonGroup key={index}>
-						{
-							group.items.map(item => (
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<Toggle variant='outline' onClick={() => item.onClick(editor)} pressed={item.isPressed(editorState)} disabled={item.isDisabled(editorState)}>
-											<item.icon />
-										</Toggle>
-									</TooltipTrigger>
-									<TooltipContent>{item.tooltip}</TooltipContent>
-								</Tooltip>
-							))
-						}
-					</ButtonGroup>
-				))
-			}
-		</ButtonGroup>
+		<div className='rich-text-editor__menubar sticky top-0 z-1'>
+			<ButtonGroup className='flex-wrap bg-background p-2'>
+				{
+					groups.map((group, index) => (
+						<ButtonGroup key={index}>
+							{
+								group.items.map(item => (
+									<Tooltip>
+										<TooltipTrigger asChild>
+											<Toggle variant='outline' size='sm' onClick={() => item.onClick(editor)} pressed={item.isPressed(editorState)} disabled={item.isDisabled(editorState)}>
+												<item.icon />
+											</Toggle>
+										</TooltipTrigger>
+										<TooltipContent>{item.tooltip}</TooltipContent>
+									</Tooltip>
+								))
+							}
+						</ButtonGroup>
+					))
+				}
+			</ButtonGroup>
+		</div>
 	)
 }
 
@@ -107,23 +109,12 @@ const groups: Group[] = [
 				onClick: (editor) => editor.chain().focus().toggleCode().run(),
 				isDisabled: (editorState) => !editorState.canCode,
 				isPressed: (editorState) => editorState.isCode,
-			}
-		]
-	},
-	{
-		items: [
+			},
 			{
 				tooltip: 'Clear marks',
 				icon: RemoveFormattingIcon,
 				onClick: (editor) => editor.chain().focus().unsetAllMarks().run(),
 				isDisabled: (editorState) => !editorState.canClearMarks,
-				isPressed: () => false,
-			},
-			{
-				tooltip: 'Clear nodes',
-				icon: RemoveFormattingIcon,
-				onClick: (editor) => editor.chain().focus().clearNodes().run(),
-				isDisabled: () => false,
 				isPressed: () => false,
 			}
 		]

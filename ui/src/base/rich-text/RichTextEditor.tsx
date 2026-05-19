@@ -38,9 +38,9 @@ export function RichTextEditor(props: RichTextEditorProps) {
 	})
 
 	return (
-		<div className='relative flex flex-col gap-2'>
+		<div className='rich-text-editor relative flex flex-col gap-2'>
 			<RichTextEditorMenuBar editor={editor} />
-			<EditorContent editor={editor} className='rich-text-editor' />
+			<EditorContent editor={editor} className='rich-text-editor__content' />
 		</div>
 	)
 }
