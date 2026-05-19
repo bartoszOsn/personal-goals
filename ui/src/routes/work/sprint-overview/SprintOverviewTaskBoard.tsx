@@ -14,6 +14,9 @@ import { CardAction, CardContent, CardDescription, CardHeader, CardTitle } from 
 import { Button } from '@/primitive/components/ui/button';
 import { Skeleton } from '@/primitive/components/ui/skeleton';
 import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrigger';
+import { WorkItemTimeFramePicker } from '@/core/work-item/WorkItemTimeFramePicker';
+import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange';
+import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);
@@ -52,19 +55,20 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 			<>
 				<CardHeader>
 					<CardTitle>{task.title}</CardTitle>
-					<CardDescription className='flex items-center gap-2'><CalendarDays className='w-3 h-3 inline' /> <span>2026-Q2-06</span></CardDescription>
+					<CardDescription className='flex items-center gap-2'><CalendarDays className='w-3 h-3 inline' />
+						<WorkItemTimeFrameDisplayName workItem={task} />
+					</CardDescription>
 					<CardAction>
 						<WorkItemModalTrigger context={context} workItem={task} variant='ghost' />
 					</CardAction>
 				</CardHeader>
 				<CardContent className="px-2 flex justify-end">
-					<Button variant="ghost">
-						<CalendarDays />
-						{task.timeFrame?.startDate.toLocaleString(undefined, {
-							day: 'numeric',
-							month: 'short'
-						})} – {task.timeFrame?.endDate.toLocaleString(undefined, { day: 'numeric', month: 'short' })}
-					</Button>
+					<WorkItemTimeFramePicker workItem={task}>
+						<Button variant="ghost">
+							<CalendarDays />
+							<WorkItemTimeFrameDisplayRange workItem={task} />
+						</Button>
+					</WorkItemTimeFramePicker>
 				</CardContent>
 			</>
 		);
