@@ -4,12 +4,13 @@ import { isPlainDate } from '@personal-okr/shared';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import {
 	useCreateWorkItemInSprintOverviewMutation,
-	useMoveWorkItemInSprintOverviewMutation, useUpdateWorkItemsInHierarchyMutation,
+	useMoveWorkItemInSprintOverviewMutation,
+	useUpdateWorkItemsInHierarchyMutation,
 	useWorkItemSprintOverviewQuery
 } from '@/api/work-item/work-item-hooks';
 import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
 import { BoardColumn, BoardItem, BoardReorderResult } from '@/base/board/api/BoardProps';
-import { CalendarDays, CircleCheck, CircleDashed, CircleDot, CircleX } from 'lucide-react';
+import { CalendarDays } from 'lucide-react';
 import { CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card';
 import { Button } from '@/primitive/components/ui/button';
 import { Skeleton } from '@/primitive/components/ui/skeleton';
@@ -18,6 +19,8 @@ import { WorkItemTimeFramePicker } from '@/core/work-item/WorkItemTimeFramePicke
 import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange';
 import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName';
 import { InplaceInput } from '@/base/inplace/InplaceInput';
+import { workItemStatusUIProperties } from '@/core/work-item/workItemStatusUIProperties';
+import { Icon } from '@/base/Icon';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);
@@ -93,27 +96,31 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 	const columns: BoardColumn<WorkItemStatus>[] = [
 		{
 			columnId: WorkItemStatus.TODO,
-			columnHeader: 'To do',
+			columnHeader: workItemStatusUIProperties[WorkItemStatus.TODO].label,
 			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.TODO)}>Create</Button>,
-			columnIcon: <CircleDashed className="text-gray-500" />
+			columnIcon: <Icon Icon={workItemStatusUIProperties[WorkItemStatus.TODO].icon}
+							  className={workItemStatusUIProperties[WorkItemStatus.TODO].iconTextClass} />
 		},
 		{
 			columnId: WorkItemStatus.IN_PROGRESS,
-			columnHeader: 'In progress',
+			columnHeader: workItemStatusUIProperties[WorkItemStatus.IN_PROGRESS].label,
 			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.IN_PROGRESS)}>Create</Button>,
-			columnIcon: <CircleDot className="text-blue-500" />
+			columnIcon: <Icon Icon={workItemStatusUIProperties[WorkItemStatus.IN_PROGRESS].icon}
+							  className={workItemStatusUIProperties[WorkItemStatus.IN_PROGRESS].iconTextClass} />
 		},
 		{
 			columnId: WorkItemStatus.FAILED,
-			columnHeader: 'Failed',
+			columnHeader: workItemStatusUIProperties[WorkItemStatus.FAILED].label,
 			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.FAILED)}>Create</Button>,
-			columnIcon: <CircleX className="text-red-500" />
+			columnIcon: <Icon Icon={workItemStatusUIProperties[WorkItemStatus.FAILED].icon}
+							  className={workItemStatusUIProperties[WorkItemStatus.FAILED].iconTextClass} />
 		},
 		{
 			columnId: WorkItemStatus.DONE,
-			columnHeader: 'Done',
+			columnHeader: workItemStatusUIProperties[WorkItemStatus.DONE].label,
 			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.DONE)}>Create</Button>,
-			columnIcon: <CircleCheck className="text-green-500" />
+			columnIcon: <Icon Icon={workItemStatusUIProperties[WorkItemStatus.DONE].icon}
+							  className={workItemStatusUIProperties[WorkItemStatus.DONE].iconTextClass} />
 		}
 	];
 
