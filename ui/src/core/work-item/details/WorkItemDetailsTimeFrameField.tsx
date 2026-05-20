@@ -9,7 +9,7 @@ import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrame
 
 export function WorkItemDetailsTimeFrameField({ workItem }: { workItem: WorkItem }) {
 	return (
-		<Field>
+		<Field className='flex-1 min-w-0'>
 			<FieldLabel>Time frame</FieldLabel>
 			<WorkItemTimeFramePicker workItem={workItem}>
 				<Item variant="outline" className="flex-1" asChild>

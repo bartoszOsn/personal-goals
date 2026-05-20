@@ -25,7 +25,7 @@ export function WorkItemDetailsStatusField({ workItem }: { workItem: WorkItem })
 	}
 
 	return (
-		<Field>
+		<Field className='flex-1 min-w-0'>
 			<FieldLabel>Status</FieldLabel>
 			<Select value={workItem.status} onValueChange={(value) => updateStatus(value as WorkItemStatus)}>
 				<Item variant="outline" className="flex-1" asChild>
