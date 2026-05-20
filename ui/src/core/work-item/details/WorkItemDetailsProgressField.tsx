@@ -10,10 +10,10 @@ export function WorkItemDetailsProgressField({ workItem }: { workItem: WorkItem 
 			<FieldLabel>Progress</FieldLabel>
 			<Item variant="outline" className="flex-1 overflow-hidden">
 				<ItemMedia>
-					<CircularProgress values={[{ value: workItem.progress.completed }, { value: workItem.progress.failed, strokeClass: 'stroke-destructive' }]} />
+					<CircularProgress values={[{ value: workItem.progress.completed, strokeClass: 'stroke-green-700 dark:stroke-green-400' }, { value: workItem.progress.failed, strokeClass: 'stroke-destructive' }]} />
 				</ItemMedia>
 				<ItemContent>
-					<ItemTitle className='gap-0'><DotIcon className='text-primary' />{workItem.progress.completed}% completed</ItemTitle>
+					<ItemTitle className='gap-0'><DotIcon className='text-green-700 dark:text-green-400' />{workItem.progress.completed}% completed</ItemTitle>
 					<ItemDescription className='flex items-center'><DotIcon className='text-destructive' />{workItem.progress.failed}% failed</ItemDescription>
 				</ItemContent>
 			</Item>
