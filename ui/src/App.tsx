@@ -9,7 +9,6 @@ import { router } from '@/router.tsx';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { queryClient } from '@/api/queryClient';
-import { ModalsProvider } from '@mantine/modals';
 import { FirebaseUIProvider } from '@firebase-oss/ui-react';
 import { initializeUI, requireDisplayName } from '@firebase-oss/ui-core';
 import { firebase, firebaseAuth } from '@/api/auth/firebase';
@@ -17,6 +16,7 @@ import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
 import { useEffect } from 'react';
 import { http } from '@/base/http';
 import { TooltipProvider } from '@/primitive/components/ui/tooltip';
+import { DialogManagerProvider } from '@/base/dialog-manager/api/DialogManagerProvider';
 
 const firebaseUI = initializeUI({
 	app: firebase,
@@ -24,7 +24,7 @@ const firebaseUI = initializeUI({
 	behaviors: [
 		requireDisplayName()
 	]
-})
+});
 
 
 export function App() {
@@ -42,12 +42,12 @@ export function App() {
 		<FirebaseUIProvider ui={firebaseUI}>
 			<QueryClientProvider client={queryClient}>
 				<TooltipProvider>
-						<MantineProvider>
-							<ModalsProvider>
-								<Notifications />
-								<RouterProvider router={router} />
-							</ModalsProvider>
-						</MantineProvider>
+					<MantineProvider>
+						<DialogManagerProvider>
+							<Notifications />
+							<RouterProvider router={router} />
+						</DialogManagerProvider>
+					</MantineProvider>
 				</TooltipProvider>
 			</QueryClientProvider>
 		</FirebaseUIProvider>

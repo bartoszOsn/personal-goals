@@ -18,5 +18,5 @@ export function WorkItemDetailsProgressField({ workItem }: { workItem: WorkItem 
 				</ItemContent>
 			</Item>
 		</Field>
-	)
+	);
 }

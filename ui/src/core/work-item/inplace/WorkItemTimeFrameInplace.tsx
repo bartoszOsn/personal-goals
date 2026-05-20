@@ -1,7 +1,6 @@
 import { Accordion, Button, Checkbox, Group, Loader, Radio, Select, Stack, Text, UnstyledButton } from '@mantine/core';
 import { ComponentProps, useState } from 'react';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
-import { useModals } from '@mantine/modals';
 import { Quarter } from '@/models/Quarter';
 import { Temporal } from 'temporal-polyfill';
 import { DatePickerInput } from '@mantine/dates';
@@ -9,6 +8,9 @@ import { Sprint } from '@/models/Sprint';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { WorkItem, WorkItemTimeFrame, WorkItemTimeFrameType, WorkItemUpdateRequest } from '@/models/WorkItem';
 import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
+import { useDialogManager } from '@/base/dialog-manager/api/useDialogManager';
+import { useCurrentDialog } from '@/base/dialog-manager/api/useCurrentDialog';
+import { DialogContent, DialogHeader } from '@/primitive/components/ui/dialog';
 
 export interface WorkItemTimeFrameInplaceProps {
 	workItem: WorkItem;
@@ -16,22 +18,11 @@ export interface WorkItemTimeFrameInplaceProps {
 	multiline?: boolean;
 }
 
-const modalId = 'work-item-time-frame-inplace';
-
 export function WorkItemTimeFrameInplace(props: WorkItemTimeFrameInplaceProps) {
-	const modals = useModals();
+	const { openDialog } = useDialogManager();
 
 	const openModal = () => {
-		modals.openModal({
-			title: 'Time frame',
-			children: <TimeFrameModal {...props} />,
-			styles: {
-				body: {
-					paddingBottom: 0
-				}
-			},
-			id: modalId
-		});
+		openDialog(<TimeFrameModal {...props} />);
 	};
 
 	return (
@@ -48,10 +39,10 @@ function TimeFrameDisplay(props: WorkItemTimeFrameInplaceProps) {
 	const sprintName = sprint?.name;
 
 	if (props.workItem.timeFrame === null) {
-		return <Text c="dimmed" size='sm'>No time frame</Text>;
+		return <Text c="dimmed" size="sm">No time frame</Text>;
 	}
 
-	return <Text size='sm' style={{ textWrap: 'nowrap' }}>
+	return <Text size="sm" style={{ textWrap: 'nowrap' }}>
 		{props.workItem.timeFrame.startDate.toLocaleString()}
 		{' '}<IconArrowNarrowRight size={12} />{' '}
 		{props.workItem.timeFrame.endDate.toLocaleString()}
@@ -76,7 +67,7 @@ function TimeFrameDisplay(props: WorkItemTimeFrameInplaceProps) {
 			props.workItem.timeFrame.type === WorkItemTimeFrameType.SPRINT && sprintName &&
 			<Text span c="dimmed"> ({sprintName})</Text>
 		}
-	</Text>
+	</Text>;
 }
 
 function TimeFrameModal(props: WorkItemTimeFrameInplaceProps) {
@@ -91,7 +82,6 @@ function TimeFrameModal(props: WorkItemTimeFrameInplaceProps) {
 
 function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints: Sprint[] }) {
 	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
-	const modalContext = useModals();
 	const [type, setType] = useState<WorkItemTimeFrameType | 'no-date'>(props.workItem.timeFrame?.type ?? 'no-date');
 	const [quarter, setQuarter] = useState<Quarter>(
 		props.workItem.timeFrame?.type === WorkItemTimeFrameType.QUARTER
@@ -103,6 +93,7 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 	const [sprint, setSprint] = useState<Sprint | undefined>(
 		props.sprints.find(s => props.workItem.timeFrame?.type === WorkItemTimeFrameType.SPRINT && s.id === props.workItem.timeFrame?.sprintId) ?? props.sprints[0]
 	);
+	const { closeCurrentDialog } = useCurrentDialog();
 
 	let timeFrame: WorkItemTimeFrame | null = null;
 
@@ -129,7 +120,7 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 			context: props.workItem.contextYear,
 			startDate: startDate,
 			endDate: endDate
-		}
+		};
 	} else if (type === WorkItemTimeFrameType.SPRINT && sprint) {
 		timeFrame = {
 			type: WorkItemTimeFrameType.SPRINT,
@@ -137,14 +128,14 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 			startDate: startDate,
 			endDate: endDate,
 			sprintId: sprint.id
-		}
+		};
 	} else {
-		throw new Error('Invalid time frame type')
+		throw new Error('Invalid time frame type');
 	}
 
 	const request: WorkItemUpdateRequest = {
 		timeFrame: timeFrame
-	}
+	};
 
 	const onSave = () => {
 		updateWorkItemMutation.mutateAsync({
@@ -155,65 +146,69 @@ function TimeFrameModalContent(props: WorkItemTimeFrameInplaceProps & { sprints:
 				}
 			}
 		}).then(() => {
-			const modalToClose = modalContext.modals.find(modal => modal.props.id === modalId);
-			if (modalToClose) {
-				modalContext.closeModal(modalToClose.id);
-			}
-		})
-	}
+			closeCurrentDialog();
+		});
+	};
 
 	return (
-		<Stack>
-			<Accordion value={type} onChange={(value => value && setType(value as WorkItemTimeFrameType | 'no-date'))}>
-				<Accordion.Item value={'no-date'}>
-					<Accordion.Control icon={<Checkbox.Indicator checked={type === 'no-date'} />}>No time frame</Accordion.Control>
-					<Accordion.Panel>
-						<Text c="dimmed">No time frame</Text>
-					</Accordion.Panel>
-				</Accordion.Item>
-				<Accordion.Item value={WorkItemTimeFrameType.WHOLE_YEAR}>
-					<Accordion.Control icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.WHOLE_YEAR} />}>Whole year</Accordion.Control>
-					<Accordion.Panel>
-						<Text c="dimmed">Time frame spanning whole year</Text>
-					</Accordion.Panel>
-				</Accordion.Item>
-				<Accordion.Item value={WorkItemTimeFrameType.QUARTER}>
-					<Accordion.Control icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.QUARTER} />}>Quarter</Accordion.Control>
-					<Accordion.Panel>
-						<Radio.Group label="Select Quarter" value={quarter} onChange={(value) => setQuarter(value as Quarter)}>
+		<DialogContent>
+			<DialogHeader>
+				Time frame
+			</DialogHeader>
+			<Stack className='overflow-y-auto max-h-[calc(100vh-200px)]'>
+				<Accordion value={type} onChange={(value => value && setType(value as WorkItemTimeFrameType | 'no-date'))}>
+					<Accordion.Item value={'no-date'}>
+						<Accordion.Control icon={<Checkbox.Indicator checked={type === 'no-date'} />}>No time frame</Accordion.Control>
+						<Accordion.Panel>
+							<Text c="dimmed">No time frame</Text>
+						</Accordion.Panel>
+					</Accordion.Item>
+					<Accordion.Item value={WorkItemTimeFrameType.WHOLE_YEAR}>
+						<Accordion.Control icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.WHOLE_YEAR} />}>Whole year</Accordion.Control>
+						<Accordion.Panel>
+							<Text c="dimmed">Time frame spanning whole year</Text>
+						</Accordion.Panel>
+					</Accordion.Item>
+					<Accordion.Item value={WorkItemTimeFrameType.QUARTER}>
+						<Accordion.Control icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.QUARTER} />}>Quarter</Accordion.Control>
+						<Accordion.Panel>
+							<Radio.Group label="Select Quarter" value={quarter} onChange={(value) => setQuarter(value as Quarter)}>
+								<Group mt="xs">
+									<Radio value={Quarter.Q1} label="Q1" />
+									<Radio value={Quarter.Q2} label="Q2" />
+									<Radio value={Quarter.Q3} label="Q3" />
+									<Radio value={Quarter.Q4} label="Q4" />
+								</Group>
+							</Radio.Group>
+						</Accordion.Panel>
+					</Accordion.Item>
+					<Accordion.Item value={WorkItemTimeFrameType.CUSTOM_DATE}>
+						<Accordion.Control icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.CUSTOM_DATE} />}>Custom dates</Accordion.Control>
+						<Accordion.Panel>
 							<Group mt="xs">
-								<Radio value={Quarter.Q1} label="Q1" />
-								<Radio value={Quarter.Q2} label="Q2" />
-								<Radio value={Quarter.Q3} label="Q3" />
-								<Radio value={Quarter.Q4} label="Q4" />
+								<DatePickerInput flex={1} label="Start date" value={startDate.toJSON()}
+												 onChange={v => v && setStartDate(Temporal.PlainDate.from(v))} />
+								<DatePickerInput flex={1} label="End date" value={endDate.toJSON()}
+												 onChange={v => v && setEndDate(Temporal.PlainDate.from(v))} />
 							</Group>
-						</Radio.Group>
-					</Accordion.Panel>
-				</Accordion.Item>
-				<Accordion.Item value={WorkItemTimeFrameType.CUSTOM_DATE}>
-					<Accordion.Control icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.CUSTOM_DATE} />}>Custom dates</Accordion.Control>
-					<Accordion.Panel>
-						<Group mt="xs">
-							<DatePickerInput flex={1} label="Start date" value={startDate.toJSON()}
-											 onChange={v => v && setStartDate(Temporal.PlainDate.from(v))} />
-							<DatePickerInput flex={1} label="End date" value={endDate.toJSON()} onChange={v => v && setEndDate(Temporal.PlainDate.from(v))} />
-						</Group>
-					</Accordion.Panel>
-				</Accordion.Item>
-				<Accordion.Item value={WorkItemTimeFrameType.SPRINT}>
-					<Accordion.Control disabled={!sprint} icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.SPRINT} />}>Sprint</Accordion.Control>
-					<Accordion.Panel>
-						{
-							sprint && <Select value={sprint.id}
-											  data={props.sprints.map(sprint => ({ label: sprint.name, value: sprint.id }))}
-											  onChange={id => setSprint(props.sprints.find(s => s.id === id)!)} />
-						}
-					</Accordion.Panel>
-				</Accordion.Item>
-			</Accordion>
-			<Group pos="sticky" bg="white" pb="md" pt="xs" bottom={0}>
-				<Button loading={updateWorkItemMutation.isPending} onClick={onSave}>Save</Button>
-			</Group>
-		</Stack>
+						</Accordion.Panel>
+					</Accordion.Item>
+					<Accordion.Item value={WorkItemTimeFrameType.SPRINT}>
+						<Accordion.Control disabled={!sprint}
+										   icon={<Checkbox.Indicator checked={type === WorkItemTimeFrameType.SPRINT} />}>Sprint</Accordion.Control>
+						<Accordion.Panel>
+							{
+								sprint && <Select value={sprint.id}
+												  data={props.sprints.map(sprint => ({ label: sprint.name, value: sprint.id }))}
+												  onChange={id => setSprint(props.sprints.find(s => s.id === id)!)} />
+							}
+						</Accordion.Panel>
+					</Accordion.Item>
+				</Accordion>
+				<Group pos="sticky" bg="white" pb="md" pt="xs" bottom={0}>
+					<Button loading={updateWorkItemMutation.isPending} onClick={onSave}>Save</Button>
+				</Group>
+			</Stack>
+		</DialogContent>
 	);
 }
