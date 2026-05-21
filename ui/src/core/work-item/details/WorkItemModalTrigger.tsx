@@ -33,7 +33,7 @@ export function WorkItemModalTrigger({ context, workItem, ...buttonProps }: { co
 	);
 }
 
-export function WorkItemModalTriggerIcon({ workItem, ...lucideProps }: { workItem: WorkItem } & Omit<LucideProps, "ref">) {
+function WorkItemModalTriggerIcon({ workItem, ...lucideProps }: { workItem: WorkItem } & Omit<LucideProps, "ref">) {
 	switch (workItem.type) {
 		case WorkItemType.TASK:
 			return <SquareCheckIcon {...lucideProps} />
