@@ -14,6 +14,7 @@ import { ButtonGroup } from '@/primitive/components/ui/button-group';
 import { Button } from '@/primitive/components/ui/button';
 import { MinusIcon, PlusIcon } from 'lucide-react';
 import { TimelineRowChartBar } from '@/base/timeline/internal/components/TimelineRowChartBar';
+import { TimelineHeaderRowCell } from '@/base/timeline/internal/components/TimelineHeaderRowCell';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
@@ -23,17 +24,19 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 
 	const isFlatHierarchy = 'flatHierarchyItems' in props;
 
+	const [collapsedIds, setCollapsedIds] = useState<TId[]>([]);
+
 	const rowDatas = isFlatHierarchy
 		? flatHierarchyItemsToRowData(props.flatHierarchyItems)
-		: deepHierarchyItemsToRowData(props.deepHierarchyItems);
+		: deepHierarchyItemsToRowData(props.deepHierarchyItems, collapsedIds);
 
 	return (
 		<Slot.Root className="relative overflow-x-auto border rounded" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
 			<div {...props.rootProps}>
 				<div style={{ width: width + timelineTableWidth }}>
 					<TimelineHeaderRow>
-						<TimelineRowCell>
-							<div className='w-full h-full p-2 flex items-center justify-end'>
+						<TimelineHeaderRowCell>
+							<div className="w-full h-full p-2 flex items-center justify-end">
 								<ButtonGroup>
 									<Button size="icon-xs"
 											variant="outline"
@@ -49,29 +52,34 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 									</Button>
 								</ButtonGroup>
 							</div>
-						</TimelineRowCell>
+						</TimelineHeaderRowCell>
 						<TimelineRowChart>
 							<TimelineHeaderChart scale={scale} startDate={props.startDate} endDate={props.endDate} timeboxes={props.timeboxes} />
 						</TimelineRowChart>
 					</TimelineHeaderRow>
 					{
 						rowDatas.map((rowData) => (
-							<TimelineRow key={rowData.id}>
-								<TimelineRowCell>
-									{
-										props.renderCell(rowData.item.data)
-									}
-								</TimelineRowCell>
-								<TimelineRowChart>
-									{
-										rowData.item.dates && (
-											<TimelineRowChartBar posStart={rowData.item.dates.from} posEnd={rowData.item.dates.to} startDate={props.startDate} scale={scale}>
-												{ props.renderBar?.(rowData.item.data) }
-											</TimelineRowChartBar>
-										)
-									}
-								</TimelineRowChart>
-							</TimelineRow>
+							rowData.visible
+								? (
+									<TimelineRow key={rowData.id}>
+										<TimelineRowCell row={rowData}
+														 onChevronClick={() => setCollapsedIds(prev => prev.includes(rowData.id) ? prev.filter(id => id !== rowData.id) : [...prev, rowData.id])}>
+											{
+												props.renderCell(rowData.item.data)
+											}
+										</TimelineRowCell>
+										<TimelineRowChart>
+											{
+												rowData.item.dates && (
+													<TimelineRowChartBar posStart={rowData.item.dates.from} posEnd={rowData.item.dates.to} startDate={props.startDate}
+																		 scale={scale}>
+														{props.renderBar?.(rowData.item.data)}
+													</TimelineRowChartBar>
+												)
+											}
+										</TimelineRowChart>
+									</TimelineRow>
+								) : null
 						))
 					}
 				</div>

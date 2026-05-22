@@ -41,35 +41,41 @@ export function WorkItemDetails({ workItem }: { workItem: WorkItem }) {
 
 			<Timeline startDate={Temporal.PlainDate.from({ year: 2026, month: 1, day: 1 })}
 					  endDate={Temporal.PlainDate.from({ year: 2026, month: 12, day: 31 })}
-					  flatHierarchyItems={Array.from({ length: 10 }, () => workItem).map(wi => ({
+					  deepHierarchyItems={Array.from({ length: 5 }, () => workItem).map(wi => ({
 						  id: wi.id,
 						  data: wi,
-						  dates: wi.timeFrame ? { from: wi.timeFrame.startDate, to: wi.timeFrame.endDate } : undefined
+						  dates: wi.timeFrame ? { from: wi.timeFrame.startDate, to: wi.timeFrame.endDate } : undefined,
+						  children: [{
+							  id: wi.id,
+							  data: wi,
+							  dates: wi.timeFrame ? { from: wi.timeFrame.startDate.add({ days: 2}), to: wi.timeFrame.endDate } : undefined,
+						  }]
 					  }))}
 					  renderCell={(wi) => (
 						  <div className="flex flex-row gap-2 flex-nowrap p-1">
-							  <Item size="sm" className="p-0 text-nowrap flex-nowrap overflow-hidden">
+							  <Item size="xs" className="p-0 text-nowrap flex-nowrap overflow-hidden">
 								  <ItemMedia>
 									  <CircularProgress size="default" values={[{
 										  value: wi.progress.completed,
 										  strokeClass: 'stroke-green-700 dark:stroke-green-400'
-									  }, { value: wi.progress.failed, strokeClass: 'stroke-destructive' }]} />
-									  <WorkItemModalTrigger context={wi.contextYear} workItem={wi} variant="ghost" size="icon-xs" />
+									  }, { value: wi.progress.failed, strokeClass: 'stroke-destructive' }]}>
+									  	<WorkItemModalTrigger context={wi.contextYear} workItem={wi} variant="ghost" size="icon-xs" />
+									  </CircularProgress>
 								  </ItemMedia>
 								  <ItemContent>
-									  <ItemTitle><InplaceInput value={wi.title} /></ItemTitle>
-									  <ItemDescription className="flex flex-row gap-1">
+									  <ItemTitle className='text-xs'><InplaceInput value={wi.title} /></ItemTitle>
+									  <ItemDescription className="flex flex-row gap-1 text-xs">
 										  <Icon Icon={workItemStatusUIProperties[wi.status].icon}
-												className={workItemStatusUIProperties[wi.status].iconTextClass + ' w-5 h-5'} />
+												className={workItemStatusUIProperties[wi.status].iconTextClass + ' w-4 h-4'} />
 										  {workItemStatusUIProperties[wi.status].label}
 									  </ItemDescription>
 								  </ItemContent>
 							  </Item>
-							  <Item size="sm" className="p-0 pl-2 flex-0 text-nowrap" asChild>
+							  <Item size="xs" className="p-0 pl-2 flex-0 text-nowrap" asChild>
 								  <button>
 									  <ItemContent>
-										  <ItemTitle className="w-full justify-end"><WorkItemTimeFrameDisplayRange workItem={wi} /></ItemTitle>
-										  <ItemDescription className="text-end">
+										  <ItemTitle className="w-full justify-end text-xs"><WorkItemTimeFrameDisplayRange workItem={wi} /></ItemTitle>
+										  <ItemDescription className="text-end text-xs">
 											  <WorkItemTimeFrameDisplayName workItem={wi} />
 										  </ItemDescription>
 									  </ItemContent>
