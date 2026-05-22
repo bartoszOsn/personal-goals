@@ -93,7 +93,9 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 						  <Item size="xs" className="p-0 pl-2 flex-0 text-nowrap" asChild>
 							  <button>
 								  <ItemContent>
-									  <ItemTitle className="w-full justify-end text-xs"><WorkItemTimeFrameDisplayRange workItem={wi} /></ItemTitle>
+									  <ItemTitle className="w-full justify-end text-xs">
+										  <WorkItemTimeFrameDisplayRange workItem={wi} />
+									  </ItemTitle>
 									  <ItemDescription className="text-end text-xs">
 										  <WorkItemTimeFrameDisplayName workItem={wi} />
 									  </ItemDescription>

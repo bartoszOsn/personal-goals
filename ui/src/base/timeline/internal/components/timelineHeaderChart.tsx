@@ -5,6 +5,7 @@ import { TimelineTimebox } from '@/base/timeline/api/TimelineProps';
 import { plainDateToPxOffset } from '@/base/timeline/internal/plainDateToPxOffset';
 import { durationToPx } from '@/base/timeline/internal/durationToPx';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/primitive/components/ui/tooltip';
+import { formatTimeRange } from '@/base/formatTimeRange';
 
 export function TimelineHeaderChart({
 	scale,
@@ -41,11 +42,15 @@ function HeaderRow({ headerCells, startDate, scale }: { headerCells: HeaderCell[
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<div className='border rounded absolute top-0 bg-background text-center' style={{ left: plainDateToPxOffset(cell.start, scale, startDate), width: durationToPx(cell.start.until(cell.end), scale) }}>
-								<span className='sticky left-0 pointer-events-none'>{cell.label}</span>
+								<p className='sticky left-0 pointer-events-none text-nowrap text-ellipsis overflow-hidden'>{cell.label}</p>
 							</div>
 						</TooltipTrigger>
 						<TooltipContent>
-							asddf
+							{
+								cell.showDatesOnHover
+									? formatTimeRange(cell.start, cell.end)
+									: cell.label
+							}
 						</TooltipContent>
 					</Tooltip>
 				))
