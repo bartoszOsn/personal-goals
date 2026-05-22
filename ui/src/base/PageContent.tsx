@@ -11,7 +11,7 @@ export function PageContent({ children }: { children: ReactNode }) {
 
 export function PageContentHeader({ children }: { children: ReactNode }) {
 	return (
-		<header className='sticky top-0 bg-background/50 flex flex-row gap-4 items-center z-100 px-4 py-2 backdrop-blur-md border-b'>
+		<header className='sticky top-0 bg-background/50 flex flex-row gap-4 items-center z-40 px-4 py-2 backdrop-blur-md border-b'>
 			<SidebarTrigger />
 			{children}
 		</header>

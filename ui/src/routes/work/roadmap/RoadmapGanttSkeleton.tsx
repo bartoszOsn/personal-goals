@@ -1,14 +1,14 @@
-import { Group, Skeleton, Stack } from '@mantine/core';
+import { Skeleton } from '@/primitive/components/ui/skeleton';
 
 export function RoadmapGanttSkeleton() {
 	return (
-		<Group flex={1} align='flex-start'>
-			<Stack flex={1} gap='xs' mah='100%' style={{ overflow: 'hidden' }}>
+		<div className='flex flex-row flex-1 items-stretch gap-4'>
+			<div className='flex flex-col flex-1 gap-2'>
 				{
-					Array.from({ length: 30 }, (_, i) => <Skeleton key={i} w='100%' h={30} />)
+					Array.from({ length: 5 }, (_, i) => <Skeleton key={i} className='w-full h-8' />)
 				}
-			</Stack>
-			<Skeleton w='100%' h='100%' flex={2} />
-		</Group>
+			</div>
+			<Skeleton className='w-full flex-2' />
+		</div>
 	)
 }
