@@ -1,4 +1,4 @@
-import { timelineScaleToPxPerDay } from '@/base/timeline/internal/timelineScaleToPx.ts';
+import { timelineScales, timelineScaleToPxPerDay } from '@/base/timeline/internal/timelineScaleToPx.ts';
 import { CSSProperties, Key, useState } from 'react';
 import { Slot } from 'radix-ui';
 import { timelineTableWidthCssPropertyName } from '@/base/timeline/internal/timelineTableWidthCssPropertyName';
@@ -10,6 +10,9 @@ import { TimelineRowChart } from '@/base/timeline/internal/components/TimelineRo
 import { TimelineHeaderRow } from '@/base/timeline/internal/components/TimelineHeaderRow';
 import { TimelineHeaderChart } from '@/base/timeline/internal/components/timelineHeaderChart';
 import { durationToPx } from '@/base/timeline/internal/durationToPx';
+import { ButtonGroup } from '@/primitive/components/ui/button-group';
+import { Button } from '@/primitive/components/ui/button';
+import { MinusIcon, PlusIcon } from 'lucide-react';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
@@ -28,7 +31,24 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 			<div {...props.rootProps}>
 				<div style={{ width: width + timelineTableWidth }}>
 					<TimelineHeaderRow>
-						<TimelineRowCell />
+						<TimelineRowCell>
+							<div className='w-full h-full p-2 flex items-center justify-end'>
+								<ButtonGroup>
+									<Button size="icon-xs"
+											variant="outline"
+											disabled={scale === timelineScales.at(0)}
+											onClick={() => setScale(scale => timelineScales.at(timelineScales.indexOf(scale) - 1)!)}>
+										<MinusIcon />
+									</Button>
+									<Button size="icon-xs"
+											variant="outline"
+											disabled={scale === timelineScales.at(-1)}
+											onClick={() => setScale(scale => timelineScales.at(timelineScales.indexOf(scale) + 1)!)}>
+										<PlusIcon />
+									</Button>
+								</ButtonGroup>
+							</div>
+						</TimelineRowCell>
 						<TimelineRowChart>
 							<TimelineHeaderChart scale={scale} startDate={props.startDate} endDate={props.endDate} timeboxes={props.timeboxes} />
 						</TimelineRowChart>

@@ -28,8 +28,8 @@ export function TimelineHeaderChart({
 }
 
 const rowToZooms = {
-	year: ['sm', 'md', 'lg', 'xl'] as (keyof typeof timelineScaleToPxPerDay)[],
-	month: ['sm', 'md', 'lg', 'xl'] as (keyof typeof timelineScaleToPxPerDay)[],
+	year: ['xs', 'sm', 'md', 'lg', 'xl'] as (keyof typeof timelineScaleToPxPerDay)[],
+	month: ['xs', 'sm', 'md', 'lg', 'xl'] as (keyof typeof timelineScaleToPxPerDay)[],
 	day: ['lg', 'xl'] as (keyof typeof timelineScaleToPxPerDay)[]
 } as const satisfies Record<string, (keyof typeof timelineScaleToPxPerDay)[]>;
 
