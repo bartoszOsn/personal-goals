@@ -13,6 +13,7 @@ import { durationToPx } from '@/base/timeline/internal/durationToPx';
 import { ButtonGroup } from '@/primitive/components/ui/button-group';
 import { Button } from '@/primitive/components/ui/button';
 import { MinusIcon, PlusIcon } from 'lucide-react';
+import { TimelineRowChartBar } from '@/base/timeline/internal/components/TimelineRowChartBar';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
@@ -62,8 +63,13 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 									}
 								</TimelineRowCell>
 								<TimelineRowChart>
-									{/* TODO */}
-									<div className='w-16 h-6 bg-background border rounded my-1 absolute left-12'></div>
+									{
+										rowData.item.dates && (
+											<TimelineRowChartBar posStart={rowData.item.dates.from} posEnd={rowData.item.dates.to} startDate={props.startDate} scale={scale}>
+												{ props.renderBar?.(rowData.item.data) }
+											</TimelineRowChartBar>
+										)
+									}
 								</TimelineRowChart>
 							</TimelineRow>
 						))

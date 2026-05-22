@@ -44,7 +44,7 @@ export function WorkItemDetails({ workItem }: { workItem: WorkItem }) {
 					  flatHierarchyItems={Array.from({ length: 10 }, () => workItem).map(wi => ({
 						  id: wi.id,
 						  data: wi,
-						  dates: undefined
+						  dates: wi.timeFrame ? { from: wi.timeFrame.startDate, to: wi.timeFrame.endDate } : undefined
 					  }))}
 					  renderCell={(wi) => (
 						  <div className="flex flex-row gap-2 flex-nowrap p-1">
