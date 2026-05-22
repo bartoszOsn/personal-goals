@@ -1,20 +1,21 @@
 import { RoadmapGanttSkeleton } from '@/routes/work/roadmap/RoadmapGanttSkeleton';
 import { RoadmapEmptySplashScreen } from '@/routes/work/roadmap/RoadmapEmptySplashScreen';
-import { Gantt, GanttItem } from '@/base/gantt';
-import { ColumnDescriptor } from '@/base/data-table';
 import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
-import { renderRoadmapGanttContextMenu } from '@/routes/work/roadmap/renderRoadmapGanttContextMenu';
-import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
-import { WorkItemStatusInplace } from '@/core/work-item/inplace/WorkItemStatusInplace';
-import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
-import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
 import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { Temporal } from 'temporal-polyfill';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
-import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
-import { quarterToColor } from '@/core/quarterToColor';
 import { useMoveWorkItemInHierarchyMutation, useUpdateWorkItemsInHierarchyMutation, useWorkItemHierarchyQuery } from '@/api/work-item/work-item-hooks';
-import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
+import { WorkItemId, WorkItemTimeFrameType } from '@/models/WorkItem';
+import { Timeline } from '@/base/timeline/api/Timeline';
+import { TimelineTimebox } from '@/base/timeline/api/TimelineProps';
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/primitive/components/ui/item';
+import { CircularProgress } from '@/primitive/components/customized/CircularProgress';
+import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrigger';
+import { InplaceInput } from '@/base/inplace/InplaceInput';
+import { Icon } from '@/base/Icon';
+import { workItemStatusUIProperties } from '@/core/work-item/workItemStatusUIProperties';
+import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange';
+import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName';
 
 export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: number, onSelectedWorkItemsChange: (workItemIds: WorkItemId[]) => void }) {
 	const workItemsQuery = useWorkItemHierarchyQuery(context);
@@ -58,74 +59,50 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 		return <RoadmapEmptySplashScreen context={context} />
 	}
 
-	const columns: ColumnDescriptor<GanttItem<WorkItem>>[] = [
-		{
-			columnId: 'title',
-			columnName: 'Title',
-			hierarchyColumn: true,
-			render: (item) => <WorkItemTitleInplace workItem={item.data} />
-		},
-		{
-			columnId: 'status',
-			columnName: 'Status',
-			render: (item) => <WorkItemStatusInplace workItem={item.data} />
-		},
-		{
-			columnId: 'progress',
-			columnName: 'Progress',
-			render: (item) => <WorkItemProgressInplace workItem={item.data} />
-		},
-		{
-			columnId: 'timeFrame',
-			columnName: 'Time frame',
-			render: (item) => <WorkItemTimeFrameInplace workItem={item.data} />
-		}
-	];
-
-	const timeboxes: GanttTimebox[] = sprints.data.map(sprint => ({
-		label: sprint.name,
+	const timeboxes: TimelineTimebox[] = sprints.data.map(sprint => ({
+		id: sprint.id,
+		name: sprint.name,
 		startDate: sprint.startDate,
-		endDate: sprint.endDate,
-		color: quarterToColor[sprint.quarter]
+		endDate: sprint.endDate
 	}));
 
 	return (
-		<Gantt items={ganttItems}
-			   containerProps={{ w: '100%', style: { flexGrow: 1, flexShrink: 0 } }}
-			   ganttKey={'roadmap-gantt'}
-			   possibleColumns={columns}
-			   initialColumnIds={['title']}
-			   changeDates={changeDates}
-			   bounds={[contextStartDate, contextEndDate]}
+		<Timeline deepHierarchyItems={ganttItems}
+				  startDate={contextStartDate}
+				  endDate={contextEndDate}
+				  renderCell={(wi) => (
+					  <div className="flex flex-row gap-2 flex-nowrap p-1">
+						  <Item size="xs" className="p-0 text-nowrap flex-nowrap overflow-hidden">
+							  <ItemMedia>
+								  <CircularProgress size="default" values={[{
+									  value: wi.progress.completed,
+									  strokeClass: 'stroke-green-700 dark:stroke-green-400'
+								  }, { value: wi.progress.failed, strokeClass: 'stroke-destructive' }]}>
+									  <WorkItemModalTrigger context={wi.contextYear} workItem={wi} variant="ghost" size="icon-xs" />
+								  </CircularProgress>
+							  </ItemMedia>
+							  <ItemContent>
+								  <ItemTitle className='text-xs'><InplaceInput value={wi.title} /></ItemTitle>
+								  <ItemDescription className="flex flex-row gap-1 text-xs">
+									  <Icon Icon={workItemStatusUIProperties[wi.status].icon}
+											className={workItemStatusUIProperties[wi.status].iconTextClass + ' w-4 h-4'} />
+									  {workItemStatusUIProperties[wi.status].label}
+								  </ItemDescription>
+							  </ItemContent>
+						  </Item>
+						  <Item size="xs" className="p-0 pl-2 flex-0 text-nowrap" asChild>
+							  <button>
+								  <ItemContent>
+									  <ItemTitle className="w-full justify-end text-xs"><WorkItemTimeFrameDisplayRange workItem={wi} /></ItemTitle>
+									  <ItemDescription className="text-end text-xs">
+										  <WorkItemTimeFrameDisplayName workItem={wi} />
+									  </ItemDescription>
+								  </ItemContent>
+							  </button>
+						  </Item>
+					  </div>
+				  )}
 			   timeboxes={timeboxes}
-			   setSelectedItemIds={(ids) => onSelectedWorkItemsChange(ids as WorkItemId[])}
-			   renderContextMenu={(o, s) => renderRoadmapGanttContextMenu(o, s, context)}
-			   rowMove={{
-				   canBeParent: (_child, parent) => parent.data.data.type !== WorkItemType.TASK,
-				   onMove: async (payload) => {
-					   let order: WorkItemMoveOrder;
-
-					   if (payload.newOrderInParent[0] === payload.movedRow.id) {
-						   order = { type: 'FIRST' }
-					   } else if (payload.newOrderInParent.at(-1) === payload.movedRow.id) {
-						   order = { type: 'LAST' }
-					   } else {
-						   const index = payload.newOrderInParent.findIndex(id => id === payload.movedRow.id);
-						   order = { type: 'BETWEEN', before: payload.newOrderInParent[index - 1] as WorkItemId, after: payload.newOrderInParent[index + 1] as WorkItemId };
-					   }
-
-
-						await moveWorkItemMutation.mutateAsync({
-							context: context,
-							request: {
-								id: payload.movedRow.data.data.id,
-								parentId: payload.newParent?.data.data.id ?? null,
-								order: order
-							}
-						});
-				   }
-			   }}
-			   hideChartWithScreenSmallerThan='sm'
 		/>
 	)
 }
