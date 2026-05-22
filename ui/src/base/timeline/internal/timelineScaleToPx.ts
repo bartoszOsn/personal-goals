@@ -1,6 +1,6 @@
 export const timelineScaleToPxPerDay = {
-	sm: 32,
-	md: 16,
-	lg: 1,
-	xl: 0.25
+	sm: 4,
+	md: 8,
+	lg: 16,
+	xl: 32,
 } as const;

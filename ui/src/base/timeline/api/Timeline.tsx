@@ -7,10 +7,13 @@ import { deepHierarchyItemsToRowData, flatHierarchyItemsToRowData } from '@/base
 import { TimelineRow } from '@/base/timeline/internal/components/TimelineRow';
 import { TimelineRowCell } from '@/base/timeline/internal/components/TimelineRowCell';
 import { TimelineRowChart } from '@/base/timeline/internal/components/TimelineRowChart';
+import { TimelineHeaderRow } from '@/base/timeline/internal/components/TimelineHeaderRow';
+import { TimelineHeaderChart } from '@/base/timeline/internal/components/timelineHeaderChart';
+import { durationToPx } from '@/base/timeline/internal/durationToPx';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
-	const width = props.startDate.until(props.endDate).total('days') * timelineScaleToPxPerDay[scale];
+	const width = durationToPx(props.startDate.until(props.endDate), scale);
 	const timelineTableWidth = 300;
 	const timelineTableWidthPx = `${timelineTableWidth}px`;
 
@@ -23,7 +26,13 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 	return (
 		<Slot.Root className="relative overflow-x-auto border rounded" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
 			<div {...props.rootProps}>
-				<div style={{ width }}>
+				<div style={{ width: width + timelineTableWidth }}>
+					<TimelineHeaderRow>
+						<TimelineRowCell />
+						<TimelineRowChart>
+							<TimelineHeaderChart scale={scale} startDate={props.startDate} endDate={props.endDate} timeboxes={props.timeboxes} />
+						</TimelineRowChart>
+					</TimelineHeaderRow>
 					{
 						rowDatas.map((rowData) => (
 							<TimelineRow key={rowData.id}>
