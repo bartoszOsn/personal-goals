@@ -6,11 +6,11 @@ import { TimelineRowData } from '@/base/timeline/internal/TimelineRowData';
 import { cn } from '@/primitive/lib/utils';
 
 export function TimelineRowCell<TId extends Key, TData>(
-	{ children, row, onChevronClick }:
-	{ children?: ReactNode, row: TimelineRowData<TId, TData>, onChevronClick: () => void }
+	{ children, row, onChevronClick, isSelected }:
+	{ children?: ReactNode, row: TimelineRowData<TId, TData>, onChevronClick: () => void, isSelected: boolean }
 ) {
 	return (
-		<div className="sticky left-0 border-r bg-background z-10 flex flex-row flex-nowrap overflow-hidden"
+		<div className={cn("sticky left-0 border-r bg-background z-10 flex flex-row flex-nowrap overflow-hidden", { 'bg-muted': isSelected })}
 			 style={{ width: `var(${timelineTableWidthCssPropertyName})`, paddingLeft: row.level * 20 }}>
 			<Button variant="ghost"
 					size="icon"

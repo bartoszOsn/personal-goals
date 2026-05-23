@@ -1,6 +1,6 @@
 import { useCreateWorkItemInHierarchyMutation, useDeleteWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 import { WorkItemId, WorkItemType } from '@/models/WorkItem';
-import { Menubar, MenubarContent, MenubarGroup, MenubarItem, MenubarMenu, MenubarTrigger } from '@/primitive/components/ui/menubar';
+import { Menubar, MenubarContent, MenubarGroup, MenubarItem, MenubarMenu, MenubarShortcut, MenubarTrigger } from '@/primitive/components/ui/menubar';
 import { PlusIcon, TrashIcon } from 'lucide-react';
 import { Spinner } from '@/primitive/components/ui/spinner';
 
@@ -44,8 +44,9 @@ export function RoadmapHeader({ context, selectedWorkItemIds }: { context: numbe
 				</MenubarTrigger>
 				<MenubarContent>
 					<MenubarGroup>
-						<MenubarItem disabled={selectedWorkItemIds.length === 0} onClick={() => deleteWorkItemMutation.mutate({ context: context, ids: selectedWorkItemIds})}>
-							Selected
+						<MenubarItem disabled={selectedWorkItemIds.length === 0}
+									 onClick={() => deleteWorkItemMutation.mutate({ context: context, ids: selectedWorkItemIds })}>
+							Selected <MenubarShortcut>{selectedWorkItemIds.length}</MenubarShortcut>
 						</MenubarItem>
 					</MenubarGroup>
 				</MenubarContent>

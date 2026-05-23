@@ -105,6 +105,7 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 					  </div>
 				  )}
 			   timeboxes={timeboxes}
+			  onSelectionChange={onSelectedWorkItemsChange}
 		/>
 	)
 }

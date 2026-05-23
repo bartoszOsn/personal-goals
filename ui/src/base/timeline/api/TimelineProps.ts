@@ -16,6 +16,7 @@ export interface BaseTimelineProps<TId extends Key, TData>  {
 	timeboxes?: TimelineTimebox[];
 	renderCell: (data: TData) => ReactNode;
 	renderBar?: (data: TData) => ReactNode;
+	onSelectionChange?: (selectedRows: TId[]) => void;
 }
 
 export interface FlatHierarchyTimelineProps<TId extends Key, TData> {

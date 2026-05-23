@@ -1,5 +1,5 @@
 import { timelineScales, timelineScaleToPxPerDay } from '@/base/timeline/internal/timelineScaleToPx.ts';
-import { CSSProperties, Key, useState } from 'react';
+import { CSSProperties, Key, useRef, useState } from 'react';
 import { Slot } from 'radix-ui';
 import { timelineTableWidthCssPropertyName } from '@/base/timeline/internal/timelineTableWidthCssPropertyName';
 import { TimelineProps } from '@/base/timeline/api/TimelineProps';
@@ -15,11 +15,13 @@ import { Button } from '@/primitive/components/ui/button';
 import { MinusIcon, PlusIcon } from 'lucide-react';
 import { TimelineRowChartBar } from '@/base/timeline/internal/components/TimelineRowChartBar';
 import { TimelineHeaderRowCell } from '@/base/timeline/internal/components/TimelineHeaderRowCell';
+import { useRowSelection } from '@/base/timeline/internal/useRowSelection';
+import { useClickOutside } from '@/base/useClickOutside';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
 	const width = durationToPx(props.startDate.until(props.endDate), scale);
-	const timelineTableWidth = 300;
+	const timelineTableWidth = 400;
 	const timelineTableWidthPx = `${timelineTableWidth}px`;
 
 	const isFlatHierarchy = 'flatHierarchyItems' in props;
@@ -30,8 +32,20 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 		? flatHierarchyItemsToRowData(props.flatHierarchyItems)
 		: deepHierarchyItemsToRowData(props.deepHierarchyItems, collapsedIds);
 
+	const rootRef = useRef<HTMLDivElement | null>(null);
+
+	const {
+		selectedRows,
+		clickedOn,
+		clickOutside
+	} = useRowSelection(rowDatas.map(row => row.id), (selectedRows) => {
+		props.onSelectionChange?.(selectedRows);
+	});
+
+	useClickOutside(rootRef, () => clickOutside(), { withoutInteractiveElements: true})
+
 	return (
-		<Slot.Root className="relative overflow-x-auto border rounded" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
+		<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
 			<div {...props.rootProps}>
 				<div style={{ width: width + timelineTableWidth }}>
 					<TimelineHeaderRow>
@@ -61,8 +75,9 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 						rowDatas.map((rowData) => (
 							rowData.visible
 								? (
-									<TimelineRow key={rowData.id}>
+									<TimelineRow key={rowData.id} isSelected={selectedRows.includes(rowData.id)} onClick={(withShift) => clickedOn(rowData.id, withShift)}>
 										<TimelineRowCell row={rowData}
+														 isSelected={selectedRows.includes(rowData.id)}
 														 onChevronClick={() => setCollapsedIds(prev => prev.includes(rowData.id) ? prev.filter(id => id !== rowData.id) : [...prev, rowData.id])}>
 											{
 												props.renderCell(rowData.item.data)
