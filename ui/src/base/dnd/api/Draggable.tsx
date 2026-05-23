@@ -26,8 +26,10 @@ export const Draggable = genericForwardRef(<TDragPayload, TDropPayload>({
 			return;
 		}
 
+		const dragHandle = elementRef.current.querySelector('[data-drag-handle]') ?? undefined;
 		return draggable({
 			element: elementRef.current,
+			dragHandle: dragHandle,
 			getInitialData: () => context.wrapDragPayload(data),
 			onDragStart: () => {
 				setIsDragging(true);

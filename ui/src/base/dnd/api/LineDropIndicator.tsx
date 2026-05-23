@@ -6,10 +6,12 @@ import { cn } from '@/primitive/lib/utils.ts';
 export function LineDropIndicator<TDragPayload, TDropPayload>(
 	{
 		isVisible,
-		context
+		context,
+		className
 	}: {
 		isVisible: (dragPayload: TDragPayload, dropPayload: TDropPayload) => boolean,
-		context: DragAndDropContext<TDragPayload, TDropPayload>
+		context: DragAndDropContext<TDragPayload, TDropPayload>,
+		className?: string
 	}
 ) {
 	const [visible, setVisible] = useState(false);
@@ -23,6 +25,6 @@ export function LineDropIndicator<TDragPayload, TDropPayload>(
 	})
 
 	return (
-		<div className={cn('w-full h-px bg-accent-foreground relative flex items-center before:w-1 before:h-1 before:bg-accent-foreground before:rounded-full', { 'opacity-0': !visible})} />
+		<div className={cn(className, 'w-full h-px bg-accent-foreground relative flex items-center before:w-1 before:h-1 before:bg-accent-foreground before:rounded-full', { 'opacity-0': !visible})} />
 	)
 }

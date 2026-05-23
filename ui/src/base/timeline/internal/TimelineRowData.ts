@@ -59,3 +59,21 @@ function deepHierarchyItemsToRowDataRecursive<TId extends Key, TData>(
 		return result;
 	});
 }
+
+export function isChild<TId extends Key, TData>(parent: TimelineRowData<TId, TData>, child: TimelineRowData<TId, TData>) {
+	if (parent.children.length === 0) {
+		return false;
+	}
+
+	for (const directChild of parent.children) {
+		if (directChild.id === child.id) {
+			return true;
+		}
+
+		if (isChild(directChild, child)) {
+			return true;
+		}
+	}
+
+	return false;
+}

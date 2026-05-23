@@ -9,15 +9,19 @@ import { Input } from '@atlaskit/pragmatic-drag-and-drop/types';
 
 export const Droppable = genericForwardRef(<TDragPayload, TDropPayload>({
 	children,
-																			getData,
+	getData,
+	canDrop = () => true,
 	context,
+	isSticky = true,
 	withBorderIndicator = true,
 	className,
 	...htmlAttributes
 }: {
 	children: ReactNode,
-	getData: (draggedData: TDragPayload, dropTargetElement: Element, input: Input) => TDropPayload
+	getData: (draggedData: TDragPayload, dropTargetElement: Element, input: Input) => TDropPayload,
+	canDrop?: (draggedData: TDragPayload) => boolean
 	context: DragAndDropContext<TDragPayload, TDropPayload>,
+	isSticky?: boolean
 	withBorderIndicator?: boolean
 } & HTMLAttributes<HTMLElement>, ref: ForwardedRef<HTMLElement | null>) => {
 	const elementRef = useRef<HTMLElement>(null);
@@ -32,7 +36,11 @@ export const Droppable = genericForwardRef(<TDragPayload, TDropPayload>({
 		return dropTargetForElements({
 			element: elementRef.current,
 			canDrop: (args) => {
-				return context.isMatchingDragPayload(args.source.data);
+				if (!context.isMatchingDragPayload(args.source.data)) {
+					return false;
+				}
+				const draggedData = context.unwrapDragPayload(args.source.data);
+				return canDrop(draggedData);
 			},
 			onDragEnter: () => {
 				setIsDropTarget(true);
@@ -48,13 +56,13 @@ export const Droppable = genericForwardRef(<TDragPayload, TDropPayload>({
 				const dropData = getData(draggedData, args.element, args.input);
 				return context.wrapDropPayload(dropData);
 			},
-			getIsSticky: () => true
+			getIsSticky: () => isSticky
 		});
-	}, [context, getData]);
+	}, [canDrop, context, getData, isSticky]);
 
 	return (
 		<Slot.Root ref={mergedRef} {...htmlAttributes} className={cn(className, { 'outline outline-accent-foreground': withBorderIndicator && isDropTarget })}>
 			{children}
 		</Slot.Root>
-	)
+	);
 });

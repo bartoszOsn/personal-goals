@@ -5,7 +5,7 @@ import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { Temporal } from 'temporal-polyfill';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { useMoveWorkItemInHierarchyMutation, useUpdateWorkItemsInHierarchyMutation, useWorkItemHierarchyQuery } from '@/api/work-item/work-item-hooks';
-import { WorkItemId, WorkItemTimeFrameType } from '@/models/WorkItem';
+import { WorkItemId, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
 import { Timeline } from '@/base/timeline/api/Timeline';
 import { TimelineTimebox } from '@/base/timeline/api/TimelineProps';
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/primitive/components/ui/item';
@@ -106,6 +106,8 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 				  )}
 			   timeboxes={timeboxes}
 			  onSelectionChange={onSelectedWorkItemsChange}
+				  onMove={() => void 0}
+				  canBeParent={(_, parentCandidate) => parentCandidate.type !== WorkItemType.TASK }
 		/>
 	)
 }

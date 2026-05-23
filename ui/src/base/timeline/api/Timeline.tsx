@@ -17,6 +17,7 @@ import { TimelineRowChartBar } from '@/base/timeline/internal/components/Timelin
 import { TimelineHeaderRowCell } from '@/base/timeline/internal/components/TimelineHeaderRowCell';
 import { useRowSelection } from '@/base/timeline/internal/useRowSelection';
 import { useClickOutside } from '@/base/useClickOutside';
+import { DragAutoScroll } from '@/base/dnd/api/DragAutoScroll';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
@@ -45,60 +46,69 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 	useClickOutside(rootRef, () => clickOutside(), { withoutInteractiveElements: true})
 
 	return (
-		<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
-			<div {...props.rootProps}>
-				<div style={{ width: width + timelineTableWidth }}>
-					<TimelineHeaderRow>
-						<TimelineHeaderRowCell>
-							<div className="w-full h-full p-2 flex items-center justify-end">
-								<ButtonGroup>
-									<Button size="icon-xs"
-											variant="outline"
-											disabled={scale === timelineScales.at(0)}
-											onClick={() => setScale(scale => timelineScales.at(timelineScales.indexOf(scale) - 1)!)}>
-										<MinusIcon />
-									</Button>
-									<Button size="icon-xs"
-											variant="outline"
-											disabled={scale === timelineScales.at(-1)}
-											onClick={() => setScale(scale => timelineScales.at(timelineScales.indexOf(scale) + 1)!)}>
-										<PlusIcon />
-									</Button>
-								</ButtonGroup>
-							</div>
-						</TimelineHeaderRowCell>
-						<TimelineRowChart>
-							<TimelineHeaderChart scale={scale} startDate={props.startDate} endDate={props.endDate} timeboxes={props.timeboxes} />
-						</TimelineRowChart>
-					</TimelineHeaderRow>
-					{
-						rowDatas.map((rowData) => (
-							rowData.visible
-								? (
-									<TimelineRow key={rowData.id} isSelected={selectedRows.includes(rowData.id)} onClick={(withShift) => clickedOn(rowData.id, withShift)}>
-										<TimelineRowCell row={rowData}
-														 isSelected={selectedRows.includes(rowData.id)}
-														 onChevronClick={() => setCollapsedIds(prev => prev.includes(rowData.id) ? prev.filter(id => id !== rowData.id) : [...prev, rowData.id])}>
-											{
-												props.renderCell(rowData.item.data)
-											}
-										</TimelineRowCell>
-										<TimelineRowChart>
-											{
-												rowData.item.dates && (
-													<TimelineRowChartBar posStart={rowData.item.dates.from} posEnd={rowData.item.dates.to} startDate={props.startDate}
-																		 scale={scale}>
-														{props.renderBar?.(rowData.item.data)}
-													</TimelineRowChartBar>
-												)
-											}
-										</TimelineRowChart>
-									</TimelineRow>
-								) : null
-						))
-					}
+		<DragAutoScroll allowedAxis='vertical'>
+			<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
+				<div {...props.rootProps}>
+					<div style={{ width: width + timelineTableWidth }}>
+						<TimelineHeaderRow>
+							<TimelineHeaderRowCell>
+								<div className="w-full h-full p-2 flex items-center justify-end">
+									<ButtonGroup>
+										<Button size="icon-xs"
+												variant="outline"
+												disabled={scale === timelineScales.at(0)}
+												onClick={() => setScale(scale => timelineScales.at(timelineScales.indexOf(scale) - 1)!)}>
+											<MinusIcon />
+										</Button>
+										<Button size="icon-xs"
+												variant="outline"
+												disabled={scale === timelineScales.at(-1)}
+												onClick={() => setScale(scale => timelineScales.at(timelineScales.indexOf(scale) + 1)!)}>
+											<PlusIcon />
+										</Button>
+									</ButtonGroup>
+								</div>
+							</TimelineHeaderRowCell>
+							<TimelineRowChart>
+								<TimelineHeaderChart scale={scale} startDate={props.startDate} endDate={props.endDate} timeboxes={props.timeboxes} />
+							</TimelineRowChart>
+						</TimelineHeaderRow>
+						{
+							rowDatas.map((rowData) => (
+								rowData.visible
+									? (
+										<TimelineRow key={rowData.id}
+													 row={rowData}
+													 isSelected={selectedRows.includes(rowData.id)}
+													 onClick={(withShift) => clickedOn(rowData.id, withShift)}
+													 canBeParent={isFlatHierarchy ? () => true : (props.canBeParent ?? (() => true)) }
+										>
+											<TimelineRowCell row={rowData}
+															 isSelected={selectedRows.includes(rowData.id)}
+															 showDragHandle={!!props.onMove}
+															 onChevronClick={() => setCollapsedIds(prev => prev.includes(rowData.id) ? prev.filter(id => id !== rowData.id) : [...prev, rowData.id])}>
+												{
+													props.renderCell(rowData.item.data)
+												}
+											</TimelineRowCell>
+											<TimelineRowChart>
+												{
+													rowData.item.dates && (
+														<TimelineRowChartBar posStart={rowData.item.dates.from} posEnd={rowData.item.dates.to}
+																			 startDate={props.startDate}
+																			 scale={scale}>
+															{props.renderBar?.(rowData.item.data)}
+														</TimelineRowChartBar>
+													)
+												}
+											</TimelineRowChart>
+										</TimelineRow>
+									) : null
+							))
+						}
+					</div>
 				</div>
-			</div>
-		</Slot.Root>
+			</Slot.Root>
+		</DragAutoScroll>
 	);
 }
