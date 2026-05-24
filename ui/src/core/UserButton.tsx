@@ -1,10 +1,9 @@
-import { IconChevronRight } from '@tabler/icons-react';
 import { firebaseAuth } from '@/api/auth/firebase';
 import { Link } from '@tanstack/react-router';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
 import { Skeleton } from '@/primitive/components/ui/skeleton';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/primitive/components/ui/dropdown-menu';
-import { LogOut, Settings } from 'lucide-react';
+import { ChevronRightIcon, LogOut, Settings } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/primitive/components/ui/avatar';
 import { useIsMobile } from '@/primitive/hooks/use-mobile';
 
@@ -35,7 +34,7 @@ export function UserButton({ context }: { context: number }) {
 							</p>
 						</div>
 					</div>
-					<IconChevronRight size={14} stroke={1.5} />
+					<ChevronRightIcon />
 				</div>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent side={ isMobile ? 'top' : 'right' }>

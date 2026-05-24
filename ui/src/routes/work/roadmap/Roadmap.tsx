@@ -13,7 +13,7 @@ export function Roadmap({ context }: { context: number }) {
 				<RoadmapHeader context={context} selectedWorkItemIds={selectedItemIds} />
 			</PageContentHeader>
 			<PageContentContent>
-				<RoadmapGantt context={context} onSelectedWorkItemsChange={setSelectedItemIds} />
+				<RoadmapGantt context={context} selectedWorkItems={selectedItemIds} onSelectedWorkItemsChange={setSelectedItemIds} />
 			</PageContentContent>
 		</PageContent>
 	);

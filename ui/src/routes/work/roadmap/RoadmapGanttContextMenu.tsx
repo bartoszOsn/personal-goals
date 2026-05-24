@@ -1,12 +1,21 @@
-import { WorkItem, WorkItemType } from '@/models/WorkItem';
+import { WorkItem, WorkItemId, WorkItemType } from '@/models/WorkItem';
 import { useCreateWorkItemInHierarchyMutation, useDeleteWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
-import { Menu } from '@mantine/core';
-import { IconFile, IconPlus, IconTrash } from '@tabler/icons-react';
+import { ReactNode } from 'react';
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuGroup,
+	ContextMenuItem,
+	ContextMenuSeparator,
+	ContextMenuTrigger
+} from '@/primitive/components/ui/context-menu.tsx';
+import { FileIcon, PlusIcon, TrashIcon } from 'lucide-react';
 
-export function RoadmapGanttContextMenu({ clickedOn, selected, context }: {
+export function RoadmapGanttContextMenu({ children, clickedOn, selected, context }: {
+	children: ReactNode,
 	clickedOn: WorkItem,
-	selected: WorkItem[],
+	selected: WorkItemId[],
 	context: number
 }) {
 
@@ -40,7 +49,7 @@ export function RoadmapGanttContextMenu({ clickedOn, selected, context }: {
 	};
 
 	const deleteSelected = () => {
-		deleteWorkItemsMutation.mutate({ context, ids: selected.map(s => s.id) });
+		deleteWorkItemsMutation.mutate({ context, ids: selected });
 	};
 
 	const deleteClicked = () => {
@@ -48,37 +57,50 @@ export function RoadmapGanttContextMenu({ clickedOn, selected, context }: {
 	};
 
 	return (
-		<>
-			<Menu.Item leftSection={<IconFile size={14} />} onClick={() => openWorkItemModal(clickedOn.id)}>
-				Details
-			</Menu.Item>
-			{
-				clickedOn.type !== WorkItemType.TASK && (
-					<>
-						<Menu.Item leftSection={<IconPlus size={14} />} onClick={createChildGoal}>
-							Create child goal
-						</Menu.Item>
-						<Menu.Item leftSection={<IconPlus size={14} />} onClick={createChildGroup}>
-							Create child group
-						</Menu.Item>
-						<Menu.Item leftSection={<IconPlus size={14} />} onClick={createChildTask}>
-							Create child task
-						</Menu.Item>
-					</>
-				)
-			}
-			{
-				selected.some(s => s.id === clickedOn.id) && selected.length > 1
-					? (
-						<Menu.Item color="red" leftSection={<IconTrash size={14} />} onClick={deleteSelected}>
-							Delete {selected.length} selected
-						</Menu.Item>
-					) : (
-						<Menu.Item color="red" leftSection={<IconTrash size={14} />} onClick={deleteClicked}>
-							Delete "{clickedOn.title}"
-						</Menu.Item>
+		<ContextMenu>
+			<ContextMenuTrigger asChild>
+				{children}
+			</ContextMenuTrigger>
+			<ContextMenuContent>
+				<ContextMenuGroup>
+					<ContextMenuItem onClick={() => openWorkItemModal(clickedOn.id)}>
+						<FileIcon /> Details
+					</ContextMenuItem>
+				</ContextMenuGroup>
+				<ContextMenuSeparator />
+				{
+					clickedOn.type !== WorkItemType.TASK && (
+						<>
+							<ContextMenuGroup>
+								<ContextMenuItem onClick={createChildGoal}>
+									<PlusIcon /> Create child goal
+								</ContextMenuItem>
+								<ContextMenuItem onClick={createChildGroup}>
+									<PlusIcon /> Create child group
+								</ContextMenuItem>
+								<ContextMenuItem onClick={createChildTask}>
+									<PlusIcon /> Create child task
+								</ContextMenuItem>
+							</ContextMenuGroup>
+							<ContextMenuSeparator />
+						</>
 					)
-			}
-		</>
+				}
+				<ContextMenuGroup>
+					{
+						selected.some(s => s === clickedOn.id) && selected.length > 1
+							? (
+								<ContextMenuItem variant='destructive' onClick={deleteSelected}>
+									<TrashIcon /> Delete {selected.length} selected
+								</ContextMenuItem>
+							) : (
+								<ContextMenuItem variant='destructive'  onClick={deleteClicked}>
+									<TrashIcon /> Delete "{clickedOn.title}"
+								</ContextMenuItem>
+							)
+					}
+				</ContextMenuGroup>
+			</ContextMenuContent>
+		</ContextMenu>
 	);
 }

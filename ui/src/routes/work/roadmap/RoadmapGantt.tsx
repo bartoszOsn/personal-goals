@@ -15,8 +15,9 @@ import { Icon } from '@/base/Icon';
 import { workItemStatusUIProperties } from '@/core/work-item/workItemStatusUIProperties';
 import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange';
 import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName';
+import { RoadmapGanttContextMenu } from '@/routes/work/roadmap/RoadmapGanttContextMenu';
 
-export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: number, onSelectedWorkItemsChange: (workItemIds: WorkItemId[]) => void }) {
+export function RoadmapGantt({ context, selectedWorkItems, onSelectedWorkItemsChange }: { context: number, selectedWorkItems: WorkItemId[], onSelectedWorkItemsChange: (workItemIds: WorkItemId[]) => void }) {
 	const workItemsQuery = useWorkItemHierarchyQuery(context);
 	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
 	const moveWorkItemMutation = useMoveWorkItemInHierarchyMutation();
@@ -48,38 +49,40 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 				  startDate={contextStartDate}
 				  endDate={contextEndDate}
 				  renderCell={(wi) => (
-					  <div className="flex flex-row gap-2 flex-nowrap p-1">
-						  <Item size="xs" className="p-0 text-nowrap flex-nowrap overflow-hidden">
-							  <ItemMedia>
-								  <CircularProgress size="default" values={[{
-									  value: wi.progress.completed,
-									  strokeClass: 'stroke-green-700 dark:stroke-green-400'
-								  }, { value: wi.progress.failed, strokeClass: 'stroke-destructive' }]}>
-									  <WorkItemModalTrigger context={wi.contextYear} workItem={wi} variant="ghost" size="icon-xs" />
-								  </CircularProgress>
-							  </ItemMedia>
-							  <ItemContent>
-								  <ItemTitle className="text-xs"><InplaceInput value={wi.title} /></ItemTitle>
-								  <ItemDescription className="flex flex-row gap-1 text-xs">
-									  <Icon Icon={workItemStatusUIProperties[wi.status].icon}
-											className={workItemStatusUIProperties[wi.status].iconTextClass + ' w-4 h-4'} />
-									  {workItemStatusUIProperties[wi.status].label}
-								  </ItemDescription>
-							  </ItemContent>
-						  </Item>
-						  <Item size="xs" className="p-0 pl-2 flex-0 text-nowrap" asChild>
-							  <button>
+					  <RoadmapGanttContextMenu clickedOn={wi} selected={selectedWorkItems} context={context}>
+						  <div className="flex flex-row gap-2 flex-nowrap p-1">
+							  <Item size="xs" className="p-0 text-nowrap flex-nowrap overflow-hidden">
+								  <ItemMedia>
+									  <CircularProgress size="default" values={[{
+										  value: wi.progress.completed,
+										  strokeClass: 'stroke-green-700 dark:stroke-green-400'
+									  }, { value: wi.progress.failed, strokeClass: 'stroke-destructive' }]}>
+										  <WorkItemModalTrigger context={wi.contextYear} workItem={wi} variant="ghost" size="icon-xs" />
+									  </CircularProgress>
+								  </ItemMedia>
 								  <ItemContent>
-									  <ItemTitle className="w-full justify-end text-xs">
-										  <WorkItemTimeFrameDisplayRange workItem={wi} />
-									  </ItemTitle>
-									  <ItemDescription className="text-end text-xs">
-										  <WorkItemTimeFrameDisplayName workItem={wi} />
+									  <ItemTitle className="text-xs"><InplaceInput value={wi.title} /></ItemTitle>
+									  <ItemDescription className="flex flex-row gap-1 text-xs">
+										  <Icon Icon={workItemStatusUIProperties[wi.status].icon}
+												className={workItemStatusUIProperties[wi.status].iconTextClass + ' w-4 h-4'} />
+										  {workItemStatusUIProperties[wi.status].label}
 									  </ItemDescription>
 								  </ItemContent>
-							  </button>
-						  </Item>
-					  </div>
+							  </Item>
+							  <Item size="xs" className="p-0 pl-2 flex-0 text-nowrap" asChild>
+								  <button>
+									  <ItemContent>
+										  <ItemTitle className="w-full justify-end text-xs">
+											  <WorkItemTimeFrameDisplayRange workItem={wi} />
+										  </ItemTitle>
+										  <ItemDescription className="text-end text-xs">
+											  <WorkItemTimeFrameDisplayName workItem={wi} />
+										  </ItemDescription>
+									  </ItemContent>
+								  </button>
+							  </Item>
+						  </div>
+					  </RoadmapGanttContextMenu>
 				  )}
 				  timeboxes={timeboxes}
 				  onSelectionChange={onSelectedWorkItemsChange}

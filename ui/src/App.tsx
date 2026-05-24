@@ -1,9 +1,7 @@
-import '@mantine/core/styles.css';
 import '@firebase-oss/ui-styles/dist.min.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from '@/router.tsx';
-import { MantineProvider } from '@mantine/core';
 import { queryClient } from '@/api/queryClient';
 import { FirebaseUIProvider } from '@firebase-oss/ui-react';
 import { initializeUI, requireDisplayName } from '@firebase-oss/ui-core';
@@ -39,12 +37,10 @@ export function App() {
 		<FirebaseUIProvider ui={firebaseUI}>
 			<QueryClientProvider client={queryClient}>
 				<TooltipProvider>
-					<MantineProvider>
-						<DialogManagerProvider>
-							<Toaster />
-							<RouterProvider router={router} />
-						</DialogManagerProvider>
-					</MantineProvider>
+					<DialogManagerProvider>
+						<Toaster />
+						<RouterProvider router={router} />
+					</DialogManagerProvider>
 				</TooltipProvider>
 			</QueryClientProvider>
 		</FirebaseUIProvider>
