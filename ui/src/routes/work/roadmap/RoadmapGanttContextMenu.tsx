@@ -1,4 +1,3 @@
-import { GanttItem } from '@/base/gantt';
 import { WorkItem, WorkItemType } from '@/models/WorkItem';
 import { useCreateWorkItemInHierarchyMutation, useDeleteWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 import { useWorkItemDetailsModal } from '@/core/work-item/details/useWorkItemDetailsModal';
@@ -6,8 +5,8 @@ import { Menu } from '@mantine/core';
 import { IconFile, IconPlus, IconTrash } from '@tabler/icons-react';
 
 export function RoadmapGanttContextMenu({ clickedOn, selected, context }: {
-	clickedOn: GanttItem<WorkItem>,
-	selected: GanttItem<WorkItem>[],
+	clickedOn: WorkItem,
+	selected: WorkItem[],
 	context: number
 }) {
 
@@ -20,7 +19,7 @@ export function RoadmapGanttContextMenu({ clickedOn, selected, context }: {
 		createWorkItemMutation.mutate({
 			context,
 			type: WorkItemType.GOAL,
-			parentId: clickedOn.data.id
+			parentId: clickedOn.id
 		});
 	};
 
@@ -28,7 +27,7 @@ export function RoadmapGanttContextMenu({ clickedOn, selected, context }: {
 		createWorkItemMutation.mutate({
 			context,
 			type: WorkItemType.GROUP,
-			parentId: clickedOn.data.id
+			parentId: clickedOn.id
 		});
 	};
 
@@ -36,25 +35,25 @@ export function RoadmapGanttContextMenu({ clickedOn, selected, context }: {
 		createWorkItemMutation.mutate({
 			context,
 			type: WorkItemType.TASK,
-			parentId: clickedOn.data.id
+			parentId: clickedOn.id
 		});
 	};
 
 	const deleteSelected = () => {
-		deleteWorkItemsMutation.mutate({ context, ids: selected.map(s => s.data.id) });
+		deleteWorkItemsMutation.mutate({ context, ids: selected.map(s => s.id) });
 	};
 
 	const deleteClicked = () => {
-		deleteWorkItemsMutation.mutate({ context, ids: [clickedOn.data.id] });
+		deleteWorkItemsMutation.mutate({ context, ids: [clickedOn.id] });
 	};
 
 	return (
 		<>
-			<Menu.Item leftSection={<IconFile size={14} />} onClick={() => openWorkItemModal(clickedOn.data.id)}>
+			<Menu.Item leftSection={<IconFile size={14} />} onClick={() => openWorkItemModal(clickedOn.id)}>
 				Details
 			</Menu.Item>
 			{
-				clickedOn.data.type !== WorkItemType.TASK && (
+				clickedOn.type !== WorkItemType.TASK && (
 					<>
 						<Menu.Item leftSection={<IconPlus size={14} />} onClick={createChildGoal}>
 							Create child goal
@@ -76,7 +75,7 @@ export function RoadmapGanttContextMenu({ clickedOn, selected, context }: {
 						</Menu.Item>
 					) : (
 						<Menu.Item color="red" leftSection={<IconTrash size={14} />} onClick={deleteClicked}>
-							Delete "{clickedOn.data.title}"
+							Delete "{clickedOn.title}"
 						</Menu.Item>
 					)
 			}

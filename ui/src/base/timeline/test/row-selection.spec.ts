@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { createRowSelectionReducer, rowSelectionReducerInitialState } from '@/base/data-table/internal/useRowSelection.ts';
+import { createRowSelectionReducer, rowSelectionReducerInitialState } from '@/base/timeline/internal/useRowSelection.ts';
 
 describe('row selection', () => {
 	const rows: string[] = [
