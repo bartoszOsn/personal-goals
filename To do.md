@@ -32,7 +32,7 @@
 ## First release
 
 1. Fix Gantt and Data table – Better UX
-    - changing order of columns
+    - ✅changing order of columns - No columns now
     - ✅ resizable width of table and chart
     - ✅ Gantt timeboxes show periods on tooltip
 2. ✅ Fix Auth – Use firebase
@@ -46,14 +46,14 @@
 3. ✅ Work on performance
     - ✅ It turns out it's not a problem in a production build
 4. Better UI
-    - Better inplace - Editor and display share similar styles - same font weight, size etc.
+    - ✅ Better inplace - Editor and display share similar styles - same font weight, size etc.
 5. ✅ Navigating to the index actually shows something.
 6. Make sure it works on mobile.
     - ✅ Hide gantt chart on mobile, leaving only the table
     - ✅ Sidebar hides on navigation on mobile
     - ✅ User dropdown works on mobile
-    - Column resize works on mobile
-      - Maybe it shouldn't work on mobile - maybe on mobile columns should be fixed width
+    - ✅Column resize works on mobile - No columns now
+      - ✅ Maybe it shouldn't work on mobile - maybe on mobile columns should be fixed width
 7. ✅ Drag and drop on board - Changing order
 8. ✅ Drag and drop on roadmap - changing order and parent
     - ✅ Data table uses Jotai (In perspective, it was a bad choice)
