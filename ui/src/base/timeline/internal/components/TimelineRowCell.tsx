@@ -7,14 +7,16 @@ import { cn } from '@/primitive/lib/utils';
 import { DragHandle } from '@/base/dnd/api/DragHandle';
 import { useDropTarget } from '@/base/dnd/api/useDropTarget';
 import { getTimelineDnDContext } from '@/base/timeline/internal/timelineDnDContext';
+import { Spinner } from '@/primitive/components/ui/spinner';
 
 export function TimelineRowCell<TId extends Key, TData>(
-	{ children, row, onChevronClick, isSelected, showDragHandle }:
+	{ children, row, onChevronClick, isSelected, showDragHandle, movePending }:
 	{
 		children?: ReactNode,
 		row: TimelineRowData<TId, TData>,
 		onChevronClick: () => void, isSelected: boolean,
-		showDragHandle: boolean
+		showDragHandle: boolean,
+		movePending: boolean,
 	}
 ) {
 	const dropTarget = useDropTarget(getTimelineDnDContext<TId, TData>());
@@ -29,7 +31,11 @@ export function TimelineRowCell<TId extends Key, TData>(
 							size="icon-xs"
 							className="self-center opacity-10 group-hover/timelineRow:opacity-100"
 							onClick={onChevronClick}>
-						<GripVerticalIcon />
+						{
+							movePending
+								? <Spinner />
+								: <GripVerticalIcon />
+						}
 					</Button>
 				</DragHandle>
 			}

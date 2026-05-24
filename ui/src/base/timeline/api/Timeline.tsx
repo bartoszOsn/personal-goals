@@ -20,7 +20,6 @@ import { useClickOutside } from '@/base/useClickOutside';
 import { DragAutoScroll } from '@/base/dnd/api/DragAutoScroll';
 import { useMonitorDrop } from '@/base/dnd/api/useMonitorDrop';
 import { getTimelineDnDContext } from '@/base/timeline/internal/timelineDnDContext';
-import { Spinner } from '@/primitive/components/ui/spinner';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
@@ -48,7 +47,7 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 
 	useClickOutside(rootRef, () => clickOutside(), { withoutInteractiveElements: true});
 
-	const [moveOverlay, setMoveOverlay] = useState(false);
+	const [movePending, setMovePending] = useState(false);
 
 	useMonitorDrop(getTimelineDnDContext<TId, TData>(), (drag, drop) => {
 		if (!drag || !drop) return;
@@ -58,16 +57,16 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 		}
 
 		if ('flatHierarchyItems' in props) {
-			setMoveOverlay(true);
+			setMovePending(true);
 			Promise.resolve(
 				props.onMove({
 					itemId: drag.id,
 					precedingItemId: drop.dropBelow?.id ?? null,
 					succeedingItemId: drop.dropAbove?.id ?? null
 				})
-			).finally(() => setMoveOverlay(false));
+			).finally(() => setMovePending(false));
 		} else {
-			setMoveOverlay(true);
+			setMovePending(true);
 			Promise.resolve(
 				props.onMove({
 					itemId: drag.id,
@@ -75,7 +74,7 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 					succeedingItemId: drop.dropAbove?.id ?? null,
 					newParentId: drop.dropInto?.id ?? null
 				})
-			).finally(() => setMoveOverlay(false));
+			).finally(() => setMovePending(false));
 		}
 	});
 
@@ -83,13 +82,6 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 		<DragAutoScroll allowedAxis='vertical'>
 			<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded overflow-y-hidden" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
 				<div {...props.rootProps}>
-					{
-						moveOverlay && (
-							<div className='absolute inset-0 z-30 bg-black/10 supports-backdrop-filter:backdrop-blur-xs flex align-center justify-center'>
-								<Spinner className='size-10 mt-24' />
-							</div>
-						)
-					}
 					<div style={{ width: width + timelineTableWidth }}>
 						<TimelineHeaderRow>
 							<TimelineHeaderRowCell>
@@ -121,12 +113,14 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 										<TimelineRow key={rowData.id}
 													 row={rowData}
 													 isSelected={selectedRows.includes(rowData.id)}
+													 movePending={movePending}
 													 onClick={(withShift) => clickedOn(rowData.id, withShift)}
 													 canBeParent={isFlatHierarchy ? () => true : (props.canBeParent ?? (() => true)) }
 										>
 											<TimelineRowCell row={rowData}
 															 isSelected={selectedRows.includes(rowData.id)}
 															 showDragHandle={!!props.onMove}
+															 movePending={movePending}
 															 onChevronClick={() => setCollapsedIds(prev => prev.includes(rowData.id) ? prev.filter(id => id !== rowData.id) : [...prev, rowData.id])}>
 												{
 													props.renderCell(rowData.item.data)

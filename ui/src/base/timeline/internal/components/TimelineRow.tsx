@@ -12,13 +12,15 @@ export function TimelineRow<TId extends Key, TData>({
 	isSelected,
 	onClick,
 	row,
-	canBeParent
+	canBeParent,
+	movePending
 }: {
 	children: ReactNode,
 	isSelected: boolean;
 	onClick: (withShift: boolean) => void;
 	row: TimelineRowData<TId, TData>;
 	canBeParent: (childCandidate: TData, parentCandidate: TData) => boolean;
+	movePending: boolean
 }) {
 	const dragged = useDragPayload(getTimelineDnDContext<TId, TData>());
 	const canBeDropTarget = !dragged || dragged.id !== row.id && !isChild(dragged, row);
@@ -90,7 +92,7 @@ export function TimelineRow<TId extends Key, TData>({
 							   return null;
 					   }
 				   }} isSticky={false}>
-			<Draggable context={getTimelineDnDContext<TId, TData>()} data={row}>
+			<Draggable context={getTimelineDnDContext<TId, TData>()} data={row} canDrag={!movePending}>
 				<div
 					className={`group/timelineRow relative not-last:border-b flex flex-row flex-nowrap bg-accent min-h-8 ${isSelected ? 'bg-input not-last:border-background' : ''} ${!canBeDropTarget ? 'opacity-50' : ''}`}
 					onClick={(e) => {

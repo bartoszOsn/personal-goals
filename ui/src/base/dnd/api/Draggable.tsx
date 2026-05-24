@@ -10,11 +10,13 @@ export const Draggable = genericForwardRef(<TDragPayload, TDropPayload>({
 	children,
 	context,
 	data,
+	canDrag = true,
 	className
 }: {
 	children: ReactNode,
 	context: DragAndDropContext<TDragPayload, TDropPayload>,
 	data: TDragPayload,
+	canDrag?: boolean,
 	className?: string
 }, ref: ForwardedRef<HTMLElement | null>) => {
 	const elementRef = useRef<HTMLElement>(null);
@@ -31,6 +33,7 @@ export const Draggable = genericForwardRef(<TDragPayload, TDropPayload>({
 			element: elementRef.current,
 			dragHandle: dragHandle,
 			getInitialData: () => context.wrapDragPayload(data),
+			canDrag: () => canDrag,
 			onDragStart: () => {
 				setIsDragging(true);
 			},
@@ -38,7 +41,7 @@ export const Draggable = genericForwardRef(<TDragPayload, TDropPayload>({
 				setIsDragging(false);
 			}
 		});
-	}, [data, context]);
+	}, [data, context, canDrag]);
 
 	return (
 		<Slot.Root ref={mergedRef} className={cn(className, { 'opacity-50': isDragging })}>
