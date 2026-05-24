@@ -3,7 +3,6 @@ import { isChild, TimelineRowData } from '@/base/timeline/internal/TimelineRowDa
 import { Draggable } from '@/base/dnd/api/Draggable';
 import { getTimelineDnDContext } from '@/base/timeline/internal/timelineDnDContext';
 import { Droppable } from '@/base/dnd/api/Droppable';
-import { LineDropIndicator } from '@/base/dnd/api/LineDropIndicator';
 import { createHitboxMatcher } from '@/base/pragmatic-dnd-x/crateHitboxMatcher';
 import { useDragPayload } from '@/base/dnd/api/useDragPayload';
 
@@ -101,16 +100,6 @@ export function TimelineRow<TId extends Key, TData>({
 						e.stopPropagation();
 					}}
 				>
-					<div className="absolute inset-0 z-20 pointer-events-none">
-						<LineDropIndicator isVisible={(_dragPayload, dropPayload) => !!dropPayload && !!dropPayload.dropAbove && dropPayload.dropAbove.id === row.id}
-										   context={getTimelineDnDContext<TId, TData>()}
-										   className="absolute! top-0 left-0 right-0 z-20"
-						/>
-						<LineDropIndicator isVisible={(_dragPayload, dropPayload) => !!dropPayload && !!dropPayload.dropBelow && dropPayload.dropBelow.id === row.id}
-										   context={getTimelineDnDContext<TId, TData>()}
-										   className="absolute! bottom-0 left-0 right-0 z-20"
-						/>
-					</div>
 					{children}
 				</div>
 			</Draggable>
