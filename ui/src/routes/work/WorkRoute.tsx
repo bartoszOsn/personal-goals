@@ -1,12 +1,12 @@
 import { getRouteApi, Navigate, Outlet, useNavigate } from '@tanstack/react-router';
 import { AppSidebar } from '@/routes/work/AppSidebar.tsx';
 import { Temporal } from 'temporal-polyfill';
-import { notifications } from '@mantine/notifications';
 import { useQueryOrMutationError } from '@/base/query-x/api/useQueryOrMutationError';
 import { BasicErrorDTOSchema } from '@personal-okr/shared';
 import { HttpError } from '@/base/http';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
 import { SidebarProvider } from '@/primitive/components/ui/sidebar';
+import { toast } from 'sonner';
 
 export function WorkRoute() {
 	const navigate = useNavigate();
@@ -26,10 +26,8 @@ export function WorkRoute() {
 				return;
 			}
 
-			notifications.show({
-				color: err.data.severity === 'error' ? 'red' : 'yellow',
-				title: err.data.title,
-				message: err.data.message
+			toast.error(err.data.title, {
+				description: err.data.message
 			});
 		}
 	});
