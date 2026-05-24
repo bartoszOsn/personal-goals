@@ -1,8 +1,9 @@
-import { Box } from '@mantine/core';
 import { getRouteApi } from '@tanstack/react-router';
 import { DocumentId } from '@/models/Document';
 import { DocumentDetails } from '@/routes/work/document/DocumentDetails';
 import { Temporal } from 'temporal-polyfill';
+import { PageContent, PageContentContent, PageContentHeader } from '@/base/PageContent';
+import { DocumentDetailsHeader } from '@/routes/work/document/DocumentDetailsHeader';
 
 export function DocumentRoute() {
 	const context = getRouteApi('/work/$context/document/$documentId')
@@ -15,8 +16,13 @@ export function DocumentRoute() {
 		});
 
 	return (
-		<Box p='xl' mih='calc(100vh - 50px)'>
-			<DocumentDetails context={context} documentId={documentId} />
-		</Box>
-	)
+		<PageContent>
+			<PageContentHeader>
+				<DocumentDetailsHeader context={context} documentId={documentId} />
+			</PageContentHeader>
+			<PageContentContent>
+				<DocumentDetails context={context} documentId={documentId} />
+			</PageContentContent>
+		</PageContent>
+	);
 }
