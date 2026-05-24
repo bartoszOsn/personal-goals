@@ -1,13 +1,15 @@
 import { Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { useFirebaseAuthReady } from '@/api/auth/useFirebaseAuthReady';
-import { LoadingOverlay } from '@mantine/core';
+import { Spinner } from '@/primitive/components/ui/spinner';
 
 export function RootRoute() {
 	const isAuthReady = useFirebaseAuthReady();
 
 	if (!isAuthReady) {
-		return <LoadingOverlay visible={true} />
+		return <div className='absolute inset-0 min-h-screen w-full flex items-center justify-center'>
+			<Spinner className='size-10' />
+		</div>
 	}
 
 	return (

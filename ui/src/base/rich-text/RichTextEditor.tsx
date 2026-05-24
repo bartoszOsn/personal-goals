@@ -1,9 +1,9 @@
-import { useDebouncedCallback } from '@mantine/hooks';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import './RichTextEditor.css';
 import { RichTextEditorMenuBar } from '@/base/rich-text/RichTextEditorMenuBar';
+import { useDebouncedCallback } from '@/primitive/hooks/use-debounced-callback';
 
 export interface RichTextEditorProps {
 	content: string;
