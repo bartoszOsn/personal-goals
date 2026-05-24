@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { http } from '@/base/http';
 import { TooltipProvider } from '@/primitive/components/ui/tooltip';
 import { DialogManagerProvider } from '@/base/dialog-manager/api/DialogManagerProvider';
+import { Toaster } from '@/primitive/components/ui/sonner';
 
 const firebaseUI = initializeUI({
 	app: firebase,
@@ -45,6 +46,7 @@ export function App() {
 					<MantineProvider>
 						<DialogManagerProvider>
 							<Notifications />
+							<Toaster />
 							<RouterProvider router={router} />
 						</DialogManagerProvider>
 					</MantineProvider>
