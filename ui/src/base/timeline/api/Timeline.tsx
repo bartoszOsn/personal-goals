@@ -1,5 +1,5 @@
 import { timelineScales, timelineScaleToPxPerDay } from '@/base/timeline/internal/timelineScaleToPx.ts';
-import { CSSProperties, Key, useRef, useState } from 'react';
+import { Key, useEffect, useRef, useState } from 'react';
 import { Slot } from 'radix-ui';
 import { timelineTableWidthCssPropertyName } from '@/base/timeline/internal/timelineTableWidthCssPropertyName';
 import { TimelineProps } from '@/base/timeline/api/TimelineProps';
@@ -21,14 +21,12 @@ import { DragAutoScroll } from '@/base/dnd/api/DragAutoScroll';
 import { useMonitorDrop } from '@/base/dnd/api/useMonitorDrop';
 import { getTimelineDnDContext } from '@/base/timeline/internal/timelineDnDContext';
 import { useIsMobile } from '@/primitive/hooks/use-mobile';
+import { TimelinePanelResizable } from '@/base/timeline/internal/components/TimelinePanelResizable';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const isMobile = useIsMobile();
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
-	const width = isMobile ? 0 : durationToPx(props.startDate.until(props.endDate), scale);
-	const timelineTableWidth = 400;
-	const timelineTableWidthPx = isMobile ? `100%` : `${timelineTableWidth}px`;
-	const wholeWidth = isMobile ? '100%' : timelineTableWidth + width;
+	const timelineTableWidthRef = useRef(400);
 
 	const isFlatHierarchy = 'flatHierarchyItems' in props;
 
@@ -39,6 +37,7 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 		: deepHierarchyItemsToRowData(props.deepHierarchyItems, collapsedIds);
 
 	const rootRef = useRef<HTMLDivElement | null>(null);
+	const canvasRef = useRef<HTMLDivElement | null>(null);
 
 	const {
 		selectedRows,
@@ -81,11 +80,38 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 		}
 	});
 
+	const setWidth = (timelineWidth: number) => {
+		if (rootRef.current && canvasRef.current) {
+			timelineTableWidthRef.current = Math.max(150, Math.min(timelineWidth, rootRef.current.offsetWidth - 4));
+
+			const timelineTableWidthPx = isMobile ? `100%` : `${timelineTableWidthRef.current}px`;
+			rootRef.current.style.setProperty(timelineTableWidthCssPropertyName, timelineTableWidthPx);
+
+			const width = isMobile ? 0 : durationToPx(props.startDate.until(props.endDate), scale);
+
+			const wholeWidth = isMobile ? '100%' : timelineTableWidthRef.current + width + 'px';
+			canvasRef.current.style.width = wholeWidth;
+		}
+	}
+
+	useEffect(() => {
+		if (rootRef.current && canvasRef.current) {
+			const timelineTableWidthPx = isMobile ? `100%` : `${timelineTableWidthRef.current}px`;
+			rootRef.current.style.setProperty(timelineTableWidthCssPropertyName, timelineTableWidthPx);
+
+			const width = isMobile ? 0 : durationToPx(props.startDate.until(props.endDate), scale);
+
+			const wholeWidth = isMobile ? '100%' : timelineTableWidthRef.current + width + 'px';
+			canvasRef.current.style.width = wholeWidth;
+		}
+	}, [isMobile, props.endDate, props.startDate, scale]);
+
 	return (
 		<DragAutoScroll allowedAxis='vertical'>
-			<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded overflow-y-hidden" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
+			<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded overflow-y-hidden">
 				<div {...props.rootProps}>
-					<div style={{ width: wholeWidth }}>
+					<div ref={canvasRef} className='relative'>
+						<TimelinePanelResizable getOffset={() => timelineTableWidthRef.current} setOffset={setWidth} />
 						<TimelineHeaderRow>
 							<TimelineHeaderRowCell>
 								<div className="w-full h-full p-2 flex items-center justify-end">
