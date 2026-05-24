@@ -1,8 +1,9 @@
-import { Button, Group, Stack, Text } from '@mantine/core';
-import { IconFilePlus, IconFileX } from '@tabler/icons-react';
-import { ReactNode } from 'react';
 import { useCreateWorkItemInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 import { WorkItemType } from '@/models/WorkItem';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/primitive/components/ui/empty';
+import { CircleOff } from 'lucide-react';
+import { Spinner } from '@/primitive/components/ui/spinner';
+import { Button } from '@/primitive/components/ui/button';
 
 export function RoadmapEmptySplashScreen({ context }: { context: number }) {
 	const workItemMutation = useCreateWorkItemInHierarchyMutation();
@@ -29,31 +30,23 @@ export function RoadmapEmptySplashScreen({ context }: { context: number }) {
 	}
 
 	return (
-		<Stack align="center" bg="gray.1" justify="center" h="100%" w="100%" gap="lg">
-			<IconFileX color="var(--mantine-color-blue-5)" size={100} />
-			<Text size="xl">No work items</Text>
-			<Group>
-				<SplashButton onClick={addGoal} loading={workItemMutation.isPending}>
-					<IconFilePlus color="var(--mantine-color-grape-5)" size={64} />
-					<Text>Add Goal</Text>
-				</SplashButton>
-				<SplashButton onClick={addGroup} loading={workItemMutation.isPending}>
-					<IconFilePlus color="var(--mantine-color-gray-5)" size={64} />
-					<Text>Add Group</Text>
-				</SplashButton>
-				<SplashButton onClick={addTask} loading={workItemMutation.isPending}>
-					<IconFilePlus color="var(--mantine-color-gray-5)" size={64} />
-					<Text>Add Task</Text>
-				</SplashButton>
-			</Group>
-		</Stack>
+		<Empty>
+			<EmptyHeader>
+				<EmptyMedia variant="icon">
+					{
+						workItemMutation.isPending
+						? <Spinner />
+						: <CircleOff />
+					}
+				</EmptyMedia>
+				<EmptyTitle>No work items</EmptyTitle>
+				<EmptyDescription>Create one of the possible work item types to start working.</EmptyDescription>
+			</EmptyHeader>
+			<EmptyContent className="flex-row justify-center gap-2 flex-wrap">
+				<Button onClick={addGoal}>Create Goal</Button>
+				<Button variant='outline' onClick={addGroup}>Create Task</Button>
+				<Button variant='outline' onClick={addTask}>Create Group</Button>
+			</EmptyContent>
+		</Empty>
 	);
-}
-
-function SplashButton({ children, onClick, loading }: { children: ReactNode, loading?: boolean, onClick?: () => void }) {
-	return <Button variant="default" w={180} h="unset" loading={loading} onClick={onClick}>
-		<Stack align="center" p="lg">
-			{children}
-		</Stack>
-	</Button>;
 }

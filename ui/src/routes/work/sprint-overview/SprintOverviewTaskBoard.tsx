@@ -1,111 +1,90 @@
 import { Board } from '@/base/board/api/Board.tsx';
-import { BoardColumnDefinition } from '@/base/board/api/BoardColumnDefinition.ts';
-import { Group, Skeleton, Space, Stack, Text } from '@mantine/core';
 import { SprintId } from '@/models/Sprint';
 import { isPlainDate } from '@personal-okr/shared';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
-import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
-import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
-import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
 import {
 	useCreateWorkItemInSprintOverviewMutation,
 	useMoveWorkItemInSprintOverviewMutation,
+	useUpdateWorkItemsInHierarchyMutation,
 	useWorkItemSprintOverviewQuery
 } from '@/api/work-item/work-item-hooks';
-import { WorkItem, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
-import { BoardItemMoveEvent } from '@/base/board';
+import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
+import { BoardColumn, BoardItem, BoardReorderResult } from '@/base/board/api/BoardProps';
+import { CalendarDays } from 'lucide-react';
+import { CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card';
+import { Button } from '@/primitive/components/ui/button';
+import { Skeleton } from '@/primitive/components/ui/skeleton';
+import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrigger';
+import { WorkItemTimeFramePicker } from '@/core/work-item/WorkItemTimeFramePicker';
+import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange';
+import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName';
+import { InplaceInput } from '@/base/inplace/InplaceInput';
+import { workItemStatusUIProperties } from '@/core/work-item/workItemStatusUIProperties';
+import { Icon } from '@/base/Icon';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);
 	const sprints = useSprintQuery(context);
 	const createWorkItemMutation = useCreateWorkItemInSprintOverviewMutation();
-	const moveWorkItemMutation = useMoveWorkItemInSprintOverviewMutation()
-	const columns: BoardColumnDefinition<WorkItemStatus>[] = [
-		{
-			columnId: WorkItemStatus.TODO,
-			name: 'To do',
-			color: 'gray'
-		},
-		{
-			columnId: WorkItemStatus.IN_PROGRESS,
-			name: 'In progress',
-			color: 'blue'
-		},
-		{
-			columnId: WorkItemStatus.FAILED,
-			name: 'Failed',
-			color: 'red'
-		},
-		{
-			columnId: WorkItemStatus.DONE,
-			name: 'Done',
-			color: 'green'
-		}
-	];
+	const moveWorkItemMutation = useMoveWorkItemInSprintOverviewMutation();
 
 	if (workItems.isPending || !workItems.data || sprints.isPending || !sprints.data) {
-		return <Group>
-			<Skeleton h={300} />
-			<Skeleton h={300} />
-			<Skeleton h={300} />
-		</Group>;
+		return <div className='flex flex-row gap-2'>
+			<Skeleton className='h-72' />
+			<Skeleton className='h-72' />
+			<Skeleton className='h-72' />
+		</div>;
 	}
 
 	const sprint = sprints.data.find(sprint => sprint.id === sprintId);
 	if (!sprint) {
-		return <Group>
-			<Skeleton h={300} />
-			<Skeleton h={300} />
-			<Skeleton h={300} />
-		</Group>;
+		return <div className='flex flex-row gap-2'>
+			<Skeleton className='h-72' />
+			<Skeleton className='h-72' />
+			<Skeleton className='h-72' />
+		</div>;
 	}
 
-	const tasksBySprint = flatWorkItems(workItems.data.tasks)
+	const tasksBySprint: BoardItem<WorkItem, WorkItemId, WorkItemStatus>[] = flatWorkItems(workItems.data.tasks)
 		.filter(workItem => workItem.type === WorkItemType.TASK)
-		.filter(task => task.timeFrame && isPlainDate(task.timeFrame.startDate).afterOrEqual(sprint.startDate) && isPlainDate(task.timeFrame.endDate).beforeOrEqual(sprint.endDate));
+		.filter(task => task.timeFrame && isPlainDate(task.timeFrame.startDate).afterOrEqual(sprint.startDate) && isPlainDate(task.timeFrame.endDate).beforeOrEqual(sprint.endDate))
+		.map(task => ({
+			id: task.id,
+			data: task,
+			columnId: task.status
+		}));
 
-	const renderCard = (task: WorkItem) => {
-		return <Stack gap={0}>
-			<Space h='md' />
-			<WorkItemTitleInplace workItem={task} textProps={{ fw: 'bold' }} />
-			<Space h="sm" />
-			<Text size="xs" c="dimmed">Time frame</Text>
-			<WorkItemTimeFrameInplace workItem={task} multiline />
-			<Space h="sm" />
-			<Text size="xs" c="dimmed">Progress</Text>
-			<WorkItemProgressInplace workItem={task} />
-		</Stack>;
-	};
+	const renderCard = (task: WorkItem) => <SprintOverviewTaskBoardCard task={task} />;
 
-	const onItemMove = async (event: BoardItemMoveEvent<WorkItem, WorkItemStatus>) => {
+	const onItemMove = async (event: BoardReorderResult<WorkItem, WorkItemId, WorkItemStatus>) => {
 		let order: WorkItemMoveOrder;
 
-		if (event.newIndexInColumn === 0) {
+		if (!event.previousItemId) {
 			order = {
 				type: 'FIRST'
 			};
-		} else if (event.newIndexInColumn === event.newColumnItems.length - 1) {
+		} else if (!event.nextItemId) {
 			order = {
 				type: 'LAST'
-			}
+			};
 		} else {
 			order = {
 				type: 'BETWEEN',
-				after: event.newColumnItems[event.newIndexInColumn - 1].id,
-				before: event.newColumnItems[event.newIndexInColumn + 1].id
-			}
+				after: event.nextItemId,
+				before: event.previousItemId
+			};
 		}
 
 
 		await moveWorkItemMutation.mutateAsync({
 			sprintId: sprintId,
 			request: {
-				id: event.item.id,
-				status: event.newColumn.columnId,
+				id: event.itemId,
+				status: event.toColumnId,
 				order
 			}
 		});
-	}
+	};
 
 	const onCreateTask = async (status: WorkItemStatus) => {
 		await createWorkItemMutation.mutateAsync({
@@ -114,20 +93,42 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 		});
 	};
 
+	const columns: BoardColumn<WorkItemStatus>[] = [
+		{
+			columnId: WorkItemStatus.TODO,
+			columnHeader: workItemStatusUIProperties[WorkItemStatus.TODO].label,
+			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.TODO)}>Create</Button>,
+			columnIcon: <Icon Icon={workItemStatusUIProperties[WorkItemStatus.TODO].icon}
+							  className={workItemStatusUIProperties[WorkItemStatus.TODO].iconTextClass} />
+		},
+		{
+			columnId: WorkItemStatus.IN_PROGRESS,
+			columnHeader: workItemStatusUIProperties[WorkItemStatus.IN_PROGRESS].label,
+			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.IN_PROGRESS)}>Create</Button>,
+			columnIcon: <Icon Icon={workItemStatusUIProperties[WorkItemStatus.IN_PROGRESS].icon}
+							  className={workItemStatusUIProperties[WorkItemStatus.IN_PROGRESS].iconTextClass} />
+		},
+		{
+			columnId: WorkItemStatus.FAILED,
+			columnHeader: workItemStatusUIProperties[WorkItemStatus.FAILED].label,
+			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.FAILED)}>Create</Button>,
+			columnIcon: <Icon Icon={workItemStatusUIProperties[WorkItemStatus.FAILED].icon}
+							  className={workItemStatusUIProperties[WorkItemStatus.FAILED].iconTextClass} />
+		},
+		{
+			columnId: WorkItemStatus.DONE,
+			columnHeader: workItemStatusUIProperties[WorkItemStatus.DONE].label,
+			columnAction: <Button variant="secondary" onClick={() => onCreateTask(WorkItemStatus.DONE)}>Create</Button>,
+			columnIcon: <Icon Icon={workItemStatusUIProperties[WorkItemStatus.DONE].icon}
+							  className={workItemStatusUIProperties[WorkItemStatus.DONE].iconTextClass} />
+		}
+	];
+
 	return (
-		<>
-			<Text fw={500}>Tasks</Text>
-			<Board columnWidth={300}
-				   columns={columns}
-				   items={tasksBySprint}
-				   itemColumnSelector={(task => task.status)}
-				   itemIdSelector={(task) => task.id}
-				   renderCard={renderCard}
-				   noItemsInColumnText={'No tasks with this status'}
-				   onItemMove={onItemMove}
-				   onCreateItem={onCreateTask}
-				   createButtonText={'Create task'} />
-		</>
+		<Board columns={columns}
+			   items={tasksBySprint}
+			   renderItemCard={renderCard}
+			   onReorder={onItemMove} />
 	);
 }
 
@@ -139,4 +140,43 @@ function flatWorkItems(workItems: WorkItem[]): WorkItem[] {
 	}
 
 	return result;
+}
+
+function SprintOverviewTaskBoardCard({ task }: { task: WorkItem }) {
+	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
+
+	return (
+		<>
+			<CardHeader>
+				<CardTitle>
+					<InplaceInput value={task.title} onSubmit={(newTitle) => {
+						return updateWorkItemMutation.mutateAsync({
+							context: task.contextYear,
+							request: {
+								updates: {
+									[task.id]: {
+										title: newTitle
+									}
+								}
+							}
+						}).then();
+					}} />
+				</CardTitle>
+				<CardDescription className='flex items-center gap-2'><CalendarDays className='w-3 h-3 inline' />
+					<WorkItemTimeFrameDisplayName workItem={task} />
+				</CardDescription>
+				<CardAction>
+					<WorkItemModalTrigger context={task.contextYear} workItem={task} variant='ghost' />
+				</CardAction>
+			</CardHeader>
+			<CardContent className="px-2 flex justify-end">
+				<WorkItemTimeFramePicker workItem={task}>
+					<Button variant="ghost">
+						<CalendarDays />
+						<WorkItemTimeFrameDisplayRange workItem={task} />
+					</Button>
+				</WorkItemTimeFramePicker>
+			</CardContent>
+		</>
+	);
 }

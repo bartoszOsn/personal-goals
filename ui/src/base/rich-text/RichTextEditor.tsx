@@ -1,9 +1,9 @@
-import { useDebouncedCallback } from '@mantine/hooks';
-import { useEditor } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
-import { Link, RichTextEditor as MantineRichTextEditor } from '@mantine/tiptap';
 import './RichTextEditor.css';
+import { RichTextEditorMenuBar } from '@/base/rich-text/RichTextEditorMenuBar';
+import { useDebouncedCallback } from '@/primitive/hooks/use-debounced-callback';
 
 export interface RichTextEditorProps {
 	content: string;
@@ -28,8 +28,7 @@ export function RichTextEditor(props: RichTextEditorProps) {
 		content: props.content,
 		shouldRerenderOnTransaction: true,
 		extensions: [
-			StarterKit.configure({ link: false }),
-			Link,
+			StarterKit.configure(),
 			Placeholder.configure({ placeholder: props.placeholder ?? '' })
 		],
 		onUpdate: (props) => {
@@ -39,43 +38,9 @@ export function RichTextEditor(props: RichTextEditorProps) {
 	})
 
 	return (
-		<MantineRichTextEditor editor={editor} variant='subtle' className='rich-text-editor'>
-			<MantineRichTextEditor.Toolbar sticky stickyOffset="calc(2 * var(--mantine-spacing-xl))">
-				<MantineRichTextEditor.ControlsGroup>
-					<MantineRichTextEditor.Bold />
-					<MantineRichTextEditor.Italic />
-					<MantineRichTextEditor.Underline />
-					<MantineRichTextEditor.Strikethrough />
-					<MantineRichTextEditor.ClearFormatting />
-					<MantineRichTextEditor.Code />
-				</MantineRichTextEditor.ControlsGroup>
-
-				<MantineRichTextEditor.ControlsGroup>
-					<MantineRichTextEditor.H1 />
-					<MantineRichTextEditor.H2 />
-					<MantineRichTextEditor.H3 />
-					<MantineRichTextEditor.H4 />
-				</MantineRichTextEditor.ControlsGroup>
-
-				<MantineRichTextEditor.ControlsGroup>
-					<MantineRichTextEditor.Blockquote />
-					<MantineRichTextEditor.Hr />
-					<MantineRichTextEditor.BulletList />
-					<MantineRichTextEditor.OrderedList />
-				</MantineRichTextEditor.ControlsGroup>
-
-				<MantineRichTextEditor.ControlsGroup>
-					<MantineRichTextEditor.Link />
-					<MantineRichTextEditor.Unlink />
-				</MantineRichTextEditor.ControlsGroup>
-
-				<MantineRichTextEditor.ControlsGroup>
-					<MantineRichTextEditor.Undo />
-					<MantineRichTextEditor.Redo />
-				</MantineRichTextEditor.ControlsGroup>
-			</MantineRichTextEditor.Toolbar>
-
-			<MantineRichTextEditor.Content />
-		</MantineRichTextEditor>
-	);
+		<div className='rich-text-editor relative flex flex-col gap-2'>
+			<RichTextEditorMenuBar editor={editor} />
+			<EditorContent editor={editor} className='rich-text-editor__content' />
+		</div>
+	)
 }

@@ -1,30 +1,43 @@
 import { WorkItemId } from '@/models/WorkItem.ts';
-import { WorkItemModalSkeleton } from '@/core/WorkItemModalSkeleton.tsx';
 import { WorkItemDetails } from '@/core/work-item/details/WorkItemDetails.tsx';
-import { Modal } from '@mantine/core';
-import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
-import { useWorkItemDetailsQuery } from '@/api/work-item/work-item-hooks';
+import { useUpdateWorkItemsInHierarchyMutation, useWorkItemDetailsQuery } from '@/api/work-item/work-item-hooks';
+import { DialogContent, DialogHeader, DialogTitle } from '@/primitive/components/ui/dialog';
+import { Spinner } from '@/primitive/components/ui/spinner';
+import { InplaceInput } from '@/base/inplace/InplaceInput';
 
 export function WorkItemDetailsModal({ workItemId }: { workItemId: WorkItemId }) {
 	const workItemQuery = useWorkItemDetailsQuery(workItemId);
+	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
 
 	if (workItemQuery.isLoading || !workItemQuery.data) {
-		return <WorkItemModalSkeleton />
+		return <DialogContent>
+			<div className="flex justify-center items-center w-full h-16">
+				<Spinner />
+			</div>
+		</DialogContent>;
 	}
 
 	return (
-		<>
-			<Modal.Header>
-				<Modal.Title flex={1}>
-					<WorkItemTitleInplace workItem={workItemQuery.data}
-									 textProps={{ inherit: false, size: 'xl' }}
-									 inputProps={{ w: '100%' }} showDialogButton={false} />
-				</Modal.Title>
-				<Modal.CloseButton />
-			</Modal.Header>
-			<Modal.Body>
+		<DialogContent className="sm:max-w-[calc(100%-2rem)] lg:max-w-[50rem]">
+			<DialogHeader>
+				<DialogTitle>
+					<InplaceInput value={workItemQuery.data.title} onSubmit={(newTitle) => {
+						return updateWorkItemMutation.mutateAsync({
+							context: workItemQuery.data.contextYear,
+							request: {
+								updates: {
+									[workItemQuery.data.id]: {
+										title: newTitle
+									}
+								}
+							}
+						}).then();
+					}} />
+				</DialogTitle>
+			</DialogHeader>
+			<div className="overflow-y-auto max-h-[70vh]">
 				<WorkItemDetails workItem={workItemQuery.data} />
-			</Modal.Body>
-		</>
-	)
+			</div>
+		</DialogContent>
+	);
 }

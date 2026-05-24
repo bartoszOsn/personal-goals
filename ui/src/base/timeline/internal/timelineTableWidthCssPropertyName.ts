@@ -1,0 +1,1 @@
+export const timelineTableWidthCssPropertyName = '--timeline-table-width';

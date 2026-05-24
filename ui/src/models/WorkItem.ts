@@ -47,7 +47,7 @@ export enum WorkItemStatus {
 
 export interface WorkItemProgress {
 	readonly completed: number;
-	readonly failed: boolean;
+	readonly failed: number;
 }
 
 export interface WorkItemsUpdateRequest {

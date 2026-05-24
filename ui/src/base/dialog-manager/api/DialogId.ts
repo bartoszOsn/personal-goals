@@ -1,0 +1,1 @@
+export type DialogId = string & { __brand: 'DialogId' };

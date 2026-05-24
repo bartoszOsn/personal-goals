@@ -1,25 +1,26 @@
 import { RoadmapGanttSkeleton } from '@/routes/work/roadmap/RoadmapGanttSkeleton';
 import { RoadmapEmptySplashScreen } from '@/routes/work/roadmap/RoadmapEmptySplashScreen';
-import { Gantt, GanttItem } from '@/base/gantt';
-import { ColumnDescriptor } from '@/base/data-table';
 import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
-import { renderRoadmapGanttContextMenu } from '@/routes/work/roadmap/renderRoadmapGanttContextMenu';
-import { WorkItemTitleInplace } from '@/core/work-item/inplace/WorkItemTitleInplace';
-import { WorkItemStatusInplace } from '@/core/work-item/inplace/WorkItemStatusInplace';
-import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace';
-import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace';
-import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { Temporal } from 'temporal-polyfill';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
-import { GanttTimebox } from '@/base/gantt/model/GanttTimebox';
-import { quarterToColor } from '@/core/quarterToColor';
 import { useMoveWorkItemInHierarchyMutation, useUpdateWorkItemsInHierarchyMutation, useWorkItemHierarchyQuery } from '@/api/work-item/work-item-hooks';
-import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
+import { WorkItem, WorkItemId, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
+import { Timeline } from '@/base/timeline/api/Timeline';
+import { DeepHierarchyTimelineMovePayload, TimelineTimebox } from '@/base/timeline/api/TimelineProps';
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/primitive/components/ui/item';
+import { CircularProgress } from '@/primitive/components/customized/CircularProgress';
+import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrigger';
+import { InplaceInput } from '@/base/inplace/InplaceInput';
+import { Icon } from '@/base/Icon';
+import { workItemStatusUIProperties } from '@/core/work-item/workItemStatusUIProperties';
+import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange';
+import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName';
+import { RoadmapGanttContextMenu } from '@/routes/work/roadmap/RoadmapGanttContextMenu';
 
-export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: number, onSelectedWorkItemsChange: (workItemIds: WorkItemId[]) => void }) {
+export function RoadmapGantt({ context, selectedWorkItems, onSelectedWorkItemsChange }: { context: number, selectedWorkItems: WorkItemId[], onSelectedWorkItemsChange: (workItemIds: WorkItemId[]) => void }) {
 	const workItemsQuery = useWorkItemHierarchyQuery(context);
 	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
-	const moveWorkItemMutation = useMoveWorkItemInHierarchyMutation()
+	const moveWorkItemMutation = useMoveWorkItemInHierarchyMutation();
 
 	const sprints = useSprintQuery(context);
 
@@ -28,104 +29,177 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 
 	const ganttItems = useRoadmapGanttItems(workItemsQuery.data?.roots ?? []);
 
-	const changeDates = (items: Map<string, GanttNewItemDates>) => {
-		return Promise.all(
-			[...items.entries()].map(([id, newDates]) => {
-				return updateWorkItemMutation.mutateAsync({
-					context: context,
-					request: {
-						updates: {
-							[id as WorkItemId]: {
-								timeFrame: {
-									type: WorkItemTimeFrameType.CUSTOM_DATE,
-									context: context,
-									startDate: newDates.startDate,
-									endDate: newDates.endDate,
-								}
-							}
-						}
-					}
-				});
-			})
-		).then(() => void 0);
-	}
-
 	if (workItemsQuery.isLoading || !workItemsQuery.data || sprints.isLoading || !sprints.data) {
-		return <RoadmapGanttSkeleton />
+		return <RoadmapGanttSkeleton />;
 	}
 
 	if (workItemsQuery.data.roots.length === 0) {
-		return <RoadmapEmptySplashScreen context={context} />
+		return <RoadmapEmptySplashScreen context={context} />;
 	}
 
-	const columns: ColumnDescriptor<GanttItem<WorkItem>>[] = [
-		{
-			columnId: 'title',
-			columnName: 'Title',
-			hierarchyColumn: true,
-			render: (item) => <WorkItemTitleInplace workItem={item.data} />
-		},
-		{
-			columnId: 'status',
-			columnName: 'Status',
-			render: (item) => <WorkItemStatusInplace workItem={item.data} />
-		},
-		{
-			columnId: 'progress',
-			columnName: 'Progress',
-			render: (item) => <WorkItemProgressInplace workItem={item.data} />
-		},
-		{
-			columnId: 'timeFrame',
-			columnName: 'Time frame',
-			render: (item) => <WorkItemTimeFrameInplace workItem={item.data} />
-		}
-	];
-
-	const timeboxes: GanttTimebox[] = sprints.data.map(sprint => ({
-		label: sprint.name,
+	const timeboxes: TimelineTimebox[] = sprints.data.map(sprint => ({
+		id: sprint.id,
+		name: sprint.name,
 		startDate: sprint.startDate,
-		endDate: sprint.endDate,
-		color: quarterToColor[sprint.quarter]
+		endDate: sprint.endDate
 	}));
 
 	return (
-		<Gantt items={ganttItems}
-			   containerProps={{ w: '100%', style: { flexGrow: 1, flexShrink: 0 } }}
-			   ganttKey={'roadmap-gantt'}
-			   possibleColumns={columns}
-			   initialColumnIds={['title']}
-			   changeDates={changeDates}
-			   bounds={[contextStartDate, contextEndDate]}
-			   timeboxes={timeboxes}
-			   setSelectedItemIds={(ids) => onSelectedWorkItemsChange(ids as WorkItemId[])}
-			   renderContextMenu={(o, s) => renderRoadmapGanttContextMenu(o, s, context)}
-			   rowMove={{
-				   canBeParent: (_child, parent) => parent.data.data.type !== WorkItemType.TASK,
-				   onMove: async (payload) => {
-					   let order: WorkItemMoveOrder;
+		<Timeline deepHierarchyItems={ganttItems}
+				  startDate={contextStartDate}
+				  endDate={contextEndDate}
+				  renderCell={(wi) => (
+					  <RoadmapGanttContextMenu clickedOn={wi} selected={selectedWorkItems} context={context}>
+						  <div className="flex flex-row gap-2 flex-nowrap p-1">
+							  <Item size="xs" className="p-0 text-nowrap flex-nowrap overflow-hidden">
+								  <ItemMedia>
+									  <CircularProgress size="default" values={[{
+										  value: wi.progress.completed,
+										  strokeClass: 'stroke-green-700 dark:stroke-green-400'
+									  }, { value: wi.progress.failed, strokeClass: 'stroke-destructive' }]}>
+										  <WorkItemModalTrigger context={wi.contextYear} workItem={wi} variant="ghost" size="icon-xs" />
+									  </CircularProgress>
+								  </ItemMedia>
+								  <ItemContent>
+									  <ItemTitle className="text-xs"><InplaceInput value={wi.title} /></ItemTitle>
+									  <ItemDescription className="flex flex-row gap-1 text-xs">
+										  <Icon Icon={workItemStatusUIProperties[wi.status].icon}
+												className={workItemStatusUIProperties[wi.status].iconTextClass + ' w-4 h-4'} />
+										  {workItemStatusUIProperties[wi.status].label}
+									  </ItemDescription>
+								  </ItemContent>
+							  </Item>
+							  <Item size="xs" className="p-0 pl-2 flex-0 text-nowrap" asChild>
+								  <button>
+									  <ItemContent>
+										  <ItemTitle className="w-full justify-end text-xs">
+											  <WorkItemTimeFrameDisplayRange workItem={wi} />
+										  </ItemTitle>
+										  <ItemDescription className="text-end text-xs">
+											  <WorkItemTimeFrameDisplayName workItem={wi} />
+										  </ItemDescription>
+									  </ItemContent>
+								  </button>
+							  </Item>
+						  </div>
+					  </RoadmapGanttContextMenu>
+				  )}
+				  timeboxes={timeboxes}
+				  onSelectionChange={onSelectedWorkItemsChange}
+				  onMove={async (movePayload: DeepHierarchyTimelineMovePayload<WorkItemId>) => {
+					  const newParent = movePayload.newParentId;
+					  const existingParentChildren = getChildren(workItemsQuery.data.roots, newParent)
 
-					   if (payload.newOrderInParent[0] === payload.movedRow.id) {
-						   order = { type: 'FIRST' }
-					   } else if (payload.newOrderInParent.at(-1) === payload.movedRow.id) {
-						   order = { type: 'LAST' }
-					   } else {
-						   const index = payload.newOrderInParent.findIndex(id => id === payload.movedRow.id);
-						   order = { type: 'BETWEEN', before: payload.newOrderInParent[index - 1] as WorkItemId, after: payload.newOrderInParent[index + 1] as WorkItemId };
-					   }
+					  if (movePayload.precedingItemId) {
+						  const precedingItemIndex = existingParentChildren.findIndex(child => child.id === movePayload.precedingItemId);
+						  if (precedingItemIndex === existingParentChildren.length - 1) {
+							  await moveWorkItemMutation.mutateAsync({
+								  context: context,
+								  request: {
+									  id: movePayload.itemId,
+									  parentId: newParent,
+									  order: {
+										  type: 'LAST'
+									  }
+								  }
+							  });
+							  return;
+						  }
 
+						  await moveWorkItemMutation.mutateAsync({
+							  context: context,
+							  request: {
+								  id: movePayload.itemId,
+								  parentId: newParent,
+								  order: {
+									  type: 'BETWEEN',
+									  before: movePayload.precedingItemId,
+									  after: existingParentChildren.at(precedingItemIndex + 1)!.id,
+								  }
+							  }
+						  });
+						  return;
+					  }
 
-						await moveWorkItemMutation.mutateAsync({
-							context: context,
-							request: {
-								id: payload.movedRow.data.data.id,
-								parentId: payload.newParent?.data.data.id ?? null,
-								order: order
-							}
-						});
-				   }
-			   }}
-			   hideChartWithScreenSmallerThan='sm'
+					  if (movePayload.succeedingItemId) {
+						  const succeedingItemIndex = existingParentChildren.findIndex(child => child.id === movePayload.succeedingItemId);
+						  if (succeedingItemIndex === 0) {
+							  await moveWorkItemMutation.mutateAsync({
+								  context: context,
+								  request: {
+									  id: movePayload.itemId,
+									  parentId: newParent,
+									  order: {
+										  type: 'FIRST'
+									  }
+								  }
+							  });
+							  return;
+						  }
+
+						  await moveWorkItemMutation.mutateAsync({
+							  context: context,
+							  request: {
+								  id: movePayload.itemId,
+								  parentId: newParent,
+								  order: {
+									  type: 'BETWEEN',
+									  before: existingParentChildren.at(succeedingItemIndex - 1)!.id,
+									  after: movePayload.succeedingItemId,
+								  }
+							  }
+						  });
+						  return;
+					  }
+
+					  await moveWorkItemMutation.mutateAsync({
+						  context: context,
+						  request: {
+							  id: movePayload.itemId,
+							  parentId: newParent,
+							  order: {
+								  type: 'FIRST'
+							  }
+						  }
+					  });
+				  }}
+				  canBeParent={(_, parentCandidate) => parentCandidate.type !== WorkItemType.TASK}
+				  onDatesChange={async (itemId, newDates) => {
+					  await updateWorkItemMutation.mutateAsync({
+						  context: context,
+						  request: {
+							  updates: {
+								  [itemId]: {
+									  timeFrame: {
+										  type: WorkItemTimeFrameType.CUSTOM_DATE,
+										  context: context,
+										  startDate: newDates.from,
+										  endDate: newDates.to
+									  }
+								  }
+							  }
+						  }
+					  });
+				  }}
 		/>
-	)
+	);
+}
+
+function getChildren(roots: WorkItem[], newParent: WorkItemId | null): WorkItem[] {
+	if (newParent === null) {
+		return roots;
+	}
+
+	const queue = [...roots];
+
+	while (queue.length > 0) {
+		const item = queue.shift()!;
+		if (item.id === newParent) {
+			return item.children;
+		}
+
+		queue.push(...item.children);
+	}
+
+	return [];
 }

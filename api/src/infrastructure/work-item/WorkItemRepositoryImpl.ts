@@ -137,8 +137,15 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 			throw new WorkItemNotFoundError('Cannot find work item');
 		}
 
+		const entityWithChildren =
+			await this.workItemRepository.findDescendantsTree(entity, {
+				relations: ['timeFrame.sprint']
+			});
+
 		return new WorkItemDetailsAggregate(
-			await this.workItemEntityConverter.entityToWorkItem(entity)
+			await this.workItemEntityConverter.entityToWorkItem(
+				entityWithChildren
+			)
 		);
 	}
 

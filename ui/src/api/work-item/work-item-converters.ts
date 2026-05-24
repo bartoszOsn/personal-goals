@@ -106,7 +106,7 @@ function dtoToWorkItemStatus(dto: WorkItemStatusDTO): WorkItemStatus {
 function dtoToWorkItemProgress(dto: WorkItemProgressDTO): WorkItemProgress {
 	return {
 		completed: dto.completed,
-		failed: dto.failed === 100
+		failed: dto.failed
 	};
 }
 

@@ -1,12 +1,12 @@
-import { Group, Stack, Text } from '@mantine/core';
-import { WorkItemTimeFrameInplace } from '@/core/work-item/inplace/WorkItemTimeFrameInplace.tsx';
-import { WorkItemStatusInplace } from '@/core/work-item/inplace/WorkItemStatusInplace.tsx';
-import { WorkItemProgressInplace } from '@/core/work-item/inplace/WorkItemProgressInplace.tsx';
 import { RichTextEditor } from '@/base/rich-text/RichTextEditor.tsx';
 import { WorkItem } from '@/models/WorkItem';
 import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
+import { FieldGroup } from '@/primitive/components/ui/field';
+import { WorkItemDetailsTimeFrameField } from '@/core/work-item/details/WorkItemDetailsTimeFrameField';
+import { WorkItemDetailsStatusField } from '@/core/work-item/details/WorkItemDetailsStatusField';
+import { WorkItemDetailsProgressField } from '@/core/work-item/details/WorkItemDetailsProgressField';
 
-export function WorkItemDetails({ workItem }: { workItem: WorkItem}) {
+export function WorkItemDetails({ workItem }: { workItem: WorkItem }) {
 	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
 	const onChangeWorkItemDescription = (newDescription: string) => {
 		updateWorkItemMutation.mutate({
@@ -19,28 +19,19 @@ export function WorkItemDetails({ workItem }: { workItem: WorkItem}) {
 				}
 			}
 		});
-	}
+	};
 
 	return (
-		<Stack gap='xl'>
-			<Group gap="xl" align="stretch">
-				<Stack gap="xs" justify='space-between'>
-					<Text size="sm" c="dimmed">Time frame</Text>
-					<WorkItemTimeFrameInplace workItem={workItem} />
-				</Stack>
-				<Stack gap="xs" justify='space-between'>
-					<Text size="sm" c="dimmed">Status</Text>
-					<WorkItemStatusInplace workItem={workItem} />
-				</Stack>
-				<Stack gap="xs" justify='space-between' miw={128}>
-					<Text size="sm" c="dimmed">Progress</Text>
-					<WorkItemProgressInplace workItem={workItem} />
-				</Stack>
-			</Group>
+		<div className="flex flex-col gap-6">
+			<FieldGroup className="md:flex-row whitespace-nowrap [&_.group\/item]:flex-nowrap">
+				<WorkItemDetailsTimeFrameField workItem={workItem} />
+				<WorkItemDetailsStatusField workItem={workItem} />
+				<WorkItemDetailsProgressField workItem={workItem} />
+			</FieldGroup>
 
 			<RichTextEditor content={workItem.description}
 							placeholder="Description"
 							onChangeThrottle={onChangeWorkItemDescription} />
-		</Stack>
-	)
+		</div>
+	);
 }

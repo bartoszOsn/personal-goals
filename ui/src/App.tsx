@@ -1,21 +1,17 @@
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-import '@mantine/dates/styles.css';
-import '@mantine/tiptap/styles.css';
 import '@firebase-oss/ui-styles/dist.min.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from '@/router.tsx';
-import { MantineProvider } from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
 import { queryClient } from '@/api/queryClient';
-import { ModalsProvider } from '@mantine/modals';
 import { FirebaseUIProvider } from '@firebase-oss/ui-react';
 import { initializeUI, requireDisplayName } from '@firebase-oss/ui-core';
 import { firebase, firebaseAuth } from '@/api/auth/firebase';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
 import { useEffect } from 'react';
 import { http } from '@/base/http';
+import { TooltipProvider } from '@/primitive/components/ui/tooltip';
+import { DialogManagerProvider } from '@/base/dialog-manager/api/DialogManagerProvider';
+import { Toaster } from '@/primitive/components/ui/sonner';
 
 const firebaseUI = initializeUI({
 	app: firebase,
@@ -23,7 +19,7 @@ const firebaseUI = initializeUI({
 	behaviors: [
 		requireDisplayName()
 	]
-})
+});
 
 
 export function App() {
@@ -40,12 +36,12 @@ export function App() {
 	return (
 		<FirebaseUIProvider ui={firebaseUI}>
 			<QueryClientProvider client={queryClient}>
-				<MantineProvider>
-					<ModalsProvider>
-						<Notifications />
+				<TooltipProvider>
+					<DialogManagerProvider>
+						<Toaster />
 						<RouterProvider router={router} />
-					</ModalsProvider>
-				</MantineProvider>
+					</DialogManagerProvider>
+				</TooltipProvider>
 			</QueryClientProvider>
 		</FirebaseUIProvider>
 	);

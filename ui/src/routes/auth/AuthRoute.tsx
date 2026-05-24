@@ -1,4 +1,3 @@
-import { Stack } from '@mantine/core';
 import { Navigate, Outlet } from '@tanstack/react-router';
 import './AuthRoute.css';
 import { useFirebaseUser } from '@/api/auth/useFirebaseUser';
@@ -11,8 +10,8 @@ export function AuthRoute() {
 	}
 
 	return (
-		<Stack w="100%" h="100vh" bg='gray.1' align='center' justify='center'>
+		<div className='flex w-full min-h-screen bg-muted items-center justify-center sm:py-4'>
 			<Outlet />
-		</Stack>
+		</div>
 	)
 }

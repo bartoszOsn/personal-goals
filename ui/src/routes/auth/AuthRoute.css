@@ -1,43 +1,24 @@
 :root {
     /* The primary color is used for the button and link colors */
-    --fui-primary: var(--mantine-color-blue-filled);
+    --fui-primary: var(--primary);
     /* The primary hover color is used for the button and link colors when hovered */
-    --fui-primary-hover: var(--mantine-color-blue-filled-hover);
+    --fui-primary-hover: var(--primary);
     /* The primary surface color is used for the button text color */
-    --fui-primary-surface: var(--mantine-color-white);
+    --fui-primary-surface: var(--primary-foreground);
     /* The text color used for body text */
-    --fui-text: var(--mantine-color-text);
+    --fui-text: var(--foreground);
     /* The muted text color used for body text, such as subtitles */
-    --fui-text-muted: var(--mantine-color-dimmed);
+    --fui-text-muted: var(--muted-foreground);
     /* The background color of the cards */
-    --fui-background: var(--mantine-color-body);
+    --fui-background: var(--card);
     /* The border color used for none input fields */
-    --fui-border: var(--mantine-color-default-border);
+    --fui-border: var(--border);
     /* The input color used for input fields */
-    --fui-input: var(--mantine-color-default-border);
+    --fui-input: var(--input);
     /* The error color used for error messages */
-    --fui-error: var(--mantine-color-error);
+    --fui-error: var(--destructive);
     /* The radius used for the input fields */
-    --fui-radius: var(--mantine-radius-md);
+    --fui-radius: var(--radius);
     /* The radius used for the cards */
-    --fui-radius-card: var(--mantine-radius-default);
-}
-
-.fui-form fieldset {
-    border: none;
-    padding: 0;
-}
-
-:where(.fui-form)>:not(:last-child) {
-    margin-bottom: var(--mantine-spacing-md);
-}
-
-:where(.fui-form .fui-form__action) {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.fui-form .fui-button {
-    border: none;
+    --fui-radius-card: var(--radius);
 }
