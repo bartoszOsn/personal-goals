@@ -18,6 +18,9 @@ import { TimelineHeaderRowCell } from '@/base/timeline/internal/components/Timel
 import { useRowSelection } from '@/base/timeline/internal/useRowSelection';
 import { useClickOutside } from '@/base/useClickOutside';
 import { DragAutoScroll } from '@/base/dnd/api/DragAutoScroll';
+import { useMonitorDrop } from '@/base/dnd/api/useMonitorDrop';
+import { getTimelineDnDContext } from '@/base/timeline/internal/timelineDnDContext';
+import { Spinner } from '@/primitive/components/ui/spinner';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
@@ -43,12 +46,50 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 		props.onSelectionChange?.(selectedRows);
 	});
 
-	useClickOutside(rootRef, () => clickOutside(), { withoutInteractiveElements: true})
+	useClickOutside(rootRef, () => clickOutside(), { withoutInteractiveElements: true});
+
+	const [moveOverlay, setMoveOverlay] = useState(false);
+
+	useMonitorDrop(getTimelineDnDContext<TId, TData>(), (drag, drop) => {
+		if (!drag || !drop) return;
+
+		if (!props.onMove) {
+			return;
+		}
+
+		if ('flatHierarchyItems' in props) {
+			setMoveOverlay(true);
+			Promise.resolve(
+				props.onMove({
+					itemId: drag.id,
+					precedingItemId: drop.dropBelow?.id ?? null,
+					succeedingItemId: drop.dropAbove?.id ?? null
+				})
+			).finally(() => setMoveOverlay(false));
+		} else {
+			setMoveOverlay(true);
+			Promise.resolve(
+				props.onMove({
+					itemId: drag.id,
+					precedingItemId: drop.dropBelow?.id ?? null,
+					succeedingItemId: drop.dropAbove?.id ?? null,
+					newParentId: drop.dropInto?.id ?? null
+				})
+			).finally(() => setMoveOverlay(false));
+		}
+	});
 
 	return (
 		<DragAutoScroll allowedAxis='vertical'>
-			<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
+			<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded overflow-y-hidden" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
 				<div {...props.rootProps}>
+					{
+						moveOverlay && (
+							<div className='absolute inset-0 z-30 bg-black/10 supports-backdrop-filter:backdrop-blur-xs flex align-center justify-center'>
+								<Spinner className='size-10 mt-24' />
+							</div>
+						)
+					}
 					<div style={{ width: width + timelineTableWidth }}>
 						<TimelineHeaderRow>
 							<TimelineHeaderRowCell>

@@ -76,11 +76,16 @@ export function TimelineRow<TId extends Key, TData>({
 					   const hitbox = matchHitbox(dropTargetElement, input);
 					   switch (hitbox) {
 						   case 'top':
-							   return { dropAbove: row };
+							   return { dropAbove: row, dropInto: row.parent };
 						   case 'middle':
-							   return { dropInto: row };
-						   case 'bottom':
-							   return { dropBelow: row };
+							   return { dropInto: row, dropBelow: row.children.length > 0 ? row.children.at(-1) : undefined };
+						   case 'bottom': {
+							   if (!row.collapsed && row.children.length > 0) {
+								   return { dropAbove: row.children.at(0), dropInto: row };
+							   }
+
+							   return { dropBelow: row, dropInto: row.parent };
+						   }
 						   case null:
 							   return null;
 					   }
@@ -95,11 +100,11 @@ export function TimelineRow<TId extends Key, TData>({
 					}}
 				>
 					<div className="absolute inset-0 z-20 pointer-events-none">
-						<LineDropIndicator isVisible={(_dragPayload, dropPayload) => !!dropPayload && 'dropAbove' in dropPayload && dropPayload.dropAbove.id === row.id}
+						<LineDropIndicator isVisible={(_dragPayload, dropPayload) => !!dropPayload && !!dropPayload.dropAbove && dropPayload.dropAbove.id === row.id}
 										   context={getTimelineDnDContext<TId, TData>()}
 										   className="absolute! top-0 left-0 right-0 z-20"
 						/>
-						<LineDropIndicator isVisible={(_dragPayload, dropPayload) => !!dropPayload && 'dropBelow' in dropPayload && dropPayload.dropBelow.id === row.id}
+						<LineDropIndicator isVisible={(_dragPayload, dropPayload) => !!dropPayload && !!dropPayload.dropBelow && dropPayload.dropBelow.id === row.id}
 										   context={getTimelineDnDContext<TId, TData>()}
 										   className="absolute! bottom-0 left-0 right-0 z-20"
 						/>

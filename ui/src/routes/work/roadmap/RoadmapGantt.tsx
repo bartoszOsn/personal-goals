@@ -5,9 +5,9 @@ import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { Temporal } from 'temporal-polyfill';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { useMoveWorkItemInHierarchyMutation, useUpdateWorkItemsInHierarchyMutation, useWorkItemHierarchyQuery } from '@/api/work-item/work-item-hooks';
-import { WorkItemId, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
+import { WorkItem, WorkItemId, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
 import { Timeline } from '@/base/timeline/api/Timeline';
-import { TimelineTimebox } from '@/base/timeline/api/TimelineProps';
+import { DeepHierarchyTimelineMovePayload, TimelineTimebox } from '@/base/timeline/api/TimelineProps';
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/primitive/components/ui/item';
 import { CircularProgress } from '@/primitive/components/customized/CircularProgress';
 import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrigger';
@@ -20,7 +20,7 @@ import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrame
 export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: number, onSelectedWorkItemsChange: (workItemIds: WorkItemId[]) => void }) {
 	const workItemsQuery = useWorkItemHierarchyQuery(context);
 	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
-	const moveWorkItemMutation = useMoveWorkItemInHierarchyMutation()
+	const moveWorkItemMutation = useMoveWorkItemInHierarchyMutation();
 
 	const sprints = useSprintQuery(context);
 
@@ -41,7 +41,7 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 									type: WorkItemTimeFrameType.CUSTOM_DATE,
 									context: context,
 									startDate: newDates.startDate,
-									endDate: newDates.endDate,
+									endDate: newDates.endDate
 								}
 							}
 						}
@@ -49,14 +49,14 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 				});
 			})
 		).then(() => void 0);
-	}
+	};
 
 	if (workItemsQuery.isLoading || !workItemsQuery.data || sprints.isLoading || !sprints.data) {
-		return <RoadmapGanttSkeleton />
+		return <RoadmapGanttSkeleton />;
 	}
 
 	if (workItemsQuery.data.roots.length === 0) {
-		return <RoadmapEmptySplashScreen context={context} />
+		return <RoadmapEmptySplashScreen context={context} />;
 	}
 
 	const timeboxes: TimelineTimebox[] = sprints.data.map(sprint => ({
@@ -82,7 +82,7 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 								  </CircularProgress>
 							  </ItemMedia>
 							  <ItemContent>
-								  <ItemTitle className='text-xs'><InplaceInput value={wi.title} /></ItemTitle>
+								  <ItemTitle className="text-xs"><InplaceInput value={wi.title} /></ItemTitle>
 								  <ItemDescription className="flex flex-row gap-1 text-xs">
 									  <Icon Icon={workItemStatusUIProperties[wi.status].icon}
 											className={workItemStatusUIProperties[wi.status].iconTextClass + ' w-4 h-4'} />
@@ -104,10 +104,105 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 						  </Item>
 					  </div>
 				  )}
-			   timeboxes={timeboxes}
-			  onSelectionChange={onSelectedWorkItemsChange}
-				  onMove={() => void 0}
-				  canBeParent={(_, parentCandidate) => parentCandidate.type !== WorkItemType.TASK }
+				  timeboxes={timeboxes}
+				  onSelectionChange={onSelectedWorkItemsChange}
+				  onMove={async (movePayload: DeepHierarchyTimelineMovePayload<WorkItemId>) => {
+					  const newParent = movePayload.newParentId;
+					  const existingParentChildren = getChildren(workItemsQuery.data.roots, newParent)
+
+					  if (movePayload.precedingItemId) {
+						  const precedingItemIndex = existingParentChildren.findIndex(child => child.id === movePayload.precedingItemId);
+						  if (precedingItemIndex === existingParentChildren.length - 1) {
+							  await moveWorkItemMutation.mutateAsync({
+								  context: context,
+								  request: {
+									  id: movePayload.itemId,
+									  parentId: newParent,
+									  order: {
+										  type: 'LAST'
+									  }
+								  }
+							  });
+							  return;
+						  }
+
+						  await moveWorkItemMutation.mutateAsync({
+							  context: context,
+							  request: {
+								  id: movePayload.itemId,
+								  parentId: newParent,
+								  order: {
+									  type: 'BETWEEN',
+									  before: movePayload.precedingItemId,
+									  after: existingParentChildren.at(precedingItemIndex + 1)!.id,
+								  }
+							  }
+						  });
+						  return;
+					  }
+
+					  if (movePayload.succeedingItemId) {
+						  const succeedingItemIndex = existingParentChildren.findIndex(child => child.id === movePayload.succeedingItemId);
+						  if (succeedingItemIndex === 0) {
+							  await moveWorkItemMutation.mutateAsync({
+								  context: context,
+								  request: {
+									  id: movePayload.itemId,
+									  parentId: newParent,
+									  order: {
+										  type: 'FIRST'
+									  }
+								  }
+							  });
+							  return;
+						  }
+
+						  await moveWorkItemMutation.mutateAsync({
+							  context: context,
+							  request: {
+								  id: movePayload.itemId,
+								  parentId: newParent,
+								  order: {
+									  type: 'BETWEEN',
+									  before: existingParentChildren.at(succeedingItemIndex - 1)!.id,
+									  after: movePayload.succeedingItemId,
+								  }
+							  }
+						  });
+						  return;
+					  }
+
+					  await moveWorkItemMutation.mutateAsync({
+						  context: context,
+						  request: {
+							  id: movePayload.itemId,
+							  parentId: newParent,
+							  order: {
+								  type: 'FIRST'
+							  }
+						  }
+					  });
+				  }}
+				  canBeParent={(_, parentCandidate) => parentCandidate.type !== WorkItemType.TASK}
 		/>
-	)
+	);
+}
+
+function getChildren(roots: WorkItem[], newParent: WorkItemId | null): WorkItem[] {
+	if (newParent === null) {
+		return roots;
+	}
+
+	const queue = [...roots];
+
+	while (queue.length > 0) {
+		const item = queue.shift()!;
+		if (item.id === newParent) {
+			return item.children;
+		}
+
+		queue.push(...item.children);
+	}
+
+	return [];
 }

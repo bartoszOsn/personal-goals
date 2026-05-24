@@ -18,7 +18,7 @@ export function TimelineRowCell<TId extends Key, TData>(
 	}
 ) {
 	const dropTarget = useDropTarget(getTimelineDnDContext<TId, TData>());
-	const isDropInto = dropTarget && 'dropInto' in dropTarget && dropTarget.dropInto.id === row.id;
+	const isDropInto = dropTarget && dropTarget.dropInto && dropTarget.dropInto.id === row.id;
 
 	return (
 		<div className={cn("sticky left-0 border-r bg-background z-10 flex flex-row flex-nowrap overflow-hidden", { 'bg-muted': isSelected })}

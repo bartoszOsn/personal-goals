@@ -8,8 +8,8 @@ export function getTimelineDnDContext<TId extends Key, TData>(): DragAndDropCont
 	return timelineDnDContext as DragAndDropContext<TimelineRowData<TId, TData>, TimelineDropPayload<TId, TData>>;
 }
 
-export type TimelineDropPayload<TId extends Key, TData> =
-	| { dropBelow: TimelineRowData<TId, TData> }
-	| { dropAbove: TimelineRowData<TId, TData> }
-	| { dropInto: TimelineRowData<TId, TData> }
-	| null;
+export type TimelineDropPayload<TId extends Key, TData> = {
+	dropBelow?: TimelineRowData<TId, TData>;
+	dropAbove?: TimelineRowData<TId, TData>;
+	dropInto: TimelineRowData<TId, TData> | null;
+} | null;
