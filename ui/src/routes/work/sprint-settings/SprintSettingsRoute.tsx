@@ -8,11 +8,10 @@ import { Skeleton } from '@/primitive/components/ui/skeleton';
 import { SprintMenubar } from '@/routes/work/sprint-settings/SprintMenubar';
 import { Timeline } from '@/base/timeline/api/Timeline';
 import { FlatHierarchyTimelineItem } from '@/base/timeline/api/TimelineProps';
-import { Popover, PopoverContent, PopoverTrigger } from '@/primitive/components/ui/popover';
 import { Button } from '@/primitive/components/ui/button';
 import { CalendarIcon } from 'lucide-react';
-import { Calendar } from '@/primitive/components/ui/calendar';
 import { formatTimeRange } from '@/base/formatTimeRange';
+import { RangePicker, RangePickerTrigger } from '@/primitive/components/customized/RangePicker';
 
 export function SprintSettingsRoute() {
 	const context = getRouteApi('/work/$context/sprint-settings')
@@ -58,8 +57,15 @@ export function SprintSettingsRoute() {
 													   renderCell={(sprint) => (
 														   <div className='w-full h-full flex flex-row justify-between items-center py-1 px-2'>
 															   <span>{sprint.name}</span>
-															   <Popover>
-																   <PopoverTrigger asChild>
+															   <RangePicker value={{ start: sprint.startDate, end: sprint.endDate }} onValueChange={range => {
+																   updateSprints.mutateAsync({
+																	   [sprint.id]: {
+																		   newStartDate: range.start,
+																		   newEndDate: range.end
+																	   }
+																   });
+															   }}>
+																   <RangePickerTrigger asChild>
 																	   <Button
 																		   variant="secondary"
 																		   size="sm"
@@ -69,28 +75,8 @@ export function SprintSettingsRoute() {
 																		   <CalendarIcon />
 																		   {formatTimeRange(sprint.startDate, sprint.endDate)}
 																	   </Button>
-																   </PopoverTrigger>
-																   <PopoverContent className="w-auto p-0" align="start">
-																	   <Calendar
-																		   mode="range"
-																		   defaultMonth={temporalToLegacy(sprint.startDate)}
-																		   selected={{ from: temporalToLegacy(sprint.startDate), to: temporalToLegacy(sprint.endDate) }}
-																		   onSelect={range => {
-																			   if (!range || !range.from || !range.to) {
-																				   return;
-																			   }
-
-																			   updateSprints.mutateAsync({
-																				   [sprint.id]: {
-																					   newStartDate: legacyToTemporal(range.from),
-																					   newEndDate: legacyToTemporal(range.to)
-																				   }
-																			   });
-																		   }}
-																		   numberOfMonths={2}
-																	   />
-																   </PopoverContent>
-															   </Popover>
+																   </RangePickerTrigger>
+															   </RangePicker>
 														   </div>
 													   )}
 													   flatHierarchyItems={ganttItems}
@@ -108,12 +94,4 @@ export function SprintSettingsRoute() {
 			</PageContentContent>
 		</PageContent>
 	);
-}
-
-function temporalToLegacy(date: Temporal.PlainDate): Date {
-	return new Date(date.year, date.month - 1, date.day);
-}
-
-function legacyToTemporal(date: Date): Temporal.PlainDate {
-	return Temporal.PlainDate.from({ year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() });
 }

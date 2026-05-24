@@ -11,11 +11,10 @@ import { Link } from '@tanstack/react-router';
 import { Temporal } from 'temporal-polyfill';
 import { numberToQuarter, quarterToNumber } from '@/models/Quarter';
 import { Sprint } from '@/models/Sprint';
-import { Popover, PopoverContent, PopoverTrigger } from '@/primitive/components/ui/popover';
 import { CalendarIcon } from 'lucide-react';
-import { Calendar } from '@/primitive/components/ui/calendar';
 import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
 import { formatTimeRange } from '@/base/formatTimeRange';
+import { RangePicker, RangePickerTrigger } from '@/primitive/components/customized/RangePicker';
 
 export function WorkItemTimeFramePicker({ workItem, children }: { workItem: WorkItem, children: ReactNode }) {
 	const [opened, setOpened] = useState(false);
@@ -85,8 +84,11 @@ function WorkItemTimeFramePickerSheetContent({ workItem, close }: { workItem: Wo
 								</RadioGroup>
 								{
 									section.showCustomDatePicker && (
-										<Popover>
-											<PopoverTrigger asChild>
+										<RangePicker value={{ start: customStartDate, end: customEndDate}} onValueChange={range => {
+											setCustomStartDate(range.start);
+											setCustomEndDate(range.end);
+										}}>
+											<RangePickerTrigger asChild>
 												<Button
 													variant="secondary"
 													size="lg"
@@ -96,24 +98,8 @@ function WorkItemTimeFramePickerSheetContent({ workItem, close }: { workItem: Wo
 													<CalendarIcon />
 													{formatTimeRange(customStartDate, customEndDate)}
 												</Button>
-											</PopoverTrigger>
-											<PopoverContent className="w-auto p-0" align="start">
-												<Calendar
-													mode="range"
-													defaultMonth={temporalToLegacy(customStartDate)}
-													selected={{ from: temporalToLegacy(customStartDate), to: temporalToLegacy(customEndDate) }}
-													onSelect={range => {
-														if (!range || !range.from || !range.to) {
-															return;
-														}
-
-														setCustomStartDate(legacyToTemporal(range.from));
-														setCustomEndDate(legacyToTemporal(range.to));
-													}}
-													numberOfMonths={2}
-												/>
-											</PopoverContent>
-										</Popover>
+											</RangePickerTrigger>
+										</RangePicker>
 									)
 								}
 							</FieldSet>
@@ -303,12 +289,4 @@ function findItemById(id: string, sections: TimeFrameSection[]): TimeFrameItem |
 		}
 	}
 	return null;
-}
-
-function temporalToLegacy(date: Temporal.PlainDate): Date {
-	return new Date(date.year, date.month - 1, date.day);
-}
-
-function legacyToTemporal(date: Date): Temporal.PlainDate {
-	return Temporal.PlainDate.from({ year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() });
 }
