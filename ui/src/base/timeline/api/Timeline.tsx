@@ -22,6 +22,7 @@ import { useMonitorDrop } from '@/base/dnd/api/useMonitorDrop';
 import { getTimelineDnDContext } from '@/base/timeline/internal/timelineDnDContext';
 import { useIsMobile } from '@/primitive/hooks/use-mobile';
 import { TimelinePanelResizable } from '@/base/timeline/internal/components/TimelinePanelResizable';
+import { Skeleton } from '@/primitive/components/ui/skeleton';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const isMobile = useIsMobile();
@@ -50,6 +51,7 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 	useClickOutside(rootRef, () => clickOutside(), { withoutInteractiveElements: true});
 
 	const [movePending, setMovePending] = useState(false);
+	const [itemsWithChangingDates, setItemsWithChangingDates] = useState<TId[]>([]);
 
 	useMonitorDrop(getTimelineDnDContext<TId, TData>(), (drag, drop) => {
 		if (!drag || !drop) return;
@@ -157,12 +159,28 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 											</TimelineRowCell>
 											<TimelineRowChart>
 												{
-													rowData.item.dates && (
+													rowData.item.dates && !itemsWithChangingDates.includes(rowData.id) && (
 														<TimelineRowChartBar posStart={rowData.item.dates.from} posEnd={rowData.item.dates.to}
 																			 startDate={props.startDate}
-																			 scale={scale}>
+																			 scale={scale}
+																				onDatesChange={(newStart, newEnd) => {
+																					setItemsWithChangingDates(prev => [...prev, rowData.id]);
+																					Promise.resolve(
+																						props.onDatesChange?.(rowData.id, {
+																							from: newStart,
+																							to: newEnd
+																						})
+																					).finally(() => setItemsWithChangingDates(prev => prev.filter(id => id !== rowData.id)));
+																				}}>
 															{props.renderBar?.(rowData.item.data)}
 														</TimelineRowChartBar>
+													)
+												}
+												{
+													itemsWithChangingDates.includes(rowData.id) && (
+														<div className='absolute inset-0 bg-background'>
+															<Skeleton className='absolute inset-1' />
+														</div>
 													)
 												}
 											</TimelineRowChart>

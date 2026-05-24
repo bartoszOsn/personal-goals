@@ -1,7 +1,6 @@
 import { RoadmapGanttSkeleton } from '@/routes/work/roadmap/RoadmapGanttSkeleton';
 import { RoadmapEmptySplashScreen } from '@/routes/work/roadmap/RoadmapEmptySplashScreen';
 import { useRoadmapGanttItems } from '@/routes/work/roadmap/useRoadmapGanttItems';
-import { GanttNewItemDates } from '@/base/gantt/model/GanttNewItemDates';
 import { Temporal } from 'temporal-polyfill';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks';
 import { useMoveWorkItemInHierarchyMutation, useUpdateWorkItemsInHierarchyMutation, useWorkItemHierarchyQuery } from '@/api/work-item/work-item-hooks';
@@ -28,28 +27,6 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 	const contextEndDate = Temporal.PlainDate.from({ year: context, month: 12, day: 31 });
 
 	const ganttItems = useRoadmapGanttItems(workItemsQuery.data?.roots ?? []);
-
-	const changeDates = (items: Map<string, GanttNewItemDates>) => {
-		return Promise.all(
-			[...items.entries()].map(([id, newDates]) => {
-				return updateWorkItemMutation.mutateAsync({
-					context: context,
-					request: {
-						updates: {
-							[id as WorkItemId]: {
-								timeFrame: {
-									type: WorkItemTimeFrameType.CUSTOM_DATE,
-									context: context,
-									startDate: newDates.startDate,
-									endDate: newDates.endDate
-								}
-							}
-						}
-					}
-				});
-			})
-		).then(() => void 0);
-	};
 
 	if (workItemsQuery.isLoading || !workItemsQuery.data || sprints.isLoading || !sprints.data) {
 		return <RoadmapGanttSkeleton />;
@@ -184,6 +161,23 @@ export function RoadmapGantt({ context, onSelectedWorkItemsChange }: { context: 
 					  });
 				  }}
 				  canBeParent={(_, parentCandidate) => parentCandidate.type !== WorkItemType.TASK}
+				  onDatesChange={async (itemId, newDates) => {
+					  await updateWorkItemMutation.mutateAsync({
+						  context: context,
+						  request: {
+							  updates: {
+								  [itemId]: {
+									  timeFrame: {
+										  type: WorkItemTimeFrameType.CUSTOM_DATE,
+										  context: context,
+										  startDate: newDates.from,
+										  endDate: newDates.to
+									  }
+								  }
+							  }
+						  }
+					  });
+				  }}
 		/>
 	);
 }
