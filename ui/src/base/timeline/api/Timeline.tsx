@@ -20,12 +20,15 @@ import { useClickOutside } from '@/base/useClickOutside';
 import { DragAutoScroll } from '@/base/dnd/api/DragAutoScroll';
 import { useMonitorDrop } from '@/base/dnd/api/useMonitorDrop';
 import { getTimelineDnDContext } from '@/base/timeline/internal/timelineDnDContext';
+import { useIsMobile } from '@/primitive/hooks/use-mobile';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
+	const isMobile = useIsMobile();
 	const [scale, setScale] = useState<keyof typeof timelineScaleToPxPerDay>('sm');
-	const width = durationToPx(props.startDate.until(props.endDate), scale);
+	const width = isMobile ? 0 : durationToPx(props.startDate.until(props.endDate), scale);
 	const timelineTableWidth = 400;
-	const timelineTableWidthPx = `${timelineTableWidth}px`;
+	const timelineTableWidthPx = isMobile ? `100%` : `${timelineTableWidth}px`;
+	const wholeWidth = isMobile ? '100%' : timelineTableWidth + width;
 
 	const isFlatHierarchy = 'flatHierarchyItems' in props;
 
@@ -82,7 +85,7 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 		<DragAutoScroll allowedAxis='vertical'>
 			<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded overflow-y-hidden" style={{ [timelineTableWidthCssPropertyName]: timelineTableWidthPx } as CSSProperties}>
 				<div {...props.rootProps}>
-					<div style={{ width: width + timelineTableWidth }}>
+					<div style={{ width: wholeWidth }}>
 						<TimelineHeaderRow>
 							<TimelineHeaderRowCell>
 								<div className="w-full h-full p-2 flex items-center justify-end">

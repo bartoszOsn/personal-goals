@@ -9,6 +9,7 @@ import { useDropTarget } from '@/base/dnd/api/useDropTarget';
 import { getTimelineDnDContext } from '@/base/timeline/internal/timelineDnDContext';
 import { Spinner } from '@/primitive/components/ui/spinner';
 import { LineDropIndicator } from '@/base/dnd/api/LineDropIndicator';
+import { useIsMobile } from '@/primitive/hooks/use-mobile';
 
 export function TimelineRowCell<TId extends Key, TData>(
 	{ children, row, onChevronClick, isSelected, showDragHandle, movePending }:
@@ -20,12 +21,23 @@ export function TimelineRowCell<TId extends Key, TData>(
 		movePending: boolean,
 	}
 ) {
+	const isMobile = useIsMobile();
 	const dropTarget = useDropTarget(getTimelineDnDContext<TId, TData>());
 	const isDropInto = dropTarget && dropTarget.dropInto && dropTarget.dropInto.id === row.id;
 
 	return (
 		<div className={cn("sticky left-0 border-r bg-background z-10 flex flex-row flex-nowrap", { 'bg-muted': isSelected })}
-			 style={{ width: `var(${timelineTableWidthCssPropertyName})`, paddingLeft: row.level * 20 }}>
+			 style={{
+				 ...(
+					 isMobile
+					 	? {
+							width: '100%',
+						 }
+					    : {
+							 width: `var(${timelineTableWidthCssPropertyName})`
+						 }
+				 ),
+				 paddingLeft: row.level * 20 }}>
 			{
 				showDragHandle && <DragHandle asChild>
 					<Button variant="ghost"
