@@ -9,7 +9,7 @@ export function RoadmapHeader({ context, selectedWorkItemIds }: { context: numbe
 	const deleteWorkItemMutation = useDeleteWorkItemsInHierarchyMutation();
 
 	return (
-		<Menubar>
+		<Menubar className='w-full'>
 			<MenubarMenu>
 				<MenubarTrigger>
 					{
