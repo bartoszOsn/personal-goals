@@ -15,6 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/primitive/components/
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/primitive/components/ui/calendar';
 import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item-hooks';
+import { formatTimeRange } from '@/base/formatTimeRange';
 
 export function WorkItemTimeFramePicker({ workItem, children }: { workItem: WorkItem, children: ReactNode }) {
 	const [opened, setOpened] = useState(false);
@@ -72,11 +73,7 @@ function WorkItemTimeFramePickerSheetContent({ workItem, close }: { workItem: Wo
 														<FieldTitle>{item.name}</FieldTitle>
 														<FieldDescription>
 															{
-																item.timeFrame && (<>
-																	{item.timeFrame.startDate.toLocaleString(undefined, { day: 'numeric', month: 'short' })}
-																	{' – '}
-																	{item.timeFrame.endDate.toLocaleString(undefined, { day: 'numeric', month: 'short' })}
-																</>)
+																item.timeFrame && (formatTimeRange(item.timeFrame.startDate, item.timeFrame.endDate))
 															}
 														</FieldDescription>
 													</FieldContent>
@@ -97,9 +94,7 @@ function WorkItemTimeFramePickerSheetContent({ workItem, close }: { workItem: Wo
 													className="justify-start w-fit self-end px-2.5 font-normal"
 												>
 													<CalendarIcon />
-													{customStartDate.toLocaleString(undefined, { day: 'numeric', month: 'short' })}
-													{' – '}
-													{customEndDate.toLocaleString(undefined, { day: 'numeric', month: 'short' })}
+													{formatTimeRange(customStartDate, customEndDate)}
 												</Button>
 											</PopoverTrigger>
 											<PopoverContent className="w-auto p-0" align="start">
