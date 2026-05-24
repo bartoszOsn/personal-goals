@@ -10,7 +10,7 @@ export function AuthRoute() {
 	}
 
 	return (
-		<div className='w-full h-screen bg-muted items-center justify-center'>
+		<div className='flex w-full min-h-screen bg-muted items-center justify-center sm:py-4'>
 			<Outlet />
 		</div>
 	)
