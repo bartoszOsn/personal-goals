@@ -47,7 +47,7 @@ export function AppSidebar({ context, setContext }: { context: number, setContex
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<SidebarMenuItem>
-								<MenuButtonLink to="/work/$context/sprint-overview/{-$sprintId}" params={{ context: context.toString() }}>
+								<MenuButtonLink to="/work/$context/sprint-overview" params={{ context: context.toString() }}>
 									Sprint overview
 								</MenuButtonLink>
 							</SidebarMenuItem>

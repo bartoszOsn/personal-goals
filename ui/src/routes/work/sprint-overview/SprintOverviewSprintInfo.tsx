@@ -1,12 +1,12 @@
-import { useSprintQuery } from '@/api/sprint/sprint-hooks';
+import { useSprintQuery } from '@/api/sprint/sprint-hooks.ts';
 import { Temporal } from 'temporal-polyfill';
-import { SprintId, SprintStatus } from '@/models/Sprint';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card';
-import { Field, FieldLabel } from '@/primitive/components/ui/field';
-import { Progress } from '@/primitive/components/ui/progress';
-import { Badge } from '@/primitive/components/ui/badge';
+import { SprintId, SprintStatus } from '@/models/Sprint.ts';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card.tsx';
+import { Field, FieldLabel } from '@/primitive/components/ui/field.tsx';
+import { Progress } from '@/primitive/components/ui/progress.tsx';
+import { Badge } from '@/primitive/components/ui/badge.tsx';
 import { ArrowBigRight, CheckIcon, CircleDotDashed } from 'lucide-react';
-import { Skeleton } from '@/primitive/components/ui/skeleton';
+import { Skeleton } from '@/primitive/components/ui/skeleton.tsx';
 
 export function SprintOverviewSprintInfo({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const sprintQuery = useSprintQuery(context);

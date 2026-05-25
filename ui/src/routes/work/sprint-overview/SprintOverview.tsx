@@ -1,11 +1,15 @@
-import { SprintOverviewSprintSwitcher } from '@/routes/work/sprint-overview/SprintOverviewSprintSwitcher';
-import { useNavigate } from '@tanstack/react-router';
-import { SprintOverviewSprintInfo } from '@/routes/work/sprint-overview/SprintOverviewSprintInfo';
-import { SprintOverviewTaskBoard } from '@/routes/work/sprint-overview/SprintOverviewTaskBoard';
-import { SprintId } from '@/models/Sprint';
-import { PageContent, PageContentContent, PageContentHeader } from '@/base/PageContent';
+import { SprintOverviewSprintSwitcher } from '@/routes/work/sprint-overview/SprintOverviewSprintSwitcher.tsx';
+import { Navigate, useNavigate } from '@tanstack/react-router';
+import { SprintOverviewSprintInfo } from '@/routes/work/sprint-overview/SprintOverviewSprintInfo.tsx';
+import { SprintOverviewTaskBoard } from '@/routes/work/sprint-overview/SprintOverviewTaskBoard.tsx';
+import { SprintId } from '@/models/Sprint.ts';
+import { PageContent, PageContentContent, PageContentHeader } from '@/base/PageContent.tsx';
+import { useSprintQuery } from '@/api/sprint/sprint-hooks';
+import { SprintOverviewSkeleton } from '@/routes/work/sprint-overview/SprintOverviewSkeleton';
 
 export function SprintOverview({ context, sprintId }: { context: number, sprintId: SprintId }) {
+	const sprint = useSprintQuery(context);
+
 	const navigate = useNavigate();
 
 	const onSprintIdChange = (newId: string) => {
@@ -15,6 +19,14 @@ export function SprintOverview({ context, sprintId }: { context: number, sprintI
 		})
 			.then();
 	};
+
+	if (!sprint.data || sprint.isLoading) {
+		return <SprintOverviewSkeleton />
+	}
+
+	if (!sprint.data.some(s => s.id === sprintId)) {
+		return <Navigate to='/work/$context/sprint-overview' params={{ context: context.toString() }} />;
+	}
 
 	return (
 		<PageContent>

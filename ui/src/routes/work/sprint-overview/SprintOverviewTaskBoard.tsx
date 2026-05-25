@@ -1,26 +1,26 @@
 import { Board } from '@/base/board/api/Board.tsx';
-import { SprintId } from '@/models/Sprint';
+import { SprintId } from '@/models/Sprint.ts';
 import { isPlainDate } from '@personal-okr/shared';
-import { useSprintQuery } from '@/api/sprint/sprint-hooks';
+import { useSprintQuery } from '@/api/sprint/sprint-hooks.ts';
 import {
 	useCreateWorkItemInSprintOverviewMutation,
 	useMoveWorkItemInSprintOverviewMutation,
 	useUpdateWorkItemsInHierarchyMutation,
 	useWorkItemSprintOverviewQuery
-} from '@/api/work-item/work-item-hooks';
-import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem';
-import { BoardColumn, BoardItem, BoardReorderResult } from '@/base/board/api/BoardProps';
+} from '@/api/work-item/work-item-hooks.ts';
+import { WorkItem, WorkItemId, WorkItemMoveOrder, WorkItemStatus, WorkItemType } from '@/models/WorkItem.ts';
+import { BoardColumn, BoardItem, BoardReorderResult } from '@/base/board/api/BoardProps.ts';
 import { CalendarDays } from 'lucide-react';
-import { CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card';
-import { Button } from '@/primitive/components/ui/button';
-import { Skeleton } from '@/primitive/components/ui/skeleton';
-import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrigger';
-import { WorkItemTimeFramePicker } from '@/core/work-item/WorkItemTimeFramePicker';
-import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange';
-import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName';
-import { InplaceInput } from '@/base/inplace/InplaceInput';
-import { workItemStatusUIProperties } from '@/core/work-item/workItemStatusUIProperties';
-import { Icon } from '@/base/Icon';
+import { CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/primitive/components/ui/card.tsx';
+import { Button } from '@/primitive/components/ui/button.tsx';
+import { Skeleton } from '@/primitive/components/ui/skeleton.tsx';
+import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrigger.tsx';
+import { WorkItemTimeFramePicker } from '@/core/work-item/WorkItemTimeFramePicker.tsx';
+import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange.tsx';
+import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName.tsx';
+import { InplaceInput } from '@/base/inplace/InplaceInput.tsx';
+import { workItemStatusUIProperties } from '@/core/work-item/workItemStatusUIProperties.ts';
+import { Icon } from '@/base/Icon.tsx';
 
 export function SprintOverviewTaskBoard({ context, sprintId }: { context: number, sprintId: SprintId }) {
 	const workItems = useWorkItemSprintOverviewQuery(sprintId);

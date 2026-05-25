@@ -12,6 +12,7 @@ import { DocumentRoute } from '@/routes/work/document/DocumentRoute';
 import { RootRoute } from '@/routes/RootRoute';
 import { ForgotPasswordRoute } from '@/routes/auth/forgot-password/ForgotPasswordRoute';
 import { ProfileRoute } from '@/routes/work/profile/ProfileRoute';
+import { SprintOverviewSprintRoute } from '@/routes/work/sprint-overview/SprintOverviewSprintRoute';
 
 const rootRoute = createRootRoute({
 	component: RootRoute
@@ -31,11 +32,17 @@ const workRoute = createRoute({
 
 const sprintOverviewRoute = createRoute({
 	getParentRoute: () => workRoute,
-	path: `/sprint-overview/{-$sprintId}`,
+	path: `/sprint-overview`,
 	component: SprintOverviewRoute
 });
 
-const roadmapV2Route = createRoute({
+const sprintOverviewSprintRoute = createRoute({
+	getParentRoute: () => workRoute,
+	path: `/sprint-overview/$sprintId`,
+	component: SprintOverviewSprintRoute
+});
+
+const roadmapRoute = createRoute({
 	getParentRoute: () => workRoute,
 	path: '/roadmap',
 	component: RoadmapRoute
@@ -93,7 +100,8 @@ const routeTree = rootRoute.addChildren([
 	indexRoute,
 	workRoute.addChildren([
 		sprintOverviewRoute,
-		roadmapV2Route,
+		sprintOverviewSprintRoute,
+		roadmapRoute,
 		detailsRoute,
 		sprintSettings,
 		documentRoute,
