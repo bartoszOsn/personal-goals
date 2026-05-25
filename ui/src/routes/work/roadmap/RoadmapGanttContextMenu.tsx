@@ -58,7 +58,7 @@ export function RoadmapGanttContextMenu({ children, clickedOn, selected, context
 
 	return (
 		<ContextMenu>
-			<ContextMenuTrigger asChild>
+			<ContextMenuTrigger>
 				{children}
 			</ContextMenuTrigger>
 			<ContextMenuContent>
