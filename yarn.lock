@@ -1199,6 +1199,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@firebase-oss/ui-core@npm:^7.0.2-beta":
+  version: 7.0.2-test
+  resolution: "@firebase-oss/ui-core@npm:7.0.2-test"
+  dependencies:
+    "@firebase-oss/ui-translations": "npm:0.0.2"
+    "@nanostores/deepmap": "npm:^0.0.1"
+    libphonenumber-js: "npm:^1.12.23"
+    nanostores: "npm:^1.1.0"
+    qrcode-generator: "npm:^2.0.4"
+    zod: "npm:4.1.12"
+  peerDependencies:
+    firebase: ^11 || ^12
+  checksum: 10c0/72aae1c5253576271dc336abbbab1f6481e6496f8f9ac58508b10a4aff133eea3fc31082f64fff3e12127e9dc92f3ec74df3bee9333e3f6597c0cb4fe204c8fa
+  languageName: node
+  linkType: hard
+
 "@firebase-oss/ui-react@npm:^7.0.2-beta":
   version: 7.0.2-beta
   resolution: "@firebase-oss/ui-react@npm:7.0.2-beta"
@@ -1225,6 +1241,13 @@ __metadata:
   dependencies:
     cva: "npm:1.0.0-beta.4"
   checksum: 10c0/405e2c3327d31d57fe022cca7950f2d492e86260e73289b8ca781845982955ff7f31826a44a517d1c6830db149bc0d05df7a12d5a9b63089730df6d95b46f956
+  languageName: node
+  linkType: hard
+
+"@firebase-oss/ui-translations@npm:0.0.2":
+  version: 0.0.2
+  resolution: "@firebase-oss/ui-translations@npm:0.0.2"
+  checksum: 10c0/049f4a735c0051124915f09ddfc04ba3338ff67c56f3ded004a6f5484ed822c7be5de93b35c01142af87be3eb46fd19ce13989fd2980638cde37dae329297df6
   languageName: node
   linkType: hard
 
@@ -3207,6 +3230,7 @@ __metadata:
     "@atlaskit/pragmatic-drag-and-drop-auto-scroll": "npm:^2.1.5"
     "@base-ui/react": "npm:^1.4.1"
     "@eslint/js": "npm:^9.39.1"
+    "@firebase-oss/ui-core": "npm:^7.0.2-beta"
     "@firebase-oss/ui-react": "npm:^7.0.2-beta"
     "@fontsource-variable/geist": "npm:^5.2.9"
     "@personal-okr/shared": "workspace:^"
