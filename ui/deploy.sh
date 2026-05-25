@@ -1,3 +1,3 @@
 alias yarn="./yarn/yarn";
-yarn install;
-yarn run build
+corepack yarn install;
+corepack yarn run build;
