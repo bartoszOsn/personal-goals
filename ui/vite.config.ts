@@ -2,36 +2,41 @@ import path from 'path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
-import tailwindcss from "@tailwindcss/vite";
+import tailwindcss from '@tailwindcss/vite';
 import 'dotenv/config';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-	  react(),
-	  tailwindcss(),
-	  checker({
-		  typescript: {
-			  tsconfigPath: 'tsconfig.app.json',
-		  },
-		  eslint: {
-			  lintCommand: 'eslint .',
-			  useFlatConfig: true,
-		  }
-	  })
-  ],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
+	plugins: [
+		react(),
+		tailwindcss(),
+		checker({
+			typescript: {
+				tsconfigPath: 'tsconfig.app.json'
+			},
+			eslint: {
+				lintCommand: 'eslint .',
+				useFlatConfig: true
+			}
+		})
+	],
+	build: {
+		rollupOptions: {
+			external: ['nanostores']
+		}
+	},
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, './src')
+		}
+	},
 	server: {
-	  proxy: {
-		  '/api': {
-			  target: 'http://localhost:3000',
-			  rewrite: path => path.replace(/^\/api/, '')
-		  }
-	  }
+		proxy: {
+			'/api': {
+				target: 'http://localhost:3000',
+				rewrite: path => path.replace(/^\/api/, '')
+			}
+		}
 	},
 	define: defineEnv([
 		'FIREBASE_API_KEY',
@@ -41,7 +46,7 @@ export default defineConfig({
 		'FIREBASE_MESSAGING_SENDER_ID',
 		'FIREBASE_APP_ID'
 	])
-})
+});
 
 function defineEnv(variables: string[]): Record<string, string> {
 	return Object.fromEntries(
@@ -54,5 +59,5 @@ function defineEnv(variables: string[]): Record<string, string> {
 
 			return [`process.env.${variable}`, JSON.stringify(value)];
 		})
-	)
+	);
 }
