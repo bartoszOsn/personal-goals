@@ -1235,7 +1235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase-oss/ui-styles@npm:7.0.2-beta":
+"@firebase-oss/ui-styles@npm:7.0.2-beta, @firebase-oss/ui-styles@npm:^7.0.2-beta":
   version: 7.0.2-beta
   resolution: "@firebase-oss/ui-styles@npm:7.0.2-beta"
   dependencies:
@@ -3232,6 +3232,7 @@ __metadata:
     "@eslint/js": "npm:^9.39.1"
     "@firebase-oss/ui-core": "npm:^7.0.2-beta"
     "@firebase-oss/ui-react": "npm:^7.0.2-beta"
+    "@firebase-oss/ui-styles": "npm:^7.0.2-beta"
     "@fontsource-variable/geist": "npm:^5.2.9"
     "@personal-okr/shared": "workspace:^"
     "@tailwindcss/vite": "npm:^4.3.0"

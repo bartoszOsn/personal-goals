@@ -17,6 +17,7 @@
 		"@base-ui/react": "^1.4.1",
 		"@firebase-oss/ui-core": "^7.0.2-beta",
 		"@firebase-oss/ui-react": "^7.0.2-beta",
+		"@firebase-oss/ui-styles": "^7.0.2-beta",
 		"@fontsource-variable/geist": "^5.2.9",
 		"@personal-okr/shared": "workspace:^",
 		"@tailwindcss/vite": "^4.3.0",
