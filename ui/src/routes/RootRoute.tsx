@@ -1,5 +1,4 @@
 import { Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { useFirebaseAuthReady } from '@/api/auth/useFirebaseAuthReady';
 import { Spinner } from '@/primitive/components/ui/spinner';
 
@@ -15,7 +14,6 @@ export function RootRoute() {
 	return (
 		<>
 			<Outlet />
-			<TanStackRouterDevtools position="bottom-right" />
 		</>
 	)
 }
