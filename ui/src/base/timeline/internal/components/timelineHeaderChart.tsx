@@ -39,7 +39,7 @@ function HeaderRow({ headerCells, startDate, scale }: { headerCells: HeaderCell[
 		<div className='w-full h-5 relative text-xs'>
 			{
 				headerCells.map(cell => (
-					<Tooltip>
+					<Tooltip key={formatTimeRange(cell.start, cell.end)}>
 						<TooltipTrigger asChild>
 							<div className='border rounded absolute top-0 bg-background text-center' style={{ left: plainDateToPxOffset(cell.start, scale, startDate), width: durationToPx(cell.start.until(cell.end), scale) }}>
 								<p className='sticky left-0 pointer-events-none text-nowrap text-ellipsis overflow-hidden'>{cell.label}</p>

@@ -39,7 +39,7 @@ export function InplaceInput({
 
 	if (state === 'display') {
 		return <p ref={ref} className='relative group/inplaceRoot' role='button' onClick={() => setState('edit')}>
-			<div className=' absolute -inset-x-2 -inset-y-0.5 transition-all rounded-lg group-hover/inplaceRoot:bg-muted group-hover/inplaceRoot:text-foreground dark:group-hover/inplaceRoot:bg-muted/50' />
+			<span className='block absolute -inset-x-2 -inset-y-0.5 transition-all duration-100 rounded-lg group-hover/inplaceRoot:bg-muted group-hover/inplaceRoot:text-foreground dark:group-hover/inplaceRoot:bg-muted/50' />
 			<span className='z-1 relative'>{value}</span>
 		</p>;
 	}

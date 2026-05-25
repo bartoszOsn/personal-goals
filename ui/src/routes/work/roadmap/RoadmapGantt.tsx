@@ -7,15 +7,8 @@ import { useMoveWorkItemInHierarchyMutation, useUpdateWorkItemsInHierarchyMutati
 import { WorkItem, WorkItemId, WorkItemTimeFrameType, WorkItemType } from '@/models/WorkItem';
 import { Timeline } from '@/base/timeline/api/Timeline';
 import { DeepHierarchyTimelineMovePayload, TimelineTimebox } from '@/base/timeline/api/TimelineProps';
-import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/primitive/components/ui/item';
-import { CircularProgress } from '@/primitive/components/customized/CircularProgress';
-import { WorkItemModalTrigger } from '@/core/work-item/details/WorkItemModalTrigger';
-import { InplaceInput } from '@/base/inplace/InplaceInput';
-import { Icon } from '@/base/Icon';
-import { workItemStatusUIProperties } from '@/core/work-item/workItemStatusUIProperties';
-import { WorkItemTimeFrameDisplayRange } from '@/core/work-item/WorkItemTimeFrameDisplayRange';
-import { WorkItemTimeFrameDisplayName } from '@/core/work-item/WorkItemTimeFrameDisplayName';
 import { RoadmapGanttContextMenu } from '@/routes/work/roadmap/RoadmapGanttContextMenu';
+import { RoadmapGanttCell } from '@/routes/work/roadmap/RoadmapGanttCell';
 
 export function RoadmapGantt({ context, selectedWorkItems, onSelectedWorkItemsChange }: { context: number, selectedWorkItems: WorkItemId[], onSelectedWorkItemsChange: (workItemIds: WorkItemId[]) => void }) {
 	const workItemsQuery = useWorkItemHierarchyQuery(context);
@@ -50,38 +43,7 @@ export function RoadmapGantt({ context, selectedWorkItems, onSelectedWorkItemsCh
 				  endDate={contextEndDate}
 				  renderCell={(wi) => (
 					  <RoadmapGanttContextMenu clickedOn={wi} selected={selectedWorkItems} context={context}>
-						  <div className="flex flex-row gap-2 flex-nowrap p-1">
-							  <Item size="xs" className="p-0 text-nowrap flex-nowrap overflow-hidden">
-								  <ItemMedia>
-									  <CircularProgress size="default" values={[{
-										  value: wi.progress.completed,
-										  strokeClass: 'stroke-green-700 dark:stroke-green-400'
-									  }, { value: wi.progress.failed, strokeClass: 'stroke-destructive' }]}>
-										  <WorkItemModalTrigger context={wi.contextYear} workItem={wi} variant="ghost" size="icon-xs" />
-									  </CircularProgress>
-								  </ItemMedia>
-								  <ItemContent>
-									  <ItemTitle className="text-xs"><InplaceInput value={wi.title} /></ItemTitle>
-									  <ItemDescription className="flex flex-row gap-1 text-xs">
-										  <Icon Icon={workItemStatusUIProperties[wi.status].icon}
-												className={workItemStatusUIProperties[wi.status].iconTextClass + ' w-4 h-4'} />
-										  {workItemStatusUIProperties[wi.status].label}
-									  </ItemDescription>
-								  </ItemContent>
-							  </Item>
-							  <Item size="xs" className="p-0 pl-2 flex-0 text-nowrap" asChild>
-								  <button>
-									  <ItemContent>
-										  <ItemTitle className="w-full justify-end text-xs">
-											  <WorkItemTimeFrameDisplayRange workItem={wi} />
-										  </ItemTitle>
-										  <ItemDescription className="text-end text-xs">
-											  <WorkItemTimeFrameDisplayName workItem={wi} />
-										  </ItemDescription>
-									  </ItemContent>
-								  </button>
-							  </Item>
-						  </div>
+						  <RoadmapGanttCell workItem={wi} />
 					  </RoadmapGanttContextMenu>
 				  )}
 				  timeboxes={timeboxes}
