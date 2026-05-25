@@ -22,7 +22,7 @@ export default defineConfig({
 	],
 	build: {
 		rollupOptions: {
-			external: ['nanostores']
+			external: ['nanostores', '@tanstack/router-core']
 		}
 	},
 	resolve: {
