@@ -15,7 +15,7 @@ export function RoadmapGanttCell({workItem}: { workItem: WorkItem }) {
 
 	return (
 		<div className="flex flex-row gap-2 flex-nowrap p-1">
-			<Item size="xs" className="p-0 text-nowrap flex-nowrap overflow-hidden">
+			<Item size="xs" className="p-0 text-nowrap flex-nowrap overflow-clip min-w-0">
 				<ItemMedia>
 					<CircularProgress size="default" values={[{
 						value: workItem.progress.completed,
@@ -24,7 +24,7 @@ export function RoadmapGanttCell({workItem}: { workItem: WorkItem }) {
 						<WorkItemModalTrigger context={workItem.contextYear} workItem={workItem} variant="ghost" size="icon-xs" />
 					</CircularProgress>
 				</ItemMedia>
-				<ItemContent>
+				<ItemContent className='min-w-0'>
 					<ItemTitle className="text-xs overflow-clip max-w-full">
 						<InplaceInput value={workItem.title} onSubmit={(newName) => updateWorkItemMutation.mutateAsync({
 							context: workItem.contextYear,
@@ -35,7 +35,7 @@ export function RoadmapGanttCell({workItem}: { workItem: WorkItem }) {
 									}
 								}
 							}
-						}).then()} />
+						}).then()} className='overflow-hidden text-ellipsis' />
 					</ItemTitle>
 					<ItemDescription className="flex flex-row gap-1 text-xs">
 						<Icon Icon={workItemStatusUIProperties[workItem.status].icon}
