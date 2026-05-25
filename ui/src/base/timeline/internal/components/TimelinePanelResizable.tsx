@@ -1,6 +1,6 @@
 import { useIsMobile } from '@/primitive/hooks/use-mobile.ts';
 import { Separator } from '@/primitive/components/ui/separator';
-import { useEffect, useRef } from 'react';
+import { useEffect, useEffectEvent, useRef } from 'react';
 import { timelineTableWidthCssPropertyName } from '@/base/timeline/internal/timelineTableWidthCssPropertyName';
 
 export function TimelinePanelResizable({
@@ -13,15 +13,20 @@ export function TimelinePanelResizable({
 	const isMobile = useIsMobile();
 	const ref = useRef<HTMLDivElement | null>(null);
 
+	const getOffsetEvent = useEffectEvent(getOffset);
+	const setOffsetEvent = useEffectEvent(setOffset);
+
 	useEffect(() => {
 		if (!ref.current) return;
+
+		const elem = ref.current;
 
 		let startState: null | { offset: number, mousePos: number } = null;
 
 		const mouseDown = (e: MouseEvent) => {
 			e.preventDefault();
 			e.stopPropagation();
-			startState = { offset: getOffset(), mousePos: e.pageX };
+			startState = { offset: getOffsetEvent(), mousePos: e.pageX };
 			document.addEventListener('mousemove', mouseMove, { passive: true });
 			document.addEventListener('mouseup', mouseUp);
 			document.addEventListener('mouseleave', mouseUp);
@@ -32,7 +37,7 @@ export function TimelinePanelResizable({
 			if (!startState) return;
 
 			const delta = e.pageX - startState.mousePos;
-			setOffset(startState.offset + delta);
+			setOffsetEvent(startState.offset + delta);
 			e.stopPropagation();
 		};
 
@@ -40,15 +45,15 @@ export function TimelinePanelResizable({
 			document.removeEventListener('mousemove', mouseMove);
 		};
 
-		ref.current.addEventListener('mousedown', mouseDown);
+		elem.addEventListener('mousedown', mouseDown);
 
 		return () => {
-			ref.current?.removeEventListener('mousemove', mouseMove);
+			elem.removeEventListener('mousemove', mouseMove);
 			document.removeEventListener('mouseup', mouseUp);
 			document.removeEventListener('mouseleave', mouseUp);
 			document.removeEventListener('blur', mouseUp);
 		};
-	}, [ref]);
+	}, [ref, isMobile]);
 
 	if (isMobile) {
 		return null;
