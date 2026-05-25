@@ -125,8 +125,8 @@ export function TimelineRowChartBar(
 	return (
 		<div ref={barRef} className='group/TimelineRowChartBar h-6 bg-background border rounded absolute top-1/2 -translate-y-1/2 cursor-grab' style={{ left, width }}>
 			{children}
-			<div ref={leftHandleRef} className='absolute w-2 h-full -left-2 border-l-3 cursor-w-resize opacity-0 group-hover/TimelineRowChartBar:opacity-100 transition-opacity duration-300' />
-			<div ref={rightHandleRef} className='absolute w-2 h-full -right-2 border-r-3 cursor-w-resize opacity-0 group-hover/TimelineRowChartBar:opacity-100 transition-opacity duration-300' />
+			<div ref={leftHandleRef} className='absolute w-2 h-full -left-2 border-l-3 cursor-w-resize opacity-30 group-hover/TimelineRowChartBar:opacity-100 transition-opacity duration-300' />
+			<div ref={rightHandleRef} className='absolute w-2 h-full -right-2 border-r-3 cursor-w-resize opacity-30 group-hover/TimelineRowChartBar:opacity-100 transition-opacity duration-300' />
 		</div>
 	)
 }
