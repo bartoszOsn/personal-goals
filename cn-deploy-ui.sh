@@ -1,4 +1,3 @@
 alias yarn="./yarn/yarn";
 corepack yarn install;
-corepack yarn workspaces foreach -Rip --from @personal-okr/shared run build;
 corepack yarn workspaces foreach -Rip --from @personal-okr/ui run build;
