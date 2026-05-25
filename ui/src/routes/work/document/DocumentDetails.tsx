@@ -2,6 +2,8 @@ import { DocumentId } from '@/models/Document.ts';
 import { useDocumentDetailsQuery, useUpdateDocumentMutation } from '@/api/document/document-hooks';
 import { RichTextEditor } from '@/base/rich-text/RichTextEditor';
 import { Skeleton } from '@/primitive/components/ui/skeleton';
+import { HttpError } from '@/base/http';
+import { BasicErrorDTOSchema } from '@personal-okr/shared';
 
 export function DocumentDetails({ context, documentId }: { context: number, documentId: DocumentId }) {
 	const detailsQuery = useDocumentDetailsQuery(documentId);
@@ -12,7 +14,7 @@ export function DocumentDetails({ context, documentId }: { context: number, docu
 	}
 
 	if (detailsQuery.error) {
-		if (detailsQuery.error.statusCode === 404) {
+		if (HttpError.is(detailsQuery.error, BasicErrorDTOSchema) && detailsQuery.error.statusCode === 404) {
 			return "Document Not Found";
 		}
 	}
