@@ -3190,7 +3190,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@personal-okr/shared@workspace:shared"
   dependencies:
+    temporal-polyfill: "npm:^0.3.0"
     typescript: "npm:~5.9.3"
+    zod: "npm:^4.3.6"
   peerDependencies:
     temporal-polyfill: ^0.3.0
     zod: ^4.3.6
