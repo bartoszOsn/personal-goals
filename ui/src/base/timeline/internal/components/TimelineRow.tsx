@@ -93,7 +93,7 @@ export function TimelineRow<TId extends Key, TData>({
 				   }} isSticky={false}>
 			<Draggable context={getTimelineDnDContext<TId, TData>()} data={row} canDrag={!movePending}>
 				<div
-					className={`group/timelineRow relative not-last:border-b flex flex-row flex-nowrap bg-accent min-h-8 ${isSelected ? 'bg-input not-last:border-background' : ''} ${!canBeDropTarget ? 'opacity-50' : ''}`}
+					className={`group/timelineRow relative not-last:border-b flex flex-row flex-nowrap bg-accent min-h-8 ${isSelected ? 'bg-input' : ''} ${!canBeDropTarget ? 'opacity-50' : ''}`}
 					onClick={(e) => {
 						onClick(e.shiftKey);
 						e.preventDefault();
