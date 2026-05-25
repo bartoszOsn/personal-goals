@@ -12,6 +12,7 @@ import { Button } from '@/primitive/components/ui/button';
 import { CalendarIcon } from 'lucide-react';
 import { formatTimeRange } from '@/base/formatTimeRange';
 import { RangePicker, RangePickerTrigger } from '@/primitive/components/customized/RangePicker';
+import { SprintSettingsEmptySplashScreen } from '@/routes/work/sprint-settings/SprintSettingsEmptySplashScreen';
 
 export function SprintSettingsRoute() {
 	const context = getRouteApi('/work/$context/sprint-settings')
@@ -90,6 +91,9 @@ export function SprintSettingsRoute() {
 														   });
 													   }}
 					/>
+				}
+				{
+					!sprints.isLoading && ganttItems.length === 0 && <SprintSettingsEmptySplashScreen context={context} />
 				}
 			</PageContentContent>
 		</PageContent>
