@@ -26,7 +26,7 @@ export function TimelineRowCell<TId extends Key, TData>(
 	const isDropInto = dropTarget && dropTarget.dropInto && dropTarget.dropInto.id === row.id;
 
 	return (
-		<div className={cn("sticky left-0 border-r border-l-4 border-l-transparent bg-background z-10 flex flex-row flex-nowrap", { 'border-l-accent-foreground': isSelected })}
+		<div className={cn("sticky left-0 border-r border-l-4 border-l-transparent border-b bg-background z-10 flex flex-row flex-nowrap", { 'border-l-accent-foreground': isSelected })}
 			 style={{
 				 ...(
 					 isMobile

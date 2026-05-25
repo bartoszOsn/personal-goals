@@ -23,6 +23,7 @@ import { getTimelineDnDContext } from '@/base/timeline/internal/timelineDnDConte
 import { useIsMobile } from '@/primitive/hooks/use-mobile';
 import { TimelinePanelResizable } from '@/base/timeline/internal/components/TimelinePanelResizable';
 import { Skeleton } from '@/primitive/components/ui/skeleton';
+import { cn } from '@/primitive/lib/utils';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const isMobile = useIsMobile();
@@ -112,7 +113,7 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 		<DragAutoScroll allowedAxis='vertical'>
 			<Slot.Root ref={rootRef} className="relative overflow-x-auto border rounded overflow-y-hidden">
 				<div {...props.rootProps}>
-					<div ref={canvasRef} className='relative'>
+					<div ref={canvasRef} className={cn('relative', isMobile && 'overflow-hidden')}>
 						<TimelinePanelResizable getOffset={() => timelineTableWidthRef.current} setOffset={setWidth} />
 						<TimelineHeaderRow>
 							<TimelineHeaderRowCell>
@@ -133,7 +134,7 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 									</ButtonGroup>
 								</div>
 							</TimelineHeaderRowCell>
-							<TimelineRowChart>
+							<TimelineRowChart isSelected={false}>
 								<TimelineHeaderChart scale={scale} startDate={props.startDate} endDate={props.endDate} timeboxes={props.timeboxes} />
 							</TimelineRowChart>
 						</TimelineHeaderRow>
@@ -157,7 +158,7 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 													props.renderCell(rowData.item.data)
 												}
 											</TimelineRowCell>
-											<TimelineRowChart>
+											<TimelineRowChart isSelected={selectedRows.includes(rowData.id)}>
 												{
 													rowData.item.dates && !itemsWithChangingDates.includes(rowData.id) && (
 														<TimelineRowChartBar posStart={rowData.item.dates.from} posEnd={rowData.item.dates.to}
