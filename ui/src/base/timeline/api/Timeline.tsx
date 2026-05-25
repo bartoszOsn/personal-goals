@@ -24,6 +24,7 @@ import { useIsMobile } from '@/primitive/hooks/use-mobile';
 import { TimelinePanelResizable } from '@/base/timeline/internal/components/TimelinePanelResizable';
 import { Skeleton } from '@/primitive/components/ui/skeleton';
 import { cn } from '@/primitive/lib/utils';
+import { TimelineTodayMarker } from '@/base/timeline/internal/components/TimelineTodayMarker';
 
 export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData>) {
 	const isMobile = useIsMobile();
@@ -159,6 +160,7 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 												}
 											</TimelineRowCell>
 											<TimelineRowChart isSelected={selectedRows.includes(rowData.id)}>
+												<TimelineTodayMarker startDate={props.startDate} endDate={props.endDate} scale={scale} />
 												{
 													rowData.item.dates && !itemsWithChangingDates.includes(rowData.id) && (
 														<TimelineRowChartBar posStart={rowData.item.dates.from} posEnd={rowData.item.dates.to}
