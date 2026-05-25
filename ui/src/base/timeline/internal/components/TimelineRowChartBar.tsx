@@ -26,6 +26,10 @@ export function TimelineRowChartBar(
 		if (!barRef.current || !leftHandleRef.current || !rightHandleRef.current) {
 			return;
 		}
+
+		const bar = barRef.current;
+		const leftHandle = leftHandleRef.current;
+		const rightHandle = rightHandleRef.current;
 		
 		let initialDragInfo: null | { mouseX: number; left: number; width: number; change: 'start' | 'end' | 'both' } = null;
 
@@ -38,7 +42,7 @@ export function TimelineRowChartBar(
 		}
 
 		const mouseMove = (e: MouseEvent) => {
-			if (!initialDragInfo || !barRef.current) return;
+			if (!initialDragInfo || !bar) return;
 
 			const delta = e.pageX - initialDragInfo.mouseX;
 
@@ -62,8 +66,8 @@ export function TimelineRowChartBar(
 				}
 			}
 
-			barRef.current.style.left = `${newLeft}px`;
-			barRef.current.style.width = `${newWidth}px`;
+			bar.style.left = `${newLeft}px`;
+			bar.style.width = `${newWidth}px`;
 		}
 
 		const mouseUp = (e: MouseEvent) => {
@@ -103,19 +107,19 @@ export function TimelineRowChartBar(
 		const barMouseDown = createMouseDown('both');
 		const leftHanddleMouseDown = createMouseDown('start');
 		const rightHanddleMouseDown = createMouseDown('end');
-		
-		barRef.current.addEventListener('mousedown', barMouseDown);
-		leftHandleRef.current.addEventListener('mousedown', leftHanddleMouseDown);
-		rightHandleRef.current.addEventListener('mousedown', rightHanddleMouseDown);
+
+		bar.addEventListener('mousedown', barMouseDown);
+		leftHandle.addEventListener('mousedown', leftHanddleMouseDown);
+		rightHandle.addEventListener('mousedown', rightHanddleMouseDown);
 		
 		return () => {
-			barRef.current?.removeEventListener('mousedown', barMouseDown);
-			leftHandleRef.current?.removeEventListener('mousedown', leftHanddleMouseDown);
-			rightHandleRef.current?.removeEventListener('mousedown', rightHanddleMouseDown);
+			bar.removeEventListener('mousedown', barMouseDown);
+			leftHandle.removeEventListener('mousedown', leftHanddleMouseDown);
+			rightHandle.removeEventListener('mousedown', rightHanddleMouseDown);
 			document.removeEventListener('mousemove', mouseMove);
 			document.removeEventListener('mouseup', mouseUp);
 		}
-	}, [left, width]);
+	}, [left, onDatesChange, scale, startDate, width]);
 
 
 	return (
