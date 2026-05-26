@@ -31,7 +31,7 @@
 
 ## First release
 
-1. Fix Gantt and Data table – Better UX
+1. ✅ Fix Gantt and Data table – Better UX
     - ✅changing order of columns - No columns now
     - ✅ resizable width of table and chart
     - ✅ Gantt timeboxes show periods on tooltip
@@ -45,10 +45,10 @@
       - ✅ Deleting account must delete both firebase account and data associated with it in a local database.
 3. ✅ Work on performance
     - ✅ It turns out it's not a problem in a production build
-4. Better UI
+4. ✅ Better UI
     - ✅ Better inplace - Editor and display share similar styles - same font weight, size etc.
 5. ✅ Navigating to the index actually shows something.
-6. Make sure it works on mobile.
+6. ✅ Make sure it works on mobile.
     - ✅ Hide gantt chart on mobile, leaving only the table
     - ✅ Sidebar hides on navigation on mobile
     - ✅ User dropdown works on mobile
@@ -64,7 +64,17 @@
     - ✅ Drag and drop on Gantt
 9. ✅ Drag and drop on roadmap - gantt chart, change task dates and objective deadlines
 10. ✅ Removing sprints that are used by some work item - right now it fails. It should show a message that it cannot be done.
-11. Fix all empty splash screens
+11. ✅ Fix all empty splash screens
+
+# Hotfix
+
+1. Da się zmienić nazwę WI na pustą, psuje się wtedy layout
+2. Scrolle horyzontalne na timeline i board średnio działają
+3. W timefrfame selector da się wybrać tylko klikając na radio, a cała labelka już nie
+4. ✅ Style rich textu się popsuły
+5. Timeline: Tooltip od timeboxów powinien pokazywać też jego nazwę
+6. Roadmap: tooltip na nazwie itemu
+7. Dark mode: Co prawda to feature a nie bug, ale mamy to prawie za darmo
 
 # Ideas for future releases
 
