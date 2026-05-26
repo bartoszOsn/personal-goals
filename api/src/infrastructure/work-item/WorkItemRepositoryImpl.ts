@@ -15,13 +15,15 @@ import { WorkItem } from '../../domain/work-item/model/WorkItem';
 import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
 import { Task } from '../../domain/work-item/model/Task';
 import { WorkItemNotFoundError } from '../../domain/work-item/error/WorkItemNotFoundError';
+import { SprintService } from '../../app/sprint/SprintService';
 
 @Injectable()
 export class WorkItemRepositoryImpl extends WorkItemRepository {
 	constructor(
 		@InjectRepository(WorkItemEntity)
 		private readonly workItemRepository: TreeRepository<WorkItemEntity>,
-		private readonly workItemEntityConverter: WorkItemEntityConverter
+		private readonly workItemEntityConverter: WorkItemEntityConverter,
+		private readonly sprintService: SprintService
 	) {
 		super();
 	}
@@ -47,11 +49,14 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 			})
 		);
 
+		const sprints = await this.sprintService.getSprintsByContext(context);
+
 		return new WorkHierarchyForContextAggregate(
 			context,
-			await Promise.all(
-				rootsWithChildren.map((entity) =>
-					this.workItemEntityConverter.entityToWorkItem(entity)
+			rootsWithChildren.map((entity) =>
+				this.workItemEntityConverter.entityToWorkItem(
+					entity,
+					sprints.sprints
 				)
 			)
 		);
@@ -142,9 +147,14 @@ export class WorkItemRepositoryImpl extends WorkItemRepository {
 				relations: ['timeFrame.sprint']
 			});
 
+		const sprints = await this.sprintService.getSprintsByContext(
+			new ContextYear(entity.contextYear)
+		);
+
 		return new WorkItemDetailsAggregate(
-			await this.workItemEntityConverter.entityToWorkItem(
-				entityWithChildren
+			this.workItemEntityConverter.entityToWorkItem(
+				entityWithChildren,
+				sprints.sprints
 			)
 		);
 	}
