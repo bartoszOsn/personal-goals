@@ -21,20 +21,18 @@ import { ContextYear } from '../../domain/common/model/ContextYear';
 import { WorkItemTitle } from '../../domain/work-item/model/WorkItemTitle';
 import { WorkItemDescription } from '../../domain/work-item/model/WorkItemDescription';
 import { Temporal } from 'temporal-polyfill';
-import { SprintId } from '../../domain/sprint/model/SprintId';
-import { SprintService } from '../../app/sprint/SprintService';
 import { WorkItemType } from '../../domain/work-item/model/WorkItemType';
 import { Task } from '../../domain/work-item/model/Task';
 import { LexicalRank } from '../../domain/common/model/LexicalRank';
 import { Goal } from '../../domain/work-item/model/Goal';
 import { Group } from '../../domain/work-item/model/Group';
+import { Sprint } from '../../domain/sprint/model/Sprint';
 
 @Injectable()
 export class WorkItemEntityConverter {
 	constructor(
 		@InjectRepository(WorkItemEntity)
-		private readonly workItemRepository: Repository<WorkItemEntity>,
-		private readonly sprintService: SprintService
+		private readonly workItemRepository: Repository<WorkItemEntity>
 	) {}
 
 	flatWorkItemToEntity(workItem: WorkItem, user: User): WorkItemEntity {
@@ -121,7 +119,10 @@ export class WorkItemEntityConverter {
 		throw new Error('Unknown time frame type');
 	}
 
-	async entityToWorkItem(entity: WorkItemEntity): Promise<WorkItem> {
+	entityToWorkItem(
+		entity: WorkItemEntity,
+		sprints: ReadonlyArray<Sprint>
+	): WorkItem {
 		let workItem: WorkItem | null = null;
 
 		switch (entity.type) {
@@ -132,9 +133,10 @@ export class WorkItemEntityConverter {
 					new WorkItemTitle(entity.title),
 					new WorkItemDescription(entity.description),
 					this.entityToWorkItemStatus(entity.status),
-					await this.entityToWorkItemTimeFrame(
+					this.entityToWorkItemTimeFrame(
 						entity.timeFrame,
-						new ContextYear(entity.contextYear)
+						new ContextYear(entity.contextYear),
+						sprints
 					),
 					entity.hierarchyOrder
 						? LexicalRank.fromString(entity.hierarchyOrder)
@@ -151,9 +153,10 @@ export class WorkItemEntityConverter {
 					new WorkItemTitle(entity.title),
 					new WorkItemDescription(entity.description),
 					this.entityToWorkItemStatus(entity.status),
-					await this.entityToWorkItemTimeFrame(
+					this.entityToWorkItemTimeFrame(
 						entity.timeFrame,
-						new ContextYear(entity.contextYear)
+						new ContextYear(entity.contextYear),
+						sprints
 					),
 					entity.hierarchyOrder
 						? LexicalRank.fromString(entity.hierarchyOrder)
@@ -170,9 +173,10 @@ export class WorkItemEntityConverter {
 					new WorkItemTitle(entity.title),
 					new WorkItemDescription(entity.description),
 					this.entityToWorkItemStatus(entity.status),
-					await this.entityToWorkItemTimeFrame(
+					this.entityToWorkItemTimeFrame(
 						entity.timeFrame,
-						new ContextYear(entity.contextYear)
+						new ContextYear(entity.contextYear),
+						sprints
 					),
 					entity.hierarchyOrder
 						? LexicalRank.fromString(entity.hierarchyOrder)
@@ -187,7 +191,7 @@ export class WorkItemEntityConverter {
 		}
 
 		for (const childEntity of entity.children ?? []) {
-			const child = await this.entityToWorkItem(childEntity);
+			const child = this.entityToWorkItem(childEntity, sprints);
 			child.parent = workItem;
 		}
 
@@ -211,10 +215,11 @@ export class WorkItemEntityConverter {
 		}
 	}
 
-	private async entityToWorkItemTimeFrame(
+	private entityToWorkItemTimeFrame(
 		timeFrameEntity: WorkItemTimeFrameEntity,
-		context: ContextYear
-	): Promise<WorkItemTimeFrame | null> {
+		context: ContextYear,
+		sprints: ReadonlyArray<Sprint>
+	): WorkItemTimeFrame | null {
 		if (timeFrameEntity.type === 'null') {
 			return null;
 		}
@@ -239,8 +244,10 @@ export class WorkItemEntityConverter {
 				return null;
 			}
 
-			const sprint = await this.sprintService.getSprintById(
-				new SprintId(timeFrameEntity.sprint.id)
+			const sprint = sprints.find(
+				(sprint) =>
+					timeFrameEntity.sprint &&
+					sprint.id.value === timeFrameEntity.sprint.id
 			);
 			if (!sprint) {
 				throw new Error('Unable to find sprint');
