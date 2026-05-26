@@ -61,7 +61,7 @@ export function RoadmapGanttContextMenu({ children, clickedOn, selected, context
 			<ContextMenuTrigger>
 				{children}
 			</ContextMenuTrigger>
-			<ContextMenuContent>
+			<ContextMenuContent className='max-w-96'>
 				<ContextMenuGroup>
 					<ContextMenuItem onClick={() => openWorkItemModal(clickedOn.id)}>
 						<FileIcon /> Details
@@ -94,8 +94,8 @@ export function RoadmapGanttContextMenu({ children, clickedOn, selected, context
 									<TrashIcon /> Delete {selected.length} selected
 								</ContextMenuItem>
 							) : (
-								<ContextMenuItem variant='destructive'  onClick={deleteClicked}>
-									<TrashIcon /> Delete "{clickedOn.title}"
+								<ContextMenuItem variant='destructive' onClick={deleteClicked}>
+									<TrashIcon /> <span className='truncate'>Delete "{clickedOn.title}"</span>
 								</ContextMenuItem>
 							)
 					}
