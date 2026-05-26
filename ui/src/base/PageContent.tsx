@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { SidebarTrigger } from '@/primitive/components/ui/sidebar.tsx';
 import { cn } from '@/primitive/lib/utils';
+import { ThemeIcon, ThemeSwitcher } from '@/base/ThemeSwitcher';
 
 export function PageContent({ children }: { children: ReactNode }) {
 	return (
@@ -36,7 +37,13 @@ export function PageContentHeader({ children }: { children: ReactNode }) {
 				isHidden ? '-top-full' : 'top-0'
 			)}>
 			<SidebarTrigger />
+			<div className='flex-1'>
 			{children}
+			</div>
+			<ThemeSwitcher>
+				<ThemeIcon />
+				Theme
+			</ThemeSwitcher>
 		</header>
 	)
 }
