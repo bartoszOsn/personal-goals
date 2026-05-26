@@ -74,7 +74,7 @@
 4. ✅ Style rich textu się popsuły
 5. Timeline: Tooltip od timeboxów powinien pokazywać też jego nazwę
 6. Roadmap: tooltip na nazwie itemu
-7. Dark mode: Co prawda to feature a nie bug, ale mamy to prawie za darmo
+7. ✅ Dark mode: Co prawda to feature a nie bug, ale mamy to prawie za darmo
 
 # Ideas for future releases
 
