@@ -20,11 +20,6 @@ export default defineConfig({
 			}
 		})
 	],
-	build: {
-		rollupOptions: {
-			external: ['nanostores', '@tanstack/router-core']
-		}
-	},
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, './src')
