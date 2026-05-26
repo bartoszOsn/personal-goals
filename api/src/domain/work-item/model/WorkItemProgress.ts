@@ -1,5 +1,5 @@
 export class WorkItemProgress {
-	constructor(
+	private constructor(
 		public readonly completed: Percentage,
 		public readonly failed: Percentage
 	) {
@@ -8,6 +8,20 @@ export class WorkItemProgress {
 				'Completed and failed percentages cannot exceed 100'
 			);
 		}
+	}
+
+	static from(completed: Percentage, failed: Percentage): WorkItemProgress {
+		const sum = completed.value + failed.value;
+		// handle rounding error
+		if (sum > 100 && sum <= 101) {
+			const overLimit = sum - 100;
+			return new WorkItemProgress(
+				completed,
+				Percentage.from(failed.value - overLimit)
+			);
+		}
+
+		return new WorkItemProgress(completed, failed);
 	}
 
 	static empty(): WorkItemProgress {
