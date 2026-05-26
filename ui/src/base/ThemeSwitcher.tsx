@@ -100,6 +100,7 @@ function useColorScheme() {
 		applyScheme(localStorage.getItem(schemeLSKey) as Scheme ?? Scheme.system);
 
 		return () => observer.disconnect();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [meta]);
 
 	return [scheme, applyScheme] as const;

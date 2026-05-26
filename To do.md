@@ -69,12 +69,11 @@
 # Hotfix
 
 1. ✅ Da się zmienić nazwę WI na pustą, psuje się wtedy layout
-2. W timefrfame selector da się wybrać tylko klikając na radio, a cała labelka już nie
-3. ✅ Style rich textu się popsuły
-4. ✅ Timeline: Tooltip od timeboxów powinien pokazywać też jego nazwę
-5. ✅ Roadmap: tooltip na nazwie itemu
-6. ✅ Dark mode: Co prawda to feature a nie bug, ale mamy to prawie za darmo
-7. Usunąć tanstack router devtools na produkcji
+2. ✅ Style rich textu się popsuły
+3. ✅ Timeline: Tooltip od timeboxów powinien pokazywać też jego nazwę
+4. ✅ Roadmap: tooltip na nazwie itemu
+5. ✅ Dark mode: Co prawda to feature a nie bug, ale mamy to prawie za darmo
+6. ✅ Usunąć tanstack router devtools na produkcji
 
 # Ideas for future releases
 
