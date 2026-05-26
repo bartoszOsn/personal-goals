@@ -95,7 +95,7 @@ export abstract class WorkItem {
 			failedSum += child.progress.failed.value;
 		}
 
-		return new WorkItemProgress(
+		return WorkItemProgress.from(
 			Percentage.fraction(completedSum, this._children.length),
 			Percentage.fraction(failedSum, this._children.length)
 		);
