@@ -1,11 +1,11 @@
-import { Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { WorkItemEntity } from '../../work-item/entity/WorkItemEntity';
 import { SprintEntity } from '../../sprint/entity/SprintEntity';
 import { DocumentEntity } from '../../document/entity/DocumentEntity';
 
 @Entity()
 export class UserEntity {
-	@PrimaryGeneratedColumn('uuid')
+	@PrimaryColumn()
 	id!: string;
 
 	@OneToMany(() => SprintEntity, (sprint) => sprint.user)

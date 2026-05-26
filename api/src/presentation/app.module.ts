@@ -6,15 +6,23 @@ import { DocumentPresentationModule } from './document/DocumentPresentationModul
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalExceptionFilter } from './GlobalExceptionFilter';
 import { WorkItemPresentationModule } from './work-item/WorkItemPresentationModule';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm/dist/interfaces/typeorm-options.interface';
+
+const dbOptions: TypeOrmModuleOptions = process.env['PSQL_URL']
+	? {
+			type: 'postgres',
+			url: process.env['PSQL_URL'],
+			autoLoadEntities: true
+		}
+	: {
+			type: 'sqlite',
+			database: 'database.sqlite',
+			autoLoadEntities: true
+		};
 
 @Module({
 	imports: [
-		TypeOrmModule.forRoot({
-			type: 'sqlite',
-			database: 'database.sqlite',
-			autoLoadEntities: true,
-			synchronize: true // TODO: Remove in production, use migrations instead
-		}),
+		TypeOrmModule.forRoot(dbOptions),
 		AuthPresentationModule,
 		WorkItemPresentationModule,
 		SprintPresentationModule,
