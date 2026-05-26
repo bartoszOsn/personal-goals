@@ -11,6 +11,7 @@ import { useUpdateWorkItemsInHierarchyMutation } from '@/api/work-item/work-item
 import { WorkItemTimeFramePicker } from '@/core/work-item/WorkItemTimeFramePicker';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '@/primitive/components/ui/select';
 import { Spinner } from '@/primitive/components/ui/spinner';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/primitive/components/ui/tooltip';
 
 export function RoadmapGanttCell({workItem}: { workItem: WorkItem }) {
 	const updateWorkItemMutation = useUpdateWorkItemsInHierarchyMutation();
@@ -41,24 +42,32 @@ export function RoadmapGanttCell({workItem}: { workItem: WorkItem }) {
 					</CircularProgress>
 				</ItemMedia>
 				<ItemContent className='min-w-0 gap-0.5!'>
-					<ItemTitle className="text-xs overflow-clip max-w-full">
-						<InplaceInput value={workItem.title} onSubmit={(newName) => {
-							if (newName.trim() === '') {
-								return;
-							}
-
-							return updateWorkItemMutation.mutateAsync({
-								context: workItem.contextYear,
-								request: {
-									updates: {
-										[workItem.id]: {
-											title: newName
-										}
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<ItemTitle className="text-xs overflow-clip max-w-full">
+								<InplaceInput value={workItem.title} onSubmit={(newName) => {
+									if (newName.trim() === '') {
+										return;
 									}
-								}
-							}).then();
-						}} className='overflow-hidden text-ellipsis' />
-					</ItemTitle>
+
+									return updateWorkItemMutation.mutateAsync({
+										context: workItem.contextYear,
+										request: {
+											updates: {
+												[workItem.id]: {
+													title: newName
+												}
+											}
+										}
+									}).then();
+								}} className='overflow-hidden text-ellipsis' />
+							</ItemTitle>
+						</TooltipTrigger>
+						<TooltipContent>
+							{workItem.title}
+						</TooltipContent>
+					</Tooltip>
+
 					<Select value={workItem.status} onValueChange={(value) => updateStatus(value as WorkItemStatus)}>
 						<SelectTrigger className='py-0 px-0.5 h-[unset]! border-none hover:bg-accent'>
 							<ItemDescription className="flex flex-row gap-1 text-xs">

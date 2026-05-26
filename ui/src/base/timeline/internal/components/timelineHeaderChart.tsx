@@ -6,6 +6,7 @@ import { plainDateToPxOffset } from '@/base/timeline/internal/plainDateToPxOffse
 import { durationToPx } from '@/base/timeline/internal/durationToPx';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/primitive/components/ui/tooltip';
 import { formatTimeRange } from '@/base/formatTimeRange';
+import { Item, ItemContent, ItemDescription, ItemTitle } from '@/primitive/components/ui/item';
 
 export function TimelineHeaderChart({
 	scale,
@@ -48,7 +49,14 @@ function HeaderRow({ headerCells, startDate, scale }: { headerCells: HeaderCell[
 						<TooltipContent>
 							{
 								cell.showDatesOnHover
-									? formatTimeRange(cell.start, cell.end)
+									? (
+										<Item size='xs'>
+											<ItemContent>
+												<ItemTitle>{cell.label}</ItemTitle>
+												<ItemDescription>{formatTimeRange(cell.start, cell.end)}</ItemDescription>
+											</ItemContent>
+										</Item>
+									)
 									: cell.label
 							}
 						</TooltipContent>
