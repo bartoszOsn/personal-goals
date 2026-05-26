@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { cert, initializeApp } from 'firebase-admin/app';
 import { DecodedIdToken, getAuth } from 'firebase-admin/auth';
 import { resolve } from 'path';
-import { existsSync } from 'fs';
+import { writeFileSync } from 'fs';
 
 @Injectable()
 export class FirebaseAuthRepository {
@@ -10,14 +10,24 @@ export class FirebaseAuthRepository {
 		__dirname,
 		'../../../firebase-credentials.json'
 	);
-	private readonly app = initializeApp({ credential: cert(this.certPath) });
-	private readonly auth = getAuth(this.app);
+	private readonly envVar = 'FIRREBASE_CREDENTIALS';
+
+	private readonly app;
+	private readonly auth;
 
 	constructor() {
-		// Validate that file at certPath exists
-		if (!existsSync(this.certPath)) {
-			throw new Error('No certificate found');
+		const certStr = process.env[this.envVar];
+		if (!certStr) {
+			throw new Error(`Environment variable ${this.envVar} not set`);
 		}
+
+		const certDec = decodeURIComponent(certStr);
+
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		const certJson: Record<string, string> = JSON.parse(certDec);
+		writeFileSync(this.certPath, JSON.stringify(certJson, null, '\t'));
+		this.app = initializeApp({ credential: cert(this.certPath) });
+		this.auth = getAuth(this.app);
 	}
 
 	async getUserIdByToken(token: string): Promise<DecodedIdToken | null> {
