@@ -150,6 +150,10 @@ function SprintOverviewTaskBoardCard({ task }: { task: WorkItem }) {
 			<CardHeader>
 				<CardTitle>
 					<InplaceInput value={task.title} onSubmit={(newTitle) => {
+						if (newTitle.trim() === '') {
+							return;
+						}
+
 						return updateWorkItemMutation.mutateAsync({
 							context: task.contextYear,
 							request: {

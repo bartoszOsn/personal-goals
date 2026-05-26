@@ -42,16 +42,22 @@ export function RoadmapGanttCell({workItem}: { workItem: WorkItem }) {
 				</ItemMedia>
 				<ItemContent className='min-w-0 gap-0.5!'>
 					<ItemTitle className="text-xs overflow-clip max-w-full">
-						<InplaceInput value={workItem.title} onSubmit={(newName) => updateWorkItemMutation.mutateAsync({
-							context: workItem.contextYear,
-							request: {
-								updates: {
-									[workItem.id]: {
-										title: newName
+						<InplaceInput value={workItem.title} onSubmit={(newName) => {
+							if (newName.trim() === '') {
+								return;
+							}
+
+							return updateWorkItemMutation.mutateAsync({
+								context: workItem.contextYear,
+								request: {
+									updates: {
+										[workItem.id]: {
+											title: newName
+										}
 									}
 								}
-							}
-						}).then()} className='overflow-hidden text-ellipsis' />
+							}).then();
+						}} className='overflow-hidden text-ellipsis' />
 					</ItemTitle>
 					<Select value={workItem.status} onValueChange={(value) => updateStatus(value as WorkItemStatus)}>
 						<SelectTrigger className='py-0 px-0.5 h-[unset]! border-none hover:bg-accent'>

@@ -68,7 +68,7 @@
 
 # Hotfix
 
-1. Da się zmienić nazwę WI na pustą, psuje się wtedy layout
+1. ✅ Da się zmienić nazwę WI na pustą, psuje się wtedy layout
 2. Scrolle horyzontalne na timeline i board średnio działają
 3. W timefrfame selector da się wybrać tylko klikając na radio, a cała labelka już nie
 4. ✅ Style rich textu się popsuły
