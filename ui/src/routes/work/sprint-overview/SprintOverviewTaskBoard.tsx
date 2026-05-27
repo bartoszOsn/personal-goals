@@ -1,6 +1,5 @@
 import { Board } from '@/base/board/api/Board.tsx';
 import { SprintId } from '@/models/Sprint.ts';
-import { isPlainDate } from '@personal-okr/shared';
 import { useSprintQuery } from '@/api/sprint/sprint-hooks.ts';
 import {
 	useCreateWorkItemInSprintOverviewMutation,
@@ -47,7 +46,6 @@ export function SprintOverviewTaskBoard({ context, sprintId }: { context: number
 
 	const tasksBySprint: BoardItem<WorkItem, WorkItemId, WorkItemStatus>[] = flatWorkItems(workItems.data.tasks)
 		.filter(workItem => workItem.type === WorkItemType.TASK)
-		.filter(task => task.timeFrame && isPlainDate(task.timeFrame.startDate).afterOrEqual(sprint.startDate) && isPlainDate(task.timeFrame.endDate).beforeOrEqual(sprint.endDate))
 		.map(task => ({
 			id: task.id,
 			data: task,
