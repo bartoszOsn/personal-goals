@@ -79,9 +79,7 @@
 
 1. Immediately after first release I need to work on migrations
     - Migration tests on CI
-2. Dark mode
-    - CSS colors needs to be ported to using semantic tokens instead of color palettes
-3. Demo mode – allow users to try out the app without creating an account
+2. Demo mode – allow users to try out the app without creating an account
     - Login and register page has a link to demo mode
     - When in demo, frontend should always display a banner at the top showing that this is a demo and changes won't be persisted
     - Ideally, logged in user should also be able to enter demo mode for exploring without worrying of changing production data
@@ -93,14 +91,3 @@
         - Or maybe it should be handled at app layer level?
         - Or maybe naive solution - on enter create new account with "demo" flag, and periodically delete all accounts with "demo" flag after some inactivity?
     - Should avoid code duplication as much as possible
-4. Technical - Better integration of DataTable and gantt, so that it willl be possible to, for example:
-    - When dragging, highlight row on both dataTable and gantt
-5. Technical - Refactor data-table completely
-    - Use divs with flex or grid instead of tables - avoid table's layout quirks
-    - Try some approach with some global state management for shared data between components
-      - I still don't know what
-        - Jotai on board didn't pass the exam. Ideal solution that I have in mind would be something like angular services, but it's not "react way".
-        - React context api also is not ideal, as shown in gantt.
-        - The problem lies in passing props to the store introduces not-ideal `useEffect` usages.
-        - Maybe stick to hooks executed at the root level and passed props, just like it is now, but structure it better, with a more "data-first" approach, and don't rely too much on UI when it's unnecessary
-    - Also, ties to the previous point, with better integration of DataTable and gantt, so that it will be possible to, for example:
