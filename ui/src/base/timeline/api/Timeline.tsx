@@ -12,7 +12,7 @@ import { TimelineHeaderChart } from '@/base/timeline/internal/components/timelin
 import { durationToPx } from '@/base/timeline/internal/durationToPx';
 import { ButtonGroup } from '@/primitive/components/ui/button-group';
 import { Button } from '@/primitive/components/ui/button';
-import { MinusIcon, PlusIcon } from 'lucide-react';
+import { ChevronsDownIcon, ChevronsRightIcon, MinusIcon, PlusIcon } from 'lucide-react';
 import { TimelineRowChartBar } from '@/base/timeline/internal/components/TimelineRowChartBar';
 import { TimelineHeaderRowCell } from '@/base/timeline/internal/components/TimelineHeaderRowCell';
 import { useRowSelection } from '@/base/timeline/internal/useRowSelection';
@@ -98,6 +98,18 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 		}
 	}
 
+	const expandAll = () => {
+		setCollapsedIds([]);
+	}
+
+	const collapseAll = () => {
+		setCollapsedIds(
+			rowDatas
+				.filter(rowData => rowData.children.length > 0)
+				.map(rowData => rowData.id)
+		);
+	}
+
 	useEffect(() => {
 		if (rootRef.current && canvasRef.current) {
 			const timelineTableWidthPx = isMobile ? `100%` : `${timelineTableWidthRef.current}px`;
@@ -118,7 +130,19 @@ export function Timeline<TId extends Key, TData>(props: TimelineProps<TId, TData
 						<TimelinePanelResizable getOffset={() => timelineTableWidthRef.current} setOffset={setWidth} />
 						<TimelineHeaderRow>
 							<TimelineHeaderRowCell>
-								<div className="w-full h-full p-2 flex items-center justify-end">
+								<div className="w-full h-full p-2 flex items-center justify-between">
+									<ButtonGroup>
+										<Button size="icon-xs"
+												variant="outline"
+												onClick={expandAll}>
+											<ChevronsDownIcon />
+										</Button>
+										<Button size="icon-xs"
+												variant="outline"
+												onClick={collapseAll}>
+											<ChevronsRightIcon />
+										</Button>
+									</ButtonGroup>
 									<ButtonGroup>
 										<Button size="icon-xs"
 												variant="outline"
