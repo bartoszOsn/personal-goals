@@ -47,6 +47,14 @@ export class Group extends WorkItem {
 	}
 
 	get progress(): WorkItemProgress {
-		return this.getChildrenProgressAverage();
+		switch (this.status) {
+			case WorkItemStatus.TO_DO:
+			case WorkItemStatus.IN_PROGRESS:
+				return this.getChildrenProgressAverage();
+			case WorkItemStatus.DONE:
+				return WorkItemProgress.fullyCompleted();
+			case WorkItemStatus.FAILED:
+				return WorkItemProgress.fullyFailed();
+		}
 	}
 }
