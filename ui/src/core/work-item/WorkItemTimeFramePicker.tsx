@@ -66,7 +66,7 @@ function WorkItemTimeFramePickerSheetContent({ workItem, close }: { workItem: Wo
 								<RadioGroup>
 									{
 										section.items.map(item => (
-											<FieldLabel htmlFor={item.id}>
+											<FieldLabel htmlFor={item.id} onClick={() => setSelectedId(item.id)}>
 												<Field orientation="horizontal">
 													<FieldContent>
 														<FieldTitle>{item.name}</FieldTitle>
@@ -76,7 +76,7 @@ function WorkItemTimeFramePickerSheetContent({ workItem, close }: { workItem: Wo
 															}
 														</FieldDescription>
 													</FieldContent>
-													<RadioGroupItem checked={selectedId === item.id} onClick={() => setSelectedId(item.id)} value={item.id} id={item.id} />
+													<RadioGroupItem checked={selectedId === item.id} value={item.id} id={item.id} />
 												</Field>
 											</FieldLabel>
 										))
