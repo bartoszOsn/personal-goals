@@ -23,7 +23,7 @@ export function WorkItemTimeFramePicker({ workItem, children }: { workItem: Work
 		<SheetTrigger asChild>
 			{children}
 		</SheetTrigger>
-		<SheetContent>
+		<SheetContent onContextMenu={e => e.stopPropagation()}>
 			<WorkItemTimeFramePickerSheetContent workItem={workItem} close={() => setOpened(false)} />
 		</SheetContent>
 	</Sheet>;
