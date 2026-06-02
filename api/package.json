@@ -8,6 +8,7 @@
 	"scripts": {
 		"dev": "yarn run start:dev --preserveWatchOutput",
 		"build": "nest build",
+		"prod:watch": "yarn run start:dev --preserveWatchOutput",
 		"format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
 		"start": "nest start",
 		"start:dev": "nest start --watch",

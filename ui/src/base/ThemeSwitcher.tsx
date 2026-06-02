@@ -17,8 +17,7 @@ export function ThemeSwitcher({ children }: { children: ReactNode }) {
 					{
 						options.map((option) => (
 							<SelectItem key={option} value={option}>
-								<Icon Icon={schemeToIcon[option]} /> {schemeToLabel[option]
-							}
+								<Icon Icon={schemeToIcon[option]} /> {schemeToLabel[option]}
 							</SelectItem>
 						))
 					}
@@ -55,53 +54,67 @@ const schemeToLabel: Record<Scheme, string> = {
 
 const schemeLSKey = 'theme-scheme';
 
-function useColorSchemeMetaElement() {
-	const [element] = useState(() => {
-		const element = document.querySelector('meta[name="color-scheme"]');
-
-		if (element) {
-			return element;
-		}
-
-		const newElement = document.createElement('meta');
-		newElement.setAttribute('name', 'color-scheme');
-		newElement.setAttribute('content', Scheme.system);
-
-		document.head.appendChild(newElement);
-
-		return newElement;
-	});
-
-	return element;
-}
-
 function useColorScheme() {
-	const meta = useColorSchemeMetaElement();
+	const [stateScheme, setStateScheme] = useState<Scheme>(localStorage.getItem(schemeLSKey) as Scheme ?? Scheme.light);
+	const preferredColorScheme = usePreferredColorScheme();
 
-	const [scheme, setScheme] = useState<Scheme>(() => meta.getAttribute('content') as Scheme);
+	const setScheme = (newScheme: Scheme) => {
+		setStateScheme(newScheme as Scheme);
+		localStorage.setItem(schemeLSKey, newScheme as Scheme);
+	}
 
-	const applyScheme = (newScheme: Scheme) => {
-		meta.setAttribute('content', newScheme);
-		if (newScheme === Scheme.dark) {
-			document.documentElement.classList.add('dark');
+	useEffect(() => {
+		if (stateScheme === Scheme.system) {
+			document.documentElement.classList.toggle('dark', preferredColorScheme === Scheme.dark);
 		} else {
-			document.documentElement.classList.remove('dark');
+			document.documentElement.classList.toggle('dark', stateScheme === Scheme.dark)
 		}
-		localStorage.setItem(schemeLSKey, newScheme);
-	};
+	}, [stateScheme, preferredColorScheme]);
+
+	useEffect(() => {
+		const handler = (e: StorageEvent) => {
+			if (e.key !== schemeLSKey) {
+				return;
+			}
+
+			setStateScheme(e.newValue as Scheme);
+		}
+		window.addEventListener('storage', handler);
+		return () => window.removeEventListener('storage', handler);
+	}, []);
 
 	useEffect(() => {
 		const observer = new MutationObserver(() => {
-			setScheme(meta.getAttribute('content') as Scheme);
+			if (document.documentElement.classList.contains('dark')) {
+				setScheme(Scheme.dark);
+			} else {
+				setScheme(Scheme.light);
+			}
 		});
 
-		observer.observe(meta, { attributeFilter: ['content']});
-
-		applyScheme(localStorage.getItem(schemeLSKey) as Scheme ?? Scheme.system);
+		observer.observe(document.documentElement, {
+			attributeFilter: ['class']
+		});
 
 		return () => observer.disconnect();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [meta]);
+	});
 
-	return [scheme, applyScheme] as const;
+	return [stateScheme, setScheme] as const;
+}
+
+function usePreferredColorScheme(): Scheme.light | Scheme.dark {
+	const [preferredColorScheme, setPreferredColorScheme] = useState<Scheme.light | Scheme.dark>(Scheme.light);
+
+	useEffect(() => {
+		const mql = window.matchMedia(`(prefers-color-scheme: light)`)
+		const onChange = (ev: MediaQueryListEvent) => {
+			setPreferredColorScheme(ev.matches ? Scheme.light : Scheme.dark)
+		}
+		mql.addEventListener("change", onChange)
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setPreferredColorScheme(mql.matches ? Scheme.light : Scheme.dark)
+		return () => mql.removeEventListener("change", onChange)
+	}, []);
+
+	return preferredColorScheme;
 }
